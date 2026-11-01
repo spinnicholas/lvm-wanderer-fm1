@@ -1,8 +1,10 @@
 # Wanderer 0.9 — work in progress
 
-Wanderer 0.9 is available for source review, host audition and experienced volunteer testing. It has not been tested on a physical FM-1. Installation, controls, real-time audio headroom, speaker sound, flash save/load and switching back to another firmware still need real-device validation. Back up your work and retain known-working recovery firmware before a trial. Install at your own risk.
+Wanderer 0.9 is available for source review, host audition and volunteer testing. I have physically tested it on my own M-VAVE FM-1 and successfully rolled back to another firmware. This establishes an initial device test and rollback, not full coverage of every function or device revision. Detailed starting/destination firmware versions, real-time audio measurements and persistence results have not yet been recorded. Back up your work and retain known-working recovery firmware before a trial. Install at your own risk.
 
-The unchanged release file reports `FM-1_929`. The Firmware Hub’s live checker showed no listed firmware using that ID at publication preparation. This is not a reservation or Hub approval. The Hub requires physical install and rollback testing before a listing; this release has not been submitted as meeting that requirement.
+The unchanged release file reports `FM-1_929`. The Firmware Hub’s live checker showed no listed firmware using that ID at publication preparation. This is not a reservation or Hub approval. The initial physical test and rollback have now been completed on my FM-1. The Hub also asks for installation from official V15 and from another custom firmware; those starting conditions have not yet been recorded, so a complete Hub qualification claim has not been submitted.
+
+See [HARDWARE_TESTING.md](HARDWARE_TESTING.md) for the latest physical-test report. The earlier statements in the original source/download bundle reflect the state before this author report.
 
 ## What was verified
 
