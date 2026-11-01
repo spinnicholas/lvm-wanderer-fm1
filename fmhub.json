@@ -4,5 +4,6 @@
   "kinds": [
     "synth"
   ],
-  "image": "docs/card.png"
+  "image": "docs/card.png",
+  "cheat": "https://github.com/spinnicholas/lvm-wanderer-fm1/blob/main/docs/QUICK_START.md"
 }
