@@ -25,6 +25,7 @@ Packages: 20 interleave blocks (FM-1, SLOOP, SMK-37 Pro up to v011) or more (the
 v016 has 36: the extra markers are 0x7D); the count is detected and checked with the files' CRCs.
 """
 import argparse
+import hashlib
 import queue
 import re
 import sys
@@ -38,6 +39,8 @@ BLOCKS, BLK, KEEP = 20, 0x30, 0x2F         # BLOCKS: the identity blocks (more m
 MAX_BLOCKS = 64
 LOADER_MARK = b"FELUCCA-LOADER-1"
 PORT_RE = re.compile(r"fm-1|smk|elite|mke-p37|starry|felucca|sloop|clipper|melodee|fomni|x0x|makkuro|maku|rainbow|snoop|vector|vox|ota|composite|sinco|usb-midi", re.I)   # never probe other gear
+STOCK_V15_SHA256 = "db1642b2b6fa5c2cccb11ffd13878068bb28601678d3644049f99dc40e7edb8a"
+STOCK_V15_SIZE = 699956
 # (the FM-1 and the SMK-37 family under Dinghy / OberVave / Felucca (its USB name), under the other ports, the update loaders,
 # the stock firmware: as the fm1-to-smk37 reference installer, genkigenki/sloop-fm1 smk37)
 OWN_LOADER_RE = re.compile(r"ota-(FM-1|SMK-37 Pro|SMK-37 Elite|MKE-P37)_9\d\d", re.I)   # a Felucca-family update loader
@@ -407,13 +410,16 @@ class Updater:
         step("done", back.id.text)
         return back.id.text
 
-    def install(self, dev, image, product, step=lambda *a: None):
+    def install(self, dev, image, product, step=lambda *a: None, stock_v15=False):
         """running firmware -> loader -> new firmware; dev from find(). A device already in
         update mode only needs the write."""
         if not same_keyboard(dev.id.text, product):
             dev.link.close()
             raise InstallError("model", f"the device is {dev.id.text}, the package is for {product}")
-        if dev.id.loader and not OWN_LOADER_RE.fullmatch(dev.id.text):
+        if dev.id.loader and stock_v15 and dev.id.text!="ota-FM-1_015":
+            dev.link.close()
+            raise InstallError("foreign", "finish the interrupted custom-firmware update with its original package first; then restore v15 from the running firmware")
+        if dev.id.loader and not OWN_LOADER_RE.fullmatch(dev.id.text) and not (stock_v15 and dev.id.text=="ota-FM-1_015"):
             dev.link.close()           # another firmware's loader: its image layout may differ
             raise InstallError("foreign", f"the FM-1 is in the update mode of another firmware ({dev.id.text}): "
                                           "finish that update with its own updater (M-UPGRADE), then install again")
@@ -424,15 +430,18 @@ class Updater:
 
 # ------------------------------------------------------------------- CLI ---
 
-def load_package(path, force):
+def load_package(path, force=False, stock_v15=False):
     try:
         raw = open(path, "rb").read()
     except OSError as e:
         raise InstallError("badpkg", f"cannot read {path}: {e.strerror}")
     product = product_of(raw)
+    if stock_v15 and (len(raw)!=STOCK_V15_SIZE or product!="FM-1_015" or
+                      hashlib.sha256(raw).hexdigest()!=STOCK_V15_SHA256):
+        raise InstallError("badpkg", "not the exact verified official FM-1 v15 package; nothing was written")
     if not re.fullmatch(r"[^_]+_\d+", product):
         raise InstallError("badpkg", f"{path}: not an FM-1 package (identity {product!r})")
-    if LOADER_MARK not in raw and not force:
+    if LOADER_MARK not in raw and not force and not stock_v15:
         raise InstallError("badpkg", f"{path}: no Felucca update loader in this package; "
                                      "only Felucca's own packages are installed (--force overrides)")
     image, _ = deinterleave(raw)
@@ -534,7 +543,7 @@ def run(a, backend, out, ask):
         mode = "update loader (update not finished)" if dev.id.loader else "running"
         print(f"{dev.id.text}  [{mode}]  port: {dev.name}", file=out)
         return 0
-    product, image = load_package(a.package, a.force)
+    product, image = load_package(a.package, a.force, a.stock_v15)
     print(f"package: {product}  ({a.package})", file=out)
     dev = up.find()
     if not dev:
@@ -547,7 +556,7 @@ def run(a, backend, out, ask):
         return 1
     prog = Progress(out)
     try:
-        up.install(dev, image, product, prog)
+        up.install(dev, image, product, prog, stock_v15=a.stock_v15)
     finally:
         prog.end()
     return 0
@@ -567,9 +576,12 @@ def main(argv=None, backend=None, out=sys.stdout, ask=ask_tty):
     ap.add_argument("--port", metavar="NAME", help="MIDI port to use (part of its name)")
     ap.add_argument("--yes", action="store_true", help="do not ask for confirmation")
     ap.add_argument("--force", action="store_true", help="install a package without the Felucca loader marker")
+    ap.add_argument("--stock-v15", action="store_true", help="restore only the exact SHA-256-pinned official FM-1 v15 file")
     a = ap.parse_args(argv)
     if bool(a.info) == bool(a.package):
         ap.error("give a PACKAGE.fwsc or --info")
+    if a.stock_v15 and (a.force or a.info):
+        ap.error("--stock-v15 requires a package and cannot be combined with --force or --info")
     try:
         if backend is None:
             try:

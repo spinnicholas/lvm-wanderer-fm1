@@ -70,7 +70,8 @@ static uint32_t fm1_input_edges(uint32_t *released)
     host_rel_next = 0;
     return b;
 }
-static uint32_t fm1_input_note_edges(void) { return 0; }   /* (the script sets fm1_in.notes) */
+static uint32_t host_note_latched;
+static uint32_t fm1_input_note_edges(void) { uint32_t n=host_note_latched;host_note_latched=0;return n; }
 static int32_t host_enc[HOST_NENC], host_enc_pos[HOST_NENC];   /* detents owed to the app; the position so far (the film's log) */
 static int32_t fm1_enc_take(uint32_t e) { int32_t v = host_enc[e % HOST_NENC]; host_enc[e % HOST_NENC] = 0; return v; }
 static uint64_t host_leds;                      /* bit id: LED id lit (0..13 buttons, 14..40 keys) */
@@ -122,12 +123,13 @@ static int host_save(uint8_t *a, uint32_t max, const void *p, uint32_t n, const 
     printf("%6u ms  %s %u saved (%u B)\n", fm1_ms, what, i, n);
     return 0;
 }
+static uint32_t host_fault_settings_save,host_fault_slot_save,host_fault_slot_load,host_store_writes;
 static int settings_load(void *p, uint32_t n) { return host_load(host_set, SECTOR_MAX, p, n); }
-static int settings_save(const void *p, uint32_t n) { return host_save(host_set, SECTOR_MAX, p, n, "settings", 0); }
+static int settings_save(const void *p, uint32_t n) { if(host_fault_settings_save){host_fault_settings_save--;return -1;}host_store_writes++;return host_save(host_set, SECTOR_MAX, p, n, "settings", 0); }
 static int blob_load(uint32_t i, void *p, uint32_t n) { return i < NBLOB ? host_load(host_blob[i], SECTOR_MAX, p, n) : -1; }
 static int blob_save(uint32_t i, const void *p, uint32_t n) { return i < NBLOB ? host_save(host_blob[i], SECTOR_MAX, p, n, "blob", i) : -1; }
-static int slot_load(uint32_t i, void *p, uint32_t n) { return i < NSLOT ? host_load(host_slot[i], SLOT_MAX, p, n) : -1; }
-static int slot_save(uint32_t i, const void *p, uint32_t n) { return i < NSLOT ? host_save(host_slot[i], SLOT_MAX, p, n, "slot", i) : -1; }
+static int slot_load(uint32_t i, void *p, uint32_t n) { if(host_fault_slot_load){host_fault_slot_load--;return -1;}return i < NSLOT ? host_load(host_slot[i], SLOT_MAX, p, n) : -1; }
+static int slot_save(uint32_t i, const void *p, uint32_t n) { if(host_fault_slot_save){host_fault_slot_save--;return -1;}host_store_writes++;return i < NSLOT ? host_save(host_slot[i], SLOT_MAX, p, n, "slot", i) : -1; }
 
 static uint8_t mq[64][4];                       /* status, data 1, data 2, source (1 USB, 2 TRS) */
 static uint32_t mq_w, mq_r;
@@ -325,8 +327,10 @@ static void platform_poll(void)                 /* one call = one millisecond */
         }
         else if (script[step].enc >= 0)
             host_enc[script[step].enc % HOST_NENC] += script[step].encn, host_enc_pos[script[step].enc % HOST_NENC] += script[step].encn;
-        else
+        else {
+            host_note_latched |= script[step].keys & ~fm1_in.notes;
             fm1_in.notes = script[step].keys;
+        }
         step++;
     }
     owed += FS;                                 /* the frames this millisecond is worth, in blocks as the ISR renders */

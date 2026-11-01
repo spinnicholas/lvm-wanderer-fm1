@@ -24,7 +24,7 @@ complete source under the same licence too.
 
 ## The logo
 
-Dinghy’s designburg signet is not included in this public fork. The original Wanderer graphic in `assets/wanderer.svg` is Copyright (C) 2026 Nicholas James / Low Vision Music and shared under GPL-3.0-only.
+The upstream Dinghy designburg signet is not included in this Wanderer source distribution. Its original all-rights-reserved notice is preserved here for provenance; Wanderer does not use it.
 
 ## Trademarks
 
@@ -32,3 +32,7 @@ Dinghy’s designburg signet is not included in this public fork. The original W
 belong to their owners. Dinghy is not made or endorsed by them.
 
 LVM Wanderer event-memory app is GPL-3.0-only, by Nicholas James / Low Vision Music. Its large-screen font uses Atkinson Hyperlegible Bold (SIL OFL 1.1) from Tonitor's font pipeline, attributed to the Braille Institute. Source TTF and OFL notice are in assets/. The glyph generator is adapted from Tonitor (GPL-3.0-only); see tools/gen_wanderer_font.py.
+
+## Wanderer 1.2 interface icons
+
+The UI uses actual SVG assets from Lucide Icons and Contributors (ISC), with Feather-derived icons retaining Cole Bemis's MIT notice, and four Tabler icons (MIT). The complete notices are in assets/icons/lucide/LICENSE.txt and assets/icons/tabler/LICENSE.txt. Untouched original SVGs and per-file source URLs/hashes are retained in assets/icons/. The build adapts stroke width to 2.25 units on the original 24-unit grid and rasterizes alpha masks at the display sizes; it does not fetch artwork at build time. These icon projects do not endorse Wanderer.

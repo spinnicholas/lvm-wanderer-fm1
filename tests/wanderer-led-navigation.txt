@@ -1,0 +1,31 @@
+0 btn 13
+20 keys 128
+60 keys 0
+100 btn 13
+120 btn 12
+140 btn 9
+180 btn 6
+200 btn 5
+240 btn 3
+280 enc 6 1
+320 enc 6 1
+360 btn 8
+400 btn 11
+440 enc 0 7
+480 btn 8
+520 btn 10
+560 btn 2
+600 btn 8
+640 btn 2
+680 btn 8
+720 btndown 2
+2400 btnup 2
+2440 btn 8
+2500 btndown 5
+3800 btnup 5
+3840 btn 8
+3900 keys 128
+3950 btndown 8
+5100 btnup 8
+5140 keys 0
+5200 end

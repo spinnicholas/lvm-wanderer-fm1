@@ -1,101 +1,101 @@
-number,bank,name,osc1,osc2,mix,ratio,detune,attack,decay,sustain,release,cutoff,contour,contour_decay,fm,fm_decay
-1,Foundations,Warm Wander,S,H,38,16,7,8,4,92,2,30,64,5,0,1
-2,Foundations,Glass Lantern,G,H,26,16,2,72,12,58,4,100,40,12,0,1
-3,Foundations,Hollow Beacon,H,S,54,16,12,28,8,80,3,58,52,7,0,1
-4,Foundations,Soft Current,T,S,35,16,4,3,3,104,1,65,30,3,0,1
-5,Foundations,Clear Tone,N,G,20,16,0,26,9,85,3,170,12,18,0,1
-6,Foundations,Dark Pulse,H,N,12,8,0,12,6,98,2,26,44,8,0,1
-7,Foundations,Dawn Edge,S,T,34,16,5,20,3,107,2,81,55,5,0,1
-8,Foundations,Little Glow,G,N,17,32,1,80,24,0,7,122,38,56,0,1
-9,Foundations,Velvet Fifth,T,H,30,24,2,14,5,82,3,50,38,6,0,1
-10,Foundations,Blue Horizon,S,G,27,16,14,2,1,110,1,70,32,2,0,1
-11,Vintage Poly,Wide Saw,S,S,51,16,18,3,3,109,2,86,52,5,0,1
-12,Vintage Poly,Chorus Silk,S,H,28,16,6,2,2,111,1,63,43,3,0,1
-13,Vintage Poly,Soft Strings,S,T,40,16,12,1,2,112,1,46,66,2,0,1
-14,Vintage Poly,Subensemble,S,H,47,8,1,4,3,104,2,54,48,4,0,1
-15,Vintage Poly,Orbit Choir,H,G,33,16,13,1,2,114,1,66,24,3,0,1
-16,Vintage Poly,Poly Brass,S,S,39,16,5,8,7,92,4,74,84,12,0,1
-17,Vintage Poly,Starlit PWM,H,H,58,16,20,4,4,91,2,92,26,6,0,1
-18,Vintage Poly,Old Film,T,S,27,8,3,1,2,105,1,41,36,2,0,1
-19,Vintage Poly,Golden Stack,S,G,46,16,10,11,4,101,2,108,48,5,0,1
-20,Vintage Poly,Winter Organ,H,T,25,32,1,70,5,119,2,93,16,4,0,1
-21,Mono & Lead,Round Lead,N,S,33,16,3,80,6,120,4,121,25,8,0,1
-22,Mono & Lead,Velvet Lead,T,S,45,16,11,60,9,107,5,80,38,7,0,1
-23,Mono & Lead,Reedy Lead,H,N,24,16,2,100,7,104,3,75,34,13,0,1
-24,Mono & Lead,Hot Saw,S,S,48,16,6,120,5,116,3,131,68,8,0,1
-25,Mono & Lead,Octave Torch,S,T,36,32,2,115,12,106,4,123,48,7,0,1
-26,Mono & Lead,Thin Wire,G,N,15,16,0,95,14,90,3,174,10,14,0,1
-27,Mono & Lead,Soft Solo,T,G,20,16,4,45,11,114,6,91,18,4,0,1
-28,Mono & Lead,Sub Voice,S,H,40,8,1,90,6,113,3,72,56,9,0,1
-29,Mono & Lead,Glass Lead,N,G,31,32,1,67,18,87,4,145,27,22,16,8
-30,Mono & Lead,Siren Thread,H,S,28,16,16,34,5,123,6,109,28,4,0,1
-31,Bass Lab,Round Sub,N,T,42,8,0,70,20,90,3,38,26,14,0,1
-32,Bass Lab,Thick Root,S,H,56,8,1,90,14,96,2,34,80,20,0,1
-33,Bass Lab,Bouncy Low,S,T,22,16,4,100,36,49,4,43,90,43,0,1
-34,Bass Lab,Dark Rubber,H,S,32,8,3,80,43,38,4,27,85,34,0,1
-35,Bass Lab,Sub Circuit,N,S,28,8,0,110,16,92,3,64,34,19,14,32
-36,Bass Lab,Acid Wink,S,G,19,16,1,100,28,55,4,91,115,58,0,1
-37,Bass Lab,Felt Bass,T,H,32,8,0,46,24,65,3,28,40,18,0,1
-38,Bass Lab,Low Octave,S,S,49,8,2,110,7,100,3,62,47,9,0,1
-39,Bass Lab,FM Thumb,N,N,21,16,0,120,40,35,3,108,22,57,56,45
-40,Bass Lab,Deep Grain,H,G,28,8,1,64,13,93,2,52,68,30,25,21
-41,Plucks & Keys,Amber Pluck,G,T,35,16,2,110,42,0,6,95,75,56,0,1
-42,Plucks & Keys,Pearl Key,N,G,42,32,0,95,18,22,5,180,10,31,20,40
-43,Plucks & Keys,Thumb Harp,T,G,27,24,0,85,26,0,7,82,48,45,0,1
-44,Plucks & Keys,Digital Kalimba,N,N,16,48,0,120,48,0,8,183,8,32,70,63
-45,Plucks & Keys,Soft Tines,G,N,22,32,0,75,17,24,6,125,26,26,28,24
-46,Plucks & Keys,Pizz Sun,S,T,29,16,2,100,53,0,5,79,70,62,0,1
-47,Plucks & Keys,Wood Knock,H,T,18,8,0,110,68,0,4,50,95,80,0,1
-48,Plucks & Keys,Muted Electric,N,G,31,16,0,96,24,26,5,112,25,41,32,36
-49,Plucks & Keys,Chime Pick,N,N,20,56,0,110,30,0,9,190,9,29,90,62
-50,Plucks & Keys,Arcade Key,G,H,30,32,0,100,38,12,5,155,35,55,12,33
-51,FM Bells,Clear Bell,N,N,15,48,0,115,23,0,9,184,0,1,74,28
-52,FM Bells,Iron Bell,N,N,12,56,0,110,14,0,12,205,0,1,104,16
-53,FM Bells,Soft EP,N,N,23,16,0,65,14,28,7,171,0,1,36,28
-54,FM Bells,Shimmer EP,N,N,29,32,0,90,19,33,8,197,0,1,52,25
-55,FM Bells,Marimba Glass,N,N,9,64,0,120,52,0,7,150,0,1,64,70
-56,FM Bells,Inharmonic Air,N,N,14,24,0,74,17,9,10,202,0,1,86,20
-57,FM Bells,Sweet Chime,N,N,25,32,0,70,12,0,12,181,0,1,42,13
-58,FM Bells,Crystal Drops,N,N,16,64,0,120,80,0,8,215,0,1,98,92
-59,FM Bells,FM Organ,N,N,33,48,0,110,4,118,2,185,0,1,30,2
-60,FM Bells,Silver Mallet,N,N,18,40,0,115,34,0,6,195,0,1,69,48
-61,Digital Motion,Bit Shimmer,G,N,26,48,1,48,9,86,6,158,24,16,32,15
-62,Digital Motion,Phase Reed,H,N,31,32,2,50,12,98,5,99,31,12,39,12
-63,Digital Motion,Soft Mod,N,G,31,24,0,16,5,109,5,143,17,6,48,5
-64,Digital Motion,Arc Light,G,G,39,32,8,36,11,100,4,164,30,21,0,1
-65,Digital Motion,Prism Stack,N,H,34,48,0,75,12,76,8,128,22,23,54,14
-66,Digital Motion,Polygon,T,G,48,16,3,70,27,63,5,133,40,36,0,1
-67,Digital Motion,Phase Cloud,N,G,25,40,0,2,4,100,2,190,12,4,62,8
-68,Digital Motion,Glass Machine,G,N,37,24,0,104,33,32,5,178,14,41,36,44
-69,Digital Motion,Plastic Wind,H,G,35,32,6,55,18,84,5,106,33,26,10,10
-70,Digital Motion,Orbit Spark,N,N,32,64,0,28,16,77,7,207,0,1,82,29
-71,Pads & Atmospheres,Quiet Shore,T,S,37,16,13,1,1,116,1,42,50,2,0,1
-72,Pads & Atmospheres,Wide Mist,S,H,46,16,19,1,1,121,1,58,35,2,0,1
-73,Pads & Atmospheres,Glass Tides,G,T,32,16,10,1,2,106,1,103,17,3,0,1
-74,Pads & Atmospheres,Dusk Choir,H,N,23,16,5,1,1,117,1,60,38,2,0,1
-75,Pads & Atmospheres,Blue Tape,T,G,28,8,2,2,1,109,1,48,27,3,0,1
-76,Pads & Atmospheres,Slow Aurora,N,G,33,24,1,1,1,119,1,132,14,2,16,2
-77,Pads & Atmospheres,Bloom Field,S,T,42,16,14,1,1,127,1,79,56,1,0,1
-78,Pads & Atmospheres,Cloud Organ,H,T,29,32,1,2,1,124,1,91,9,3,0,1
-79,Pads & Atmospheres,Moonlit Air,G,N,26,16,0,1,2,110,1,110,15,2,19,3
-80,Pads & Atmospheres,Far Horizon,T,S,25,24,7,1,1,118,1,70,43,2,0,1
-81,Brass & Organic,Soft Brass,S,H,31,16,5,10,10,98,3,56,78,11,0,1
-82,Brass & Organic,Open Horn,S,S,39,16,3,18,6,111,4,98,94,7,0,1
-83,Brass & Organic,Reed Organ,H,T,34,16,0,90,3,120,2,88,15,7,0,1
-84,Brass & Organic,Nasal Reed,H,N,26,16,0,75,8,112,3,61,41,15,0,1
-85,Brass & Organic,Air Flute,N,T,21,32,0,5,7,104,3,183,6,4,0,1
-86,Brass & Organic,Dark Horn,S,H,45,8,2,8,9,100,4,48,100,10,0,1
-87,Brass & Organic,Soft Oboe,G,H,34,16,0,40,13,97,4,74,32,12,0,1
-88,Brass & Organic,Harmonium,H,S,38,24,1,26,4,112,2,85,22,6,0,1
-89,Brass & Organic,Wood Flute,T,N,24,16,0,20,10,81,3,102,16,12,0,1
-90,Brass & Organic,Golden Brass,S,G,42,16,3,7,10,99,4,114,105,15,0,1
-91,Experimental,Copper Dust,N,N,15,56,0,120,57,0,12,160,0,1,124,46
-92,Experimental,Shifting Alloy,N,G,22,40,0,28,20,83,7,180,14,24,105,21
-93,Experimental,Shattered Glass,G,N,23,64,0,115,64,0,9,205,18,71,45,60
-94,Experimental,Hollow Machine,H,G,41,24,9,16,8,115,3,78,76,8,20,8
-95,Experimental,Tidal Bell,N,N,10,24,0,1,15,82,1,193,0,1,98,6
-96,Experimental,Distant Metal,N,N,17,56,0,2,5,111,1,176,0,1,118,3
-97,Experimental,Warped Reed,H,N,32,48,1,36,20,65,5,65,95,30,55,34
-98,Experimental,Pixel Pluck,G,G,38,32,0,120,90,0,5,190,29,75,0,1
-99,Experimental,Celestial Alloy,N,G,29,24,0,3,6,122,1,166,14,5,68,8
-100,Experimental,Last Light,T,N,37,16,11,1,3,106,1,76,29,5,24,12
+number,bank,name,osc1,osc2,mix,ratio,detune,attack_ms,decay_ms,sustain,release_ms,cutoff,contour,contour_ms,fm,fm_ms,resonance,sub,drive,lfo_rate,lfo_filter,vibrato,pwm,level
+1,Foundations,Warm Wander,S,S,54,16,10,45,500,100,1000,112,32,700,0,500,1,14,10,8,3,0,0,100
+2,Foundations,Glass Lantern,N,N,54,32,10,4,1200,42,550,190,32,700,28,1200,1,0,10,8,3,0,0,100
+3,Foundations,Hollow Beacon,P,T,54,16,4,12,500,100,550,128,32,700,0,500,1,0,10,8,3,0,22,100
+4,Foundations,Soft Current,T,S,54,16,10,240,500,100,1800,104,32,700,0,500,1,0,10,8,3,0,0,100
+5,Foundations,Clear Horizon,N,T,24,16,10,40,500,100,900,180,32,700,0,500,1,0,10,8,3,0,0,100
+6,Foundations,Dark Pulse,P,N,54,8,10,12,500,100,550,85,32,700,0,500,3,40,10,8,3,0,0,100
+7,Foundations,Dawn Brass,S,S,54,16,10,70,400,88,550,120,68,700,0,500,2,0,10,8,3,0,0,100
+8,Foundations,Little Glow,N,G,54,16,10,12,900,0,850,180,32,700,14,500,1,0,10,8,3,0,0,100
+9,Foundations,Velvet Fifth,T,S,30,24,10,170,500,100,1400,120,32,700,0,500,1,0,10,8,3,0,0,100
+10,Foundations,Blue Horizon,S,S,54,16,18,650,500,100,2300,120,32,700,0,500,1,0,10,8,7,0,0,100
+11,Vintage Poly,Wide Saw,S,S,64,16,24,70,500,100,1100,140,32,700,0,500,1,0,10,8,4,0,0,100
+12,Vintage Poly,Chorus Silk,S,P,54,16,16,130,500,100,1100,120,32,700,0,500,1,0,10,8,4,0,18,100
+13,Vintage Poly,Soft Strings,S,S,54,16,16,800,500,100,2000,110,40,700,0,500,1,0,10,8,4,0,0,100
+14,Vintage Poly,Subensemble,S,T,28,8,16,70,500,100,1100,120,32,700,0,500,1,16,10,8,4,0,0,100
+15,Vintage Poly,Orbit Choir,H,G,54,16,16,380,500,100,1100,150,32,700,0,500,1,0,10,4,4,0,0,100
+16,Vintage Poly,Poly Brass,S,S,54,16,16,35,500,82,1100,120,80,700,0,500,3,0,10,8,4,0,0,100
+17,Vintage Poly,Starlit PWM,P,P,54,16,7,70,500,100,1100,130,32,700,0,500,1,0,10,8,4,0,35,100
+18,Vintage Poly,Old Film,T,S,54,16,16,70,500,100,1100,95,32,700,0,500,1,0,18,12,4,4,0,100
+19,Vintage Poly,Golden Stack,S,S,34,32,16,70,500,100,1100,120,54,700,0,500,1,0,10,8,4,0,0,100
+20,Vintage Poly,Winter Organ,N,N,48,32,16,8,120,127,180,200,32,700,0,500,1,0,10,8,4,0,0,100
+21,Mono & Lead,Round Lead,T,N,54,16,10,7,500,112,250,150,32,700,0,500,1,14,10,95,3,3,0,100
+22,Mono & Lead,Velvet Lead,T,S,38,16,10,7,500,112,250,115,32,700,0,500,1,0,10,95,3,3,0,100
+23,Mono & Lead,Reedy Lead,P,S,54,16,10,7,500,112,250,130,32,700,0,500,3,0,10,95,3,3,12,100
+24,Mono & Lead,Hot Saw,S,S,54,16,18,7,500,112,250,150,35,700,0,500,3,0,38,95,3,3,0,100
+25,Mono & Lead,Octave Torch,S,S,35,32,10,7,500,112,250,150,32,700,0,500,1,0,25,95,3,3,0,100
+26,Mono & Lead,Thin Wire,N,N,54,32,10,7,500,112,250,190,32,700,30,500,1,0,10,95,3,3,0,100
+27,Mono & Lead,Soft Solo,T,S,54,16,10,30,500,112,600,130,32,700,0,500,1,0,10,95,3,3,0,100
+28,Mono & Lead,Sub Voice,P,T,36,8,10,7,500,112,250,110,32,700,0,500,1,25,10,95,3,3,0,100
+29,Mono & Lead,Glass Lead,N,N,54,24,10,7,500,112,250,195,32,700,46,700,1,0,10,95,3,3,0,100
+30,Mono & Lead,Siren Thread,H,S,24,16,10,50,500,112,250,150,32,700,0,500,1,0,10,80,3,8,0,100
+31,Bass Lab,Round Sub,N,T,24,8,10,3,300,70,160,80,25,260,0,500,1,45,24,8,0,0,0,95
+32,Bass Lab,Thick Root,S,P,30,8,10,3,300,70,160,65,90,260,0,500,1,44,24,8,0,0,0,95
+33,Bass Lab,Bouncy Low,S,S,54,16,10,3,180,26,160,65,90,150,0,500,3,32,24,8,0,0,0,95
+34,Bass Lab,Dark Rubber,P,S,54,16,10,3,300,70,160,44,110,180,0,500,4,32,24,8,0,0,0,95
+35,Bass Lab,Sub Circuit,N,N,54,8,10,3,300,70,160,125,20,260,32,150,1,32,24,8,0,0,0,95
+36,Bass Lab,Acid Willow,S,P,16,16,10,3,300,70,160,65,130,180,0,500,6,32,40,8,0,0,0,95
+37,Bass Lab,Velvet Bass,T,S,22,16,10,9,300,70,160,80,40,260,0,500,1,32,24,8,0,0,0,95
+38,Bass Lab,Wooden Root,T,N,54,16,10,3,420,18,160,65,90,260,15,80,1,32,24,8,0,0,0,95
+39,Bass Lab,Pulse Runner,P,P,54,16,10,3,300,70,160,88,65,260,0,500,2,32,24,8,0,0,18,95
+40,Bass Lab,Low Horizon,S,S,54,16,10,70,900,100,700,92,35,260,0,500,1,32,24,8,0,0,0,95
+41,Plucks & Keys,Felt Keys,T,N,30,16,3,2,1100,0,230,110,68,240,0,500,1,0,10,8,0,0,0,100
+42,Plucks & Keys,Copper Pluck,P,S,54,16,3,2,650,0,450,135,90,240,0,500,3,0,10,8,0,0,0,100
+43,Plucks & Keys,Electric Mist,N,N,54,16,3,2,1800,12,450,185,68,240,36,280,1,0,10,8,0,0,0,100
+44,Plucks & Keys,Thumb Piano,N,T,54,48,3,2,950,0,450,180,68,240,48,160,1,0,10,8,0,0,0,100
+45,Plucks & Keys,Harp Current,T,G,18,16,3,2,1600,0,1000,135,68,240,0,500,1,0,10,8,0,0,0,100
+46,Plucks & Keys,Soft Mallet,N,N,54,32,3,2,700,0,450,180,68,240,24,90,1,0,10,8,0,0,0,100
+47,Plucks & Keys,Neon Clav,P,H,54,16,3,2,450,0,100,150,68,240,0,500,1,0,24,8,0,0,0,100
+48,Plucks & Keys,Dusty Tines,N,N,54,48,3,2,2200,0,600,135,68,240,45,450,1,0,10,8,0,0,0,100
+49,Plucks & Keys,Amber String,S,T,30,16,3,2,1500,0,450,120,68,500,0,500,1,0,10,8,0,0,0,100
+50,Plucks & Keys,Moon Celeste,N,N,54,32,3,2,2500,0,1400,200,68,240,20,750,1,0,10,8,0,0,0,100
+51,FM Bells,Glass Bell,N,N,6,32,0,2,2500,0,1700,210,0,900,40,700,1,0,0,8,0,0,0,110
+52,FM Bells,Copper Bell,N,N,6,48,0,2,2500,0,1700,210,0,900,62,1100,1,0,0,8,0,0,0,110
+53,FM Bells,Frozen Chime,N,N,6,40,0,2,3400,0,1700,210,0,900,45,700,1,0,0,8,0,0,0,110
+54,FM Bells,Temple Bowl,N,N,6,24,0,15,2500,0,1700,210,0,900,80,1800,1,0,0,8,0,0,0,110
+55,FM Bells,Tiny Music Box,N,N,6,32,0,2,1300,0,700,210,0,900,22,700,1,0,0,8,0,0,0,110
+56,FM Bells,Polar Tines,N,N,6,16,0,2,2100,0,1700,210,0,900,70,350,1,0,0,8,0,0,0,110
+57,FM Bells,Bronze Sky,N,N,6,56,0,2,2500,0,1700,185,0,900,88,1200,1,0,0,8,0,0,0,110
+58,FM Bells,Crystal Rain,N,N,6,64,0,2,1900,0,1700,210,0,900,35,700,1,0,0,8,0,0,0,110
+59,FM Bells,Distant Gong,N,N,6,23,0,2,4500,0,2500,210,0,900,105,2600,1,0,0,8,0,0,0,110
+60,FM Bells,Soft Vibraphone,N,N,6,32,0,2,2700,0,1700,210,0,900,18,700,1,0,0,100,0,2,0,110
+61,Digital Motion,Prism Current,G,N,54,32,10,20,900,88,1000,165,32,700,20,500,1,0,10,30,12,0,0,100
+62,Digital Motion,Hollow Pixels,P,G,42,16,10,20,900,88,1000,165,32,700,0,500,1,0,10,30,12,0,32,100
+63,Digital Motion,Orbit Sync,S,N,54,24,10,20,900,88,1000,165,32,700,36,500,1,0,10,30,12,0,0,100
+64,Digital Motion,Blue Formant,H,N,54,32,10,20,900,88,1000,165,32,700,62,500,4,0,10,30,12,0,0,100
+65,Digital Motion,Silver Fold,T,N,54,48,10,20,900,88,1000,165,32,700,80,1600,1,0,10,30,12,0,0,100
+66,Digital Motion,Moving Glass,N,G,54,24,10,20,900,88,1000,165,32,700,28,500,1,0,10,15,12,0,0,100
+67,Digital Motion,Liquid Grid,P,S,54,16,10,20,900,88,1000,165,32,700,0,500,3,0,10,9,12,0,42,100
+68,Digital Motion,Electric Bloom,N,N,54,32,10,140,900,88,1000,165,32,700,95,2200,1,0,10,30,12,0,0,100
+69,Digital Motion,Soft Machine,G,T,54,16,10,90,900,88,1000,135,32,700,0,500,1,0,10,30,12,0,0,100
+70,Digital Motion,Dawn Vector,S,G,25,32,10,350,900,88,1000,165,32,700,0,500,1,0,10,30,18,0,0,100
+71,Pads & Atmospheres,Cloud Atlas,S,S,54,16,25,850,2300,110,2800,115,38,2200,0,500,1,0,10,5,8,0,0,105
+72,Pads & Atmospheres,Tape Cathedral,H,S,54,16,18,850,2300,110,2800,115,38,2200,0,500,1,0,18,7,8,3,0,105
+73,Pads & Atmospheres,Slow Aurora,S,S,54,16,18,1800,2300,110,4000,125,38,2200,0,500,1,0,10,5,8,0,0,105
+74,Pads & Atmospheres,Velvet Water,T,P,48,16,18,850,2300,110,2800,130,38,2200,0,500,1,0,10,5,8,0,28,105
+75,Pads & Atmospheres,Deep Choir,H,G,26,8,18,850,2300,110,2800,115,38,2200,0,500,1,14,10,5,8,0,0,105
+76,Pads & Atmospheres,Frozen Bloom,N,N,54,32,18,850,2300,110,2800,190,38,2200,45,4000,1,0,10,5,8,0,0,105
+77,Pads & Atmospheres,Golden Weather,S,T,54,16,18,850,2300,110,2800,140,42,2200,0,500,1,0,10,5,8,0,0,105
+78,Pads & Atmospheres,Night Orchard,P,P,54,16,18,1200,2300,110,2800,100,38,2200,0,500,1,0,10,5,8,0,40,105
+79,Pads & Atmospheres,Ocean Memory,T,S,24,24,18,850,2300,110,2800,115,38,2200,0,500,1,0,10,5,14,0,0,105
+80,Pads & Atmospheres,Homeward Light,S,S,54,16,18,450,2300,110,3200,132,38,2200,0,500,1,12,10,5,8,0,0,105
+81,Brass & Organic,Amber Horn,S,P,54,16,7,65,450,86,650,112,70,450,0,500,2,0,10,8,3,0,0,100
+82,Brass & Organic,Breath Reed,P,T,54,16,7,65,450,86,650,125,70,450,0,500,2,0,10,95,3,4,12,100
+83,Brass & Organic,Warm Flute,N,T,14,16,7,90,450,86,650,170,10,450,0,500,2,0,10,8,3,0,0,100
+84,Brass & Organic,Woodwind Choir,H,T,54,16,7,160,450,86,1200,112,70,450,0,500,2,0,10,8,3,0,0,100
+85,Brass & Organic,Soft Trombone,S,T,20,8,7,65,450,86,650,112,70,450,0,500,2,12,10,8,3,0,0,100
+86,Brass & Organic,Golden Horns,S,S,54,16,20,65,450,86,650,112,85,450,0,500,2,0,10,8,3,0,0,100
+87,Brass & Organic,Accordion Air,P,H,22,32,7,35,450,116,650,112,70,450,0,500,2,0,10,8,3,0,0,100
+88,Brass & Organic,Cello Thread,S,T,54,16,7,250,450,86,1000,95,70,450,0,500,2,0,10,8,3,0,0,100
+89,Brass & Organic,Oboe Lantern,P,G,18,16,7,65,450,86,650,120,70,450,0,500,4,0,10,8,3,0,0,100
+90,Brass & Organic,Analog Choir,H,P,54,16,7,450,450,86,1800,138,70,450,0,500,2,0,10,8,3,0,18,100
+91,Experimental,Bowed Glass,N,N,54,23,10,700,1500,76,1400,155,32,700,78,3000,1,0,10,12,12,0,0,100
+92,Experimental,Orbit Metal,G,N,54,56,10,35,1500,76,1400,155,32,700,96,500,1,0,10,12,12,0,0,100
+93,Experimental,Paper Satellites,P,G,54,16,10,35,1500,76,1400,155,32,700,0,500,4,0,10,12,12,0,44,100
+94,Experimental,Low Gravity,T,N,54,8,10,35,1500,76,1400,108,32,700,38,500,1,36,10,12,12,0,0,100
+95,Experimental,Broken Halo,H,N,54,35,10,35,1500,76,1400,155,32,700,70,500,1,0,24,12,12,0,0,100
+96,Experimental,Crystal Moss,N,G,54,48,10,900,1500,76,3000,155,32,700,35,500,1,0,10,12,12,0,0,100
+97,Experimental,Magnetic Rain,S,N,54,32,10,35,950,0,1400,155,32,700,110,500,1,0,10,12,12,0,0,100
+98,Experimental,Distant Engine,P,S,54,8,10,650,1500,76,1400,85,32,700,0,500,1,40,10,12,12,0,36,100
+99,Experimental,Starling Network,N,N,54,64,10,35,1500,76,1400,155,32,700,88,500,1,0,10,40,12,5,0,100
+100,Experimental,Last Light,T,S,54,16,23,1300,1500,76,4000,120,32,700,0,500,1,0,10,12,12,0,0,100

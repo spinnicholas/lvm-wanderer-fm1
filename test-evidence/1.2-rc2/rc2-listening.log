@@ -1,0 +1,11 @@
+   105 ms  assertion recording = 0 passed
+   125 ms  assertion running = 0 passed
+   145 ms  assertion anchor = 1 passed
+   205 ms  assertion anchorview = 1 passed
+   225 ms  assertion running = 1 passed
+   228 ms  assertion gates = 2 passed
+   235 ms  assertion anchorview = 0 passed
+   235 ms  assertion gates = 1 passed
+   250 ms  screen -> build/rc2-listening-250.ppm
+   355 ms  assertion gates = 0 passed
+sound  -> build/rc2-listening.wav (17408 frames)

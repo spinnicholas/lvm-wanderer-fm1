@@ -1,0 +1,49 @@
+pack7 / unpack7 round trip                                       ok
+response: header, address, data, checksum                        ok
+product_of / logical_image (synthetic)                           ok
+install: running -> loader -> Felucca (11 reads)                 ok
+install: an FM-1 under CLIPPER (port 'Clipper') -> found, SLOOP installed ok
+install: device already in update mode -> finishes the write     ok
+install: answer no -> nothing sent but the handshake             ok
+--info: identity of the connected FM-1                           ok
+--info: device in update mode                                    ok
+no FM-1 port -> exit 3, lists the MIDI inputs                    ok
+--port that matches nothing -> exit 3                            ok
+--port picks a port the default match skips                      ok
+unplugged in step 1 -> exit 4 'lost', nothing written            ok
+unplugged during the write -> exit 4 at once                     ok
+loader stops answering -> exit 4 after the idle time             ok
+read past the package -> exit 4                                  ok
+another identity after the restart -> exit 6                     ok
+another model -> exit 6, nothing sent                            ok
+another firmware's update loader -> exit 6, nothing sent         ok
+no loader after step 1 -> exit 5                                 ok
+package without the loader marker -> exit 2, no MIDI             ok
+... installs with --force                                        ok
+damaged package (a file's CRC) -> exit 2, no MIDI                ok
+not a package -> exit 2                                          ok
+missing file -> exit 2                                           ok
+port names: SMK-37 Pro ports probed, FM-1 too, other gear not    ok
+own loader: ota-SMK-37 Pro_9XX / ota-FM-1_9XX, not the stock ones ok
+identity SMK-37 Pro_016 parses (model SMK-37 Pro, the space kept) ok
+36 blocks (synthetic): detected, logical image valid             ok
+... a fixed 20-block deinterleave of it fails the CRCs           ok
+20 blocks with a 0x7D data byte at the 21st marker (seed 135): falls back to 20 ok
+install on an SMK-37 Pro: running -> loader -> SMK-37 Pro_900    ok
+SMK in SLOOP's update mode -> finishes the write                 ok
+SMK in the stock loader -> exit 6, nothing sent                  ok
+FM-1 package on an SMK-37 Pro -> exit 6 (wrong model), nothing sent ok
+FM-1 package on an SMK in SLOOP's update mode -> exit 6 (wrong model), nothing sent ok
+SMK package on an FM-1 -> exit 6, nothing sent                   ok
+stock SMK-37 Pro packages: skipped (SMK_STOCK_DIR not set)
+FM-1 package dinghy.fwsc still parses: 20 blocks, FM-1_920       ok
+dinghy.fwsc carries the Felucca loader marker                    ok
+logical image vs fm1pkg.js: skipped (needs node, web/fm1pkg.js and build/dinghy.fwsc; Dinghy has no web/)
+models: SMK-37 Pro / Elite / MKE-P37 / Starrykey are one keyboard, FM-1 is another ok
+port names: every SMK model and every port firmware probed       ok
+device identity STARRYKEY-37 PLAY_016: all 21 characters         ok
+device identity: the text ends at the first NUL                  ok
+36-block package with a 21-character identity: read in full      ok
+20-block package: the identity stops at 20 characters (the stock V015 layout) ok
+36-block package with a short identity: unchanged                ok
+install tests passed

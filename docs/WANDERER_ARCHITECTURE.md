@@ -1,3 +1,5 @@
+> Historical build/design notes. Current 1.2 behavior and verification are documented in USER_GUIDE_1.2.md and TEST_REPORT_1.2.md. User hardware reports cover 0.9, not the 1.2 candidate.
+
 # Source review and architecture decision
 
 This is an original instrument with a quiet protected source and a changing musical copy. The practical first implementation captures **note and velocity events at 16 time positions**, not audio. An Anchor is set once for a session. Changes to the working memory are non-destructive until a deliberate branch commits them; even then the Anchor stays intact. A layer offers a second simultaneous event phrase. The three controls have different roles: Melt blends a second harmonic into the synth voice, Drift changes the pitch of selected events by one or two semitones, and Decay reduces their velocity over repeat cycles with a floor. The branch captures current note and velocity differences and the base Melt amount.

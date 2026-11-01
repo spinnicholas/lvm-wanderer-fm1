@@ -1,0 +1,49 @@
+     5 ms  assertion recording = 1 passed
+    15 ms  assertion recording = 1 passed
+    15 ms  assertion anchorview = 0 passed
+    15 ms  assertion notice = 6 passed
+    55 ms  assertion chord0 = 3 passed
+    55 ms  assertion captures = 3 passed
+   455 ms  assertion captures = 2 passed
+   655 ms  assertion captures = 0 passed
+   685 ms  assertion recording = 0 passed
+   705 ms  assertion running = 0 passed
+   905 ms  assertion savepending = 1 passed
+   905 ms  assertion anchor = 0 passed
+  1000 ms  screen -> build/product-navigation-1000.ppm
+  1805 ms  assertion confirm = 2 passed
+  1805 ms  assertion anchor = 0 passed
+  1805 ms  assertion savepending = 0 passed
+  1825 ms  assertion confirm = 2 passed
+  1850 ms  screen -> build/product-navigation-1850.ppm
+  1901 ms  slot 0 saved (2084 B)
+  1901 ms  settings 0 saved (16 B)
+  1905 ms  assertion notice = 14 passed
+  1905 ms  assertion leds = 2056 passed
+  1905 ms  assertion glow = 260 passed
+  1905 ms  assertion origin = 0 passed
+  1905 ms  assertion dirty = 0 passed
+  1905 ms  assertion slotvalid = 2 passed
+  2000 ms  screen -> build/product-navigation-2000.ppm
+  2105 ms  assertion notice = 0 passed
+  2205 ms  assertion chord0 = 0 passed
+  2205 ms  assertion dirty = 1 passed
+  2205 ms  assertion origin = 0 passed
+  2335 ms  assertion notice = 16 passed
+  2335 ms  assertion leds = 1032 passed
+  2335 ms  assertion glow = 260 passed
+  2335 ms  assertion chord0 = 3 passed
+  2335 ms  assertion dirty = 0 passed
+  2365 ms  assertion notice = 0 passed
+  2405 ms  assertion running = 1 passed
+  2460 ms  assertion anchor = 1 passed
+  2505 ms  assertion recording = 1 passed
+  2555 ms  assertion recording = 0 passed
+  2555 ms  assertion anchorview = 1 passed
+  2605 ms  assertion anchorview = 0 passed
+  2655 ms  assertion confirm = 1 passed
+  2705 ms  assertion running = 0 passed
+  2705 ms  assertion confirm = 1 passed
+  2755 ms  assertion confirm = 0 passed
+  2800 ms  screen -> build/product-navigation-2800.ppm
+sound  -> build/product-navigation.wav (125440 frames)

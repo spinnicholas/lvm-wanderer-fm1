@@ -1,0 +1,29 @@
+    35 ms  assertion page = 3 passed
+    95 ms  assertion length = 32 passed
+   120 ms  screen -> build/music-navigation-120.ppm
+   185 ms  assertion scale = 4 passed
+   245 ms  assertion root = 7 passed
+   305 ms  assertion recording = 1 passed
+   335 ms  assertion capture = 1 passed
+  1000 ms  screen -> build/music-navigation-1000.ppm
+  1035 ms  assertion recording = 0 passed
+  1035 ms  assertion capture = 0 passed
+  1035 ms  assertion heldlong = 1 passed
+  1060 ms  screen -> build/music-navigation-1060.ppm
+  1135 ms  assertion running = 0 passed
+  1191 ms  slot 0 saved (2084 B)
+  1191 ms  settings 0 saved (16 B)
+  1195 ms  assertion notice = 14 passed
+  1285 ms  assertion notice = 16 passed
+  1285 ms  assertion length = 32 passed
+  1285 ms  assertion heldlong = 1 passed
+  1405 ms  assertion running = 1 passed
+  1435 ms  assertion notice = 17 passed
+  1435 ms  assertion length = 32 passed
+  1460 ms  screen -> build/music-navigation-1460.ppm
+  1495 ms  assertion notice = 0 passed
+  1525 ms  assertion running = 0 passed
+  1555 ms  assertion length = 16 passed
+  1615 ms  assertion length = 32 passed
+  1640 ms  screen -> build/music-navigation-1640.ppm
+sound  -> build/music-navigation.wav (73472 frames)

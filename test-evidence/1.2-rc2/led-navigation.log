@@ -1,0 +1,44 @@
+     5 ms  assertion recording = 1 passed
+     5 ms  assertion running = 1 passed
+    25 ms  assertion gates = 1 passed
+    65 ms  assertion gates = 0 passed
+   125 ms  assertion running = 0 passed
+   145 ms  assertion anchor = 1 passed
+   185 ms  assertion layer = 1 passed
+   205 ms  assertion anchorview = 1 passed
+   205 ms  assertion leds = 608 passed
+   245 ms  assertion settings = 1 passed
+   245 ms  assertion recording = 0 passed
+   245 ms  assertion leds = 8 passed
+   245 ms  assertion glow = 256 passed
+   285 ms  assertion page = 1 passed
+   325 ms  assertion page = 2 passed
+   365 ms  assertion settings = 0 passed
+   365 ms  assertion leds = 608 passed
+   405 ms  assertion confirm = 2 passed
+   405 ms  assertion leds = 2056 passed
+   445 ms  assertion slot = 7 passed
+   485 ms  assertion confirm = 0 passed
+   485 ms  assertion leds = 576 passed
+   525 ms  assertion confirm = 3 passed
+   525 ms  assertion leds = 1032 passed
+   565 ms  assertion confirm = 0 passed
+   565 ms  assertion leds = 576 passed
+   605 ms  assertion confirm = 0 passed
+   645 ms  assertion confirm = 1 passed
+   645 ms  assertion leds = 12 passed
+   685 ms  assertion confirm = 0 passed
+  1000 ms  screen -> build/led-navigation-1000.ppm
+  2405 ms  assertion confirm = 4 passed
+  2405 ms  assertion leds = 12 passed
+  2445 ms  assertion confirm = 0 passed
+  3000 ms  screen -> build/led-navigation-3000.ppm
+  3805 ms  assertion confirm = 5 passed
+  3805 ms  assertion leds = 40 passed
+  3845 ms  assertion confirm = 0 passed
+  3905 ms  assertion gates = 1 passed
+  5055 ms  assertion gates = 0 passed
+  5055 ms  assertion running = 0 passed
+  5055 ms  assertion confirm = 0 passed
+  5055 ms  assertion leds = 576 passed
+sound  -> build/led-navigation.wav (229120 frames)

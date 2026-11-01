@@ -1,0 +1,13 @@
+0 btn 13
+10 keys 128
+80 keys 0
+100 btn 13
+120 btn 12
+140 btn 9
+200 btn 5
+220 btn 12
+225 keys 32768
+230 btn 8
+250 shot
+350 keys 0
+400 end

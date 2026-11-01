@@ -1,0 +1,10 @@
+{
+  "baseline_sha256": "c6c0a2829a5c1fe5959cb0d302c4de152b97fe3f29e469c400d1fbaefa236dc9",
+  "release_sha256": "e1a18e8f2d700399f6cac736e9587031d4a91cc7f286cc32172b45d0489ef378",
+  "identity": "FM-1_932",
+  "unchanged_safety_files": 33,
+  "loader_sha256": "dac30791235ae6339f7b4b7179fbb59fb59ee6a05aa8442697b5f6407e4ef8dc",
+  "loader_identical_to_0.9": true,
+  "package_head_identical_to_0.9": true,
+  "physical_1.2_test": "pending; inherited 0.9 tests do not validate new app bytes"
+}

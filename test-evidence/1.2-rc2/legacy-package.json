@@ -1,0 +1,9 @@
+{
+  "identity": "FM-1_920",
+  "package_bytes": 612196,
+  "sha256": "e894183e5dc37a72fa5715666333c99c8964c80d956d979e0fb835fefdd6d169",
+  "app_bytes": 520752,
+  "app_limit": 581564,
+  "validation": "CRC and loader marker parsed; host tests pass",
+  "physical_device": "not tested"
+}

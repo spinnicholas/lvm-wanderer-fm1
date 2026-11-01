@@ -1,9 +1,9 @@
 {
-  "what": "Work-in-progress 16-step event-memory synth with 100 sounds. Protect an Anchor, evolve a copy with Melt, Drift and Decay, and add a layer, chorus, tempo delay and reverb. Large symbols and audible cues. Author-tested on FM-1 with successful rollback.",
+  "what": "Event-memory synth with four-note chord recording, held notes, 16/32-step loops and 100 sounds. Protect an Anchor and evolve a copy with scale-aware Drift. Large symbols, Zoom, meaningful lights, optional earcons, effects and a live waveform view.",
   "author": "Nicholas James / Low Vision Music",
   "kinds": [
     "synth"
   ],
   "image": "docs/card.png",
-  "cheat": "https://github.com/spinnicholas/lvm-wanderer-fm1/blob/main/docs/QUICK_START.md"
+  "cheat": "https://github.com/spinnicholas/lvm-wanderer-fm1/blob/main/docs/USER_GUIDE_1.2.md"
 }

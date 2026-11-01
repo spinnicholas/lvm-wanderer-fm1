@@ -1,0 +1,17 @@
+{
+  "path": "production MIDI capture -> v5 Save/Load -> production sequencer",
+  "patches": [
+    "073 Slow Aurora",
+    "043 Electric Mist"
+  ],
+  "seconds": 22.142131519274376,
+  "peak": 9081,
+  "rms": 1222.29,
+  "voices": 4,
+  "loop_steps": 32,
+  "gate_ticks": [
+    2560,
+    3072,
+    3584
+  ]
+}

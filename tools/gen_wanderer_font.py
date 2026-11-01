@@ -19,9 +19,9 @@ FONTS = Path(__file__).resolve().parents[1] / "assets" / "fonts"
 TTF = Path(__file__).resolve().parents[1] / "assets" / "AtkinsonHyperlegible-Bold.ttf"
 BDF = FONTS / "ter-u16b.bdf"
 PAD = 2
-CHARS = " 0123456789?ADENRW"
+CHARS = " 0123456789?ABCDEFG#N RW/%"
 # name, characters, TTF pixel size, Terminus scale
-SIZES = [("H", CHARS, 58, 4), ("W", CHARS, 44, 3), ("N", CHARS, 31, 2)]
+SIZES = [("X", " 0123456789/%?ABCDEFG#", 102, 6), ("B", " 0123456789/%?ABCDEFG#", 86, 5), ("H", CHARS, 58, 4), ("W", CHARS, 44, 3), ("N", CHARS, 31, 2)]
 
 
 def bdf_glyphs():

@@ -1,18 +1,16 @@
 /* SPDX-License-Identifier: GPL-3.0-only
- * Continuous 240-pixel scene rendered through four 60-pixel DMA bands.
+ * Wanderer 1.1 RC2: licensed source icons, calm spacing and explicit state.
+ * Only Home uses a word. All editing views devote the header to context/status.
  */
-static const int8_t OX[16]={0,17,31,41,44,41,31,17,0,-17,-31,-41,-44,-41,-31,-17};
-static const int8_t OY[16]={-44,-41,-31,-17,0,17,31,41,44,41,31,17,0,-17,-31,-41};
 static char *number(uint32_t n,char *s)
 {
     char t[12];uint32_t i=0,j=0;
     if(!n){s[0]='0';s[1]=0;return s;}
     while(n&&i<11u){t[i++]=(char)('0'+n%10u);n/=10u;}
-    while(i)s[j++]=t[--i];
+    while(i){s[j++]=t[--i];}
     s[j]=0;return s;
 }
-static void symbol_blit(int32_t x,int32_t y,uint32_t id,uint32_t size,
-                        const uint8_t *base,uint16_t fg)
+static void symbol_blit(int32_t x,int32_t y,uint32_t id,uint32_t size,const uint8_t *base,uint16_t fg)
 {
     const uint8_t *data=base+id*size*size/2;
     for(uint32_t gy=0;gy<size;gy++)for(uint32_t gx=0;gx<size;gx++){
@@ -27,259 +25,376 @@ static void symbol_blit(int32_t x,int32_t y,uint32_t id,uint32_t size,
         }
     }
 }
-static void icon_blit(int32_t x,int32_t y,uint32_t id,uint16_t fg)
-{symbol_blit(x,y,id,ICON_SIZE,ICON_ALPHA,fg);}
-static void zoom_blit(int32_t x,int32_t y,uint32_t id,uint16_t fg)
-{symbol_blit(x,y,id,ZOOM_SIZE,ICON_ZOOM_ALPHA,fg);}
+static void icon_blit(int32_t x,int32_t y,uint32_t id,uint16_t fg){symbol_blit(x,y,id,64,ICON_ALPHA,fg);}
+static void zoom_blit(int32_t x,int32_t y,uint32_t id,uint16_t fg){symbol_blit(x,y,id,96,ICON_ZOOM_ALPHA,fg);}
+static void tiny(int32_t x,int32_t y,uint32_t id,uint16_t fg){symbol_blit(x,y,id,24,ICON_TINY_ALPHA,fg);}
+static void mini(int32_t x,int32_t y,uint32_t id,uint16_t fg){symbol_blit(x,y,id,32,ICON_MINI_ALPHA,fg);}
+static void mid(int32_t x,int32_t y,uint32_t id,uint16_t fg){symbol_blit(x,y,id,48,ICON_MID_ALPHA,fg);}
 static void disk(int32_t cx,int32_t cy,int32_t r,uint16_t col)
 {
-    for(int32_t y=-r;y<=r;y++)for(int32_t x=-r;x<=r;x++)
-        if(x*x+y*y<=r*r)cv_pset(cx+x,cy+y,col);
+    for(int32_t y=-r;y<=r;y++)for(int32_t x=-r;x<=r;x++)if(x*x+y*y<=r*r)cv_pset(cx+x,cy+y,col);
 }
 static void panel(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t fill)
 {
-    cv_rect(x+5,y,w-10,h,fill);
-    cv_rect(x,y+5,w,h-10,fill);
-    cv_rect(x+2,y+2,w-4,h-4,fill);
+    int32_t r=h/2<7?h/2:7;
+    cv_rect(x+r,y,w-2*r,h,fill);cv_rect(x,y+r,w,h-2*r,fill);
+    disk(x+r,y+r,r,fill);disk(x+w-r-1,y+r,r,fill);
+    disk(x+r,y+h-r-1,r,fill);disk(x+w-r-1,y+h-r-1,r,fill);
 }
-static void card_edge(int32_t x,int32_t y,int32_t w,int32_t h,
-                      uint16_t col,uint8_t selected)
+static void card(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t fill,uint16_t edge,uint8_t selected)
 {
-    /* One continuous visual cue for the listening/editing target. */
-    cv_rect(x+12,y+1,w-24,selected?3:1,col);
-    if(selected)cv_rect(x+2,y+11,3,h-22,col);
+    uint32_t inset=selected?3u:1u;panel(x,y,w,h,edge);
+    panel(x+(int32_t)inset,y+(int32_t)inset,w-2*(int32_t)inset,h-2*(int32_t)inset,fill);
+}
+static void slash(int32_t x,int32_t y,int32_t w,uint16_t col)
+{for(int32_t i=-1;i<=1;i++)cv_line(x+i,y+w,x+w+i,y,col);}
+static void switch_draw(int32_t x,int32_t y,int32_t w,int32_t h,uint8_t on,uint16_t fg,uint16_t guide,uint16_t bg)
+{
+    int32_t r=h/2;
+    cv_rect(x+r,y,w-2*r,h,on?fg:guide);disk(x+r,y+r,r,on?fg:guide);disk(x+w-r-1,y+r,r,on?fg:guide);
+    if(!on){cv_rect(x+r,y+2,w-2*r,h-4,bg);disk(x+r,y+r,r-2,bg);disk(x+w-r-1,y+r,r-2,bg);}
+    disk(x+(on?w-r-1:r),y+r,r-4,on?bg:fg);
 }
 static void transport_symbol(int32_t x,int32_t y,uint16_t col)
 {
-    if(recording){disk(x+10,y+10,9,col);return;}
-    if(!running){cv_rect(x+2,y+2,17,17,col);return;}
+    if(!running){cv_rect(x+3,y+3,15,15,col);return;}
     for(int32_t i=0;i<18;i++)cv_line(x+2,y+2+i,x+2+(i<9?i:17-i)*2,y+2+i,col);
 }
-static void switch_draw(int32_t x,int32_t y,uint8_t on,uint16_t lit,uint16_t idle,uint16_t face)
+static void status_header(uint32_t context,uint16_t fg,uint16_t guide,uint8_t home)
 {
-    uint16_t rail=on?lit:idle;
-    cv_rect(x+13,y,34,27,rail);cv_rect(x+5,y+5,50,17,rail);
-    disk(x+13,y+13,13,rail);disk(x+47,y+13,13,rail);
-    disk(x+(on?46:14),y+13,10,face);
-    disk(x+(on?46:14),y+13,4,on?lit:idle);
+    if(home)aa_text(12,4,&FONT_N,"WANDERER",fg);else mini(8,0,context,fg);
+    transport_symbol(209,6,fg);
+    if(recording)disk(193,16,6,fg);
+    cv_rect(12,33,216,2,guide);
 }
-static void orbit_pixels(int32_t cx,int32_t cy,int32_t r,uint16_t col)
+static void gauge(int32_t x,int32_t y,int32_t w,uint32_t percent,uint16_t fg,uint16_t guide)
 {
-    int32_t x=r,y=0,d=1-r;
-    while(y<=x){
-        cv_pset(cx+x,cy+y,col);cv_pset(cx+y,cy+x,col);
-        cv_pset(cx-x,cy+y,col);cv_pset(cx-y,cy+x,col);
-        cv_pset(cx+x,cy-y,col);cv_pset(cx+y,cy-x,col);
-        cv_pset(cx-x,cy-y,col);cv_pset(cx-y,cy-x,col);
-        y++;
-        if(d<0)d+=2*y+1;
-        else{x--;d+=2*(y-x)+1;}
-    }
+    if(percent>100u)percent=100u;
+    panel(x,y,w,10,guide);
+    if(percent)cv_rect(x,y+2,(int32_t)(percent*(uint32_t)w/100u),6,fg);
 }
-static void orbit(int32_t cx,int32_t cy,int32_t r,uint16_t col)
+static uint32_t percent(uint32_t v){return (v*100u+63u)/127u;}
+static void percent_sign(int32_t x,int32_t y,uint16_t fg)
 {
-    orbit_pixels(cx,cy,r,col);
-    orbit_pixels(cx,cy,r-1,col);
+    disk(x+3,y+3,2,fg);disk(x+12,y+15,2,fg);
+    for(int32_t i=0;i<2;i++)cv_line(x+2+i,y+17,x+13+i,y+1,fg);
 }
-static void phrase_orbit(const wm_phrase_t *p,int32_t cx,int32_t cy,
-                         uint8_t selected,uint16_t col,uint16_t guide,uint16_t face)
+static void large_value(uint32_t value,int32_t y,uint8_t percentage,uint16_t fg)
 {
-    orbit(cx,cy,43,guide);
-    for(uint32_t i=0;i<WM_STEPS;i++){
-        int32_t x=cx+OX[i]*43/44,y=cy+OY[i]*43/44;
-        disk(x,y,p->e[i].velocity?4:3,p->e[i].velocity?col:guide);
-        if(running&&i==step_index){
-            disk(x,y,7,col);disk(x,y,4,face);
-            if(p->e[i].velocity)disk(x,y,2,col);
+    const font_t *f=wm.extra_large?&FONT_X:&FONT_B;char b[12];number(value,b);
+    int32_t w=width(f,b)+(percentage?20:0),x=(240-w)/2;
+    aa_text(x,y,f,b,fg);if(percentage)percent_sign(x+width(f,b)+3,y+f->h-20,fg);
+}
+static void steps(const wm_phrase_t *p,int32_t x,int32_t y,int32_t spacing,int32_t group,uint16_t col,uint16_t guide,uint8_t audible)
+{
+    /* Two bars occupy two rows, keeping each step as readable as the 16-step view. */
+    for(uint32_t i=0;i<wm.loop_steps;i++){
+        uint32_t pos=i%16u,row=i/16u;
+        int32_t px=x+(int32_t)pos*spacing+(int32_t)(pos/4u)*group;
+        int32_t py=y+(wm.loop_steps==32u?(int32_t)row*8-2:4);
+        uint8_t note=wm_step_notes(p,i)!=0;
+        cv_rect(px,py,spacing-2,note?(wm.loop_steps==32u?4:8):1,note?col:guide);
+        /* Held gates join cells so duration is visible instead of another onset dot. */
+        for(uint32_t v=0;v<WM_POLY;v++){
+            wm_event_t event=wm_get(p,i,v);
+            if(!event.velocity||event.gate<=256u)continue;
+            uint32_t count=(event.gate-1u)/256u;
+            if(count>wm.loop_steps-1u)count=wm.loop_steps-1u;
+            for(uint32_t k=1;k<=count;k++){
+                uint32_t t=(i+k)%wm.loop_steps;
+                int32_t tx=x+(int32_t)(t%16u)*spacing+(int32_t)((t%16u)/4u)*group;
+                int32_t ty=y+(wm.loop_steps==32u?(int32_t)(t/16u)*8:6);
+                cv_rect(tx,ty,spacing-2,2,col);
+            }
         }
-    }
-    if(selected){disk(cx,cy+53,3,col);cv_rect(cx-16,cy+58,32,3,col);}
-}
-static void layer_steps(const wm_phrase_t *p,uint32_t active,uint16_t col,uint16_t guide)
-{
-    cv_rect(82,213,142,2,guide);
-    for(uint32_t i=0;i<WM_STEPS;i++){
-        int32_t x=85+(int32_t)i*9;
-        disk(x,214,p->e[i].velocity?3:1,p->e[i].velocity?col:guide);
-        if(running&&i==active)cv_rect(x-2,205,5,18,col);
+        if(running&&audible&&i==(step_index+wm.loop_steps-1u)%wm.loop_steps){
+            cv_rect(px-1,py-3,spacing,2,col);
+        }
     }
 }
 static uint32_t focus_icon(void)
 {
-    switch(focus){
-    case 1:return ICO_MELT;case 2:return ICO_DRIFT;case 3:return ICO_DECAY;
-    case 4:return ICO_TEMPO;case 5:return ICO_LEVEL;case 7:return ICO_SOUND;default:return ICO_SIZE;
-    }
+    switch(focus){case 1:return ICO_MELT;case 2:return ICO_DRIFT;case 3:return ICO_DECAY;
+    case 4:return ICO_TEMPO;case 5:return ICO_LEVEL;case 7:return ICO_SOUND;default:return ICO_SIZE;}
 }
 static uint32_t notice_icon(void)
 {
     switch(notice){
-    case N_ORIGINAL_SAFE:case N_ANCHOR_SAFE:return ICO_SAFE;
+    case N_ORIGINAL_SAFE:case N_ANCHOR_SAFE:return ICO_LOCK;
     case N_ANCHORED:case N_CATCH_FIRST:return ICO_ANCHOR;
     case N_BRANCHED:return ICO_BRANCH;
     case N_UNDO:case N_NO_UNDO:return ICO_UNDO;
-    case N_STILL:return ICO_STOP;case N_LIVE:return ICO_PLAY;
-    case N_LAYER_CLEARED:return ICO_ERASE;
-    case N_NEW_SESSION:return ICO_NEW;
-    case N_SAVE_FAILED:case N_SAVED:return ICO_SAVE;
-    case N_NO_VALID_SAVE:case N_LOADED:return ICO_LOAD;
-    case N_STOP_FIRST:return ICO_STOP;
-    default:return ICO_MEMORY;
-    }
+    case N_NO_PHRASE:case N_NO_VALID_SAVE:return ICO_EMPTY;
+    case N_SAVE_FAILED:case N_PREF_FAILED:return ICO_BROKEN;
+    case N_STILL:case N_STOP_FIRST:return ICO_STOP;case N_LIVE:return ICO_PLAY;
+    case N_LAYER_CLEARED:return ICO_LAYER;case N_NEW_SESSION:return ICO_NEW;
+    case N_SAVED:return ICO_SAVE;case N_LOADED:return ICO_LOAD;
+    default:return ICO_MEMORY;}
 }
 static uint8_t notice_error(void)
 {
-    return notice==N_NO_PHRASE||notice==N_CATCH_FIRST||notice==N_NO_UNDO||
-      notice==N_SAVE_FAILED||notice==N_NO_VALID_SAVE||notice==N_STOP_FIRST;
+    return notice==N_NO_PHRASE||notice==N_CATCH_FIRST||notice==N_NO_UNDO||notice==N_SAVE_FAILED||
+        notice==N_NO_VALID_SAVE||notice==N_STOP_FIRST||notice==N_PREF_FAILED;
 }
-static void screen_home(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,
-                        uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
+static uint8_t notice_success(void)
+{return notice==N_SAVED||notice==N_LOADED;}
+static uint8_t notice_sticky(void)
+{return notice_error()||notice_success();}
+static void project_footer(uint16_t fg,uint16_t guide)
 {
-    aa_text(16,5,&FONT_N,"WANDERER",fg);
-    transport_symbol(206,6,recording?l:running?a:guide);
-    cv_rect(16,34,208,2,guide);
-    if(running)cv_rect(16+(int32_t)step_index*13,32,13,6,a);
-    panel(8,43,108,117,pa);panel(124,43,108,117,pm);
-    card_edge(8,43,108,117,a,anchor_view);
-    card_edge(124,43,108,117,m,!anchor_view);
-    phrase_orbit(&wm.anchor,62,100,anchor_view,a,guide,pa);
-    phrase_orbit(&wm.memory,178,100,!anchor_view,m,guide,pm);
-    icon_blit(30,68,ICO_ANCHOR,wm.has_anchor?a:guide);
-    icon_blit(146,68,ICO_MEMORY,anchor_view?guide:m);
-    panel(8,167,224,66,pa);
-    card_edge(8,167,224,66,l,wm.layer_enabled);
-    icon_blit(16,168,ICO_LAYER,l);
-    switch_draw(169,174,wm.layer_enabled,l,guide,wm.light?RGB(255,255,255):fg);
-    layer_steps(&wm.layer,step_index,l,guide);
+    uint32_t icon=project_dirty?ICO_EDITED:project_origin_slot<NSLOT?ICO_STORED:ICO_FRESH;
+    tiny(8,214,icon,project_dirty||project_origin_slot<NSLOT?fg:guide);
+    if(project_origin_slot<NSLOT){char b[12];number(project_origin_slot+1u,b);aa_text(38,216,&FONT_N,b,fg);}
+    if(!vol)tiny(108,214,ICO_MUTE,fg);
+    tiny(159,214,ICO_LENGTH,guide);
+    char b[12];number(wm.loop_steps,b);aa_text(188,216,&FONT_N,b,fg);
 }
-static void screen_zoom(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,
-                        uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
+static void screen_home(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
 {
-    uint8_t original=anchor_view&&wm.has_anchor;
-    const wm_phrase_t *p=original?&wm.anchor:&wm.memory;
-    uint16_t col=original?a:m,face=original?pa:pm;
-    aa_text(16,5,&FONT_N,"WANDERER",fg);
-    transport_symbol(206,6,recording?l:running?a:guide);
-    cv_rect(16,34,208,2,guide);
-    panel(8,41,224,152,face);
-    card_edge(8,41,224,152,col,1);
-    orbit(120,115,70,guide);
-    for(uint32_t i=0;i<WM_STEPS;i++){
-        int32_t x=120+OX[i]*70/44,y=115+OY[i]*70/44;
-        disk(x,y,p->e[i].velocity?5:3,p->e[i].velocity?col:guide);
-        if(running&&i==step_index){
-            disk(x,y,8,col);disk(x,y,4,face);
-            if(p->e[i].velocity)disk(x,y,2,col);
-        }
-    }
-    zoom_blit(72,67,original?ICO_ANCHOR:ICO_MEMORY,col);
-    panel(8,198,224,36,pa);
-    card_edge(8,198,224,36,l,wm.layer_enabled);
-    symbol_blit(18,200,0,SMALL_SIZE,ICON_LAYER_SMALL_ALPHA,l);
-    cv_rect(65,220,92,2,guide);
-    for(uint32_t i=0;i<WM_STEPS;i++)
-        if(wm.layer.e[i].velocity)disk(67+(int32_t)i*6,221,2,l);
-    switch_draw(169,203,wm.layer_enabled,l,guide,wm.light?RGB(255,255,255):fg);
+    status_header(ICO_MEMORY,fg,guide,1);
+    card(8,42,108,118,pa,anchor_view?fg:guide,anchor_view);
+    card(124,42,108,118,pm,!anchor_view?fg:guide,!anchor_view);
+    icon_blit(30,70,ICO_ANCHOR,a);icon_blit(146,70,ICO_MEMORY,m);
+    if(wm.has_anchor)mini(12,45,ICO_LOCK,fg);else mini(12,45,ICO_NEW,guide);
+    if(anchor_view)mini(80,45,ICO_LISTEN,fg);else mini(196,45,ICO_LISTEN,fg);
+    if(recording&&!wm.layer_enabled)disk(211,119,5,fg);
+    steps(&wm.anchor,12,140,6,2,a,guide,anchor_view);
+    steps(&wm.memory,128,140,6,2,m,guide,!anchor_view);
+    card(8,165,224,47,pa,guide,0);mid(14,164,ICO_LAYER,l);
+    if(!wm.layer_enabled)slash(20,170,30,fg);
+    switch_draw(168,168,54,25,wm.layer_enabled,fg,guide,pa);
+    if(recording&&wm.layer_enabled)disk(85,181,5,fg);
+    steps(&wm.layer,78,198,8,3,l,guide,!anchor_view&&wm.layer_enabled);
+    project_footer(fg,guide);
     (void)bg;
 }
-static void screen_settings(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,
-                            uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
+static void screen_zoom(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
 {
-    uint32_t system_icons[3]={ICO_SUN,ICO_SIZE,ICO_STILL};
-    uint32_t effect_icons[3]={ICO_CHORUS,ICO_DELAY,ICO_REVERB};
-    uint8_t system_on[3]={wm.light,wm.extra_large,wm.reduced_motion};
-    uint8_t effect_on[3]={wm.fx_on&1u,(wm.fx_on>>1)&1u,(wm.fx_on>>2)&1u};
-    uint8_t amounts[3]={wm.chorus_mix,wm.delay_mix,wm.reverb_mix};
-    uint16_t colors[3]={l,a,m};
-    char buf[12];
-    aa_text(16,5,&FONT_N,"WANDERER",fg);
-    cv_rect(16,34,208,2,guide);
-    cv_rect(settings_page?122:16,34,settings_page?102:102,3,
-            settings_page?m:l);
-    cv_rect(212,3,6,5,guide);cv_rect(212,26,6,5,guide);
-    cv_rect(201,14,6,6,guide);cv_rect(223,14,6,6,guide);
-    cv_line(205,7,209,11,guide);cv_line(221,23,225,27,guide);
-    cv_line(205,27,209,23,guide);cv_line(221,11,225,7,guide);
-    disk(215,17,10,guide);disk(215,17,5,bg);
+    uint8_t original=anchor_view&&wm.has_anchor;uint16_t col=original?a:m;
+    const wm_phrase_t *p=original?&wm.anchor:&wm.memory;
+    status_header(original?ICO_ANCHOR:ICO_MEMORY,fg,guide,1);
+    card(8,42,224,136,original?pa:pm,fg,1);
+    zoom_blit(72,52,original?ICO_ANCHOR:ICO_MEMORY,col);
+    if(original)mini(16,47,wm.has_anchor?ICO_LOCK:ICO_EMPTY,fg);
+    if(recording&&!wm.layer_enabled)disk(210,62,7,fg);
+    steps(p,16,152,12,4,col,guide,1);
+    card(8,185,224,27,pa,guide,0);tiny(18,187,ICO_LAYER,l);
+    if(!wm.layer_enabled)slash(20,188,20,fg);
+    switch_draw(172,187,48,23,wm.layer_enabled,fg,guide,pa);
+    if(recording&&wm.layer_enabled)disk(62,198,5,fg);
+    steps(&wm.layer,80,196,5,2,l,guide,!anchor_view&&wm.layer_enabled);
+    project_footer(fg,guide);
+    (void)bg;
+}
+static uint32_t setting_icon(void)
+{
+    const uint8_t ids[4][3]={{ICO_SUN,ICO_SIZE,ICO_STILL},{ICO_CHORUS,ICO_DELAY,ICO_REVERB},{ICO_LEVEL,ICO_BELL,ICO_SAVE},{ICO_ROOT,ICO_SCALE,ICO_LENGTH}};
+    return ids[settings_page][settings_index];
+}
+static uint8_t setting_on(uint32_t i)
+{
+    if(!settings_page)return i==0?wm.light:i==1?wm.extra_large:wm.reduced_motion;
+    if(settings_page==1)return (wm.fx_on>>i)&1u;
+    return i==1?cues_enabled:1u;
+}
+static void row_locator(uint16_t fg,uint16_t guide)
+{
     for(uint32_t i=0;i<3u;i++){
-        int32_t y=42+(int32_t)i*64;
-        panel(8,y,224,59,i==1?pm:pa);
-        card_edge(8,y,224,59,settings_index==i?colors[i]:guide,settings_index==i);
-        if(settings_index==i&&!settings_page){
-            cv_rect(94,y+52,55,3,colors[i]);
-        }
-        icon_blit(22,y-2,settings_page?effect_icons[i]:system_icons[i],colors[i]);
-        if(settings_page){
-            uint32_t value=amounts[i];
-            if(settings_index==i&&settings_detail&&fm1_ms<settings_detail_until)
-                value=settings_detail;
-            number(value,buf);
-            aa_text(157-width(&FONT_N,buf),y+12,&FONT_N,buf,fg);
-            cv_rect(96,y+49,60,2,guide);
-            cv_rect(96,y+49,(int32_t)amounts[i]*60/127,3,colors[i]);
-        }
-        switch_draw(166,y+16,settings_page?effect_on[i]:system_on[i],colors[i],guide,
-          wm.light?RGB(255,255,255):fg);
+        int32_t x=79+(int32_t)i*30;
+        cv_rect(x,231,22,4,i==settings_index?fg:guide);
+        if(i==settings_index)cv_rect(x,229,22,2,fg);
     }
+}
+static void diagram_arrow(int32_t x,int32_t y,int32_t w,uint16_t fg)
+{
+    for(int32_t t=-1;t<=1;t++){
+        cv_line(x,y+t,x+w,y+t,fg);
+        cv_line(x+w-7,y-7+t,x+w,y+t,fg);
+        cv_line(x+w-7,y+7+t,x+w,y+t,fg);
+    }
+}
+static void settings_header(uint16_t fg,uint16_t guide)
+{
+    const uint8_t ids[4]={ICO_SUN,ICO_CHORUS,ICO_CONTROLS,ICO_SCALE};
+    transport_symbol(209,6,fg);if(recording)disk(193,16,6,fg);cv_rect(12,34,216,1,guide);
+    for(uint32_t i=0;i<4;i++){
+        if(i==settings_page)panel(6+(int32_t)i*46,0,36,30,wm.light?RGB(211,226,229):RGB(22,43,55));
+        mini(8+(int32_t)i*46,0,ids[i],i==settings_page?fg:guide);
+        if(i==settings_page)cv_rect(12+(int32_t)i*46,30,24,3,fg);
+    }
+}
+static void screen_setting_detail(uint16_t bg,uint16_t fg,uint16_t guide)
+{
+    uint32_t icon=setting_icon(),value=0;uint8_t toggle=0,percentage=0,timing=0;
+    if(settings_page==3u){
+        const char *notes[12]={"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+        settings_header(fg,guide);mid(96,45,icon,fg);
+        if(settings_index==0){
+            const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
+            aa_text((240-width(f,notes[wm.root]))/2,111,f,notes[wm.root],fg);
+        }else large_value(settings_index==1?wm.scale:wm.loop_steps,111,0,fg);
+        if(settings_index==1){
+            for(uint32_t n=0;n<12u;n++){
+                uint8_t on=(WM_SCALES[wm.scale]>>n)&1u;
+                int32_t x=13+(int32_t)n*18;
+                cv_rect(x,201,14,19,on?fg:guide);
+                if(!on)cv_rect(x+2,203,10,15,bg);
+            }
+        }else if(settings_index==2){
+            for(uint32_t bar=0;bar<2;bar++)for(uint32_t beat=0;beat<4;beat++){
+                int32_t x=20+(int32_t)bar*108+(int32_t)beat*23;
+                uint8_t present=!bar||wm.loop_steps==32u;
+                cv_rect(x,204,19,14,present?fg:guide);
+                if(!present)cv_rect(x+2,206,15,10,bg);
+            }
+        }
+        row_locator(fg,guide);
+        return;
+    }
+    if(settings_page==0)toggle=1;
+    else if(settings_page==2){if(settings_index==1)toggle=1;else value=settings_index==0?percent(vol):project_slot+1u,percentage=settings_index==0;}
+    else{
+        if(settings_detail_kind==1){icon=ICO_CLOCK;timing=1;}
+        else if(settings_detail_kind==2){icon=ICO_FEEDBACK;value=(wm.delay_feedback*67u+63u)/127u;percentage=1;}
+        else if(settings_detail_kind==3){icon=ICO_ROOM;value=percent(wm.reverb_size);percentage=1;}
+        else if(settings_detail_kind==4){icon=ICO_DAMP;value=percent(wm.reverb_damp);percentage=1;}
+        else{value=percent(settings_index==0?wm.chorus_mix:settings_index==1?wm.delay_mix:wm.reverb_mix);percentage=1;}
+    }
+    settings_header(fg,guide);
+    if(toggle){
+        zoom_blit(72,47,icon,fg);
+        switch_draw(64,165,112,43,setting_on(settings_index),fg,guide,bg);
+    }else{
+        mid(96,47,icon,fg);
+        if(timing){
+            const char *times[4]={"1/16","1/8","3/16","1/4"};const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
+            aa_text((240-width(f,times[wm.delay_div]))/2,119,f,times[wm.delay_div],fg);
+        }else{large_value(value,117,percentage,fg);if(percentage)gauge(16,210,208,value,fg,guide);}
+        if(settings_page==1){mini(174,54,setting_icon(),fg);if(!setting_on(settings_index))slash(178,58,24,fg);}
+    }
+    row_locator(fg,guide);
+}
+static void screen_settings(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t pm,uint16_t guide,uint16_t a,uint16_t m,uint16_t l)
+{
+    if(wm.extra_large||settings_page==3u||(settings_page==1&&settings_detail_kind)){screen_setting_detail(bg,fg,guide);return;}
+    settings_header(fg,guide);
+    uint8_t prior=settings_index;
+    for(uint32_t i=0;i<3;i++){
+        int32_t y=39+(int32_t)i*65;uint32_t value=0;uint8_t numeric=0,pct=0;
+        settings_index=(uint8_t)i;uint32_t icon=setting_icon();settings_index=prior;
+        card(8,y,224,61,pa,prior==i?fg:guide,prior==i);
+        mid(10,y+6,icon,fg);
+        if(settings_page==1){numeric=pct=1;value=percent(i==0?wm.chorus_mix:i==1?wm.delay_mix:wm.reverb_mix);}
+        else if(settings_page==2&&i!=1){numeric=1;pct=i==0;value=i==0?percent(vol):project_slot+1u;}
+        if(numeric){
+            char b[12];number(value,b);
+            int32_t end=settings_page==2?(pct?194:212):142;
+            aa_text(end-width(&FONT_W,b),y+9,&FONT_W,b,fg);
+            if(pct){
+                percent_sign(end+4,y+22,fg);
+                int32_t span=settings_page==2?134:84;
+                cv_rect(72,y+51,span,3,guide);
+                cv_rect(72,y+51,(int32_t)value*span/100,3,fg);
+            }
+        }
+        if(settings_page!=2||i==1)switch_draw(170,y+17,50,25,setting_on(i),fg,guide,pa);
+        if(settings_page==1&&!setting_on(i))slash(42,y+34,16,fg);
+    }
+    (void)pm;(void)a;(void)m;(void)l;
 }
 static void screen_focus(uint16_t fg,uint16_t guide,uint16_t accent)
 {
-    char buf[16];uint32_t v=focus==4?((uint32_t)wm.bpm-60u)*127u/120u:
-      focus==6?(wm.extra_large?127u:0u):
-      focus==7?(uint32_t)wm.sound*127u/(WM_PRESET_COUNT-1u):focus_value;
-    aa_text(16,5,&FONT_N,"WANDERER",fg);
-    cv_rect(16,34,208,2,guide);
-    orbit(65,121,55,guide);
-    for(uint32_t i=0;i<16u;i++)
-        disk(65+OX[i]*55/44,121+OY[i]*55/44,3,i*127u/15u<=v?accent:guide);
-    icon_blit(33,89,focus_icon(),accent);
-    number(focus==4?wm.bpm:focus_value,buf);
-    aa_text(231-width(&FONT_H,buf),98,&FONT_H,buf,fg);
-    cv_rect(20,205,200,7,guide);
-    if(v)cv_rect(20,205,(int32_t)v*200/127,7,accent);
-    disk(20+(int32_t)v*200/127,208,8,accent);
+    uint32_t value=focus==4?wm.bpm:focus==7?wm.sound+1u:percent(focus_value);
+    status_header(focus_icon(),fg,guide,0);icon_blit(88,44,focus_icon(),fg);
+    large_value(value,122,focus!=4&&focus!=7,fg);
+    if(focus!=7)gauge(16,215,208,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide);
+    else for(uint32_t b=0;b<10;b++){
+        int32_t x=17+(int32_t)b*21;cv_rect(x,219,16,9,b==wm.sound/10u?fg:guide);
+    }
+    (void)accent;
 }
 static void screen_message(uint16_t fg,uint16_t guide,uint16_t accent)
 {
-    uint32_t icon=confirm?(confirm==1?ICO_ERASE:confirm==2?ICO_SAVE:
-      confirm==3?ICO_LOAD:ICO_NEW):notice_icon();
-    aa_text(16,5,&FONT_N,"WANDERER",fg);
-    cv_rect(16,34,208,2,guide);
-    orbit(120,123,70,guide);
-    for(uint32_t i=0;i<16u;i++)
-        disk(120+OX[i]*70/44,123+OY[i]*70/44,2,guide);
-    icon_blit(88,91,icon,accent);
+    status_header(confirm==2?ICO_SAVE:confirm==3?ICO_LOAD:confirm==1||confirm==4?ICO_ERASE:confirm==5?ICO_ANCHOR:notice_icon(),fg,guide,0);
     if(confirm){
-        icon_blit(40,166,ICO_CLOSE,guide);
-        icon_blit(142,166,ICO_CHECK,accent);
-        cv_rect(64,223,112,3,guide);
+        if(confirm==2||confirm==3){
+            card(12,47,216,119,wm.light?RGB(255,255,255):RGB(16,32,43),guide,0);
+            icon_blit(25,73,confirm==2?ICO_SAVE:ICO_LOAD,fg);
+            char b[12];number(project_slot+1u,b);const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
+            aa_text(196-width(f,b),77,f,b,fg);
+            tiny(26,139,slot_presence[project_slot]==2u?ICO_STORED:slot_presence[project_slot]==1u?ICO_EMPTY:ICO_BROKEN,fg);
+            if(project_dirty)tiny(96,139,ICO_EDITED,fg);
+        }else if(confirm==4){
+            if(project_dirty)tiny(202,37,ICO_EDITED,fg);
+            mini(40,54,ICO_ANCHOR,fg);mini(104,54,ICO_MEMORY,fg);mini(168,54,ICO_LAYER,fg);
+            icon_blit(88,100,ICO_ERASE,fg);
+        }else if(confirm==5){
+            icon_blit(20,73,ICO_ANCHOR,fg);icon_blit(158,73,ICO_MEMORY,fg);
+            diagram_arrow(98,104,42,fg);
+        }else{zoom_blit(42,51,ICO_LAYER,fg);mid(145,108,ICO_ERASE,fg);}
+        card(12,177,100,57,wm.light?RGB(255,255,255):RGB(16,32,43),guide,0);
+        card(128,177,100,57,wm.light?RGB(255,255,255):RGB(16,32,43),guide,0);
+        mid(38,181,ICO_CLOSE,fg);mid(154,181,ICO_CHECK,fg);
+    }else if(notice==N_PREF_FAILED){
+        uint16_t fill=wm.light?RGB(255,255,255):RGB(16,32,43);
+        card(12,47,216,76,fill,guide,0);mid(28,60,ICO_SAVE,fg);mid(158,60,ICO_CHECK,fg);
+        char b[12];number(project_slot+1u,b);aa_text(103,67,&FONT_W,b,fg);
+        card(12,135,216,76,fill,guide,0);mid(28,148,ICO_CONTROLS,fg);mid(158,148,ICO_CLOSE,fg);
+    }else if(notice_success()){
+        card(12,47,216,119,wm.light?RGB(255,255,255):RGB(16,32,43),guide,0);
+        icon_blit(25,73,notice==N_SAVED?ICO_SAVE:ICO_LOAD,fg);
+        char b[12];number(project_slot+1u,b);const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
+        aa_text(196-width(f,b),77,f,b,fg);mid(96,177,ICO_CHECK,fg);
     }else{
-        uint32_t remaining=notice_until>fm1_ms?notice_until-fm1_ms:0u;
-        if(remaining>1200u)remaining=1200u;
-        icon_blit(142,148,notice_error()?ICO_CLOSE:ICO_CHECK,accent);
-        cv_rect(32,220,176,4,guide);
-        cv_rect(32,220,(int32_t)remaining*176/1200,4,accent);
+        if(notice==N_STOP_FIRST){
+            icon_blit(22,67,ICO_PLAY,fg);icon_blit(154,67,ICO_STOP,fg);
+            diagram_arrow(97,99,44,fg);
+        }else zoom_blit(72,62,notice_icon(),fg);
+        if(notice==N_SAVED||notice==N_LOADED){
+            char b[12];number(project_slot+1u,b);aa_text(190-width(&FONT_H,b),126,&FONT_H,b,fg);
+        }
+        mid(96,177,notice_error()?ICO_CLOSE:ICO_CHECK,fg);
     }
+    (void)accent;
 }
+static void screen_scope(uint16_t bg,uint16_t fg,uint16_t guide)
+{
+    status_header(ICO_SCOPE,fg,guide,0);
+    if(scope_hold)mini(60,0,ICO_PAUSE,fg);
+    card(10,43,220,145,bg,guide,0);
+    for(int32_t x=16;x<224;x+=8)cv_rect(x,114,3,1,guide);
+    cv_rect(120,49,1,133,guide);
+    int32_t old=115;
+    for(uint32_t x=0;x<208u;x++){
+        uint32_t at=x*(SCOPE_N-1u)/207u;
+        int32_t y=115-((int32_t)scope_trace[at]*(1<<scope_gain)*62)/32768;
+        if(y<49)y=49;
+        if(y>180)y=180;
+        if(x)for(int32_t t=0;t<3;t++)cv_line(15+(int32_t)x,old+t-1,16+(int32_t)x,y+t-1,fg);
+        old=y;
+    }
+    char b[12];mini(12,199,ICO_CLOCK,fg);
+    number((SCOPE_N*(1u<<scope_display_time)*1000u+FS/2u)/FS,b);aa_text(48,203,&FONT_N,b,fg);
+    mini(131,199,ICO_SIZE,fg);number(1u<<scope_gain,b);aa_text(168,203,&FONT_N,b,fg);
+    cv_line(198,211,205,218,fg);cv_line(198,218,205,211,fg);
+}
+#include "wanderer_splash.c"
 static void screen(void)
 {
-    uint16_t bg=wm.light?RGB(234,246,243):RGB(5,17,23);
-    uint16_t fg=wm.light?INK:RGB(240,249,245);
-    uint16_t pa=wm.light?RGB(251,255,251):RGB(10,38,43);
-    uint16_t pm=wm.light?RGB(241,245,252):RGB(21,32,53);
-    uint16_t guide=wm.light?RGB(145,170,167):RGB(75,108,116);
-    uint16_t a=wm.light?RGB(10,91,92):CYAN;
-    uint16_t m=wm.light?RGB(51,64,143):BLUE;
-    uint16_t l=wm.light?RGB(138,74,8):GOLD;
+    if(splash_active){splash_screen();return;}
+    uint16_t bg=wm.light?RGB(238,246,246):RGB(8,17,25),fg=wm.light?INK:RGB(240,249,245);
+    uint16_t pa=wm.light?RGB(255,255,255):RGB(16,32,43),pm=wm.light?RGB(247,247,255):RGB(23,31,49);
+    uint16_t guide=wm.light?RGB(70,100,110):RGB(127,161,173);
+    uint16_t a=wm.light?RGB(8,89,90):CYAN,m=wm.light?RGB(49,64,139):BLUE,l=wm.light?RGB(139,72,8):GOLD;
+    if(scope_open)scope_snapshot();
     for(int32_t band=0;band<4;band++){
-        cv_begin(240,60,bg);
-        cv_oy=-band*60;
-        if(settings_open)screen_settings(bg,fg,pa,pm,guide,a,m,l);
+        cv_begin(240,60,bg);cv_oy=-band*60;
+        if(scope_open)screen_scope(bg,fg,guide);
+        else if(notice&&notice_error())screen_message(fg,guide,fg);
+        else if(settings_open)screen_settings(bg,fg,pa,pm,guide,a,m,l);
         else if(confirm)screen_message(fg,guide,l);
-        else if(notice&&fm1_ms<notice_until)
-            screen_message(fg,guide,notice_error()?l:a);
-        else if(focus&&fm1_ms<focus_until)
-            screen_focus(fg,guide,focus==1?a:focus==2?m:l);
+        else if(notice&&(!notice_until||fm1_ms<notice_until))screen_message(fg,guide,fg);
+        else if(focus&&fm1_ms<focus_until)screen_focus(fg,guide,fg);
         else if(wm.extra_large)screen_zoom(bg,fg,pa,pm,guide,a,m,l);
         else screen_home(bg,fg,pa,pm,guide,a,m,l);
         cv_blit(0,(uint32_t)band*60u);

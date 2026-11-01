@@ -9,10 +9,11 @@ mkdir -p build/host
 python3 tools/gen_wanderer_font.py firmware/src/wanderer_font.h
 python3 tools/gen_wanderer_icons.py firmware/src/wanderer_icons.h
 python3 tools/gen_wanderer_waves.py firmware/src/wanderer_waves.h
-python3 tools/gen_wanderer_presets.py firmware/src/wanderer_presets.h docs/WANDERER_PRESETS_0.9.md
+python3 tools/gen_wanderer_presets.py firmware/src/wanderer_presets.h docs/WANDERER_PRESETS.md
+python3 tools/gen_wanderer_splash.py
 N=dinghy; D=
 if [ "${BOARD:-fm1}" = smk37 ]; then N=dinghy-smk37; D=-DBOARD_SMK37=1; fi
-cc -O2 -Wall -Wno-unused-function -DDINGHY_HOST $D -DAPP_VER="\"${APP_VER:-dev}\"" -Ifirmware/hal -Ifirmware/src -Ifirmware/gen -o build/host/$N firmware/src/dinghy.c
+cc ${HOST_CFLAGS:--O2} -Wall -Wno-unused-function -DDINGHY_HOST $D -DAPP_VER="\"${APP_VER:-dev}\"" -Ifirmware/hal -Ifirmware/src -Ifirmware/gen -o build/host/$N firmware/src/dinghy.c
 build/host/$N build/host/$N ${1:+"$1"}
 python3 - "$N" <<'PY'
 import sys

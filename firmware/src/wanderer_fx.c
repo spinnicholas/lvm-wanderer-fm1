@@ -15,6 +15,33 @@ static int16_t diffuse_r[1423] __attribute__((section(".pool")));
 static uint16_t verb_pos[4],diffuse_pos[2];
 static int32_t verb_tone[4];
 static int32_t mix_smooth[3];
+static volatile uint8_t fx_clearing;
+static uint32_t fx_clear_part,fx_clear_at;
+static void fx_reset(void)
+{
+    fx_clear_part=fx_clear_at=0;fx_clearing=1;
+}
+/* Clear bounded chunks in the audio callback; no large memset with IRQs off. */
+static void fx_clear_chunk(void)
+{
+    int16_t *lines[8]={ambience,delay_line,verb_a,verb_b,verb_c,verb_d,diffuse_l,diffuse_r};
+    const uint32_t sizes[8]={AMBIENCE_SIZE,65536u,5003u,5903u,6607u,7307u,1133u,1423u};
+    uint32_t budget=2048u;
+    while(budget&&fx_clear_part<8u){
+        uint32_t n=sizes[fx_clear_part]-fx_clear_at;
+        if(n>budget)n=budget;
+        for(uint32_t k=0;k<n;k++)lines[fx_clear_part][fx_clear_at+k]=0;
+        fx_clear_at+=n;budget-=n;
+        if(fx_clear_at==sizes[fx_clear_part]){fx_clear_at=0;fx_clear_part++;}
+    }
+    if(fx_clear_part==8u){
+        ambience_write=delay_write=delay_frames_smooth=0;delay_tone=0;
+        for(uint32_t k=0;k<4u;k++)verb_pos[k]=0,verb_tone[k]=0;
+        for(uint32_t k=0;k<2u;k++)diffuse_pos[k]=0;
+        for(uint32_t k=0;k<3u;k++)mix_smooth[k]=0;
+        fx_clearing=0;
+    }
+}
 
 static int16_t fx_bound(int32_t x)
 {
@@ -57,9 +84,20 @@ static int32_t fx_limit(int32_t x)
     if(x< -29000)x=-29000+((x+29000)>>3);
     return x>32767?32767:x< -32767?-32767:x;
 }
+static int32_t fx_tap(const int16_t *line,uint32_t mask,uint32_t write,uint32_t frames_q8)
+{
+    uint32_t whole=frames_q8>>8,frac=frames_q8&255u;
+    int32_t a=line[(write-whole)&mask],b=line[(write-whole-1u)&mask];
+    return a+(((b-a)*(int32_t)frac)>>8);
+}
 static void fx_process(int32_t *out,uint32_t n)
 {
     uint32_t i;
+    if(fx_clearing){
+        fx_clear_chunk();
+        for(i=0;i<n;i++)out[i*2u+1u]=out[i*2u];
+        return;
+    }
     uint32_t times[4]={step_samples,step_samples*2u,step_samples*3u,step_samples*4u};
     uint32_t delay_frames=times[wm.delay_div&3u];
     int32_t feedback=wm.delay_feedback*86/127; /* limited to 67 percent */
@@ -71,9 +109,9 @@ static void fx_process(int32_t *out,uint32_t n)
         uint32_t at=ambience_write,dt=delay_write;
         int32_t dry=out[i*2u],left=dry,right=dry;
         uint32_t tri=(motion_phase>>21)&2047u;
-        int32_t sweep=((int32_t)(tri<1024u?tri:2047u-tri)-512)/8;
-        int32_t chorus_l=ambience[(at-701u-(uint32_t)sweep)&(AMBIENCE_SIZE-1u)];
-        int32_t chorus_r=ambience[(at-907u+(uint32_t)sweep)&(AMBIENCE_SIZE-1u)];
+        int32_t sweep=((int32_t)(tri<1024u?tri:2047u-tri)-512)*32;
+        int32_t chorus_l=fx_tap(ambience,AMBIENCE_SIZE-1u,at,(uint32_t)(701*256+sweep));
+        int32_t chorus_r=fx_tap(ambience,AMBIENCE_SIZE-1u,at,(uint32_t)(907*256-sweep));
         if(delay_frames_smooth<delay_frames)
             delay_frames_smooth+=delay_frames-delay_frames_smooth>8u?8u:delay_frames-delay_frames_smooth;
         else if(delay_frames_smooth>delay_frames)
