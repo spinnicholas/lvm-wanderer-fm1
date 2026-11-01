@@ -1,0 +1,26 @@
+# Capture four notes, hear the evolving phrase and Layer, then revisit Anchor.
+0 btn 12
+50 btn 13
+100 keys 128
+300 keys 0
+430 keys 2048
+630 keys 0
+760 keys 16384
+960 keys 0
+1090 keys 524288
+1290 keys 0
+1450 btn 13
+1530 btn 9
+1800 enc 2 18
+2000 enc 3 4
+2200 enc 4 3
+3000 btn 6
+3100 btn 13
+3220 keys 262144
+3420 keys 0
+3500 btn 13
+4800 btn 7
+6800 btn 5
+8500 btn 5
+11300 btn 12
+12500 end

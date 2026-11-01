@@ -1,0 +1,35 @@
+# A captured four-note phrase, transformations, then chorus/reverb/delay and three sound characters.
+0 btn 12
+50 btn 13
+100 keys 128
+300 keys 0
+430 keys 2048
+630 keys 0
+760 keys 16384
+960 keys 0
+1090 keys 524288
+1290 keys 0
+1450 btn 13
+1530 btn 9
+1800 enc 2 18
+2000 enc 3 4
+2200 enc 4 3
+2500 btn 3
+2550 enc 6 1
+2600 enc 0 1
+2650 btn 3
+2700 enc 5 12
+2750 enc 4 6
+2780 shot
+2850 btn 8
+3400 btn 6
+3500 btn 13
+3620 keys 262144
+3820 keys 0
+3900 btn 13
+5400 enc 6 1
+6900 btn 7
+8000 enc 6 1
+9000 btn 5
+12000 btn 12
+13500 end

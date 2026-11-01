@@ -1,0 +1,6 @@
+# Four held notes at maximum MELT and level exercise headroom and voice release.
+0 enc 5 7
+20 enc 2 40
+100 keys 280704
+1800 keys 0
+3000 end

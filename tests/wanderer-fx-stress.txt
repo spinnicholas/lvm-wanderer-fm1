@@ -1,0 +1,17 @@
+# Maximum wet controls and four notes; room feedback must remain bounded and decay.
+0 enc 5 7
+20 enc 2 40
+50 btn 3
+100 enc 6 1
+150 enc 0 1
+200 btn 3
+250 enc 5 30
+300 enc 4 30
+350 enc 0 1
+400 enc 5 30
+450 enc 1 20
+500 enc 4 30
+550 btn 8
+600 keys 280704
+2500 keys 0
+11000 end

@@ -1,0 +1,31 @@
+# Ten-category audition: foundations, poly, lead, bass, pluck, FM, digital, pad, organic, experimental.
+300 keys 18560
+790 keys 0
+1250 enc 6 13
+1350 keys 18560
+1840 keys 0
+2300 enc 6 10
+2400 keys 128
+2890 keys 0
+3350 enc 6 9
+3450 keys 128
+3940 keys 0
+4400 enc 6 11
+4500 keys 128
+4990 keys 0
+5450 enc 6 8
+5550 keys 128
+6040 keys 0
+6500 enc 6 15
+6600 keys 18560
+7090 keys 0
+7550 enc 6 10
+7650 keys 18560
+8140 keys 0
+8600 enc 6 8
+8700 keys 128
+9190 keys 0
+9650 enc 6 6
+9750 keys 128
+10240 keys 0
+11200 end

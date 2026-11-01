@@ -1,0 +1,18 @@
+0 shot
+10 enc 2 127
+30 shot
+50 enc 3 127
+70 shot
+90 enc 4 127
+110 shot
+130 enc 1 127
+150 shot
+170 btn 3
+190 shot
+210 enc 6 1
+230 shot
+250 enc 0 1
+270 shot
+290 enc 2 -127
+310 shot
+330 end

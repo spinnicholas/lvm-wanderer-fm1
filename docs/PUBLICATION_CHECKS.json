@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "scenario": "wanderer-tour",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-settings",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-fx",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-boundaries",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-new-session",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-tempo-restore",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-adversarial",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-presets-tour",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-audio-stress",
+      "exit_code": 0
+    },
+    {
+      "scenario": "wanderer-fx-stress",
+      "exit_code": 0
+    },
+    {
+      "scenario": "100-preset-audit",
+      "exit_code": 0,
+      "output": "100 audible presets: RMS 361\u20134099, peak 7176"
+    },
+    {
+      "scenario": "memory-sanitizers",
+      "exit_code": 0,
+      "output": "event-memory preservation, layer, branch, undo and storage validation pass"
+    }
+  ],
+  "firmware_identity": "FM-1_929",
+  "firmware_sha256": "c6c0a2829a5c1fe5959cb0d302c4de152b97fe3f29e469c400d1fbaefa236dc9",
+  "firmware_bytes": 612196,
+  "generated_headers_unchanged": true,
+  "hardware_tested": false,
+  "identity_live_check": "FM-1_929 free according to Firmware Hub checker at publication preparation",
+  "leak_detection": "disabled because the container cannot inspect process threads"
+}

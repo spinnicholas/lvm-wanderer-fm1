@@ -1,0 +1,12 @@
+0 enc 1 25
+50 btn 11
+100 btn 3
+150 enc 1 -20
+200 btn 10
+250 btn 3
+300 btn 4
+350 btndown 2
+2050 btnup 2
+2100 btn 3
+2150 shot
+2200 end

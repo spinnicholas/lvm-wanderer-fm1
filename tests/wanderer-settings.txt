@@ -1,0 +1,24 @@
+# SEL opens settings. SELECT encoder moves. SEL toggles. HOME closes.
+0 shot
+50 btn 12
+100 btn 3
+150 shot
+200 enc 0 1
+250 shot
+300 btn 3
+350 shot
+400 enc 0 1
+450 shot
+500 btn 3
+550 shot
+600 enc 0 1
+650 shot
+700 btn 3
+750 shot
+800 btn 8
+850 shot
+900 enc 0 1
+950 shot
+1000 shot
+2200 shot
+2300 end

@@ -1,0 +1,17 @@
+# Wanderer 0.9: the 100-sound bank
+
+## Playing and browsing
+
+The 100 original patches are organized as ten banks of ten, with a numbered companion [catalog](WANDERER_PRESETS_0.9.md). PRESETS walks through the whole bank, wrapping after 100; SELECT jumps ten numbers and keeps the position within the current bank. Zoom moved to the system settings page. The main screen uses one large sound symbol and a large 1–100 number; no additional words were placed on the display. Numbers 1–3 are updated versions of the previous warm, glass and hollow characters, so older saved sound choices continue to point to corresponding sounds. Slot format 3 and its 160-byte record remain unchanged; sound values 0–99 are valid. A legacy 0.1–0.7 slot still migrates on explicit Load.
+
+## Voice design
+
+Each new note snapshots its patch, so turning PRESETS does not abruptly change a sustained voice. The four-voice engine chooses between three original band-limited oscillator tables (saw, hollow and glass), a sine, and a triangle. The second oscillator has a patch-defined interval or sub-octave and small detune. A mix balances them. Each voice has separate attack, decay, sustain and release settings, a decaying filter-brightness contour, and a two-stage low-pass path. A subset uses two-operator phase modulation: the second oscillator modulates the first, with a time-varying index, so bells and electric keys can soften after the attack. Higher registers reduce this index and octave interval to limit aliasing. Melt increases brightness; Drift and Decay still transform the note memory rather than modifying patch storage. The existing chorus, tempo delay and room remain global effects.
+
+The bank draws on synthesis *approaches*: low oscillators and moving filters for classic mono bass; paired saw and hollow oscillators with chorus for vintage poly; short bright contours for plucks; sine carrier/modulator ratios and changing modulation index for FM bells; and digital oscillator/FM blends through the filter for hybrid colors. Roland's JUNO-106 documentation describes saw and pulse sources, sub, envelopes, filter and chorus. Yamaha explains how modulator ratio, level and envelope shape FM harmonics. Arturia documents digital engines through analog filters and effects in MiniFreak. Moog's Model D manuals describe the subtractive oscillator-filter-envelope approach. These are original patches, not accurate models of those instruments, and there are no manufacturer samples or preset data in the firmware.
+
+Primary references: https://cdn.roland.com/assets/media/pdf/JUNO-106_OM.pdf ; https://usa.yamaha.com/files/download/other_assets/9/322009/DX200E.pdf ; https://www.arturia.com/products/hardware-synths/minifreak/overview ; https://www.moogmusic.com/downloads/ .
+
+## Validation and limits
+
+The checked-in CSV defines exactly 100 unique names and parameter sets. Its generator validates the range and writes both the firmware table and the companion catalog. A 100-patch host sweep turns off the default effects, triggers each patch, and checks nonzero output, a bounded dynamic range and no clipped PCM. All 100 are audible in that test; the sweep's measured per-patch RMS spans 361–4,099 and overall peak is 7,176/32,767. The target build and full Wanderer tests pass. The actual release package runs and responds to keys in fm1-emu, but this cannot establish physical FM-1 audio deadlines or the way every patch sounds through the device. The simple four-voice DSP and filters do not match the architectures or depth of full commercial synthesizers.

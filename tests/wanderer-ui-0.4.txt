@@ -1,0 +1,47 @@
+# FM-1 button ids in docs/API.md. A phrase, anchor, transformation, layer, branch, revisit.
+0 shot
+100 btn 13
+190 keys 128
+290 keys 0
+410 keys 2048
+500 keys 0
+640 keys 16384
+720 keys 0
+800 btn 13
+830 btn 9
+900 shot
+980 enc 2 12
+1010 enc 3 16
+1040 enc 4 20
+1100 shot
+1300 btn 6
+1350 btn 13
+1420 keys 8192
+1500 keys 0
+1550 btn 13
+1600 shot
+1700 btn 7
+1800 shot
+1900 btn 5
+2000 shot
+2100 btn 8
+2200 shot
+2300 btn 12
+2400 btn 11
+2450 shot
+2500 btn 3
+2600 shot
+2700 btn 10
+2800 btn 3
+2900 shot
+3000 enc 6 1
+3100 shot
+4500 shot
+4700 enc 6 1
+4800 shot
+5100 enc 4 20
+5200 shot
+6500 shot
+6600 btn 6
+6750 shot
+6900 end

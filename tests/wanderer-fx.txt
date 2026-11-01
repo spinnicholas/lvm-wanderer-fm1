@@ -1,0 +1,22 @@
+# SEL opens settings; PRESETS switches to effects; SELECT picks a row.
+0 shot
+50 btn 3
+100 enc 6 1
+150 shot
+200 enc 0 1
+250 shot
+300 btn 3
+350 shot
+400 enc 5 12
+450 shot
+500 enc 1 1
+550 shot
+600 enc 4 8
+650 shot
+700 enc 0 1
+750 shot
+800 enc 1 10
+850 shot
+900 btn 8
+950 shot
+1800 end
