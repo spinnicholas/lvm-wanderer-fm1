@@ -1,5 +1,5 @@
 {
-  "what": "Work-in-progress 16-step event-memory synth with 100 original sounds. Protect an Anchor, evolve a copy with Melt, Drift and Decay, add a layer, chorus, tempo delay and reverb. Large symbols and audible cues. Host/emulator checked; physical FM-1 testing pending.",
+  "what": "Work-in-progress 16-step event-memory synth with 100 sounds. Protect an Anchor, evolve a copy with Melt, Drift and Decay, and add a layer, chorus, tempo delay and reverb. Large symbols and audible cues. Author-tested on FM-1 with successful rollback.",
   "author": "Nicholas James / Low Vision Music",
   "kinds": [
     "synth"
