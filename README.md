@@ -17,6 +17,18 @@ Download the FM-1 firmware, matching source bundle, preset catalog and sound tou
 This image is a host-rendered framebuffer capture. The audio tour is a host render, not a recording of a physical FM-1. Package identity: `FM-1_929`. SHA-256: `c6c0a2829a5c1fe5959cb0d302c4de152b97fe3f29e469c400d1fbaefa236dc9`.
 
 
+## Compiled firmware download
+
+The ready-to-install FM-1 package is [LVM-Wanderer-0.9-FM1.fwsc](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v0.9.0-wip/LVM-Wanderer-0.9-FM1.fwsc). It is a compiled firmware image, not a source-code archive. Download the [full testing bundle](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v0.9.0-wip/LVM-Wanderer-0.9-Public-Testing.zip) for the included installer and matching source. From the extracted `source` folder:
+
+```sh
+python3 -m pip install mido python-rtmidi
+python3 tools/fm1_install.py --info
+python3 tools/fm1_install.py /absolute/path/to/LVM-Wanderer-0.9-FM1.fwsc
+```
+
+Use a USB data cable and leave it connected while writing. Back up your work before switching firmware. The public .fwsc was downloaded and checked against the original compiled release: 612,196 bytes, `FM-1_929`, package checks passed, SHA-256 `c6c0a2829a5c1fe5959cb0d302c4de152b97fe3f29e469c400d1fbaefa236dc9`. The bundled installer’s offline tests pass. I have physically tested this version on my FM-1 and successfully rolled back; it remains a work in progress.
+
 ## 0.9: one hundred sounds
 
 Wanderer 0.9 contains 100 original, numbered patches in ten banks of ten: Foundations, Vintage Poly, Mono & Lead, Bass Lab, Plucks & Keys, FM Bells, Digital Motion, Pads & Atmospheres, Brass & Organic, and Experimental. They range from mellow analog-style voices and sub basses to short keys, two-operator phase-modulated bells and slowly blooming pads. These are broad sound-design inspirations, not emulations or copies of Moog, Roland, Arturia or Yamaha instruments. See the [numbered sound catalog](docs/WANDERER_PRESETS_0.9.md) and [engine notes](docs/WANDERER_SOUND_0.9.md).
