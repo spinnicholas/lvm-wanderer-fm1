@@ -4,7 +4,7 @@
 
 **Work in progress · experimental pre-release · tested on the author’s FM-1, with successful rollback.**
 
-I have physically tested Wanderer 0.9 on my own M-VAVE FM-1: installation from official V15, rollback to V15, and switching from Wanderer to SLOOP all succeeded. Wanderer remains a work in progress.
+I have physically tested Wanderer 0.9 on my own M-VAVE FM-1: installation from official V15 and from SLOOP, rollback to V15, and switching from Wanderer to SLOOP all succeeded. Wanderer remains a work in progress.
 
 See [hardware testing](docs/HARDWARE_TESTING.md) for the recorded scope.
 
