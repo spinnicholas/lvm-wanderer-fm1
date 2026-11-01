@@ -2,7 +2,11 @@
 
 ![Wanderer](assets/wanderer.svg)
 
-**Work in progress · experimental pre-release · physical hardware testing pending.**
+**Work in progress · experimental pre-release · tested on the author’s FM-1, with successful rollback.**
+
+I have physically tested Wanderer 0.9 on my own M-VAVE FM-1 and successfully rolled back to another firmware. Wanderer remains a work in progress.
+
+See [hardware testing](docs/HARDWARE_TESTING.md) for the recorded scope.
 
 I’m Nicholas James, a visually impaired musician and the person behind [Low Vision Music](https://www.lowvisionmusic.info). Wanderer explores an instrument built around large symbols, clear positions, recoverable actions and short audible cues. I’d welcome feedback from FM-1 users, especially musicians with low vision.
 
@@ -17,7 +21,7 @@ This image is a host-rendered framebuffer capture. The audio tour is a host rend
 
 Wanderer 0.9 contains 100 original, numbered patches in ten banks of ten: Foundations, Vintage Poly, Mono & Lead, Bass Lab, Plucks & Keys, FM Bells, Digital Motion, Pads & Atmospheres, Brass & Organic, and Experimental. They range from mellow analog-style voices and sub basses to short keys, two-operator phase-modulated bells and slowly blooming pads. These are broad sound-design inspirations, not emulations or copies of Moog, Roland, Arturia or Yamaha instruments. See the [numbered sound catalog](docs/WANDERER_PRESETS_0.9.md) and [engine notes](docs/WANDERER_SOUND_0.9.md).
 
-Outside settings, turn PRESETS one step at a time to browse all 100, or turn SELECT to jump between banks while preserving the number within the bank (for example 17 to 27). The large waveform symbol and number 1–100 are the on-device identification; WANDERER remains its only word. Zoom can still be switched in settings. Existing notes keep their current patch until retriggered. A confirmed slot save remembers the selected sound. Prior 0.8 saved slots and older Wanderer slots retain their sound selection (the original three remain numbers 1–3). The 0.9 FM-1 package has been cross-compiled and exercised on a host and in fm1-emu; physical hardware remains untested.
+Outside settings, turn PRESETS one step at a time to browse all 100, or turn SELECT to jump between banks while preserving the number within the bank (for example 17 to 27). The large waveform symbol and number 1–100 are the on-device identification; WANDERER remains its only word. Zoom can still be switched in settings. Existing notes keep their current patch until retriggered. A confirmed slot save remembers the selected sound. Prior 0.8 saved slots and older Wanderer slots retain their sound selection (the original three remain numbers 1–3). The 0.9 FM-1 package has been cross-compiled, exercised on a host and in fm1-emu, and physically tested on my FM-1 with a successful rollback.
 
 ## 0.8 sound characters and effects
 
@@ -31,9 +35,9 @@ The four-voice synth now keeps the fundamental present as Melt adds a softer sec
 
 Version 0.6 established the current full-screen visual language. **Wanderer is the only word on the instrument display.** The home screen has two large phrase orbits, each with a 64-pixel symbol and 16 visible positions. A literal anchor identifies the protected original; paired arrows identify the evolving memory. Layer has a full-width panel and an oversized switch. The system settings screen contains palette, Zoom and reduced motion. Zoom gives the active phrase a 96-pixel symbol. See `docs/WANDERER_UI_0.6.md` for the visual changes.
 
-This is the first playable software expression of Low Vision Music's Wanderer concept. It is a **new application on Dinghy's FM-1 platform**, not a four-track SLOOP update. The separate `lvm-access-0.6.1-recovery` branch in the companion worktree preserves that older groovebox.
+This is the first playable software expression of Low Vision Music's Wanderer concept. It is a **new application on Dinghy's FM-1 platform**, not a four-track SLOOP update.
 
-**Hardware untested. Make a backup and conduct a controlled device trial before relying on the package.** The FM-1 display, controls, audio deadlines and flash writes have not been measured on hardware. No device was flashed during this work.
+**Early hardware test completed on my FM-1, including a successful rollback.** Wider device coverage and detailed measurements of audio timing and flash writes are still to be documented. Back up your work before switching firmware.
 
 A 16-step phrase is captured as note and velocity events. SAVE catches the first phrase as an immutable Anchor. The working memory evolves with MELT (timbre), DRIFT (bounded pitch variation), and DECAY (gradual velocity aging). A second phrase can be layered. GLO commits a variation into a new branch while keeping the Anchor. LFO alternates the original and the living memory without stopping playback. No audio samples or microphone input are captured.
 
