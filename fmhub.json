@@ -1,5 +1,5 @@
 {
-  "what": "Work-in-progress 16-step event-memory synth with 100 sounds. Protect an Anchor, evolve a copy with Melt, Drift and Decay, and add a layer, chorus, tempo delay and reverb. Large symbols and audible cues. Author-tested on FM-1 with successful rollback.",
+  "what": "Wanderer is an experimental event-memory synth for the M-VAVE FM-1, designed with low-vision musicians in mind. Large symbols, predictable controls and audible cues support Anchor memories, evolving phrases, 100 presets, layers and effects.",
   "author": "Nicholas James / Low Vision Music",
   "kinds": [
     "synth"
