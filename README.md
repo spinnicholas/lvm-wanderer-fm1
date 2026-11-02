@@ -6,7 +6,7 @@
 
 Wanderer is a four-voice event-memory synthesizer from [Low Vision Music](https://www.lowvisionmusic.info). Protect an idea as an Anchor, evolve a working copy with Melt and Drift, add a second layer, then reshape the result with musical Scatter, Print and effects. I designed it as a visually impaired musician, with large high-contrast symbols, consistent physical controls and optional sound feedback.
 
-[Download the tested firmware](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v1.4.0/LVM-Wanderer-1.4-RC6-FM1.fwsc) · [Release and what’s new](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v1.4.0) · [Full guide](docs/index.html) · [Quick start](docs/QUICK_START_1.4.md)
+[Download the tested firmware](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v1.4.0/LVM-Wanderer-1.4-RC6-FM1.fwsc) · [Release and what’s new](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v1.4.0) · [Full guide](https://spinnicholas.github.io/lvm-wanderer-fm1/) · [Quick start](docs/QUICK_START_1.4.md)
 
 ## What is new in 1.4
 
