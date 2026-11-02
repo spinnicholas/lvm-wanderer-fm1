@@ -1,0 +1,42 @@
+0 btn 3
+30 enc 6 2
+60 enc 0 1
+90 btn 3
+130 btn 8
+160 btn 13
+180 keys 128
+220 btndown 8
+230 btndown 3
+240 btnup 8
+250 btnup 3
+270 btn 3
+300 enc 1 3
+320 enc 0 2
+350 btn 3
+380 enc 1 1
+400 keys 0
+430 btndown 3
+440 btndown 8
+450 btnup 3
+460 btnup 8
+480 btn 13
+500 btn 12
+530 btn 11
+560 btndown 3
+570 btndown 8
+580 btnup 3
+590 btnup 8
+620 btn 8
+650 btn 8
+680 btn 10
+710 btn 3
+750 btn 3
+780 btn 3
+810 enc 6 2
+840 enc 0 1
+870 btn 3
+900 btn 3
+930 btn 8
+970 btndown 8
+2050 btnup 8
+2100 end

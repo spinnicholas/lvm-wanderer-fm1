@@ -1,0 +1,29 @@
+0 btn 13
+10 btn 5
+50 keys 17536
+450 keys 16512
+650 keys 0
+680 btn 13
+10 btn 5
+700 btn 12
+900 btndown 9
+1820 btnup 9
+1850 shot
+1900 btn 3
+2000 shot
+2100 btn 8
+2200 btn 4
+2300 btn 10
+2330 btn 3
+2360 btn 8
+2400 btn 12
+2450 btn 9
+2500 btn 13
+10 btn 5
+2550 btn 5
+2600 btn 8
+2650 btn 2
+2700 btn 12
+2750 btn 8
+2800 shot
+2850 end

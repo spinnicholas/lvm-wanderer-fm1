@@ -1,55 +1,45 @@
-# LVM Wanderer 1.3 RC4 (Grains) for M-VAVE FM-1
+# LVM Wanderer 1.4 for M-VAVE FM-1
 
-![Wanderer Home screen: large Anchor icon at left, evolving-memory icon at right and visible step/layer indicators](docs/screenshots-1.3-rc4/00-anchor-home-reference.png)
+![Wanderer Home screen with the protected Anchor, evolving memory and layer controls](docs/screenshots-1.4/home-large.png)
 
-*Wanderer's main Home screen, showing the protected Anchor and evolving memory. Reference capture from the retained 1.2 interface; the current RC4 editor screenshots appear below.*
+**Current release: 1.4 · Author hardware-tested · Designed with low vision in mind**
 
-**Current version: 1.3 RC4 · Hardware tested by the author · Designed with low-vision musicians in mind**
+Wanderer is a four-voice event-memory synthesizer from [Low Vision Music](https://www.lowvisionmusic.info). Protect an idea as an Anchor, evolve a working copy with Melt and Drift, add a second layer, then reshape the result with musical Scatter, Print and effects. I designed it as a visually impaired musician, with large high-contrast symbols, consistent physical controls and optional sound feedback.
 
-Wanderer is an experimental event-memory synthesizer for M-VAVE FM-1 from [Low Vision Music](https://www.lowvisionmusic.info). I designed Wanderer as a visually impaired musician, with large high-contrast symbols, predictable physical controls, visual layouts that do not rely only on color, and audible action cues. This is an independent musical instrument built on the FM-1 platform, not an update to SLOOP.
+[Download the tested firmware](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v1.4.0/LVM-Wanderer-1.4-RC6-FM1.fwsc) · [Release and what’s new](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v1.4.0) · [Full guide](docs/index.html) · [Quick start](docs/QUICK_START_1.4.md)
 
-## Wanderer 1.3 RC4 screen gallery
+## What is new in 1.4
 
-The images below are actual rendered RC4 interface captures from the release guide, not concept art. [Browse all six original screenshots](docs/screenshots-1.3-rc4).
+The sound engine has fuller subtractive oscillator blends, stronger sub bass, a four-pole low-pass path, finer phase distortion and a rebalanced bank of 100 sounds. Scatter now has eight modes on one page: Mixed, Slices, Hops, Reverse, Tape, Cloud, Pitched and Fills. Size, Amount and Smooth shape the result before chorus, delay and reverb.
 
-![Wanderer RC4 boot splash](docs/Wanderer-1.3-RC4-Splash.png)
+The arpeggiator adds 13 patterns, 12 timing options, octave range, gate, swing, latch and USB/TRS clock input. Generated notes and their lengths can be recorded into Memory or Layer. Four main knobs match the displayed parameters throughout the editor and settings pages.
 
-| Scatter grain sizes | Accessible light-theme Zoom |
-| --- | --- |
-| ![Scatter 128 ms editor](docs/screenshots-1.3-rc4/05-scatter-size-128ms.png) | ![Scatter Zoom in light theme](docs/screenshots-1.3-rc4/06-scatter-zoom-light.png) |
+Adaptive Zoom enlarges words to fit and wraps longer values where useful. Steady numeric Zoom keeps numbers the same size across a parameter’s range and unit changes. Display hold offers two, five or ten seconds, or Hold until dismissed. Cues offers Off, Actions and Full with a separate level; Full adds rising/falling switch patterns and range landmarks. Press **HOME + EDIT together**, then release both, to toggle Zoom without leaving the current page.
 
-| Filter controls | Modal ratios | Preset zoom |
+## Current screens
+
+| Musical Scatter | Arpeggiator | Access Feel |
 | --- | --- | --- |
-| ![Independent filter editor](docs/screenshots-1.3-rc4/01-filter-controls.png) | ![Modal ratios](docs/screenshots-1.3-rc4/02-modal-ratios-light.png) | ![Named patch Zoom](docs/screenshots-1.3-rc4/03-patch-zoom.png) |
+| ![Scatter controls](docs/screenshots-1.4/scatter.png) | ![Arpeggiator controls](docs/screenshots-1.4/arp.png) | ![Display hold, cue mode, cue level and steady Zoom](docs/screenshots-1.4/access-feel.png) |
 
-![Print in progress](docs/screenshots-1.3-rc4/04-print-progress.png)
+![Adaptive and steady Zoom views](docs/screenshots-1.4/access-feel-gallery.png)
 
-## Current firmware: 1.3 RC4
+[Boot splash](docs/screenshots-1.4/splash.png) · [Accessibility menu](docs/screenshots-1.4/accessibility.png) · [Stable time/frequency units](docs/screenshots-1.4/steady-units.png) · [Audio cue preview](docs/audio-1.4/cues.wav)
 
-The latest author-tested candidate is **LVM-Wanderer-1.3-RC4-Grains-FM1.fwsc**. Its persistent firmware identity is `FM-1_929`; its SHA-256 is:
+## Hardware confirmation and exact download
 
+On November 2, 2026, Nicholas confirmed that this exact RC6 build passes his standard physical FM-1 tests and is ready to publish. The public 1.4 release retains that tested binary without recompiling or changing its embedded version label. [Hardware confirmation](docs/HARDWARE_TESTING.md) · [Software verification](docs/TEST_REPORT_1.4_RC6.md)
+
+Filename: `LVM-Wanderer-1.4-RC6-FM1.fwsc`. Identity: `FM-1_929`. Size: 612,196 bytes. SHA-256:
+
+```text
+9135b62169409efb73a6492561673bb5465979563824605956ab3316c50d5b32
 ```
-91633c4d0e3de94fd15722fce062504243c0d623437317be96434165c3b116ce
-```
 
-**Release/download status:** The 1.3 RC4 binary has been built and tested, but it has **not yet been attached to a public GitHub Release**. Do not mistake the archived 0.9 release download for the latest firmware. Follow [Releases](https://github.com/spinnicholas/lvm-wanderer-fm1/releases) for downloadable assets. Before installing, verify the entire filename and SHA-256 hash.
+## Install and keep your projects
 
-## What Wanderer does
+Use the compiled `.fwsc` download with your FM-1 update method. The source/release bundle includes the Python installer and [installation and recovery instructions](docs/INSTALL_AND_RECOVERY.md). Start at a lower master level: the modern engine has 6 dB more gain than 1.3 RC4.
 
-Wanderer holds a protected original musical idea (Anchor) and lets you branch, transform and layer evolving event-memory phrases. It offers a bank of 100 original synthesizer sounds, chord recording with held-note gates, melodic evolution, Print, Undo/Redo, tempo-synced musical effects, and a tactile-oriented interface.
+New saves use project format v8. Older Wanderer projects import without overwriting their original slots; save conversions into spare slots if you need to return to an older version. Printed audio remains RAM-only and must be recorded externally. External clock controls the arpeggiator; event-memory playback and printed audio keep their existing clock.
 
-**New in RC4:** On the Scatter editor page, knobs 1–3 control Style, grain Size and Amount. Grain size offers Auto or 4, 8, 16, 32, 64 and 128 milliseconds. Unpredictable jumps, hops, repeats and dropouts can be softened with downstream chorus, delay and reverb. The signal flow is synth/playback → Scatter → Print/Melt → effects → output. New saves use project format v7, and older v6 slots can be imported without overwriting their original records.
-
-## Tested firmware transitions
-
-On November 1, 2026, the author reported fully testing the latest firmware on physical FM-1 hardware. The reported successful installation and return paths were:
-
-- Previous Wanderer version ↔ Wanderer 1.3 RC4
-- Official FM-1 V15 ↔ Wanderer 1.3 RC4
-- SLOOP ↔ Wanderer 1.3 RC4
-
-The report is first-party device testing, not a guarantee across all FM-1 units or every intermediate firmware version. Back up your existing music, keep the exact original firmware package for your device, and do not interrupt flashing. Different firmware families do not necessarily share project formats. A new project saved with RC4 may not load in older Wanderer versions; save migrated projects in spare slots.
-
-For the full details, see [1.3 RC4 release notes](docs/RELEASE_1.3_RC4.md). The [original 0.9 documentation](docs/README_0.9_ARCHIVE.md) remains available for historical reference. [Source and attribution](LICENSING.md) and [Dinghy's platform README](README-DINGHY.md) are retained.
-
-Wanderer is experimental independent firmware, not affiliated with M-VAVE or the original platform/firmware developers. GPL-3.0 applies to project code, with third-party notices as documented. The accessibility direction is a design priority, not a claim that every function is screen-free.
+Build the exact embedded RC6 version with `sh build.sh --release 1.4-RC6`, following [the pinned toolchain instructions](README-DINGHY.md). GPL-3.0-only with retained platform, font and icon notices in [LICENSING.md](LICENSING.md). Nicholas James / Low Vision Music. Independent firmware; not affiliated with M-VAVE or the original platform authors.

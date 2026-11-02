@@ -1,0 +1,34 @@
+0 btn 3
+30 enc 6 3
+60 enc 0 2
+90 btn 3
+120 shot
+150 enc 0 -1
+180 enc 5 2
+210 enc 0 -1
+240 enc 5 7
+270 btn 8
+300 btn 13
+330 keys 128
+1030 btn 13
+1060 shot
+1100 keys 0
+1130 btn 12
+1160 btn 11
+1190 btn 3
+1250 btn 10
+1280 btn 3
+1300 btn 8
+1310 btn 3
+1340 enc 6 3
+1370 enc 0 2
+1400 btn 12
+1430 btn 3
+1460 shot
+1490 btn 8
+1520 btn 12
+1550 enc 5 -1
+1580 btn 8
+1610 btn 4
+1640 shot
+1670 end

@@ -1,0 +1,23 @@
+# Wanderer 1.4 RC6 display hold, audio feedback and steady Zoom
+
+**Publication update, November 2, 2026:** the author has now confirmed that this exact RC6 build passes his standard physical FM-1 tests and is ready to publish. That acceptance supersedes the pending-device wording in the original development report below. The recorded software measurements are unchanged.
+
+The implementation plan is in ACCESSIBILITY_PLAN_1.4_RC6.md. Access Feel is one PRESET step left from Accessibility. Knobs 1–4 adjust DISPLAY (2/5/10 seconds or HOLD), CUES (OFF/ACTIONS/FULL), CUE LEVEL (0–100%) and STEADY (ON/OFF). Defaults: 2 seconds, Full cues, 50% cue level, Steady on. The shortcut hint still appears only on the selected Zoom option on Accessibility.
+
+Display deadlines refresh on adjustment and use rollover-safe comparisons. HOLD uses the existing HOME dismissal and normal navigation/action paths. Critical and saved-result messages keep their previous persistent behavior. Full cues add rising/falling toggle patterns and range landmarks, with short fades, a sample-counted gap, rate limiting of repeated identical boundary events, action priority and silence on unchanged clamped values. Cues use their own oscillator after Print and scope capture, never a synth voice. Their adjustable level still follows Master. Steady reserves width for the formatted numeric range; text still uses adaptive fitting and word wrapping.
+
+The original 16-byte preferences schema and v8 project format are retained. Reserved bytes carry a marked extension; legacy records load explicit defaults for the new fields. Existing readers ignore those reserved bytes. New options participate in the unsaved indicator and its revert detection. Explicit Save verifies preference readback. No boot-time migration write or control-turn flash write was added.
+
+Candidate SHA-256: `9135b62169409efb73a6492561673bb5465979563824605956ab3316c50d5b32`; 612,196 bytes; FM-1_929.
+
+Fresh validation: 60/60 sanitizer-backed compile/runtime/regression/navigation/loader checks pass. Additional cue stress was rerun after refining its alternating-toggle test; firmware bytes were unchanged. Timer tests cover all durations, refresh, HOLD, exact expiry, uint32 rollover and persistent-message priority. Preferences tests cover legacy defaults, every new flag combination, level extremes, malformed records, failed saves, clean/dirty reversion and no control-turn writes. A real application-loop navigation scenario proves that a preset remains visible beyond the former timeout in HOLD, HOME dismisses it, and the two-second setting expires correctly.
+
+Cue tests verify motifs, exact sample durations, gaps, mute, priority, rate limits, independent gain and identical samples across six callback sizes. Audible cues leave the printed silent Anchor, scope trace, capture events and synth voices untouched. Thirty seconds of dense cue retriggers with both layers, arp, Scatter and maximum effects remain bounded, preserve the Anchor and panic cleanly. Existing sound/Print/Scatter/arp regression checks pass.
+
+Numeric steady fitting passes 35,840 production Zoom range renders across all five engine contexts and every editor control, including milliseconds/seconds and Hz/kHz transitions. Numeric 0–127 and percentage 0–100 remain at one font size; STEADY OFF and adaptive words are verified. The earlier adaptive-fit and shortcut suites still pass. 388 production screenshots cover both themes/sizes, all Access Feel options, selected parameters, 9/99/100 and unit-boundary examples; representative contact sheets were visually reviewed.
+
+The exact final package completed 4,700 ms in fm1-emu with Access Feel set to HOLD, four held notes and live range changes/cues. Compiled Access Feel and live output screenshots were inspected. Emulator observation: 21.5% in an ISR, 0.4% nested (52.6 M ISR instructions per emulated s). This is an average simulated ISR result, not a physical worst-case deadline measurement. Known unsupported MMIO accesses remain reported.
+
+Target image: 455,364 / 581,564 bytes; ordinary RAM: 63,872 / 98,304 bytes; audio pool: 315,392 / 344,064 bytes. The conservative boot migration bound stays 2,964 / 4,096 bytes. All 33 protected source files, package head and loader remain identical to verified 1.3 RC4.
+
+The one-second Cues WAV contains minimum, midpoint, maximum, off and on, in that order, at the default cue level. It is a production-DSP host render, not an FM-1 recording. Earlier synthesis demos were rendered for RC1 and remain historical examples. Physical installation, listening, cue audibility and worst-case control/audio timing remain device acceptance. No public release was made.

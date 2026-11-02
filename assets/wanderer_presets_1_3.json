@@ -1,0 +1,8402 @@
+[
+  {
+    "name": "VELVET REED",
+    "patch": {
+      "engine": 0,
+      "wave": 1,
+      "mix": 30,
+      "sub": 8,
+      "detune": 3,
+      "pulse": 25,
+      "shape": 22,
+      "damp": 25,
+      "position": 15,
+      "inharm": 0,
+      "amp": [
+        8,
+        62,
+        78,
+        50
+      ],
+      "fenv": [
+        2,
+        36,
+        20,
+        38
+      ],
+      "cutoff": 75,
+      "resonance": 20,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 14,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 8,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        42,
+        25,
+        15
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          22,
+          20,
+          28
+        ],
+        [
+          2,
+          35,
+          10,
+          35
+        ],
+        [
+          1,
+          18,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "COPPER BASS",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 38,
+      "shape": 39,
+      "damp": 48,
+      "position": 34,
+      "inharm": 7,
+      "amp": [
+        0,
+        57,
+        45,
+        35
+      ],
+      "fenv": [
+        11,
+        43,
+        31,
+        41
+      ],
+      "cutoff": 46,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 17,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 15,
+      "ratio": [
+        16,
+        16,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        47,
+        34,
+        28
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          27,
+          27,
+          28
+        ],
+        [
+          2,
+          46,
+          10,
+          35
+        ],
+        [
+          1,
+          21,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "DUSK STRINGS",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 51,
+      "shape": 56,
+      "damp": 71,
+      "position": 53,
+      "inharm": 14,
+      "amp": [
+        60,
+        80,
+        94,
+        80
+      ],
+      "fenv": [
+        20,
+        50,
+        42,
+        44
+      ],
+      "cutoff": 58,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 20,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 22,
+      "ratio": [
+        16,
+        16,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        52,
+        43,
+        41
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          32,
+          34,
+          28
+        ],
+        [
+          2,
+          57,
+          10,
+          35
+        ],
+        [
+          1,
+          24,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "HOLLOW WOOD",
+    "patch": {
+      "engine": 0,
+      "wave": 1,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 64,
+      "shape": 73,
+      "damp": 94,
+      "position": 72,
+      "inharm": 21,
+      "amp": [
+        0,
+        58,
+        0,
+        32
+      ],
+      "fenv": [
+        29,
+        57,
+        53,
+        47
+      ],
+      "cutoff": 56,
+      "resonance": 35,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 23,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 29,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        57,
+        52,
+        54
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          37,
+          41,
+          28
+        ],
+        [
+          2,
+          68,
+          10,
+          35
+        ],
+        [
+          1,
+          27,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "PAPER ORGAN",
+    "patch": {
+      "engine": 0,
+      "wave": 1,
+      "mix": 90,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 90,
+      "damp": 117,
+      "position": 91,
+      "inharm": 28,
+      "amp": [
+        0,
+        0,
+        105,
+        20
+      ],
+      "fenv": [
+        2,
+        64,
+        64,
+        50
+      ],
+      "cutoff": 80,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 26,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 4,
+      "feedback": 36,
+      "ratio": [
+        16,
+        32,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        62,
+        61,
+        67
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          42,
+          48,
+          28
+        ],
+        [
+          2,
+          79,
+          10,
+          35
+        ],
+        [
+          1,
+          30,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SOFT EDGE",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 63,
+      "sub": 12,
+      "detune": 7,
+      "pulse": 90,
+      "shape": 107,
+      "damp": 41,
+      "position": 110,
+      "inharm": 35,
+      "amp": [
+        2,
+        62,
+        65,
+        40
+      ],
+      "fenv": [
+        11,
+        71,
+        75,
+        53
+      ],
+      "cutoff": 100,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 29,
+      "lfo_depth": 3,
+      "lfo_dest": 1,
+      "algorithm": 5,
+      "feedback": 43,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        67,
+        70,
+        80
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          47,
+          55,
+          28
+        ],
+        [
+          2,
+          90,
+          10,
+          35
+        ],
+        [
+          1,
+          33,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "SLOW GLASS",
+    "patch": {
+      "engine": 0,
+      "wave": 5,
+      "mix": 82,
+      "sub": 0,
+      "detune": 8,
+      "pulse": 25,
+      "shape": 24,
+      "damp": 64,
+      "position": 29,
+      "inharm": 42,
+      "amp": [
+        75,
+        83,
+        86,
+        90
+      ],
+      "fenv": [
+        20,
+        78,
+        86,
+        56
+      ],
+      "cutoff": 90,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 32,
+      "lfo_depth": 0,
+      "lfo_dest": 1,
+      "algorithm": 6,
+      "feedback": 50,
+      "ratio": [
+        16,
+        16,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        72,
+        79,
+        93
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          52,
+          62,
+          28
+        ],
+        [
+          2,
+          36,
+          10,
+          35
+        ],
+        [
+          1,
+          36,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "NARROW LIGHT",
+    "patch": {
+      "engine": 0,
+      "wave": 2,
+      "mix": 48,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 22,
+      "shape": 41,
+      "damp": 87,
+      "position": 48,
+      "inharm": 49,
+      "amp": [
+        1,
+        48,
+        80,
+        40
+      ],
+      "fenv": [
+        29,
+        85,
+        97,
+        59
+      ],
+      "cutoff": 80,
+      "resonance": 40,
+      "filter": 1,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 35,
+      "lfo_depth": 14,
+      "lfo_dest": 1,
+      "algorithm": 7,
+      "feedback": 57,
+      "ratio": [
+        16,
+        16,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        77,
+        88,
+        21
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          57,
+          69,
+          28
+        ],
+        [
+          2,
+          47,
+          10,
+          35
+        ],
+        [
+          1,
+          39,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "WARM BRASS",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 90,
+      "sub": 10,
+      "detune": 3,
+      "pulse": 51,
+      "shape": 58,
+      "damp": 110,
+      "position": 67,
+      "inharm": 56,
+      "amp": [
+        16,
+        64,
+        78,
+        44
+      ],
+      "fenv": [
+        2,
+        42,
+        28,
+        62
+      ],
+      "cutoff": 46,
+      "resonance": 24,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 38,
+      "lfo_depth": 5,
+      "lfo_dest": 1,
+      "algorithm": 0,
+      "feedback": 64,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        82,
+        97,
+        34
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          62,
+          21,
+          28
+        ],
+        [
+          2,
+          58,
+          10,
+          35
+        ],
+        [
+          1,
+          42,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SUB CURRENT",
+    "patch": {
+      "engine": 0,
+      "wave": 3,
+      "mix": 10,
+      "sub": 64,
+      "detune": 0,
+      "pulse": 64,
+      "shape": 75,
+      "damp": 34,
+      "position": 86,
+      "inharm": 63,
+      "amp": [
+        1,
+        60,
+        105,
+        34
+      ],
+      "fenv": [
+        11,
+        49,
+        39,
+        65
+      ],
+      "cutoff": 55,
+      "resonance": 0,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 41,
+      "lfo_depth": 20,
+      "lfo_dest": 1,
+      "algorithm": 1,
+      "feedback": 71,
+      "ratio": [
+        16,
+        16,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        87,
+        26,
+        47
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          67,
+          28,
+          28
+        ],
+        [
+          2,
+          69,
+          10,
+          35
+        ],
+        [
+          1,
+          45,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "SILK PULSE",
+    "patch": {
+      "engine": 0,
+      "wave": 2,
+      "mix": 24,
+      "sub": 8,
+      "detune": 5,
+      "pulse": 77,
+      "shape": 92,
+      "damp": 57,
+      "position": 105,
+      "inharm": 70,
+      "amp": [
+        12,
+        55,
+        80,
+        60
+      ],
+      "fenv": [
+        20,
+        56,
+        50,
+        68
+      ],
+      "cutoff": 70,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 44,
+      "lfo_depth": 3,
+      "lfo_dest": 2,
+      "algorithm": 2,
+      "feedback": 13,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        92,
+        35,
+        60
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          72,
+          35,
+          28
+        ],
+        [
+          2,
+          80,
+          10,
+          35
+        ],
+        [
+          1,
+          48,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BROKEN RADIO",
+    "patch": {
+      "engine": 0,
+      "wave": 2,
+      "mix": 75,
+      "sub": 0,
+      "detune": 22,
+      "pulse": 10,
+      "shape": 109,
+      "damp": 80,
+      "position": 24,
+      "inharm": 77,
+      "amp": [
+        0,
+        40,
+        60,
+        20
+      ],
+      "fenv": [
+        29,
+        63,
+        61,
+        71
+      ],
+      "cutoff": 57,
+      "resonance": 64,
+      "filter": 1,
+      "envdepth": 72,
+      "drive": 70,
+      "level": 84,
+      "lfo_rate": 47,
+      "lfo_depth": 0,
+      "lfo_dest": 2,
+      "algorithm": 3,
+      "feedback": 20,
+      "ratio": [
+        16,
+        16,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        97,
+        44,
+        73
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          77,
+          42,
+          28
+        ],
+        [
+          2,
+          91,
+          10,
+          35
+        ],
+        [
+          1,
+          51,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "LOW TIDE",
+    "patch": {
+      "engine": 0,
+      "wave": 4,
+      "mix": 40,
+      "sub": 35,
+      "detune": 5,
+      "pulse": 25,
+      "shape": 26,
+      "damp": 103,
+      "position": 43,
+      "inharm": 84,
+      "amp": [
+        85,
+        80,
+        99,
+        95
+      ],
+      "fenv": [
+        2,
+        70,
+        72,
+        74
+      ],
+      "cutoff": 52,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 50,
+      "lfo_depth": 14,
+      "lfo_dest": 2,
+      "algorithm": 4,
+      "feedback": 27,
+      "ratio": [
+        16,
+        8,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        102,
+        53,
+        86
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          22,
+          49,
+          28
+        ],
+        [
+          2,
+          37,
+          10,
+          35
+        ],
+        [
+          1,
+          54,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "GOLDEN FIFTH",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 76,
+      "sub": 0,
+      "detune": 3,
+      "pulse": 38,
+      "shape": 43,
+      "damp": 27,
+      "position": 62,
+      "inharm": 91,
+      "amp": [
+        6,
+        64,
+        76,
+        40
+      ],
+      "fenv": [
+        11,
+        77,
+        83,
+        77
+      ],
+      "cutoff": 70,
+      "resonance": 28,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 53,
+      "lfo_depth": 5,
+      "lfo_dest": 2,
+      "algorithm": 5,
+      "feedback": 34,
+      "ratio": [
+        8,
+        24,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        42,
+        62,
+        99
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          27,
+          56,
+          28
+        ],
+        [
+          2,
+          48,
+          10,
+          35
+        ],
+        [
+          1,
+          57,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "DUST FLUTE",
+    "patch": {
+      "engine": 0,
+      "wave": 3,
+      "mix": 10,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 51,
+      "shape": 60,
+      "damp": 50,
+      "position": 81,
+      "inharm": 98,
+      "amp": [
+        15,
+        45,
+        105,
+        60
+      ],
+      "fenv": [
+        20,
+        84,
+        94,
+        80
+      ],
+      "cutoff": 65,
+      "resonance": 0,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 56,
+      "lfo_depth": 20,
+      "lfo_dest": 2,
+      "algorithm": 6,
+      "feedback": 41,
+      "ratio": [
+        16,
+        32,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        47,
+        71,
+        27
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          32,
+          63,
+          28
+        ],
+        [
+          2,
+          59,
+          10,
+          35
+        ],
+        [
+          1,
+          60,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "WIDE HORIZON",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 95,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 64,
+      "shape": 77,
+      "damp": 73,
+      "position": 100,
+      "inharm": 105,
+      "amp": [
+        65,
+        85,
+        90,
+        95
+      ],
+      "fenv": [
+        29,
+        41,
+        25,
+        83
+      ],
+      "cutoff": 66,
+      "resonance": 10,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 59,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 7,
+      "feedback": 48,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        52,
+        80,
+        40
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          37,
+          70,
+          28
+        ],
+        [
+          2,
+          70,
+          10,
+          35
+        ],
+        [
+          1,
+          63,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "ROUND SQUARE",
+    "patch": {
+      "engine": 0,
+      "wave": 1,
+      "mix": 65,
+      "sub": 8,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 114,
+      "damp": 96,
+      "position": 19,
+      "inharm": 2,
+      "amp": [
+        3,
+        70,
+        80,
+        45
+      ],
+      "fenv": [
+        2,
+        48,
+        36,
+        86
+      ],
+      "cutoff": 73,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 62,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 55,
+      "ratio": [
+        16,
+        16,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        57,
+        89,
+        53
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          42,
+          22,
+          28
+        ],
+        [
+          2,
+          81,
+          10,
+          35
+        ],
+        [
+          1,
+          66,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "MOSS PAD",
+    "patch": {
+      "engine": 0,
+      "wave": 4,
+      "mix": 40,
+      "sub": 15,
+      "detune": 11,
+      "pulse": 90,
+      "shape": 111,
+      "damp": 119,
+      "position": 38,
+      "inharm": 9,
+      "amp": [
+        85,
+        85,
+        95,
+        90
+      ],
+      "fenv": [
+        11,
+        55,
+        47,
+        89
+      ],
+      "cutoff": 44,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 65,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 62,
+      "ratio": [
+        16,
+        16,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        62,
+        98,
+        66
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          47,
+          29,
+          28
+        ],
+        [
+          2,
+          92,
+          10,
+          35
+        ],
+        [
+          1,
+          69,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "SILVER SAW",
+    "patch": {
+      "engine": 0,
+      "wave": 0,
+      "mix": 80,
+      "sub": 0,
+      "detune": 6,
+      "pulse": 25,
+      "shape": 28,
+      "damp": 43,
+      "position": 57,
+      "inharm": 16,
+      "amp": [
+        1,
+        70,
+        36,
+        46
+      ],
+      "fenv": [
+        20,
+        62,
+        58,
+        92
+      ],
+      "cutoff": 30,
+      "resonance": 22,
+      "filter": 2,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 68,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 69,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        67,
+        27,
+        79
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          52,
+          36,
+          28
+        ],
+        [
+          2,
+          38,
+          10,
+          35
+        ],
+        [
+          1,
+          72,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "NIGHT CHORD",
+    "patch": {
+      "engine": 0,
+      "wave": 1,
+      "mix": 70,
+      "sub": 45,
+      "detune": 9,
+      "pulse": 38,
+      "shape": 45,
+      "damp": 66,
+      "position": 76,
+      "inharm": 23,
+      "amp": [
+        70,
+        90,
+        104,
+        90
+      ],
+      "fenv": [
+        29,
+        69,
+        69,
+        40
+      ],
+      "cutoff": 50,
+      "resonance": 10,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 71,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 11,
+      "ratio": [
+        16,
+        24,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        72,
+        36,
+        92
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          57,
+          43,
+          28
+        ],
+        [
+          2,
+          49,
+          10,
+          35
+        ],
+        [
+          1,
+          20,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "FELT TINES",
+    "patch": {
+      "engine": 1,
+      "wave": 0,
+      "mix": 24,
+      "sub": 0,
+      "detune": 3,
+      "pulse": 25,
+      "shape": 22,
+      "damp": 25,
+      "position": 15,
+      "inharm": 0,
+      "amp": [
+        1,
+        70,
+        0,
+        40
+      ],
+      "fenv": [
+        2,
+        36,
+        20,
+        38
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 14,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 8,
+      "ratio": [
+        16,
+        16,
+        112,
+        16
+      ],
+      "op_level": [
+        110,
+        42,
+        25,
+        15
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          0,
+          40
+        ],
+        [
+          1,
+          22,
+          20,
+          28
+        ],
+        [
+          2,
+          35,
+          10,
+          35
+        ],
+        [
+          1,
+          18,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BRONZE BELL",
+    "patch": {
+      "engine": 1,
+      "wave": 1,
+      "mix": 70,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 38,
+      "shape": 39,
+      "damp": 48,
+      "position": 34,
+      "inharm": 7,
+      "amp": [
+        1,
+        71,
+        0,
+        41
+      ],
+      "fenv": [
+        11,
+        43,
+        31,
+        41
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 17,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 15,
+      "ratio": [
+        16,
+        45,
+        93,
+        127
+      ],
+      "op_level": [
+        110,
+        47,
+        34,
+        28
+      ],
+      "op_env": [
+        [
+          1,
+          71,
+          0,
+          41
+        ],
+        [
+          1,
+          27,
+          27,
+          28
+        ],
+        [
+          2,
+          46,
+          10,
+          35
+        ],
+        [
+          1,
+          21,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "ICE KEYS",
+    "patch": {
+      "engine": 1,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 51,
+      "shape": 56,
+      "damp": 71,
+      "position": 53,
+      "inharm": 14,
+      "amp": [
+        1,
+        72,
+        0,
+        42
+      ],
+      "fenv": [
+        20,
+        50,
+        42,
+        44
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 20,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 22,
+      "ratio": [
+        16,
+        48,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        52,
+        43,
+        41
+      ],
+      "op_env": [
+        [
+          1,
+          72,
+          0,
+          42
+        ],
+        [
+          1,
+          32,
+          34,
+          28
+        ],
+        [
+          2,
+          57,
+          10,
+          35
+        ],
+        [
+          1,
+          24,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "RUBBER BASS",
+    "patch": {
+      "engine": 1,
+      "wave": 3,
+      "mix": 45,
+      "sub": 0,
+      "detune": 4,
+      "pulse": 64,
+      "shape": 73,
+      "damp": 94,
+      "position": 72,
+      "inharm": 21,
+      "amp": [
+        1,
+        70,
+        36,
+        46
+      ],
+      "fenv": [
+        29,
+        57,
+        53,
+        47
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 23,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 29,
+      "ratio": [
+        8,
+        16,
+        8,
+        16
+      ],
+      "op_level": [
+        110,
+        57,
+        52,
+        54
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          37,
+          41,
+          28
+        ],
+        [
+          2,
+          68,
+          10,
+          35
+        ],
+        [
+          1,
+          27,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "WIRE CHOIR",
+    "patch": {
+      "engine": 1,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 77,
+      "shape": 90,
+      "damp": 117,
+      "position": 91,
+      "inharm": 28,
+      "amp": [
+        39,
+        80,
+        90,
+        75
+      ],
+      "fenv": [
+        2,
+        64,
+        64,
+        50
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 26,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 6,
+      "feedback": 36,
+      "ratio": [
+        16,
+        32,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        62,
+        61,
+        67
+      ],
+      "op_env": [
+        [
+          39,
+          80,
+          90,
+          75
+        ],
+        [
+          1,
+          42,
+          48,
+          28
+        ],
+        [
+          2,
+          79,
+          10,
+          35
+        ],
+        [
+          1,
+          30,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BAMBOO FM",
+    "patch": {
+      "engine": 1,
+      "wave": 0,
+      "mix": 24,
+      "sub": 0,
+      "detune": 3,
+      "pulse": 90,
+      "shape": 107,
+      "damp": 41,
+      "position": 110,
+      "inharm": 35,
+      "amp": [
+        1,
+        75,
+        0,
+        45
+      ],
+      "fenv": [
+        11,
+        71,
+        75,
+        53
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 29,
+      "lfo_depth": 3,
+      "lfo_dest": 1,
+      "algorithm": 3,
+      "feedback": 43,
+      "ratio": [
+        16,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        67,
+        70,
+        80
+      ],
+      "op_env": [
+        [
+          1,
+          75,
+          0,
+          45
+        ],
+        [
+          1,
+          47,
+          55,
+          28
+        ],
+        [
+          2,
+          90,
+          10,
+          35
+        ],
+        [
+          1,
+          33,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "CRYSTAL DROP",
+    "patch": {
+      "engine": 1,
+      "wave": 1,
+      "mix": 70,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 25,
+      "shape": 24,
+      "damp": 64,
+      "position": 29,
+      "inharm": 42,
+      "amp": [
+        1,
+        76,
+        0,
+        46
+      ],
+      "fenv": [
+        20,
+        78,
+        86,
+        56
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 32,
+      "lfo_depth": 0,
+      "lfo_dest": 1,
+      "algorithm": 0,
+      "feedback": 50,
+      "ratio": [
+        16,
+        64,
+        96,
+        112
+      ],
+      "op_level": [
+        110,
+        72,
+        79,
+        93
+      ],
+      "op_env": [
+        [
+          1,
+          76,
+          0,
+          46
+        ],
+        [
+          1,
+          52,
+          62,
+          28
+        ],
+        [
+          2,
+          36,
+          10,
+          35
+        ],
+        [
+          1,
+          36,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "METAL REED",
+    "patch": {
+      "engine": 1,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 38,
+      "shape": 41,
+      "damp": 87,
+      "position": 48,
+      "inharm": 49,
+      "amp": [
+        9,
+        62,
+        78,
+        65
+      ],
+      "fenv": [
+        29,
+        85,
+        97,
+        59
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 35,
+      "lfo_depth": 14,
+      "lfo_dest": 1,
+      "algorithm": 5,
+      "feedback": 57,
+      "ratio": [
+        16,
+        24,
+        80,
+        48
+      ],
+      "op_level": [
+        110,
+        77,
+        88,
+        21
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          57,
+          69,
+          28
+        ],
+        [
+          2,
+          47,
+          10,
+          35
+        ],
+        [
+          1,
+          39,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "WOODEN GONG",
+    "patch": {
+      "engine": 1,
+      "wave": 3,
+      "mix": 45,
+      "sub": 0,
+      "detune": 4,
+      "pulse": 51,
+      "shape": 58,
+      "damp": 110,
+      "position": 67,
+      "inharm": 56,
+      "amp": [
+        1,
+        71,
+        0,
+        48
+      ],
+      "fenv": [
+        2,
+        42,
+        28,
+        62
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 38,
+      "lfo_depth": 5,
+      "lfo_dest": 1,
+      "algorithm": 4,
+      "feedback": 64,
+      "ratio": [
+        16,
+        23,
+        37,
+        85
+      ],
+      "op_level": [
+        110,
+        82,
+        97,
+        34
+      ],
+      "op_env": [
+        [
+          1,
+          71,
+          0,
+          48
+        ],
+        [
+          1,
+          62,
+          21,
+          28
+        ],
+        [
+          2,
+          58,
+          10,
+          35
+        ],
+        [
+          1,
+          42,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "NEON PLUCK",
+    "patch": {
+      "engine": 1,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 64,
+      "shape": 75,
+      "damp": 34,
+      "position": 86,
+      "inharm": 63,
+      "amp": [
+        1,
+        72,
+        0,
+        49
+      ],
+      "fenv": [
+        11,
+        49,
+        39,
+        65
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 41,
+      "lfo_depth": 20,
+      "lfo_dest": 1,
+      "algorithm": 2,
+      "feedback": 71,
+      "ratio": [
+        16,
+        48,
+        16,
+        80
+      ],
+      "op_level": [
+        110,
+        87,
+        26,
+        47
+      ],
+      "op_env": [
+        [
+          1,
+          72,
+          0,
+          49
+        ],
+        [
+          1,
+          67,
+          28,
+          28
+        ],
+        [
+          2,
+          69,
+          10,
+          35
+        ],
+        [
+          1,
+          45,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "QUIET RHODES",
+    "patch": {
+      "engine": 1,
+      "wave": 0,
+      "mix": 24,
+      "sub": 0,
+      "detune": 3,
+      "pulse": 77,
+      "shape": 92,
+      "damp": 57,
+      "position": 105,
+      "inharm": 70,
+      "amp": [
+        1,
+        73,
+        0,
+        50
+      ],
+      "fenv": [
+        20,
+        56,
+        50,
+        68
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 44,
+      "lfo_depth": 3,
+      "lfo_dest": 2,
+      "algorithm": 3,
+      "feedback": 13,
+      "ratio": [
+        16,
+        16,
+        16,
+        112
+      ],
+      "op_level": [
+        110,
+        92,
+        35,
+        60
+      ],
+      "op_env": [
+        [
+          1,
+          73,
+          0,
+          50
+        ],
+        [
+          1,
+          72,
+          35,
+          28
+        ],
+        [
+          2,
+          80,
+          10,
+          35
+        ],
+        [
+          1,
+          48,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "TUNED PLATE",
+    "patch": {
+      "engine": 1,
+      "wave": 1,
+      "mix": 70,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 90,
+      "shape": 109,
+      "damp": 80,
+      "position": 24,
+      "inharm": 77,
+      "amp": [
+        1,
+        74,
+        0,
+        51
+      ],
+      "fenv": [
+        29,
+        63,
+        61,
+        71
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 47,
+      "lfo_depth": 0,
+      "lfo_dest": 2,
+      "algorithm": 2,
+      "feedback": 20,
+      "ratio": [
+        16,
+        55,
+        91,
+        127
+      ],
+      "op_level": [
+        110,
+        97,
+        44,
+        73
+      ],
+      "op_env": [
+        [
+          1,
+          74,
+          0,
+          51
+        ],
+        [
+          1,
+          77,
+          42,
+          28
+        ],
+        [
+          2,
+          91,
+          10,
+          35
+        ],
+        [
+          1,
+          51,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "GLASS ORGAN",
+    "patch": {
+      "engine": 1,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 25,
+      "shape": 26,
+      "damp": 103,
+      "position": 43,
+      "inharm": 84,
+      "amp": [
+        47,
+        80,
+        90,
+        75
+      ],
+      "fenv": [
+        2,
+        70,
+        72,
+        74
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 50,
+      "lfo_depth": 14,
+      "lfo_dest": 2,
+      "algorithm": 7,
+      "feedback": 27,
+      "ratio": [
+        16,
+        32,
+        64,
+        96
+      ],
+      "op_level": [
+        110,
+        102,
+        53,
+        86
+      ],
+      "op_env": [
+        [
+          47,
+          80,
+          90,
+          75
+        ],
+        [
+          1,
+          22,
+          49,
+          28
+        ],
+        [
+          2,
+          37,
+          10,
+          35
+        ],
+        [
+          1,
+          54,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SOFT MALLET",
+    "patch": {
+      "engine": 1,
+      "wave": 3,
+      "mix": 45,
+      "sub": 0,
+      "detune": 4,
+      "pulse": 38,
+      "shape": 43,
+      "damp": 27,
+      "position": 62,
+      "inharm": 91,
+      "amp": [
+        1,
+        76,
+        0,
+        53
+      ],
+      "fenv": [
+        11,
+        77,
+        83,
+        77
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 53,
+      "lfo_depth": 5,
+      "lfo_dest": 2,
+      "algorithm": 5,
+      "feedback": 34,
+      "ratio": [
+        16,
+        16,
+        48,
+        32
+      ],
+      "op_level": [
+        110,
+        42,
+        62,
+        99
+      ],
+      "op_env": [
+        [
+          1,
+          76,
+          0,
+          53
+        ],
+        [
+          1,
+          27,
+          56,
+          28
+        ],
+        [
+          2,
+          48,
+          10,
+          35
+        ],
+        [
+          1,
+          57,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "CLOCK CHIME",
+    "patch": {
+      "engine": 1,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 51,
+      "shape": 60,
+      "damp": 50,
+      "position": 81,
+      "inharm": 98,
+      "amp": [
+        1,
+        70,
+        0,
+        54
+      ],
+      "fenv": [
+        20,
+        84,
+        94,
+        80
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 56,
+      "lfo_depth": 20,
+      "lfo_dest": 2,
+      "algorithm": 1,
+      "feedback": 41,
+      "ratio": [
+        16,
+        64,
+        112,
+        127
+      ],
+      "op_level": [
+        110,
+        47,
+        71,
+        27
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          0,
+          54
+        ],
+        [
+          1,
+          32,
+          63,
+          28
+        ],
+        [
+          2,
+          59,
+          10,
+          35
+        ],
+        [
+          1,
+          60,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "DEEP MARIMBA",
+    "patch": {
+      "engine": 1,
+      "wave": 0,
+      "mix": 24,
+      "sub": 0,
+      "detune": 3,
+      "pulse": 64,
+      "shape": 77,
+      "damp": 73,
+      "position": 100,
+      "inharm": 105,
+      "amp": [
+        1,
+        71,
+        0,
+        40
+      ],
+      "fenv": [
+        29,
+        41,
+        25,
+        83
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 59,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 4,
+      "feedback": 48,
+      "ratio": [
+        16,
+        32,
+        16,
+        48
+      ],
+      "op_level": [
+        110,
+        52,
+        80,
+        40
+      ],
+      "op_env": [
+        [
+          1,
+          71,
+          0,
+          40
+        ],
+        [
+          1,
+          37,
+          70,
+          28
+        ],
+        [
+          2,
+          70,
+          10,
+          35
+        ],
+        [
+          1,
+          63,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "ELECTRIC HARP",
+    "patch": {
+      "engine": 1,
+      "wave": 1,
+      "mix": 70,
+      "sub": 0,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 94,
+      "damp": 96,
+      "position": 19,
+      "inharm": 2,
+      "amp": [
+        1,
+        72,
+        0,
+        41
+      ],
+      "fenv": [
+        2,
+        48,
+        36,
+        86
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 62,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 55,
+      "ratio": [
+        16,
+        48,
+        80,
+        16
+      ],
+      "op_level": [
+        110,
+        57,
+        89,
+        53
+      ],
+      "op_env": [
+        [
+          1,
+          72,
+          0,
+          41
+        ],
+        [
+          1,
+          42,
+          22,
+          28
+        ],
+        [
+          2,
+          81,
+          10,
+          35
+        ],
+        [
+          1,
+          66,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "AIR COLUMN",
+    "patch": {
+      "engine": 1,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 90,
+      "shape": 111,
+      "damp": 119,
+      "position": 38,
+      "inharm": 9,
+      "amp": [
+        52,
+        80,
+        90,
+        75
+      ],
+      "fenv": [
+        11,
+        55,
+        47,
+        89
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 65,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 6,
+      "feedback": 62,
+      "ratio": [
+        16,
+        16,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        62,
+        98,
+        66
+      ],
+      "op_env": [
+        [
+          52,
+          80,
+          90,
+          75
+        ],
+        [
+          1,
+          47,
+          29,
+          28
+        ],
+        [
+          2,
+          92,
+          10,
+          35
+        ],
+        [
+          1,
+          69,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "COLD BRASS",
+    "patch": {
+      "engine": 1,
+      "wave": 3,
+      "mix": 45,
+      "sub": 0,
+      "detune": 4,
+      "pulse": 25,
+      "shape": 28,
+      "damp": 43,
+      "position": 57,
+      "inharm": 16,
+      "amp": [
+        53,
+        80,
+        90,
+        75
+      ],
+      "fenv": [
+        20,
+        62,
+        58,
+        92
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 68,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 69,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        67,
+        27,
+        79
+      ],
+      "op_env": [
+        [
+          53,
+          80,
+          90,
+          75
+        ],
+        [
+          1,
+          52,
+          36,
+          28
+        ],
+        [
+          2,
+          38,
+          10,
+          35
+        ],
+        [
+          1,
+          72,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "IRON DRUM",
+    "patch": {
+      "engine": 1,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 38,
+      "shape": 45,
+      "damp": 66,
+      "position": 76,
+      "inharm": 23,
+      "amp": [
+        1,
+        75,
+        0,
+        44
+      ],
+      "fenv": [
+        29,
+        69,
+        69,
+        40
+      ],
+      "cutoff": 112,
+      "resonance": 5,
+      "filter": 0,
+      "envdepth": 8,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 71,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 11,
+      "ratio": [
+        8,
+        13,
+        47,
+        109
+      ],
+      "op_level": [
+        110,
+        72,
+        36,
+        92
+      ],
+      "op_env": [
+        [
+          1,
+          75,
+          0,
+          44
+        ],
+        [
+          1,
+          57,
+          43,
+          28
+        ],
+        [
+          2,
+          49,
+          10,
+          35
+        ],
+        [
+          1,
+          20,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "FOLDED SINE",
+    "patch": {
+      "engine": 2,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 25,
+      "shape": 18,
+      "damp": 25,
+      "position": 15,
+      "inharm": 0,
+      "amp": [
+        2,
+        55,
+        0,
+        38
+      ],
+      "fenv": [
+        2,
+        36,
+        20,
+        38
+      ],
+      "cutoff": 83,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 14,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 8,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        42,
+        25,
+        15
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          22,
+          20,
+          28
+        ],
+        [
+          2,
+          35,
+          10,
+          35
+        ],
+        [
+          1,
+          18,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "PRISM KEYS",
+    "patch": {
+      "engine": 2,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 38,
+      "shape": 105,
+      "damp": 48,
+      "position": 34,
+      "inharm": 7,
+      "amp": [
+        1,
+        38,
+        0,
+        22
+      ],
+      "fenv": [
+        11,
+        43,
+        31,
+        41
+      ],
+      "cutoff": 46,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 17,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 15,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        47,
+        34,
+        28
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          27,
+          27,
+          28
+        ],
+        [
+          2,
+          46,
+          10,
+          35
+        ],
+        [
+          1,
+          21,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "ANGLED BASS",
+    "patch": {
+      "engine": 2,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 51,
+      "shape": 35,
+      "damp": 71,
+      "position": 53,
+      "inharm": 14,
+      "amp": [
+        9,
+        62,
+        78,
+        65
+      ],
+      "fenv": [
+        20,
+        50,
+        42,
+        44
+      ],
+      "cutoff": 68,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 20,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 22,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        52,
+        43,
+        41
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          32,
+          34,
+          28
+        ],
+        [
+          2,
+          57,
+          10,
+          35
+        ],
+        [
+          1,
+          24,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BENT REED",
+    "patch": {
+      "engine": 2,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 64,
+      "shape": 87,
+      "damp": 94,
+      "position": 72,
+      "inharm": 21,
+      "amp": [
+        1,
+        70,
+        36,
+        46
+      ],
+      "fenv": [
+        29,
+        57,
+        53,
+        47
+      ],
+      "cutoff": 76,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 23,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 29,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        57,
+        52,
+        54
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          37,
+          41,
+          28
+        ],
+        [
+          2,
+          68,
+          10,
+          35
+        ],
+        [
+          1,
+          27,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "PHASE CHOIR",
+    "patch": {
+      "engine": 2,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 77,
+      "shape": 64,
+      "damp": 117,
+      "position": 91,
+      "inharm": 28,
+      "amp": [
+        59,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        2,
+        64,
+        64,
+        50
+      ],
+      "cutoff": 54,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 26,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 4,
+      "feedback": 36,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        62,
+        61,
+        67
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          42,
+          48,
+          28
+        ],
+        [
+          2,
+          79,
+          10,
+          35
+        ],
+        [
+          1,
+          30,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "WAX LEAD",
+    "patch": {
+      "engine": 2,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 90,
+      "shape": 117,
+      "damp": 41,
+      "position": 110,
+      "inharm": 35,
+      "amp": [
+        2,
+        55,
+        0,
+        38
+      ],
+      "fenv": [
+        11,
+        71,
+        75,
+        53
+      ],
+      "cutoff": 91,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 29,
+      "lfo_depth": 3,
+      "lfo_dest": 1,
+      "algorithm": 5,
+      "feedback": 43,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        67,
+        70,
+        80
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          47,
+          55,
+          28
+        ],
+        [
+          2,
+          90,
+          10,
+          35
+        ],
+        [
+          1,
+          33,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "SOFT TEETH",
+    "patch": {
+      "engine": 2,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 25,
+      "shape": 44,
+      "damp": 64,
+      "position": 29,
+      "inharm": 42,
+      "amp": [
+        1,
+        38,
+        0,
+        22
+      ],
+      "fenv": [
+        20,
+        78,
+        86,
+        56
+      ],
+      "cutoff": 54,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 32,
+      "lfo_depth": 0,
+      "lfo_dest": 1,
+      "algorithm": 6,
+      "feedback": 50,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        72,
+        79,
+        93
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          52,
+          62,
+          28
+        ],
+        [
+          2,
+          36,
+          10,
+          35
+        ],
+        [
+          1,
+          36,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "CERAMIC",
+    "patch": {
+      "engine": 2,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 38,
+      "shape": 99,
+      "damp": 87,
+      "position": 48,
+      "inharm": 49,
+      "amp": [
+        9,
+        62,
+        78,
+        65
+      ],
+      "fenv": [
+        29,
+        85,
+        97,
+        59
+      ],
+      "cutoff": 76,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 35,
+      "lfo_depth": 14,
+      "lfo_dest": 1,
+      "algorithm": 7,
+      "feedback": 57,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        77,
+        88,
+        21
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          57,
+          69,
+          28
+        ],
+        [
+          2,
+          47,
+          10,
+          35
+        ],
+        [
+          1,
+          39,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "WAVING GLASS",
+    "patch": {
+      "engine": 2,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 51,
+      "shape": 12,
+      "damp": 110,
+      "position": 67,
+      "inharm": 56,
+      "amp": [
+        63,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        2,
+        42,
+        28,
+        62
+      ],
+      "cutoff": 84,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 38,
+      "lfo_depth": 5,
+      "lfo_dest": 1,
+      "algorithm": 0,
+      "feedback": 64,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        82,
+        97,
+        34
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          62,
+          21,
+          28
+        ],
+        [
+          2,
+          58,
+          10,
+          35
+        ],
+        [
+          1,
+          42,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SLOPE ORGAN",
+    "patch": {
+      "engine": 2,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 64,
+      "shape": 75,
+      "damp": 34,
+      "position": 86,
+      "inharm": 63,
+      "amp": [
+        65,
+        80,
+        103,
+        85
+      ],
+      "fenv": [
+        11,
+        49,
+        39,
+        65
+      ],
+      "cutoff": 62,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 41,
+      "lfo_depth": 20,
+      "lfo_dest": 1,
+      "algorithm": 1,
+      "feedback": 71,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        87,
+        26,
+        47
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          67,
+          28,
+          28
+        ],
+        [
+          2,
+          69,
+          10,
+          35
+        ],
+        [
+          1,
+          45,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "VECTOR PAD",
+    "patch": {
+      "engine": 2,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 77,
+      "shape": 28,
+      "damp": 57,
+      "position": 105,
+      "inharm": 70,
+      "amp": [
+        65,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        20,
+        56,
+        50,
+        68
+      ],
+      "cutoff": 99,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 44,
+      "lfo_depth": 3,
+      "lfo_dest": 2,
+      "algorithm": 2,
+      "feedback": 13,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        92,
+        35,
+        60
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          72,
+          35,
+          28
+        ],
+        [
+          2,
+          80,
+          10,
+          35
+        ],
+        [
+          1,
+          48,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "PAPER EDGE",
+    "patch": {
+      "engine": 2,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 90,
+      "shape": 112,
+      "damp": 80,
+      "position": 24,
+      "inharm": 77,
+      "amp": [
+        1,
+        38,
+        0,
+        22
+      ],
+      "fenv": [
+        29,
+        63,
+        61,
+        71
+      ],
+      "cutoff": 62,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 47,
+      "lfo_depth": 0,
+      "lfo_dest": 2,
+      "algorithm": 3,
+      "feedback": 20,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        97,
+        44,
+        73
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          77,
+          42,
+          28
+        ],
+        [
+          2,
+          91,
+          10,
+          35
+        ],
+        [
+          1,
+          51,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "ROUND FOLD",
+    "patch": {
+      "engine": 2,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 25,
+      "shape": 55,
+      "damp": 103,
+      "position": 43,
+      "inharm": 84,
+      "amp": [
+        9,
+        62,
+        78,
+        65
+      ],
+      "fenv": [
+        2,
+        70,
+        72,
+        74
+      ],
+      "cutoff": 84,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 50,
+      "lfo_depth": 14,
+      "lfo_dest": 2,
+      "algorithm": 4,
+      "feedback": 27,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        102,
+        53,
+        86
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          22,
+          49,
+          28
+        ],
+        [
+          2,
+          37,
+          10,
+          35
+        ],
+        [
+          1,
+          54,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "GHOST HORN",
+    "patch": {
+      "engine": 2,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 38,
+      "shape": 91,
+      "damp": 27,
+      "position": 62,
+      "inharm": 91,
+      "amp": [
+        1,
+        70,
+        36,
+        46
+      ],
+      "fenv": [
+        11,
+        77,
+        83,
+        77
+      ],
+      "cutoff": 92,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 53,
+      "lfo_depth": 5,
+      "lfo_dest": 2,
+      "algorithm": 5,
+      "feedback": 34,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        42,
+        62,
+        99
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          27,
+          56,
+          28
+        ],
+        [
+          2,
+          48,
+          10,
+          35
+        ],
+        [
+          1,
+          57,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "RIBBON",
+    "patch": {
+      "engine": 2,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 51,
+      "shape": 39,
+      "damp": 50,
+      "position": 81,
+      "inharm": 98,
+      "amp": [
+        69,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        20,
+        84,
+        94,
+        80
+      ],
+      "cutoff": 70,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 56,
+      "lfo_depth": 20,
+      "lfo_dest": 2,
+      "algorithm": 6,
+      "feedback": 41,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        47,
+        71,
+        27
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          32,
+          63,
+          28
+        ],
+        [
+          2,
+          59,
+          10,
+          35
+        ],
+        [
+          1,
+          60,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "LANTERN",
+    "patch": {
+      "engine": 2,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 64,
+      "shape": 82,
+      "damp": 73,
+      "position": 100,
+      "inharm": 105,
+      "amp": [
+        70,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        29,
+        41,
+        25,
+        83
+      ],
+      "cutoff": 107,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 63,
+      "drive": 8,
+      "level": 84,
+      "lfo_rate": 59,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 7,
+      "feedback": 48,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        52,
+        80,
+        40
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          37,
+          70,
+          28
+        ],
+        [
+          2,
+          70,
+          10,
+          35
+        ],
+        [
+          1,
+          63,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "SPLIT LIGHT",
+    "patch": {
+      "engine": 2,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 23,
+      "damp": 96,
+      "position": 19,
+      "inharm": 2,
+      "amp": [
+        1,
+        38,
+        0,
+        22
+      ],
+      "fenv": [
+        2,
+        48,
+        36,
+        86
+      ],
+      "cutoff": 70,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 72,
+      "drive": 30,
+      "level": 84,
+      "lfo_rate": 62,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 55,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        57,
+        89,
+        53
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          42,
+          22,
+          28
+        ],
+        [
+          2,
+          81,
+          10,
+          35
+        ],
+        [
+          1,
+          66,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "THIN ICE",
+    "patch": {
+      "engine": 2,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 90,
+      "shape": 120,
+      "damp": 119,
+      "position": 38,
+      "inharm": 9,
+      "amp": [
+        72,
+        83,
+        90,
+        80
+      ],
+      "fenv": [
+        11,
+        55,
+        47,
+        89
+      ],
+      "cutoff": 92,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 32,
+      "drive": 4,
+      "level": 84,
+      "lfo_rate": 65,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 62,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        62,
+        98,
+        66
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          47,
+          29,
+          28
+        ],
+        [
+          2,
+          92,
+          10,
+          35
+        ],
+        [
+          1,
+          69,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "CHALK PULSE",
+    "patch": {
+      "engine": 2,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 25,
+      "shape": 49,
+      "damp": 43,
+      "position": 57,
+      "inharm": 16,
+      "amp": [
+        1,
+        70,
+        36,
+        46
+      ],
+      "fenv": [
+        20,
+        62,
+        58,
+        92
+      ],
+      "cutoff": 100,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 48,
+      "drive": 15,
+      "level": 84,
+      "lfo_rate": 68,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 69,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        67,
+        27,
+        79
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          52,
+          36,
+          28
+        ],
+        [
+          2,
+          38,
+          10,
+          35
+        ],
+        [
+          1,
+          72,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SHADOW SYNC",
+    "patch": {
+      "engine": 2,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 38,
+      "shape": 97,
+      "damp": 66,
+      "position": 76,
+      "inharm": 23,
+      "amp": [
+        65,
+        80,
+        103,
+        85
+      ],
+      "fenv": [
+        29,
+        69,
+        69,
+        40
+      ],
+      "cutoff": 78,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 21,
+      "drive": 0,
+      "level": 84,
+      "lfo_rate": 71,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 11,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        72,
+        36,
+        92
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          57,
+          43,
+          28
+        ],
+        [
+          2,
+          49,
+          10,
+          35
+        ],
+        [
+          1,
+          20,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "CEDAR STRING",
+    "patch": {
+      "engine": 3,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 25,
+      "shape": 98,
+      "damp": 45,
+      "position": 22,
+      "inharm": 0,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        2,
+        36,
+        20,
+        38
+      ],
+      "cutoff": 105,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 8,
+      "level": 110,
+      "lfo_rate": 14,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 8,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        42,
+        25,
+        15
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          22,
+          20,
+          28
+        ],
+        [
+          2,
+          35,
+          10,
+          35
+        ],
+        [
+          1,
+          18,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "PALM MUTE",
+    "patch": {
+      "engine": 3,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 38,
+      "shape": 45,
+      "damp": 112,
+      "position": 8,
+      "inharm": 7,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        11,
+        43,
+        31,
+        41
+      ],
+      "cutoff": 105,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 30,
+      "level": 110,
+      "lfo_rate": 17,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 15,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        47,
+        34,
+        28
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          27,
+          27,
+          28
+        ],
+        [
+          2,
+          46,
+          10,
+          35
+        ],
+        [
+          1,
+          21,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "NYLON HARP",
+    "patch": {
+      "engine": 3,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 51,
+      "shape": 112,
+      "damp": 30,
+      "position": 47,
+      "inharm": 14,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        20,
+        50,
+        42,
+        44
+      ],
+      "cutoff": 105,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 4,
+      "level": 110,
+      "lfo_rate": 20,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 22,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        52,
+        43,
+        41
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          32,
+          34,
+          28
+        ],
+        [
+          2,
+          57,
+          10,
+          35
+        ],
+        [
+          1,
+          24,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "STEEL THREAD",
+    "patch": {
+      "engine": 3,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 64,
+      "shape": 118,
+      "damp": 15,
+      "position": 31,
+      "inharm": 21,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        29,
+        57,
+        53,
+        47
+      ],
+      "cutoff": 105,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 15,
+      "level": 110,
+      "lfo_rate": 23,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 29,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        57,
+        52,
+        54
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          37,
+          41,
+          28
+        ],
+        [
+          2,
+          68,
+          10,
+          35
+        ],
+        [
+          1,
+          27,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "DARK KOTO",
+    "patch": {
+      "engine": 3,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 77,
+      "shape": 73,
+      "damp": 72,
+      "position": 17,
+      "inharm": 28,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        2,
+        64,
+        64,
+        50
+      ],
+      "cutoff": 105,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 0,
+      "level": 110,
+      "lfo_rate": 26,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 4,
+      "feedback": 36,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        62,
+        61,
+        67
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          42,
+          48,
+          28
+        ],
+        [
+          2,
+          79,
+          10,
+          35
+        ],
+        [
+          1,
+          30,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "RUBBER WIRE",
+    "patch": {
+      "engine": 3,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 90,
+      "shape": 65,
+      "damp": 98,
+      "position": 64,
+      "inharm": 35,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        11,
+        71,
+        75,
+        53
+      ],
+      "cutoff": 105,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 8,
+      "level": 110,
+      "lfo_rate": 29,
+      "lfo_depth": 3,
+      "lfo_dest": 1,
+      "algorithm": 5,
+      "feedback": 43,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        67,
+        70,
+        80
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          47,
+          55,
+          28
+        ],
+        [
+          2,
+          90,
+          10,
+          35
+        ],
+        [
+          1,
+          33,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "PAPER GUITAR",
+    "patch": {
+      "engine": 3,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 25,
+      "shape": 54,
+      "damp": 85,
+      "position": 85,
+      "inharm": 42,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        20,
+        78,
+        86,
+        56
+      ],
+      "cutoff": 105,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 30,
+      "level": 110,
+      "lfo_rate": 32,
+      "lfo_depth": 0,
+      "lfo_dest": 1,
+      "algorithm": 6,
+      "feedback": 50,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        72,
+        79,
+        93
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          52,
+          62,
+          28
+        ],
+        [
+          2,
+          36,
+          10,
+          35
+        ],
+        [
+          1,
+          36,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BRASS WIRE",
+    "patch": {
+      "engine": 3,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 38,
+      "shape": 105,
+      "damp": 24,
+      "position": 12,
+      "inharm": 49,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        29,
+        85,
+        97,
+        59
+      ],
+      "cutoff": 105,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 4,
+      "level": 110,
+      "lfo_rate": 35,
+      "lfo_depth": 14,
+      "lfo_dest": 1,
+      "algorithm": 7,
+      "feedback": 57,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        77,
+        88,
+        21
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          57,
+          69,
+          28
+        ],
+        [
+          2,
+          47,
+          10,
+          35
+        ],
+        [
+          1,
+          39,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "GLASS STRING",
+    "patch": {
+      "engine": 3,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 51,
+      "shape": 123,
+      "damp": 10,
+      "position": 42,
+      "inharm": 56,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        2,
+        42,
+        28,
+        62
+      ],
+      "cutoff": 105,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 15,
+      "level": 110,
+      "lfo_rate": 38,
+      "lfo_depth": 5,
+      "lfo_dest": 1,
+      "algorithm": 0,
+      "feedback": 64,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        82,
+        97,
+        34
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          62,
+          21,
+          28
+        ],
+        [
+          2,
+          58,
+          10,
+          35
+        ],
+        [
+          1,
+          42,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BASS WOOD",
+    "patch": {
+      "engine": 3,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 64,
+      "shape": 87,
+      "damp": 68,
+      "position": 26,
+      "inharm": 63,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        11,
+        49,
+        39,
+        65
+      ],
+      "cutoff": 105,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 0,
+      "level": 110,
+      "lfo_rate": 41,
+      "lfo_depth": 20,
+      "lfo_dest": 1,
+      "algorithm": 1,
+      "feedback": 71,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        87,
+        26,
+        47
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          67,
+          28,
+          28
+        ],
+        [
+          2,
+          69,
+          10,
+          35
+        ],
+        [
+          1,
+          45,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "PICKED FIFTH",
+    "patch": {
+      "engine": 3,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 77,
+      "shape": 111,
+      "damp": 35,
+      "position": 74,
+      "inharm": 70,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        20,
+        56,
+        50,
+        68
+      ],
+      "cutoff": 105,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 8,
+      "level": 110,
+      "lfo_rate": 44,
+      "lfo_depth": 3,
+      "lfo_dest": 2,
+      "algorithm": 2,
+      "feedback": 13,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        92,
+        35,
+        60
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          72,
+          35,
+          28
+        ],
+        [
+          2,
+          80,
+          10,
+          35
+        ],
+        [
+          1,
+          48,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BAMBOO STRING",
+    "patch": {
+      "engine": 3,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 90,
+      "shape": 82,
+      "damp": 58,
+      "position": 36,
+      "inharm": 77,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        29,
+        63,
+        61,
+        71
+      ],
+      "cutoff": 105,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 30,
+      "level": 110,
+      "lfo_rate": 47,
+      "lfo_depth": 0,
+      "lfo_dest": 2,
+      "algorithm": 3,
+      "feedback": 20,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        97,
+        44,
+        73
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          77,
+          42,
+          28
+        ],
+        [
+          2,
+          91,
+          10,
+          35
+        ],
+        [
+          1,
+          51,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "TAPE HARP",
+    "patch": {
+      "engine": 3,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 25,
+      "shape": 69,
+      "damp": 75,
+      "position": 92,
+      "inharm": 84,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        2,
+        70,
+        72,
+        74
+      ],
+      "cutoff": 105,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 4,
+      "level": 110,
+      "lfo_rate": 50,
+      "lfo_depth": 14,
+      "lfo_dest": 2,
+      "algorithm": 4,
+      "feedback": 27,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        102,
+        53,
+        86
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          22,
+          49,
+          28
+        ],
+        [
+          2,
+          37,
+          10,
+          35
+        ],
+        [
+          1,
+          54,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "METAL BRUSH",
+    "patch": {
+      "engine": 3,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 38,
+      "shape": 95,
+      "damp": 40,
+      "position": 57,
+      "inharm": 91,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        11,
+        77,
+        83,
+        77
+      ],
+      "cutoff": 105,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 15,
+      "level": 110,
+      "lfo_rate": 53,
+      "lfo_depth": 5,
+      "lfo_dest": 2,
+      "algorithm": 5,
+      "feedback": 34,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        42,
+        62,
+        99
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          27,
+          56,
+          28
+        ],
+        [
+          2,
+          48,
+          10,
+          35
+        ],
+        [
+          1,
+          57,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "FELT STRING",
+    "patch": {
+      "engine": 3,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 51,
+      "shape": 40,
+      "damp": 108,
+      "position": 15,
+      "inharm": 98,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        20,
+        84,
+        94,
+        80
+      ],
+      "cutoff": 105,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 0,
+      "level": 110,
+      "lfo_rate": 56,
+      "lfo_depth": 20,
+      "lfo_dest": 2,
+      "algorithm": 6,
+      "feedback": 41,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        47,
+        71,
+        27
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          32,
+          63,
+          28
+        ],
+        [
+          2,
+          59,
+          10,
+          35
+        ],
+        [
+          1,
+          60,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "DRY KALIMBA",
+    "patch": {
+      "engine": 3,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 64,
+      "shape": 90,
+      "damp": 62,
+      "position": 51,
+      "inharm": 105,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        29,
+        41,
+        25,
+        83
+      ],
+      "cutoff": 105,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 8,
+      "level": 110,
+      "lfo_rate": 59,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 7,
+      "feedback": 48,
+      "ratio": [
+        16,
+        16,
+        32,
+        48
+      ],
+      "op_level": [
+        110,
+        52,
+        80,
+        40
+      ],
+      "op_env": [
+        [
+          2,
+          55,
+          0,
+          38
+        ],
+        [
+          1,
+          37,
+          70,
+          28
+        ],
+        [
+          2,
+          70,
+          10,
+          35
+        ],
+        [
+          1,
+          63,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "OPEN KORA",
+    "patch": {
+      "engine": 3,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 116,
+      "damp": 18,
+      "position": 78,
+      "inharm": 2,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        2,
+        48,
+        36,
+        86
+      ],
+      "cutoff": 105,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 30,
+      "level": 110,
+      "lfo_rate": 62,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 55,
+      "ratio": [
+        16,
+        32,
+        80,
+        112
+      ],
+      "op_level": [
+        110,
+        57,
+        89,
+        53
+      ],
+      "op_env": [
+        [
+          1,
+          38,
+          0,
+          22
+        ],
+        [
+          1,
+          42,
+          22,
+          28
+        ],
+        [
+          2,
+          81,
+          10,
+          35
+        ],
+        [
+          1,
+          66,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "LOW CEDAR",
+    "patch": {
+      "engine": 3,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 90,
+      "shape": 76,
+      "damp": 82,
+      "position": 19,
+      "inharm": 9,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        11,
+        55,
+        47,
+        89
+      ],
+      "cutoff": 105,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 4,
+      "level": 110,
+      "lfo_rate": 65,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 62,
+      "ratio": [
+        16,
+        24,
+        48,
+        64
+      ],
+      "op_level": [
+        110,
+        62,
+        98,
+        66
+      ],
+      "op_env": [
+        [
+          9,
+          62,
+          78,
+          65
+        ],
+        [
+          1,
+          47,
+          29,
+          28
+        ],
+        [
+          2,
+          92,
+          10,
+          35
+        ],
+        [
+          1,
+          69,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "DULCIMER",
+    "patch": {
+      "engine": 3,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 25,
+      "shape": 119,
+      "damp": 27,
+      "position": 103,
+      "inharm": 16,
+      "amp": [
+        0,
+        85,
+        0,
+        53
+      ],
+      "fenv": [
+        20,
+        62,
+        58,
+        92
+      ],
+      "cutoff": 105,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 15,
+      "level": 110,
+      "lfo_rate": 68,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 69,
+      "ratio": [
+        8,
+        16,
+        32,
+        16
+      ],
+      "op_level": [
+        110,
+        67,
+        27,
+        79
+      ],
+      "op_env": [
+        [
+          1,
+          70,
+          36,
+          46
+        ],
+        [
+          1,
+          52,
+          36,
+          28
+        ],
+        [
+          2,
+          38,
+          10,
+          35
+        ],
+        [
+          1,
+          72,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "THUMB PIANO",
+    "patch": {
+      "engine": 3,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 38,
+      "shape": 103,
+      "damp": 51,
+      "position": 44,
+      "inharm": 23,
+      "amp": [
+        0,
+        85,
+        110,
+        53
+      ],
+      "fenv": [
+        29,
+        69,
+        69,
+        40
+      ],
+      "cutoff": 105,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 12,
+      "drive": 0,
+      "level": 110,
+      "lfo_rate": 71,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 11,
+      "ratio": [
+        16,
+        48,
+        96,
+        127
+      ],
+      "op_level": [
+        110,
+        72,
+        36,
+        92
+      ],
+      "op_env": [
+        [
+          65,
+          80,
+          103,
+          85
+        ],
+        [
+          1,
+          57,
+          43,
+          28
+        ],
+        [
+          2,
+          49,
+          10,
+          35
+        ],
+        [
+          1,
+          20,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "CLAY BOWL",
+    "patch": {
+      "engine": 4,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 25,
+      "shape": 22,
+      "damp": 25,
+      "position": 15,
+      "inharm": 11,
+      "amp": [
+        0,
+        100,
+        0,
+        80
+      ],
+      "fenv": [
+        2,
+        36,
+        20,
+        38
+      ],
+      "cutoff": 112,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 14,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 8,
+      "ratio": [
+        16,
+        44,
+        85,
+        117
+      ],
+      "op_level": [
+        75,
+        110,
+        110,
+        65
+      ],
+      "op_env": [
+        [
+          0,
+          110,
+          0,
+          80
+        ],
+        [
+          1,
+          95,
+          20,
+          28
+        ],
+        [
+          2,
+          85,
+          10,
+          35
+        ],
+        [
+          1,
+          75,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "BRONZE PLATE",
+    "patch": {
+      "engine": 4,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 38,
+      "shape": 39,
+      "damp": 48,
+      "position": 34,
+      "inharm": 57,
+      "amp": [
+        0,
+        105,
+        0,
+        80
+      ],
+      "fenv": [
+        11,
+        43,
+        31,
+        41
+      ],
+      "cutoff": 112,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 17,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 15,
+      "ratio": [
+        16,
+        32,
+        49,
+        94
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        73
+      ],
+      "op_env": [
+        [
+          0,
+          115,
+          0,
+          80
+        ],
+        [
+          1,
+          96,
+          27,
+          28
+        ],
+        [
+          2,
+          86,
+          10,
+          35
+        ],
+        [
+          1,
+          76,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "WOOD BLOCK",
+    "patch": {
+      "engine": 4,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 51,
+      "shape": 56,
+      "damp": 71,
+      "position": 53,
+      "inharm": 5,
+      "amp": [
+        0,
+        55,
+        0,
+        52
+      ],
+      "fenv": [
+        20,
+        50,
+        42,
+        44
+      ],
+      "cutoff": 112,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 20,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 22,
+      "ratio": [
+        16,
+        44,
+        86,
+        127
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        81
+      ],
+      "op_env": [
+        [
+          0,
+          65,
+          0,
+          80
+        ],
+        [
+          1,
+          97,
+          34,
+          28
+        ],
+        [
+          2,
+          87,
+          10,
+          35
+        ],
+        [
+          1,
+          77,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "GLASS BOWL",
+    "patch": {
+      "engine": 4,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 64,
+      "shape": 73,
+      "damp": 94,
+      "position": 72,
+      "inharm": 39,
+      "amp": [
+        0,
+        98,
+        0,
+        80
+      ],
+      "fenv": [
+        29,
+        57,
+        53,
+        47
+      ],
+      "cutoff": 112,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 23,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 29,
+      "ratio": [
+        16,
+        38,
+        71,
+        109
+      ],
+      "op_level": [
+        75,
+        110,
+        90,
+        89
+      ],
+      "op_env": [
+        [
+          0,
+          108,
+          0,
+          80
+        ],
+        [
+          1,
+          98,
+          41,
+          28
+        ],
+        [
+          2,
+          88,
+          10,
+          35
+        ],
+        [
+          1,
+          78,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "HOLLOW DRUM",
+    "patch": {
+      "engine": 4,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 77,
+      "shape": 90,
+      "damp": 117,
+      "position": 91,
+      "inharm": 18,
+      "amp": [
+        0,
+        65,
+        0,
+        52
+      ],
+      "fenv": [
+        2,
+        64,
+        64,
+        50
+      ],
+      "cutoff": 112,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 26,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 4,
+      "feedback": 36,
+      "ratio": [
+        16,
+        25,
+        34,
+        47
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        97
+      ],
+      "op_env": [
+        [
+          0,
+          75,
+          0,
+          80
+        ],
+        [
+          1,
+          99,
+          48,
+          28
+        ],
+        [
+          2,
+          89,
+          10,
+          35
+        ],
+        [
+          1,
+          79,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SMALL GONG",
+    "patch": {
+      "engine": 4,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 90,
+      "shape": 107,
+      "damp": 41,
+      "position": 110,
+      "inharm": 91,
+      "amp": [
+        0,
+        112,
+        0,
+        80
+      ],
+      "fenv": [
+        11,
+        71,
+        75,
+        53
+      ],
+      "cutoff": 112,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 29,
+      "lfo_depth": 3,
+      "lfo_dest": 1,
+      "algorithm": 5,
+      "feedback": 43,
+      "ratio": [
+        16,
+        23,
+        43,
+        69
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        105
+      ],
+      "op_env": [
+        [
+          0,
+          122,
+          0,
+          80
+        ],
+        [
+          1,
+          100,
+          55,
+          28
+        ],
+        [
+          2,
+          90,
+          10,
+          35
+        ],
+        [
+          1,
+          80,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "STONE BELL",
+    "patch": {
+      "engine": 4,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 25,
+      "shape": 24,
+      "damp": 64,
+      "position": 29,
+      "inharm": 26,
+      "amp": [
+        0,
+        94,
+        0,
+        80
+      ],
+      "fenv": [
+        20,
+        78,
+        86,
+        56
+      ],
+      "cutoff": 112,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 32,
+      "lfo_depth": 0,
+      "lfo_dest": 1,
+      "algorithm": 6,
+      "feedback": 50,
+      "ratio": [
+        16,
+        42,
+        83,
+        120
+      ],
+      "op_level": [
+        75,
+        110,
+        110,
+        113
+      ],
+      "op_env": [
+        [
+          0,
+          104,
+          0,
+          80
+        ],
+        [
+          1,
+          101,
+          62,
+          28
+        ],
+        [
+          2,
+          91,
+          10,
+          35
+        ],
+        [
+          1,
+          81,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "WATER CUP",
+    "patch": {
+      "engine": 4,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 38,
+      "shape": 41,
+      "damp": 87,
+      "position": 48,
+      "inharm": 73,
+      "amp": [
+        0,
+        92,
+        0,
+        80
+      ],
+      "fenv": [
+        29,
+        85,
+        97,
+        59
+      ],
+      "cutoff": 112,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 35,
+      "lfo_depth": 14,
+      "lfo_dest": 1,
+      "algorithm": 7,
+      "feedback": 57,
+      "ratio": [
+        16,
+        30,
+        57,
+        93
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        65
+      ],
+      "op_env": [
+        [
+          0,
+          102,
+          0,
+          80
+        ],
+        [
+          1,
+          102,
+          69,
+          28
+        ],
+        [
+          2,
+          92,
+          10,
+          35
+        ],
+        [
+          1,
+          82,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "TUNED CAN",
+    "patch": {
+      "engine": 4,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 51,
+      "shape": 58,
+      "damp": 110,
+      "position": 67,
+      "inharm": 48,
+      "amp": [
+        0,
+        79,
+        0,
+        52
+      ],
+      "fenv": [
+        2,
+        42,
+        28,
+        62
+      ],
+      "cutoff": 112,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 38,
+      "lfo_depth": 5,
+      "lfo_dest": 1,
+      "algorithm": 0,
+      "feedback": 64,
+      "ratio": [
+        16,
+        36,
+        63,
+        105
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        73
+      ],
+      "op_env": [
+        [
+          0,
+          89,
+          0,
+          80
+        ],
+        [
+          1,
+          103,
+          21,
+          28
+        ],
+        [
+          2,
+          93,
+          10,
+          35
+        ],
+        [
+          1,
+          83,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SKIN DRUM",
+    "patch": {
+      "engine": 4,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 64,
+      "shape": 75,
+      "damp": 34,
+      "position": 86,
+      "inharm": 9,
+      "amp": [
+        0,
+        63,
+        0,
+        52
+      ],
+      "fenv": [
+        11,
+        49,
+        39,
+        65
+      ],
+      "cutoff": 112,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 41,
+      "lfo_depth": 20,
+      "lfo_dest": 1,
+      "algorithm": 1,
+      "feedback": 71,
+      "ratio": [
+        16,
+        24,
+        34,
+        45
+      ],
+      "op_level": [
+        75,
+        110,
+        90,
+        81
+      ],
+      "op_env": [
+        [
+          0,
+          73,
+          0,
+          80
+        ],
+        [
+          1,
+          104,
+          28,
+          28
+        ],
+        [
+          2,
+          94,
+          10,
+          35
+        ],
+        [
+          1,
+          84,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "BELL TREE",
+    "patch": {
+      "engine": 4,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 77,
+      "shape": 92,
+      "damp": 57,
+      "position": 105,
+      "inharm": 105,
+      "amp": [
+        0,
+        99,
+        0,
+        80
+      ],
+      "fenv": [
+        20,
+        56,
+        50,
+        68
+      ],
+      "cutoff": 112,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 44,
+      "lfo_depth": 3,
+      "lfo_dest": 2,
+      "algorithm": 2,
+      "feedback": 13,
+      "ratio": [
+        16,
+        31,
+        63,
+        127
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        89
+      ],
+      "op_env": [
+        [
+          0,
+          109,
+          0,
+          80
+        ],
+        [
+          1,
+          105,
+          35,
+          28
+        ],
+        [
+          2,
+          95,
+          10,
+          35
+        ],
+        [
+          1,
+          85,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SOFT STEEL",
+    "patch": {
+      "engine": 4,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 90,
+      "shape": 109,
+      "damp": 80,
+      "position": 24,
+      "inharm": 64,
+      "amp": [
+        0,
+        103,
+        0,
+        80
+      ],
+      "fenv": [
+        29,
+        63,
+        61,
+        71
+      ],
+      "cutoff": 112,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 47,
+      "lfo_depth": 0,
+      "lfo_dest": 2,
+      "algorithm": 3,
+      "feedback": 20,
+      "ratio": [
+        16,
+        40,
+        70,
+        103
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        97
+      ],
+      "op_env": [
+        [
+          0,
+          113,
+          0,
+          80
+        ],
+        [
+          1,
+          106,
+          42,
+          28
+        ],
+        [
+          2,
+          96,
+          10,
+          35
+        ],
+        [
+          1,
+          86,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "MARBLE DROP",
+    "patch": {
+      "engine": 4,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 25,
+      "shape": 26,
+      "damp": 103,
+      "position": 43,
+      "inharm": 21,
+      "amp": [
+        0,
+        77,
+        0,
+        52
+      ],
+      "fenv": [
+        2,
+        70,
+        72,
+        74
+      ],
+      "cutoff": 112,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 50,
+      "lfo_depth": 14,
+      "lfo_dest": 2,
+      "algorithm": 4,
+      "feedback": 27,
+      "ratio": [
+        16,
+        39,
+        73,
+        121
+      ],
+      "op_level": [
+        75,
+        110,
+        110,
+        105
+      ],
+      "op_env": [
+        [
+          0,
+          87,
+          0,
+          80
+        ],
+        [
+          1,
+          107,
+          49,
+          28
+        ],
+        [
+          2,
+          97,
+          10,
+          35
+        ],
+        [
+          1,
+          87,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "COPPER CUP",
+    "patch": {
+      "engine": 4,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 38,
+      "shape": 43,
+      "damp": 27,
+      "position": 62,
+      "inharm": 83,
+      "amp": [
+        0,
+        95,
+        0,
+        80
+      ],
+      "fenv": [
+        11,
+        77,
+        83,
+        77
+      ],
+      "cutoff": 112,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 53,
+      "lfo_depth": 5,
+      "lfo_dest": 2,
+      "algorithm": 5,
+      "feedback": 34,
+      "ratio": [
+        16,
+        34,
+        66,
+        114
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        113
+      ],
+      "op_env": [
+        [
+          0,
+          105,
+          0,
+          80
+        ],
+        [
+          1,
+          108,
+          56,
+          28
+        ],
+        [
+          2,
+          98,
+          10,
+          35
+        ],
+        [
+          1,
+          88,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "PAPER FRAME",
+    "patch": {
+      "engine": 4,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 51,
+      "shape": 60,
+      "damp": 50,
+      "position": 81,
+      "inharm": 14,
+      "amp": [
+        0,
+        60,
+        0,
+        52
+      ],
+      "fenv": [
+        20,
+        84,
+        94,
+        80
+      ],
+      "cutoff": 112,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 56,
+      "lfo_depth": 20,
+      "lfo_dest": 2,
+      "algorithm": 6,
+      "feedback": 41,
+      "ratio": [
+        16,
+        28,
+        40,
+        59
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        65
+      ],
+      "op_env": [
+        [
+          0,
+          70,
+          0,
+          80
+        ],
+        [
+          1,
+          95,
+          63,
+          28
+        ],
+        [
+          2,
+          99,
+          10,
+          35
+        ],
+        [
+          1,
+          89,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "LOW GONG",
+    "patch": {
+      "engine": 4,
+      "wave": 0,
+      "mix": 24,
+      "sub": 12,
+      "detune": 3,
+      "pulse": 64,
+      "shape": 77,
+      "damp": 73,
+      "position": 100,
+      "inharm": 119,
+      "amp": [
+        0,
+        117,
+        0,
+        80
+      ],
+      "fenv": [
+        29,
+        41,
+        25,
+        83
+      ],
+      "cutoff": 112,
+      "resonance": 12,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 8,
+      "level": 100,
+      "lfo_rate": 59,
+      "lfo_depth": 3,
+      "lfo_dest": 0,
+      "algorithm": 7,
+      "feedback": 48,
+      "ratio": [
+        8,
+        17,
+        31,
+        55
+      ],
+      "op_level": [
+        75,
+        110,
+        90,
+        73
+      ],
+      "op_env": [
+        [
+          0,
+          127,
+          0,
+          80
+        ],
+        [
+          1,
+          96,
+          70,
+          28
+        ],
+        [
+          2,
+          100,
+          10,
+          35
+        ],
+        [
+          1,
+          90,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        -35,
+        -28,
+        28,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "HANGING GLASS",
+    "patch": {
+      "engine": 4,
+      "wave": 1,
+      "mix": 70,
+      "sub": 48,
+      "detune": 0,
+      "pulse": 77,
+      "shape": 94,
+      "damp": 96,
+      "position": 19,
+      "inharm": 44,
+      "amp": [
+        0,
+        107,
+        0,
+        80
+      ],
+      "fenv": [
+        2,
+        48,
+        36,
+        86
+      ],
+      "cutoff": 112,
+      "resonance": 42,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 30,
+      "level": 100,
+      "lfo_rate": 62,
+      "lfo_depth": 0,
+      "lfo_dest": 0,
+      "algorithm": 0,
+      "feedback": 55,
+      "ratio": [
+        16,
+        41,
+        77,
+        113
+      ],
+      "op_level": [
+        90,
+        110,
+        110,
+        81
+      ],
+      "op_env": [
+        [
+          0,
+          117,
+          0,
+          80
+        ],
+        [
+          1,
+          97,
+          22,
+          28
+        ],
+        [
+          2,
+          85,
+          10,
+          35
+        ],
+        [
+          1,
+          91,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        38,
+        30,
+        -20,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "SHORT LOG",
+    "patch": {
+      "engine": 4,
+      "wave": 2,
+      "mix": 105,
+      "sub": 0,
+      "detune": 11,
+      "pulse": 90,
+      "shape": 111,
+      "damp": 119,
+      "position": 38,
+      "inharm": 2,
+      "amp": [
+        0,
+        51,
+        0,
+        52
+      ],
+      "fenv": [
+        11,
+        55,
+        47,
+        89
+      ],
+      "cutoff": 112,
+      "resonance": 22,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 4,
+      "level": 100,
+      "lfo_rate": 65,
+      "lfo_depth": 14,
+      "lfo_dest": 0,
+      "algorithm": 1,
+      "feedback": 62,
+      "ratio": [
+        16,
+        43,
+        84,
+        122
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        89
+      ],
+      "op_env": [
+        [
+          0,
+          61,
+          0,
+          80
+        ],
+        [
+          1,
+          98,
+          29,
+          28
+        ],
+        [
+          2,
+          86,
+          10,
+          35
+        ],
+        [
+          1,
+          92,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  },
+  {
+    "name": "METAL RAIN",
+    "patch": {
+      "engine": 4,
+      "wave": 3,
+      "mix": 45,
+      "sub": 20,
+      "detune": 4,
+      "pulse": 25,
+      "shape": 28,
+      "damp": 43,
+      "position": 57,
+      "inharm": 98,
+      "amp": [
+        0,
+        101,
+        0,
+        80
+      ],
+      "fenv": [
+        20,
+        62,
+        58,
+        92
+      ],
+      "cutoff": 112,
+      "resonance": 64,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 15,
+      "level": 100,
+      "lfo_rate": 68,
+      "lfo_depth": 5,
+      "lfo_dest": 0,
+      "algorithm": 2,
+      "feedback": 69,
+      "ratio": [
+        16,
+        37,
+        89,
+        127
+      ],
+      "op_level": [
+        75,
+        110,
+        110,
+        97
+      ],
+      "op_env": [
+        [
+          0,
+          111,
+          0,
+          80
+        ],
+        [
+          1,
+          99,
+          36,
+          28
+        ],
+        [
+          2,
+          87,
+          10,
+          35
+        ],
+        [
+          1,
+          93,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        28,
+        -35,
+        30,
+        28,
+        12,
+        7
+      ]
+    }
+  },
+  {
+    "name": "DEEP VESSEL",
+    "patch": {
+      "engine": 4,
+      "wave": 4,
+      "mix": 90,
+      "sub": 0,
+      "detune": 17,
+      "pulse": 38,
+      "shape": 45,
+      "damp": 66,
+      "position": 76,
+      "inharm": 68,
+      "amp": [
+        0,
+        111,
+        0,
+        80
+      ],
+      "fenv": [
+        29,
+        69,
+        69,
+        40
+      ],
+      "cutoff": 112,
+      "resonance": 8,
+      "filter": 0,
+      "envdepth": 10,
+      "drive": 0,
+      "level": 100,
+      "lfo_rate": 71,
+      "lfo_depth": 20,
+      "lfo_dest": 0,
+      "algorithm": 3,
+      "feedback": 11,
+      "ratio": [
+        8,
+        19,
+        37,
+        61
+      ],
+      "op_level": [
+        90,
+        110,
+        90,
+        105
+      ],
+      "op_env": [
+        [
+          0,
+          121,
+          0,
+          80
+        ],
+        [
+          1,
+          100,
+          43,
+          28
+        ],
+        [
+          2,
+          88,
+          10,
+          35
+        ],
+        [
+          1,
+          94,
+          0,
+          24
+        ]
+      ],
+      "morph": [
+        -22,
+        38,
+        -28,
+        -20,
+        12,
+        -3
+      ]
+    }
+  }
+]

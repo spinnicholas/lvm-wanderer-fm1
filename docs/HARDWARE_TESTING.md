@@ -1,20 +1,7 @@
-# Wanderer 0.9 hardware testing
+# Wanderer 1.4 hardware confirmation
 
-## Author’s report
+On November 2, 2026, Nicholas Spinelli / Nicholas James confirmed: “passes all my standard tests. this is ready to publish”. This confirmation applies to the current 1.4 RC6 build and supersedes the pending-device-acceptance wording in its development reports.
 
-I have physically tested Wanderer 0.9 on my own M-VAVE FM-1. Installation from official V15 and from SLOOP both succeeded. I also successfully switched from Wanderer back to V15 and from Wanderer to SLOOP. Wanderer remains a work in progress.
+The published 1.4 firmware is the exact tested RC6 package: `LVM-Wanderer-1.4-RC6-FM1.fwsc`, 612,196 bytes, identity FM-1_929, SHA-256 `9135b62169409efb73a6492561673bb5465979563824605956ab3316c50d5b32`. It has not been rebuilt for publication. Individual measurements or additional device variants are not implied by the author’s confirmation.
 
-## Confirmed firmware transitions
-
-| Starting firmware | Destination | Result |
-|---|---|---|
-| Official V15 | Wanderer 0.9 | Successful on my FM-1 |
-| SLOOP | Wanderer 0.9 | Successful on my FM-1 |
-| Wanderer 0.9 | Official V15 | Successful rollback on my FM-1 |
-| Wanderer 0.9 | SLOOP | Successful on my FM-1 |
-
-All four routes above are confirmed. This report supersedes earlier hardware-untested wording and the intermediate statement that installation from another custom firmware into Wanderer was unconfirmed.
-
-These results cover the Firmware Hub’s requested installation routes from stock V15 and another custom firmware, and leaving Wanderer again. They are an author report from one FM-1, not Hub approval. The exact SLOOP version and installation tool have not been recorded. Detailed per-feature results, measured worst-case audio timing, every flash operation, other device revisions and interrupted-update recovery are outside the recorded scope.
-
-The compiled release remains unchanged: `LVM-Wanderer-0.9-FM1.fwsc`, 612,196 bytes, `FM-1_929`, SHA-256 `c6c0a2829a5c1fe5959cb0d302c4de152b97fe3f29e469c400d1fbaefa236dc9`.
+The earlier installation/return results for V15, SLOOP and previous Wanderer versions remain historical reports for their original builds. See the archived [0.9 hardware record](HARDWARE_TESTING_0.9.md) and [1.3 RC4 notes](RELEASE_1.3_RC4.md). Current software evidence is in [the RC6 verification report](TEST_REPORT_1.4_RC6.md).

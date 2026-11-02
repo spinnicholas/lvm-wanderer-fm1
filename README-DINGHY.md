@@ -1,4 +1,4 @@
-Original Dinghy platform documentation. Upstream: https://github.com/zvenson/dinghy
+<p align="center"><img src="assets/logo.svg" width="96" alt="Dinghy"></p>
 
 # Dinghy
 

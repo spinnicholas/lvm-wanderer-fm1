@@ -1,0 +1,5 @@
+{
+  "source": "User-supplied artwork",
+  "sha256": "5e775c5828c1dc66b3490a49e0b38dc1af091d65f011acbbe95caf33a2ae4584",
+  "treatment": "Full image fitted without cropping to 240x240 black canvas, 128-color RGB565 palette; no new artwork generated."
+}

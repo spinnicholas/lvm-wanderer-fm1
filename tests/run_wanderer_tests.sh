@@ -85,7 +85,7 @@ sys.path.insert(0,'tools')
 from fm1_install import load_package
 p=Path('build/dinghy.fwsc')
 identity,image=load_package(str(p),False)
-assert identity=='FM-1_920'
+assert identity=='FM-1_929'
 report={'identity':identity,'package_bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
         'app_bytes':Path('build/dinghy.bin').stat().st_size,'app_limit':581564,
         'validation':'CRC and loader marker parsed; host tests pass','physical_device':'not tested'}

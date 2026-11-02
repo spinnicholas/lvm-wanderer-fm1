@@ -34,6 +34,8 @@ static int recovery_active;
 #define OTA_IDENTITY (recovery_active ? T_RECOVERY : FELUCCA_ID)
 
 static uint8_t nor[0x100000];
+static uint8_t device_head[0x4000];
+static uint8_t override_head;
 static uint8_t *logical;
 static size_t logical_len;
 static uint8_t rx[1024];                 /* one pending host frame (7-bit bytes) */
@@ -166,6 +168,7 @@ static void reset_dev(void)
 {
     memset(nor, 0xFF, sizeof nor);
     memcpy(nor, logical + 0x400, 0x4000);                 /* device flash head = package flash.bin head */
+    if(override_head)memcpy(nor,device_head,sizeof device_head);
     rx_full = 0; requests = 0; ident_replies = 0; committed = 0; last_code = 0;
     mute_after = 0xFFFFFFFFu; corrupt_at = NULL; bad_erase = 0;
 }
@@ -186,6 +189,11 @@ int main(int argc, char **argv)
     for (i = 0; i < 20; i++) memcpy(logical + i * 47, raw + i * 48, 47);   /* drop the marker bytes */
     memcpy(logical + 20 * 47, raw + 20 * 48, n - 20 * 48);
     logical_len = n - 20;
+    if(argc>2){
+        FILE *hf=fopen(argv[2],"rb");if(!hf){perror(argv[2]);return 2;}
+        if(fread(device_head,1,sizeof device_head,hf)!=sizeof device_head)return 2;
+        fclose(hf);override_head=1;
+    }
 
     /* handshake outside a session */
     reset_dev();
@@ -209,7 +217,7 @@ int main(int argc, char **argv)
     rc = ota_session();
     printf("  %u requests\n", requests);
     bad += check("session commits", rc == 0 && committed);
-    bad += check("headers + loader + confirm, no head reads", requests >= 10 && requests <= 30);
+    bad += check("headers + loader + confirm (stock also verifies device head)", requests >= 10 && requests <= 100);
     {
         uint8_t *h = nor + T_AREA, *p = committed_parm;
         uint32_t k, zero = 1;
@@ -229,6 +237,11 @@ int main(int argc, char **argv)
     /* boot cleanup erases it */
     bad += check("boot cleanup erases the area", ota_boot_cleanup() == 1 && area_erased());
     bad += check("second boot: nothing to do", ota_boot_cleanup() == 0);
+    if(override_head){
+        reset_dev();nor[123]^=1;
+        rc=ota_session();
+        bad += check("different device flash head rejects stock before erase",rc==-5&&!committed&&area_erased());
+    }
 
     /* host disappears in the middle */
     reset_dev();

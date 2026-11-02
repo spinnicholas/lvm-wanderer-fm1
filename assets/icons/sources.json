@@ -1,0 +1,335 @@
+{
+  "retrieved": "2026-11-01",
+  "adaptation": "2.25-unit stroke, original geometry, Inkscape rasterization at 384px; 4-bit masks at 24/32/48/64/96px",
+  "icons": [
+    {
+      "function": "repeat",
+      "source": "lucide/repeat.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/repeat.svg",
+      "sha256": "ac130c1d8520e24900adde7abef733a83abc5f9ba6ed307919706e660629cb87",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "anchor",
+      "source": "lucide/anchor.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/anchor.svg",
+      "sha256": "0de37496531f40dbf3a24a97277ec7eda0c6ec0ff8a28f0cbdfa58eaa3922305",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "memory",
+      "source": "lucide/repeat-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/repeat-2.svg",
+      "sha256": "8da32b1dcf665b65d01f276825e9da80c934b54b8894da90beae4bec4836f39f",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "layer",
+      "source": "lucide/layers-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/layers-2.svg",
+      "sha256": "328abdb48c6debf08de4d8dae00af6486ff6a37e65340d14e02c007044bd5446",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "play",
+      "source": "lucide/play.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/play.svg",
+      "sha256": "fc304bd46ad2964fbef15c06ecee9ece39999744e62ac814dfb5b2aba1306c3d",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "stop",
+      "source": "lucide/square.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/square.svg",
+      "sha256": "e4aaecf62f9a170d37b41d054e452043b4021a3d368b352f06165ea24cf38bac",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "record",
+      "source": "lucide/circle.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/circle.svg",
+      "sha256": "2b5e47feed7c2ee3734c0780cd32c9a8cb351eb2baa04abb53718676007a6dad",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "melt",
+      "source": "lucide/droplet.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/droplet.svg",
+      "sha256": "0c664a53bf8e02f2a09227b88b99a7cb4771823779d24d2f287ca5b614d052fd",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "drift",
+      "source": "lucide/shuffle.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/shuffle.svg",
+      "sha256": "75f2860a8a6ef649eb2540e7f6a76095783a25b21f312e40ca7b42733f36dabf",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "decay",
+      "source": "lucide/hourglass.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/hourglass.svg",
+      "sha256": "0a3de664ce4c927fd2bc440395fd21d0a34d6e8d0d57563bbe937ca4ec1e3a3c",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "tempo",
+      "source": "tabler/metronome.svg",
+      "url": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/metronome.svg",
+      "sha256": "3670342171bef3eb90aa17cad7638fd8bf4ba69efd3b8c180b58efffd628279d",
+      "license": "MIT"
+    },
+    {
+      "function": "level",
+      "source": "lucide/volume-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/volume-2.svg",
+      "sha256": "62d2fa448086b8cf302b7e82f21d6358f4f20c7010eb94a3daad631e783c3fe5",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "size",
+      "source": "lucide/search.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/search.svg",
+      "sha256": "d325ed3e3f24d038bcd8d3301410dd61e265bc762aceed1bb70fa53873ca854a",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "save",
+      "source": "lucide/save.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/save.svg",
+      "sha256": "9707cc7b8e8a8f099bd39639416ae61d1ab48a563a5181999fad44ffc8149c61",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "load",
+      "source": "lucide/folder-open.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/folder-open.svg",
+      "sha256": "7b26403dcaf3becace75b23aa275c441be1a4e0951ef4dbd97b9fdeb22913da4",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "undo",
+      "source": "lucide/undo-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/undo-2.svg",
+      "sha256": "f113fdaf818c64b8fecd8235cd6400419152af858ce9844bf037b3fa1aa1a796",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "branch",
+      "source": "lucide/git-branch.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/git-branch.svg",
+      "sha256": "66f89f4071e8e0f57ee28314fe9a684cc8abc902487d4ffe9865a2520256a1c7",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "erase",
+      "source": "lucide/trash.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/trash.svg",
+      "sha256": "9110aef3f73a2a1c0ea5a9f80f725c9a4694beaf88f15df3e3469d71d70bdc34",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "new",
+      "source": "lucide/circle-plus.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/circle-plus.svg",
+      "sha256": "3a64366f480356634a10c0afa516ca697d7eca6895ed34edf2824d812b35bfc3",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "check",
+      "source": "lucide/check.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/check.svg",
+      "sha256": "0a831a16589b4c471b3465bbb258ba0e622886624918eb909c5494c195f4964a",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "close",
+      "source": "lucide/x.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/x.svg",
+      "sha256": "7af6babdba1e6ef32c6f90414b990bbd4b607518d4f6e960d396f62bc6103a91",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "safe",
+      "source": "lucide/shield-check.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/shield-check.svg",
+      "sha256": "4fe6f5f183a5070fe36b2e5aa64525a2b47a70179a4aec1022e21ff427d3dca0",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "sun",
+      "source": "lucide/contrast.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/contrast.svg",
+      "sha256": "e8f50650631fe0b595e8ea7d3a002fc0e1a6aae1bbc2ca65fea00ba42e701f8c",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "still",
+      "source": "lucide/circle-pause.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/circle-pause.svg",
+      "sha256": "e486c55b7c2563e9559b03d464c455dc6964df6afe95a970e83f27bba21a39ad",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "sound",
+      "source": "lucide/list-music.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/list-music.svg",
+      "sha256": "bbb3b7820310000865bc5e59a0a0aaf4c57c543b02b8595c7fc59d5ccdffda64",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "chorus",
+      "source": "lucide/audio-waveform.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/audio-waveform.svg",
+      "sha256": "c5315bd6bb6202df8df0d493690bc0fdbc5ae9b9cd8d2ed74579cfa5c8799143",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "delay",
+      "source": "lucide/chart-no-axes-column-decreasing.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/chart-no-axes-column-decreasing.svg",
+      "sha256": "ad00c528d1fa0f200e7373dee417c6908502e77518cdc35d247a6a70d791b7df",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "reverb",
+      "source": "lucide/box.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/box.svg",
+      "sha256": "79ec7937c8bec2d7a1f41ee170dae3e23c5b2d6eed5b5bd6b9d09bbcbac39f74",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "bell",
+      "source": "lucide/bell.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/bell.svg",
+      "sha256": "436495c52b4fb49016e791865eab2c6af3025ce4f538605832563aea61973d68",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "lock",
+      "source": "lucide/lock-keyhole.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/lock-keyhole.svg",
+      "sha256": "9421c5be76db61bd0b268260cfe924127ff8a4af11671b84ec53b0706a9aae1e",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "clock",
+      "source": "lucide/clock.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/clock.svg",
+      "sha256": "b848f3e6feca2e16a1e1b758ae81f9bf2159914ad70e058493f86a58d8a1828a",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "feedback",
+      "source": "lucide/rotate-ccw.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/rotate-ccw.svg",
+      "sha256": "e0e8998005ad039c98f09c55762c12f059bf4dd72b9da4927400585bb4dbd9c5",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "room",
+      "source": "lucide/maximize-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/maximize-2.svg",
+      "sha256": "9539d941818f0727f34dade8fa0ef10e88cdebb635640e0a73f2727f3ec1c7cf",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "damp",
+      "source": "tabler/filter-down.svg",
+      "url": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/filter-down.svg",
+      "sha256": "c72e2d73b61ce60e7f387348cfa32ba7b48bdcd24d744bc2d97e5c8c97aa4b69",
+      "license": "MIT"
+    },
+    {
+      "function": "scope",
+      "source": "lucide/square-activity.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/square-activity.svg",
+      "sha256": "d4fe5fc924ab1e1165a42447b54c0fa9e063f6676eb4a0070c673dc6c6f5bd5d",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "controls",
+      "source": "lucide/sliders-horizontal.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/sliders-horizontal.svg",
+      "sha256": "b5aee6156d1c85a5471805bc5b7987d3ffa7d107669bfcd98d88c227efc5ca11",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "empty",
+      "source": "lucide/file-minus.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/file-minus.svg",
+      "sha256": "ba0f12836dd3523a06ba2f34de30270f3e55eccd5f605ef20fefa5d88e79dc7a",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "broken",
+      "source": "lucide/file-x.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/file-x.svg",
+      "sha256": "3f47a845e6a095ead997488a261559d2dff359512924445ed3506e99a338e4d8",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "pause",
+      "source": "lucide/pause.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/pause.svg",
+      "sha256": "19fb16dbeae72b98983178f258a31f54643f94ce228fb9cb399696d0659a2ba3",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "root",
+      "source": "tabler/music.svg",
+      "url": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/music.svg",
+      "sha256": "ac29cbc6aa1a1da11d41f08c1cab1615f1a5572b45c6c8ce8645b135206467b7",
+      "license": "MIT"
+    },
+    {
+      "function": "scale",
+      "source": "tabler/piano.svg",
+      "url": "https://github.com/tabler/tabler-icons/blob/main/icons/outline/piano.svg",
+      "sha256": "33d04a3a3cbdde20e7f477e7673ef13175a97069cd4d8fe68170e3c0ba20a308",
+      "license": "MIT"
+    },
+    {
+      "function": "length",
+      "source": "lucide/columns-2.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/columns-2.svg",
+      "sha256": "e94043f8c357a2ee805513cd53751bb9e47478c85e6f2726168552940cb8b3a0",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "listen",
+      "source": "lucide/headphones.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/headphones.svg",
+      "sha256": "ac6ebc98acc274102bdcb8749e061d092a4a8cb2055cddbc934b1fcaf9e5c461",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "edited",
+      "source": "lucide/file-pen-line.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/file-pen-line.svg",
+      "sha256": "6a0d9fde85ea22590dc40fcd15441c9a54b5ae4443c94f8c4e17da8cdb22d93b",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "stored",
+      "source": "lucide/file-check.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/file-check.svg",
+      "sha256": "19796e76eea6bd4f877eaea67cedfa15a835a31bf3f07479d84cbb9dafff1fb3",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "fresh",
+      "source": "lucide/file-plus.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/file-plus.svg",
+      "sha256": "2479b8a2a1cc96e1e4125b733e9fd317b0a38f7f1e81c1b92b1a419580d2257d",
+      "license": "ISC / Feather MIT"
+    },
+    {
+      "function": "mute",
+      "source": "lucide/volume-x.svg",
+      "url": "https://github.com/lucide-icons/lucide/blob/main/icons/volume-x.svg",
+      "sha256": "40bfd10adddaa987eed8407d0edd55e42087b22b3184d8255b181560b9ed746f",
+      "license": "ISC / Feather MIT"
+    }
+  ]
+}
