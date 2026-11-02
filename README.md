@@ -4,6 +4,22 @@
 
 Wanderer is an experimental event-memory synthesizer for M-VAVE FM-1 from [Low Vision Music](https://www.lowvisionmusic.info). I designed Wanderer as a visually impaired musician, with large high-contrast symbols, predictable physical controls, visual layouts that do not rely only on color, and audible action cues. This is an independent musical instrument built on the FM-1 platform, not an update to SLOOP.
 
+## Wanderer 1.3 RC4 screen gallery
+
+The images below are actual rendered RC4 interface captures from the release guide, not concept art. [Browse all six original screenshots](docs/screenshots-1.3-rc4).
+
+![Wanderer RC4 boot splash](docs/Wanderer-1.3-RC4-Splash.png)
+
+| Scatter grain sizes | Accessible light-theme Zoom |
+| --- | --- |
+| ![Scatter 128 ms editor](docs/screenshots-1.3-rc4/05-scatter-size-128ms.png) | ![Scatter Zoom in light theme](docs/screenshots-1.3-rc4/06-scatter-zoom-light.png) |
+
+| Filter controls | Modal ratios | Preset zoom |
+| --- | --- | --- |
+| ![Independent filter editor](docs/screenshots-1.3-rc4/01-filter-controls.png) | ![Modal ratios](docs/screenshots-1.3-rc4/02-modal-ratios-light.png) | ![Named patch Zoom](docs/screenshots-1.3-rc4/03-patch-zoom.png) |
+
+![Print in progress](docs/screenshots-1.3-rc4/04-print-progress.png)
+
 ## Current firmware: 1.3 RC4
 
 The latest author-tested candidate is **LVM-Wanderer-1.3-RC4-Grains-FM1.fwsc**. Its persistent firmware identity is `FM-1_929`; its SHA-256 is:
