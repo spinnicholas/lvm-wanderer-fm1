@@ -1,14 +1,14 @@
 # LVM Wanderer 1.3 RC4 (Grains) for M-VAVE FM-1
 
+![Wanderer Home screen: large Anchor icon at left, evolving-memory icon at right and visible step/layer indicators](docs/screenshots-1.3-rc4/00-anchor-home-reference.png)
+
+*Wanderer's main Home screen, showing the protected Anchor and evolving memory. Reference capture from the retained 1.2 interface; the current RC4 editor screenshots appear below.*
+
 **Current version: 1.3 RC4 · Hardware tested by the author · Designed with low-vision musicians in mind**
 
 Wanderer is an experimental event-memory synthesizer for M-VAVE FM-1 from [Low Vision Music](https://www.lowvisionmusic.info). I designed Wanderer as a visually impaired musician, with large high-contrast symbols, predictable physical controls, visual layouts that do not rely only on color, and audible action cues. This is an independent musical instrument built on the FM-1 platform, not an update to SLOOP.
 
 ## Wanderer 1.3 RC4 screen gallery
-
-![Main Home interface with Anchor and evolving memory, reference capture from the retained 1.2 screenshot set](docs/screenshots-1.3-rc4/00-anchor-home-reference.png)
-
-**Anchor/Home reference:** This screenshot comes from the retained 1.2 interface capture set included with the 1.3 project source. It illustrates the recognizable Anchor and evolving-memory Home layout; it has not been separately captured from the RC4 binary. The six editor images below come from the RC4 guide.
 
 The images below are actual rendered RC4 interface captures from the release guide, not concept art. [Browse all six original screenshots](docs/screenshots-1.3-rc4).
 
