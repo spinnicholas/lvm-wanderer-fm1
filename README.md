@@ -1,3 +1,5 @@
+> **Latest hardware-tested candidate: Wanderer 1.3 RC4 (Grains).** The developer reports testing the compiled firmware and installation/return paths with previous Wanderer, official V15 and SLOOP. [Read the RC4 release notes](docs/RELEASE_1.3_RC4.md). Wanderer is designed with low-vision musicians in mind. **The GitHub release download below still refers to 0.9 until the RC4 binary is attached to a new release.**
+
 # Wanderer 0.9 for M-VAVE FM-1
 
 ![Wanderer](assets/wanderer.svg)
