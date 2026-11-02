@@ -6,6 +6,10 @@ Wanderer is an experimental event-memory synthesizer for M-VAVE FM-1 from [Low V
 
 ## Wanderer 1.3 RC4 screen gallery
 
+![Main Home interface with Anchor and evolving memory, reference capture from the retained 1.2 screenshot set](docs/screenshots-1.3-rc4/00-anchor-home-reference.png)
+
+**Anchor/Home reference:** This screenshot comes from the retained 1.2 interface capture set included with the 1.3 project source. It illustrates the recognizable Anchor and evolving-memory Home layout; it has not been separately captured from the RC4 binary. The six editor images below come from the RC4 guide.
+
 The images below are actual rendered RC4 interface captures from the release guide, not concept art. [Browse all six original screenshots](docs/screenshots-1.3-rc4).
 
 ![Wanderer RC4 boot splash](docs/Wanderer-1.3-RC4-Splash.png)
