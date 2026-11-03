@@ -1,5 +1,8 @@
 # LVM Wanderer 1.4 for M-VAVE FM-1
 
+> **Wanderer 1.7 RC4 has been thoroughly hardware-tested by its author.** The exact firmware and matching source archive have been verified, and [release details, compatibility notes and checksums](docs/RELEASE_1.7_RC4.md) are available. **The RC4 download is not hosted on GitHub yet.** The 1.4 link below remains the latest installable GitHub release until RC4 assets are uploaded. See the [RC4 hardware-test record](docs/HARDWARE_TESTING_1.7_RC4.md).
+
+
 ![Wanderer Home screen with the protected Anchor, evolving memory and layer controls](docs/screenshots-1.4/home-large.png)
 
 **Current release: 1.4 · Author hardware-tested · Designed with low vision in mind**
