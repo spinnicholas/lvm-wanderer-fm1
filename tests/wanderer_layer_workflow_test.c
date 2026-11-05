@@ -22,12 +22,12 @@ int main(void)
  assert(voice[0].gate&&voice[1].gate);
  ws_select(40);
  assert(wm.sound==8&&wm.layer_sound==41&&voice[0].gate&&voice[1].gate);
- assert(!memcmp(&ws_voice[0].p,&WS_PRESETS_2[8],sizeof(ws_patch_t)));
- assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_2[0],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[0].p,&WS_PRESETS_3[8],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_3[0],sizeof(ws_patch_t)));
  uint32_t audition=note_on(70,100,1);
  assert(voice[audition].patch_source==PATCH_LAYER&&voice[audition].patch==40);
  editor_page=1;editor_adjust(0,-1);
- assert(wm.layer_patch_valid&&wm.layer_patch.cutoff<WS_PRESETS_2[40].cutoff);
+ assert(wm.layer_patch_valid&&wm.layer_patch.cutoff<WS_PRESETS_3[40].cutoff);
  assert(!memcmp(&ws_voice[audition].p,&wm.layer_patch,sizeof(ws_patch_t)));
  assert(!memcmp(&ws_voice[0].p,&wm.patch,sizeof(ws_patch_t)));
 
@@ -88,7 +88,7 @@ int main(void)
  memcpy(old.state,&wm,WM_V14_USED);
  memset(old.state+WM_V14_USED,255,WM_V14_SIZE-WM_V14_USED);
  assert(!slot_save(1,&old,sizeof old)&&project_read_slot(1,&loaded));
- assert(loaded.layer_sound==35&&!loaded.layer_enabled&&loaded.layer_preset_bank==WS_BANK_CURRENT);
+ assert(loaded.layer_sound==35&&!loaded.layer_enabled&&loaded.layer_preset_bank==WS_BANK_2_0); /* v14 indexes keep their 2.0 sounds */
  assert(loaded.midi_channel==9&&!loaded.layer_link&&!loaded.layer_patch_valid);
  wm=loaded;editor_page=1;editor_adjust(0,-1);assert(wm.layer_patch_valid);
  static wm_disk_t saved;

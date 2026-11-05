@@ -74,7 +74,7 @@ static void ws_select(uint8_t index)
  if(layer_focus){
   wm.layer_sound=index+1u;wm.layer_link=wm.layer_legacy=wm.layer_patch_valid=0;wm.layer_preset_bank=WS_BANK_CURRENT;
  }else{
-  wm.sound=index;wm.legacy=0;wm.preset_bank=WS_BANK_CURRENT;wm.patch=WS_PRESETS_2[index];wm.patch_valid=1;
+  wm.sound=index;wm.legacy=0;wm.preset_bank=WS_BANK_CURRENT;wm.patch=WS_PRESETS_3[index];wm.patch_valid=1;
  }
 }
 /* Nominal cutoff in Q8 semitones for the explicit low-pass modes. */
@@ -143,7 +143,7 @@ static void ws_control(uint32_t v,uint8_t gate,int32_t melt)
   * amount grows with the patch's Detune. Bounded random walk, no DC creep. */
  if(p->engine==0||p->engine==2){
   int32_t limit=(2+p->detune/24)*16;
-  if(!(s->control&1023u)){uint32_t r=wn_random(s);s->drift+=(int32_t)(r>>30)-(int32_t)((r>>28)&3u)-s->drift/limit;}
+  if((s->control&1023u)==1u){ /* ws_render increments control before this call */uint32_t r=wn_random(s);s->drift+=(int32_t)(r>>30)-(int32_t)((r>>28)&3u)-s->drift/limit;}
   s->drift=ws_clamp(s->drift,-limit,limit);cents+=s->drift/16;
  }
  s->pitch_step=(uint32_t)(((uint64_t)voice[v].inc*WN_CENTS[ws_clamp(cents,-127,127)+127])>>16);

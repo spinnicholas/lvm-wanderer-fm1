@@ -9,7 +9,7 @@ int main(void)
  for(uint32_t p=0;p<WM_PRESET_COUNT;p++){
   assert(ws_patch_valid(&WS_PRESETS[p])&&ws_patch_valid(&WS_PRESETS_2[p]));ws_select(p);assert(wm.sound==p);
   assert(wm.preset_bank==WS_BANK_CURRENT&&wm.patch_valid&&!wm.legacy);
-  assert(!memcmp(&wm.patch,&WS_PRESETS_2[p],sizeof wm.patch));
+  assert(!memcmp(&wm.patch,&WS_PRESETS_3[p],sizeof wm.patch));
   assert(wm_preset_move(p,150,0)==p&&wm_preset_move(p,-150,0)==p);
   assert(wm_preset_move(p,15,1)==p&&wm_preset_move(p,-15,1)==p);
  }

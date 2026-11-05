@@ -72,7 +72,7 @@ int main(void)
  wm.layer_sound=0;uint32_t follow=note_on(64,100,1);assert(voice[follow].patch_source==PATCH_MEMORY);
  anchor_view=settings_open=0;layer_target_locked(0);editor_page=1;editor_adjust(0,2);
  assert(ws_voice[anchor].p.cutoff==wm.anchor_patch.cutoff);
- assert(!memcmp(&ws_voice[layer].p,&WS_PRESETS_2[34],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[layer].p,&WS_PRESETS_3[34],sizeof(ws_patch_t)));
  reset_performance();wp_reset();wm=(wm_state_t)WM_DEFAULTS;
  wm.fx_on=7;wm.fx_new_on=15;wm.layer_enabled=1;wm.layer_sound=44;
  wm.chorus_mix=wm.delay_mix=wm.reverb_mix=127;

@@ -28,7 +28,8 @@ static const uint16_t WM_GRAIN_MS[WM_GRAIN_COUNT]={0,4,8,16,32,64,128,256,512,76
 /* Factory provenance is separate from MIDI Bank Select. */
 #define WS_BANK_1_4 0u
 #define WS_BANK_1_9 1u
-#define WS_BANK_CURRENT 3u
+#define WS_BANK_2_0 3u /* kept so 2.0 projects sound as they were saved */
+#define WS_BANK_CURRENT 4u /* 3.0: per-sound Melt targets and motion */
 #define WS_BANK_1_3 2u
 #define WM_MAGIC 0x314d564cu /* LVM1 */
 typedef struct { uint8_t note, velocity; uint16_t gate; } wm_event_t; /* velocity zero means empty */
@@ -141,7 +142,7 @@ typedef struct {uint32_t magic;uint16_t version,size;wm_state_v13_t state;} wm_d
 
 typedef struct {uint32_t magic;uint16_t version,size;wm_state_v8_t state;} wm_disk_v8_t;
 static const ws_patch_t *ws_factory_patch(uint8_t bank,uint8_t sound)
-{return bank==WS_BANK_1_4?&WS_PRESETS_1_4[sound]:bank==WS_BANK_1_3?&WS_PRESETS_1_3[sound]:bank==WS_BANK_1_9?&WS_PRESETS[sound]:&WS_PRESETS_2[sound];}
+{return bank==WS_BANK_1_4?&WS_PRESETS_1_4[sound]:bank==WS_BANK_1_3?&WS_PRESETS_1_3[sound]:bank==WS_BANK_1_9?&WS_PRESETS[sound]:bank==WS_BANK_2_0?&WS_PRESETS_2[sound]:&WS_PRESETS_3[sound];}
 static const char *ws_factory_name(uint8_t bank,uint8_t sound)
 {return bank==WS_BANK_1_4?WS_NAMES_1_4[sound]:bank==WS_BANK_1_3?WS_NAMES_1_3[sound]:bank==WS_BANK_1_9?WS_NAMES[sound]:WS_NAMES_2[sound];}
 #define WM_DEFAULT_FIELDS .magic=WM_MAGIC,.loop_steps=16,.root=0,.scale=2,.bpm=112,.fx_on=4,.grain_size=8, \
@@ -506,6 +507,7 @@ static __attribute__((noinline)) const wm_state_t *wm_migrate_v14_ptr(const wm_d
  wm_disk_t *c=&wm_migration;static const wm_state_t reset=WM_DEFAULTS;
  c->magic=WM_MAGIC;c->version=WM_DISK_VERSION;c->size=sizeof(wm_state_t);c->state=reset;
  memcpy(&c->state,d->state,WM_V14_USED);
+ c->state.layer_preset_bank=WS_BANK_2_0; /* v14 Layer indexes meant the 2.0 bank */
  return wm_valid(c)?&c->state:0;
 }
 /* Read v8 without changing its slot. Snapshot patches and frozen factory
@@ -540,6 +542,7 @@ static __attribute__((noinline)) const wm_state_t *wm_migrate_v13_ptr(const wm_d
  wm_disk_t *c=&wm_migration;
  c->magic=WM_MAGIC;c->version=WM_DISK_VERSION;c->size=sizeof(wm_state_t);c->state=reset;
  memcpy(&c->state,&d->state,__builtin_offsetof(wm_state_t,layer_sound));
+ c->state.layer_preset_bank=WS_BANK_2_0;
  return wm_valid(c)?&c->state:0;
 }
 static __attribute__((noinline)) const wm_state_t *wm_migrate_v9_ptr(const wm_disk_v10_t *d)

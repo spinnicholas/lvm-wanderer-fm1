@@ -5,6 +5,8 @@
 #undef main
 #include <assert.h>
 #define FRAMES 4096
+/* 3.0 voices add a slot-dependent stereo spread (odd samples); timbre is the mid. */
+static int same_mid(const int32_t *a,const int32_t *b){for(uint32_t i=0;i<FRAMES*2u;i+=2)if(a[i]!=b[i])return 0;return 1;}
 static int32_t ref[FRAMES*2],out[FRAMES*2];
 static void prepare(uint32_t preset,uint32_t slot)
 {
@@ -32,7 +34,7 @@ int main(void)
   for(int32_t oct=-2;oct<=2;oct++)for(uint32_t key=0;key<27;key++){
    uint32_t note=(uint32_t)((int32_t)KEY0+oct*12+(int32_t)key);render(p,0,note,0,ref);
    for(uint32_t slot=0;slot<NV;slot++){
-    render(p,slot,note,1,out);assert(!memcmp(ref,out,sizeof ref));cases++;
+    render(p,slot,note,1,out);assert(same_mid(ref,out));cases++;
    }
   }
  }
@@ -40,7 +42,7 @@ int main(void)
   * change must never change the rendered timbre with matching onset state. */
  for(uint32_t p=0;p<WM_PRESET_COUNT;p++)for(uint32_t note=54;note<=56;note++){
   render(p,0,note,0,ref);
-  for(uint32_t slot=1;slot<NV;slot++){render(p,slot,note,0,out);assert(!memcmp(ref,out,sizeof ref));cases++;}
+  for(uint32_t slot=1;slot<NV;slot++){render(p,slot,note,0,out);assert(same_mid(ref,out));cases++;}
  }
  /* New waveform models at both pitch limits and maximum legal modulation. */
  const uint8_t waves[6]={10,5,8,4,5,6};uint32_t corners=0;

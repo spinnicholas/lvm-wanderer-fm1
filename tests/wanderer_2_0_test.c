@@ -32,10 +32,10 @@ int main(void)
  step_index=0;step_play();
  assert(voice[0].gate&&voice[1].gate&&voice[0].note==voice[1].note);
  assert(voice[0].patch_source==PATCH_MEMORY&&voice[1].patch_source==PATCH_LAYER);
- assert(!memcmp(&ws_voice[0].p,&WS_PRESETS_2[0],sizeof(ws_patch_t)));
- assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_2[34],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[0].p,&WS_PRESETS_3[0],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_3[34],sizeof(ws_patch_t)));
  editor_page=1;editor_adjust(0,1);
- assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_2[34],sizeof(ws_patch_t)));
+ assert(!memcmp(&ws_voice[1].p,&WS_PRESETS_3[34],sizeof(ws_patch_t)));
  assert(wm_catch());anchor_view=1;step_index=0;step_play();anchor_view=0;
  settings_page=SETTINGS_LAYER;settings_open=1;settings_adjust(0,1);
  assert(voice[note_on(69,100,1)].patch_source==PATCH_LAYER);

@@ -128,7 +128,7 @@ int main(void)
     wm.memory.e[0]=(wm_event_t){60,100,800};wm_mark();wm_can_undo=1;
     const uint8_t statuses[]={N_SAVED,N_LOADED,N_SAVE_FAILED,N_PREF_FAILED,N_NO_VALID_SAVE,N_CATCH_FIRST,N_STOP_FIRST};
     for(uint32_t r=0;r<2;r++)for(uint32_t i=0;i<sizeof statuses;i++){
-        notice=statuses[i];recording=running=(uint8_t)r;app_leds();
+        notice=statuses[i];recording=running=(uint8_t)r;step_primed=1;step_index=1;step_clock=0;app_leds();
         uint64_t expected=1u<<BTN_SEL;
         if(r)expected|=(1u<<BTN_REC)|(1u<<BTN_PLAY);
         if(notice==N_SAVED||notice==N_SAVE_FAILED||notice==N_PREF_FAILED)expected|=1u<<BTN_SEQ;
