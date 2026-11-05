@@ -14,7 +14,11 @@ for dep in "${JIELI_TOOLCHAIN:-$HOME/.jieli/toolchain}/pi32v2/bin/clang" "${AC79
   fi
 done
 sh tests/run_core_tests.sh
-sh build.sh --release "$RELEASE" | tee build/native-build.log
+# Keep the build's own exit status (a pipe through tee would hide a failure).
+if ! sh build.sh --release "$RELEASE" > build/native-build.log 2>&1; then
+  cat build/native-build.log; echo "NATIVE BUILD FAILED" >&2; exit 1
+fi
+cat build/native-build.log
 python3 - "$RELEASE" <<'PY'
 import sys,hashlib
 from pathlib import Path

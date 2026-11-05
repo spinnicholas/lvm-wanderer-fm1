@@ -343,8 +343,15 @@ def main():
                         str(FW / "src" / "wanderer_font.h")], check=True, cwd=SRC)
     elif not (FW / "src" / "wanderer_font.h").is_file():
         raise SystemExit("missing generated font source header; supply the original typeface asset")
-    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_icons.py"),
-                    str(FW / "src" / "wanderer_icons.h")], check=True, cwd=SRC)
+    # Icons are rasterized from the SVG sources with Inkscape. Without it, keep
+    # the checked-in generated header (part of the GPL source) unchanged.
+    if shutil.which("inkscape"):
+        subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_icons.py"),
+                        str(FW / "src" / "wanderer_icons.h")], check=True, cwd=SRC)
+    elif not (FW / "src" / "wanderer_icons.h").is_file():
+        raise SystemExit("missing generated icon header; install Inkscape to rasterize assets/icons")
+    else:
+        print("icons: Inkscape not found, using the checked-in wanderer_icons.h")
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_waves.py"),
                     str(FW / "src" / "wanderer_waves.h")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_presets.py"),
