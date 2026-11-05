@@ -361,6 +361,7 @@ def main():
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_fm6_tables.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_1_7.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_2_0.py")], check=True, cwd=SRC)
+    subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_3_0.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_splash.py")], check=True, cwd=SRC)
     ota = build_loader()
     img, syms, dis, rt = build_app()
