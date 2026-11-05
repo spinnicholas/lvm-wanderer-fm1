@@ -2,7 +2,12 @@
  * One complete LED scene per control pass. No view inherits another view's lamps.
  * Bright = active state/current confirmation; dim = a relevant available action.
  * PLAY and sounding notes remain visible in every view because audio continues there.
+ * 3.0: PLAY (and REC while recording) pulse bright on every beat, so the tempo can be
+ * seen without reading the screen. Root-note keys glow as landmarks on Home. GLO
+ * flashes when Memory wanders at a loop boundary; LFO pulses on the bar once
+ * Memory is far from its Anchor, inviting a comparison.
  */
+static uint32_t led_tide_until;
 static uint64_t led_previous,glow_previous;
 static uint8_t leds_initialised,leds_was_running;
 static void app_leds(void)
@@ -21,7 +26,9 @@ static void app_leds(void)
         }
     }
     if(wp_armed||wp_writing)bright|=(uint64_t)1u<<BTN_REC;
-    if(running)bright|=(uint64_t)1u<<(BTN_PLAY);
+    uint32_t played=(step_index+wm.loop_steps-1u)&(wm.loop_steps-1u);
+    uint8_t on_beat=(uint8_t)(running&&step_primed&&(played&3u)==0u&&step_clock<step_samples*3u/4u);
+    if(running){if(on_beat)bright|=(uint64_t)1u<<BTN_PLAY;else glow|=(uint64_t)1u<<BTN_PLAY;}
     if(scope_open){
         if(recording)bright|=(uint64_t)1u<<BTN_REC;
         if(scope_hold)bright|=(uint64_t)1u<<BTN_SEL;
@@ -45,7 +52,7 @@ static void app_leds(void)
         if(notice==N_LOADED||notice==N_NO_VALID_SAVE)bright|=(uint64_t)1u<<BTN_ARP;
         glow|=((uint64_t)1u<<BTN_HOME)|((uint64_t)1u<<BTN_FX);
     }else{
-        if(recording)bright|=(uint64_t)1u<<(BTN_REC);
+        if(recording){if(on_beat||!running)bright|=(uint64_t)1u<<BTN_REC;else glow|=(uint64_t)1u<<BTN_REC;}
         uint8_t anchored=(uint8_t)(wm.has_anchor||wp_has_anchor);
         uint8_t memory_ready=(uint8_t)(!anchored&&wm_memory_playable());
         if(anchored)bright|=(uint64_t)1u<<BTN_SAVE;
@@ -53,7 +60,12 @@ static void app_leds(void)
         if(layer_focus)bright|=(uint64_t)1u<<(BTN_EDIT);
         if(anchor_view)bright|=(uint64_t)1u<<(BTN_LFO);
         if(!anchor_view&&(anchored||(!recording&&memory_ready)))glow|=(uint64_t)1u<<BTN_LFO;
-        if(wm.has_anchor||wp_has_anchor)glow|=(uint64_t)1u<<(BTN_GLO);
+        if(!anchor_view&&anchored&&ww.distance>=50u&&on_beat&&played==0u)bright|=(uint64_t)1u<<BTN_LFO;
+        if(wm.has_anchor||wp_has_anchor||ww.distance)glow|=(uint64_t)1u<<(BTN_GLO);
+        if(led_tide_until&&(int32_t)(fm1_ms-led_tide_until)<0)bright|=(uint64_t)1u<<BTN_GLO;
+        /* Root keys glow as landmarks while the arpeggiator is off. */
+        if(!wm.arp_on)for(uint32_t key=0;key<27u;key++)
+            if(key_notes[key]%12u==wm.root)glow|=(uint64_t)1u<<KEY_LED(key);
         if(wm_can_undo)glow|=(uint64_t)1u<<(BTN_ENV);
     }
     if(!scope_open&&!settings_open&&!confirm&&!notice_sticky()){

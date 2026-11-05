@@ -147,8 +147,22 @@ static uint32_t notice_icon(void)
     case N_SAVE_FAILED:case N_PREF_FAILED:return ICO_BROKEN;
     case N_STILL:case N_STOP_FIRST:return ICO_STOP;case N_LIVE:return ICO_PLAY;
     case N_LAYER_CLEARED:return ICO_LAYER;case N_NEW_SESSION:return ICO_NEW;
+    case N_RETURNED:return ICO_ANCHOR;case N_NOTHING_TO_KEEP:return ICO_EMPTY;case N_THEME:return ICO_SUN;
     case N_SAVED:return ICO_SAVE;case N_LOADED:return ICO_LOAD;
     default:return ICO_MEMORY;}
+}
+/* Every message pairs its symbol with a word. */
+static const char *notice_word(void)
+{
+    switch(notice){
+    case N_ORIGINAL_SAFE:return "RESTORED";case N_ANCHORED:return "ANCHOR SET";
+    case N_ANCHOR_SAFE:return "ANCHOR IS SAFE";case N_NO_PHRASE:return "NO NOTES";
+    case N_BRANCHED:return "KEPT";case N_UNDO:return "UNDONE";case N_NO_UNDO:return "NOTHING TO UNDO";
+    case N_STILL:return "STILL";case N_LIVE:return "LIVE";case N_LAYER_CLEARED:return "LAYER 2 CLEAR";
+    case N_NEW_SESSION:return "NEW SESSION";case N_STOP_FIRST:return "STOP FIRST";
+    case N_RETURNED:return "BACK HOME";case N_NOTHING_TO_KEEP:return "NOT WANDERED";
+    case N_THEME:return theme_palette()->name;case N_SAVE_FAILED:return "SAVE FAILED";
+    case N_NO_VALID_SAVE:return "EMPTY SLOT";default:return 0;}
 }
 static uint8_t notice_error(void)
 {
@@ -186,14 +200,26 @@ static void screen_home(uint16_t fg,uint16_t guide)
     }else if(layer_focus&&!wm.layer_enabled){
         tiny(132,49,ICO_MUTE,fg);
     }
+    /* Wander: how far Memory has travelled from its source, and for how many loops. */
+    uint8_t wander=(uint8_t)(!layer_focus&&ww_active()&&!wp_active&&wm_memory_playable());
     if(recording)disk(216,60,5,fg);
-
+    else if(wander&&ww.loops&&!wp_armed&&!wp_writing){
+        char b[12];number(ww.loops>99u?99u:ww.loops,b);
+        aa_text(226-width(&FONT_T,b),51,&FONT_T,b,fg);
+    }
+    int32_t icon_y=wm.extra_large?64:80;
     if(wm.extra_large){
-        zoom_blit(13,72,ICO_ANCHOR,theme->anchor);
-        zoom_blit(131,72,ICO_MEMORY,theme->evolve);
+        zoom_blit(13,icon_y,ICO_ANCHOR,theme->anchor);
+        zoom_blit(131,icon_y,ICO_MEMORY,theme->evolve);
     }else{
-        icon_blit(29,88,ICO_ANCHOR,theme->anchor);
-        icon_blit(147,88,ICO_MEMORY,theme->evolve);
+        icon_blit(29,icon_y,ICO_ANCHOR,theme->anchor);
+        icon_blit(147,icon_y,ICO_MEMORY,theme->evolve);
+    }
+    if(wander){
+        int32_t bar_y=wm.extra_large?161:150,fill=ww.distance*92/100;
+        panel(133,bar_y,92,10,guide);
+        panel(135,bar_y+2,88,6,theme->memory);
+        if(fill>4)panel(133,bar_y,fill,10,theme->evolve);
     }
     aa_text(61-width(&FONT_T,"ANCHOR")/2,170,&FONT_T,"ANCHOR",fg);
     aa_text(179-width(&FONT_T,"MEMORY")/2,170,&FONT_T,"MEMORY",fg);
@@ -275,11 +301,14 @@ static void screen_message(uint16_t fg,uint16_t guide)
         char b[12];number(project_slot+1u,b);const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
         aa_text(196-width(f,b),77,f,b,fg);mid(96,177,ICO_CHECK,fg);
     }else{
+        const char *word=notice_word();
         if(notice==N_STOP_FIRST){
-            icon_blit(22,67,ICO_PLAY,fg);icon_blit(154,67,ICO_STOP,fg);
-            diagram_arrow(97,99,44,fg);
-        }else zoom_blit(72,62,notice_icon(),fg);
-        mid(96,177,notice_error()?ICO_CLOSE:ICO_CHECK,fg);
+            icon_blit(22,60,ICO_PLAY,fg);icon_blit(154,60,ICO_STOP,fg);
+            diagram_arrow(97,92,44,fg);
+        }else if(word)zoom_blit(72,44,notice_icon(),fg);
+        else zoom_blit(72,62,notice_icon(),fg);
+        if(word)zoom_text(8,140,224,40,34,word,0,fg);
+        mid(96,186,notice_error()?ICO_CLOSE:ICO_CHECK,fg);
     }
 }
 static void scope_control(int32_t x,int32_t y,const char *label,const char *value,uint16_t fg,uint16_t guide)

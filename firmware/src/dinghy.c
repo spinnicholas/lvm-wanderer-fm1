@@ -35,7 +35,8 @@ enum {
     N_NONE, N_ORIGINAL_SAFE, N_ANCHORED, N_ANCHOR_SAFE, N_NO_PHRASE,
     N_BRANCHED, N_CATCH_FIRST, N_UNDO, N_NO_UNDO, N_STILL, N_LIVE,
     N_LAYER_CLEARED, N_NEW_SESSION, N_SAVE_FAILED, N_SAVED,
-    N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN
+    N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN,
+    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME
 };
 enum {PATCH_MEMORY,PATCH_LAYER,PATCH_ANCHOR};
 static struct {
@@ -49,6 +50,7 @@ static uint32_t ages,step_clock,step_index,cycle_index,step_samples=5906u;
 static uint8_t step_primed;
 static uint32_t audio_frames;
 static uint32_t capture_step(void);
+static void ww_clear_slot(uint32_t step,uint32_t slot);
 #define CAPTURE_COUNT (2u*WM_POLY)
 static uint8_t record_undo_pending;
 static uint8_t record_replace[2][WM_STEPS];
@@ -137,6 +139,7 @@ static void capture_on_at(uint32_t note,uint32_t velocity,uint32_t owner,uint32_
     }
     capture_finish(pick);
     *wm_at(p,at,slot)=(wm_event_t){(uint8_t)note,(uint8_t)velocity,32u};
+    if(!lane)ww_clear_slot(at,slot);
     capture[pick].start=audio_frames;capture[pick].serial=++capture_serial;capture[pick].active=1;
     capture[pick].owner=owner;capture[pick].note=note;capture[pick].step=at;capture[pick].slot=slot;
     capture[pick].sustained=capture[pick].cleared=0;
@@ -165,7 +168,7 @@ static uint8_t notice;
 static uint32_t notice_until;
 static uint32_t fx_down,arp_down;static uint8_t arp_pending;
 static uint32_t home_down,anchor_down,save_down;
-static uint32_t octave_up_down,play_down,performance_pending;
+static uint32_t octave_up_down,octave_down_down,play_down,performance_pending;
 static uint8_t play_tap,play_recall,anchor_pending,sel_can_open,edit_layer_done;
 static uint8_t save_pending;
 static uint8_t project_slot,cues_enabled=1;
@@ -355,6 +358,7 @@ static int32_t cue_sample(void)
  return sample;
 }
 #include "wanderer_sound.c"
+#include "wanderer_wander.h"
 /* Owner 0: sequencer; 1: local keys; 2..33: USB/TRS source and channel. */
 static uint32_t note_on_lane(uint32_t note,uint32_t vel,uint32_t owner,uint8_t lane)
 {
@@ -409,6 +413,14 @@ static void note_off(uint32_t note,uint32_t owner)
 #include "wanderer_scatter.h"
 #include "wanderer_print.c"
 #include "wanderer_arp.c"
+/* Key changes made after recording follow the project's root. */
+static wm_event_t step_transpose(wm_event_t e,uint32_t lane)
+{
+    if(!anchor_view&&!(lane&&ws_layer_own()?wm.layer_legacy:wm.legacy)){
+        int32_t note=(int32_t)e.note+wm.root-wm.transpose_base;e.note=(uint8_t)ws_clamp(note,0,127);
+    }
+    return e;
+}
 static void sequence_event(wm_event_t e,uint32_t lane)
 {
     if(!e.velocity)return;
@@ -425,6 +437,9 @@ static void step_play(void)
 {
     uint32_t i=step_index;
     if(!i)wp_boundary();
+    /* A completed loop moves Memory one step further (paused while recording,
+     * listening to the Anchor or playing a printed RAM loop). */
+    if(!i&&cycle_index&&!anchor_view&&!recording&&!wp_active)ww_loop();
     if(recording&&metronome_on&&!(i&3u)){click_left=FS/80u;click_phase=0;click_step=i?0x05000000u:0x07800000u;}
     scatter_plan(wm.decay,(uint8_t)(wm.legacy||anchor_view||wp_dry_view),i,cycle_index);
     /* Scatter processes audio history, so original held-note gates keep advancing. */
@@ -450,10 +465,14 @@ static void step_play(void)
                 if(!e.velocity)continue;
                 remaining--;
                 if(capture_holds(lane,i,v))continue;
-                if(!lane&&!anchor_view)e=wm_evolve(e,i,cycle_index);
-                if(!anchor_view&&!(lane&&ws_layer_own()?wm.layer_legacy:wm.legacy)){int32_t note=(int32_t)e.note+wm.root-wm.transpose_base;e.note=(uint8_t)ws_clamp(note,0,127);}
-                sequence_event(e,lane);
+                if(!lane&&!anchor_view)e=wm.legacy?wm_evolve(e,i,cycle_index):ww_apply(e,i,v);
+                sequence_event(step_transpose(e,lane),lane);
             }
+        }
+        /* Melted echoes drip into Memory's empty steps. */
+        if(!anchor_view&&ww_active()&&main_count==0u&&layer_count<NV){
+            wm_event_t drip=ww_drip_event(i);
+            if(drip.velocity)sequence_event(step_transpose(drip,0),0);
         }
     }
     step_index=(i+1u)&(wm.loop_steps-1u);
@@ -464,13 +483,15 @@ static void step_play(void)
 static void app_audio_core(int32_t *out,uint32_t n)
 {
     audio_frames+=n;for(uint32_t c=0;c<CAPTURE_COUNT;c++)capture_update(c);
-    uint32_t v,i;int32_t melt=anchor_view?0:(int32_t)wm.branch_melt+wm.melt;
+    /* Melt timbre deepens loop by loop (wander) and colours Memory's voices.
+     * Layer 2 stays the steady companion; the Anchor is heard as recorded. */
+    uint32_t v,i;int32_t melt=anchor_view?0:(int32_t)wm.branch_melt+(wm.legacy?wm.melt:ww.timbre);
     if(melt>127)melt=127;
     for(v=0;v<NV;v++){
         /* Silent slots can retain a modern 100..149 index after a reset. Never
          * dereference the frozen 100-entry legacy bank for an inactive slot. */
         if(!voice[v].amp&&!voice[v].gate)continue;
-        if(ws_voice[v].modern){ws_render(v,out,n,melt);continue;}
+        if(ws_voice[v].modern){ws_render(v,out,n,voice[v].patch_source==PATCH_MEMORY?melt:0);continue;}
         uint32_t ph=voice[v].ph,ph2=voice[v].ph2,ph3=voice[v].ph3,inc=voice[v].inc,
           inc2=voice[v].inc2,remain=voice[v].remain,patch=voice[v].patch;
         int32_t amp=voice[v].amp,g=voice[v].gate,f1=voice[v].f1,
@@ -807,7 +828,7 @@ static uint8_t undo_events_locked(void)
     recording_end();
     uint8_t old_length=wm.loop_steps;
     uint32_t old_samples=step_samples;
-    wm_undo_once();
+    wm_undo_once();ww_reset();
     step_samples=(FS*15u)/wm.bpm;
     if(old_length!=wm.loop_steps){step_index=step_clock=cycle_index=0;step_primed=0;}
     else if(old_samples!=step_samples)step_clock=step_clock*step_samples/old_samples;
@@ -833,14 +854,14 @@ static void apply_confirm(void)
         fm1_irq_off();wm_mark();wm=fresh;running=recording=anchor_view=layer_focus=0;
         step_clock=step_index=cycle_index=0;step_primed=0;
         step_samples=(FS*15u)/wm.bpm;
-        reset_performance();wp_reset();project_checkpoint=wm;project_origin_slot=255u;
+        reset_performance();wp_reset();ww_reset();project_checkpoint=wm;project_origin_slot=255u;
         fm1_irq_on();project_poll();cue(76u);show_notice(N_NEW_SESSION);
     }else if(confirm==5){
         if(wm.has_anchor||wp_has_anchor){
             fm1_irq_off();wm_mark();if(wm.has_anchor){wm.memory=wm.anchor;wm.sound=wm.anchor_sound;
                 wm.legacy=wm.anchor_legacy;wm.preset_bank=wm.anchor_preset_bank;wm.patch_valid=wm.anchor_patch_valid;if(wm.patch_valid)wm.patch=wm.anchor_patch;}
             wm.has_branch=wm.branch_melt=wm.melt=wm.drift=wm.decay=0;
-            anchor_view=0;reset_performance();if(wp_has_anchor)wp_restore();fm1_irq_on();
+            anchor_view=0;reset_performance();ww_reset();if(wp_has_anchor)wp_restore();fm1_irq_on();
             cue(79u);show_notice(N_ORIGINAL_SAFE);
         }
     }else if(confirm==2){
@@ -867,7 +888,7 @@ static void apply_confirm(void)
             running=recording=anchor_view=record_undo_pending=layer_focus=0;
             step_index=step_clock=cycle_index=0;step_primed=0;
             step_samples=(FS*15u)/wm.bpm;
-            reset_performance();wp_reset();project_checkpoint=wm;project_origin_slot=project_slot;
+            reset_performance();wp_reset();ww_reset();project_checkpoint=wm;project_origin_slot=project_slot;
             fm1_irq_on();project_poll();cue(79u);show_notice(N_LOADED);
         }
     }
@@ -954,6 +975,25 @@ static uint32_t save_edges(uint32_t b,uint32_t released)
     if((released&bit)&&save_pending){save_pending=0;save_down=0;b|=bit;}
     return b;
 }
+/* Tap GLO keeps the wander; hold GLO for 0.9 s to Return Memory to its
+ * recorded source. The Anchor and the recorded notes are never changed. */
+static uint32_t glo_down;static uint8_t glo_pending;
+static uint32_t glo_edges(uint32_t b,uint32_t released)
+{
+    const uint32_t bit=1u<<BTN_GLO;
+    uint8_t home=(uint8_t)(!scope_open&&!settings_open&&!editor_open&&!confirm&&!wp_active);
+    if(b&bit){
+        if(home){b&=~bit;glo_down=fm1_ms+1u;glo_pending=1;}
+    }
+    if(glo_pending&&!home)glo_pending=0;
+    if(glo_pending&&(fm1_in.buttons&bit)&&fm1_ms+1u-glo_down>=900u){
+        glo_pending=0;
+        fm1_irq_off();uint8_t had=ww_return();fm1_irq_on();
+        cue_pair(76u,64u,2);show_notice(had?N_RETURNED:N_NOTHING_TO_KEEP);
+    }
+    if((released&bit)&&glo_pending){glo_pending=0;b|=bit;}
+    return b;
+}
 static void layer_target_locked(uint8_t target)
 {
  if(layer_focus==target)return;
@@ -1018,12 +1058,18 @@ static uint32_t performance_edges(uint32_t b,uint32_t released)
  uint8_t on_home=(uint8_t)(!scope_open&&!settings_open&&!editor_open&&!confirm&&!notice_error());
  uint32_t oct_edges=held|released|b;
  if(b&oct){octave_up_down=fm1_ms;performance_pending|=oct;b&=~oct;}
- if(b&down){performance_pending|=down;b&=~down;}
+ if(b&down){octave_down_down=fm1_ms;performance_pending|=down;b&=~down;}
  if((oct_edges&(oct|down))==(oct|down)||zoom_chord_latched)performance_pending&=~(oct|down);
  if(released&down){b|=performance_pending&down;performance_pending&=~down;}
  if((performance_pending&oct)&&fm1_ms-octave_up_down>=1500u){
   performance_pending&=~oct;wm.extra_large=!wm.extra_large;
   cue_toggle(wm.extra_large);page_dirty=1;
+ }
+ /* Hold OCT- for 1.5 s: the next colour theme, for changing room light. */
+ if((performance_pending&down)&&fm1_ms-octave_down_down>=1500u){
+  performance_pending&=~down;
+  color_theme=(uint8_t)((color_theme+1u)%THEME_COUNT);wm.light=color_theme==THEME_LIGHT;
+  cue(64u+color_theme*3u);show_notice(N_THEME);
  }
  if(released&oct){b|=performance_pending&oct;performance_pending&=~oct;}
  if(!on_home)play_recall=0;
@@ -1078,6 +1124,23 @@ static void app_idle(void)
     if(down||up)splash_dismiss();
     local_notes(keys,down,up,(uint32_t)((int32_t)KEY0+(int8_t)octave*12));
 }
+/* The first loop that wanders protects the source as the Anchor (without
+ * touching Undo), so there is always a way home. Redraw after each loop. */
+static uint8_t wander_seen_loops;
+static void wander_service(void)
+{
+    if(ww.want_anchor){
+        ww.want_anchor=0;
+        if(!wm.has_anchor&&!recording&&!wp_has_anchor){
+            fm1_irq_off();uint8_t ok=wm_protect_source();fm1_irq_on();
+            if(ok)cue_pair(67u,79u,1);
+        }
+    }
+    if(ww.moved||(uint8_t)ww.loops!=wander_seen_loops){
+        if(ww.moved&&ww.distance)led_tide_until=fm1_ms+160u;
+        ww.moved=0;wander_seen_loops=(uint8_t)ww.loops;page_dirty=1;
+    }
+}
 static uint32_t screen_refresh_interval(void)
 {
     if(scope_open)return scope_hold?0u:wm.reduced_motion?250u:80u;
@@ -1101,7 +1164,7 @@ static void app_main(void)
         app_midi();
         b=fm1_input_edges(&rel);
         if(b)splash_dismiss();
-        b=ui_edges(b,rel);b=save_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
+        b=ui_edges(b,rel);b=save_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
         if(!scope_open&&notice&&notice_sticky()&&(b&((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX)))){
             notice=0;b&=~((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX));page_dirty=1;
         }
@@ -1159,7 +1222,13 @@ static void app_main(void)
             if(b&(1u<<BTN_SAVE)){fm1_irq_off();capture_finish_all();uint8_t ok=wm_catch();fm1_irq_on();cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_CATCH_FIRST);}
             if(b&(1u<<BTN_EDIT)){editor_open=1;editor_page=editor_selected=0;focus=notice=0;page_dirty=1;}
             if(b&(1u<<BTN_LFO))anchor_preview();
-            if(b&(1u<<BTN_GLO)){fm1_irq_off();capture_finish_all();uint8_t ok=wp_active?wp_arm():wm_branch_now(cycle_index);fm1_irq_on();cue(ok?88u:48u);if(!wp_active)show_notice(ok?N_BRANCHED:N_CATCH_FIRST);else page_dirty=1;}
+            if(b&(1u<<BTN_GLO)){
+                /* Tap GLO: Keep where Memory has wandered (or arm Print in RAM view). */
+                fm1_irq_off();capture_finish_all();
+                uint8_t ok=wp_active?wp_arm():wm.legacy?wm_branch_now(cycle_index):(wm.has_anchor||ww.distance)?ww_keep():0;
+                fm1_irq_on();cue(ok?88u:48u);
+                if(!wp_active)show_notice(ok?N_BRANCHED:wm.has_anchor?N_NOTHING_TO_KEEP:N_CATCH_FIRST);else page_dirty=1;
+            }
             if(b&(1u<<BTN_ENV)){
                 fm1_irq_off();
                 uint8_t ok;
@@ -1261,6 +1330,7 @@ static void app_main(void)
 #ifdef DINGHY_HOST
         if(step_samples!=(FS*15u)/wm.bpm){fprintf(stderr,"Wanderer tempo and scheduler diverged\n");exit(3);}
 #endif
+        wander_service();
         display_expire();
         if(page_dirty||fm1_ms-last_project_poll>=250u)project_poll();
         app_leds();

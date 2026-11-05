@@ -1,0 +1,42 @@
+# 3.0 wander: record, Melt+Drift, loops drift further, hold GLO returns home
+0 shot
+100 btn 13
+120 keys 128
+280 keys 0
+387 keys 1024
+547 keys 0
+655 keys 16384
+815 keys 0
+923 keys 4096
+1083 keys 0
+1191 keys 128
+1351 keys 0
+1459 keys 524288
+1619 keys 0
+1727 keys 131072
+1887 keys 0
+1994 keys 16384
+2154 keys 0
+2292 btn 13
+2392 shot
+2492 enc 2 16
+2542 enc 3 24
+2692 shot
+5034 shot
+7177 shot
+9320 shot
+11463 shot
+13606 shot
+15749 shot
+17892 shot
+20034 shot
+22177 shot
+24320 shot
+26463 shot
+28606 shot
+30749 shot
+32892 btndown 7
+33992 btnup 7
+34092 shot
+36392 shot
+36492 end

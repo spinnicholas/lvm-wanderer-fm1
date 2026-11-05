@@ -75,6 +75,7 @@ int main(void)
     puts("eight independent slots, stopped-only saves, invalid-load rejection and preferences pass");
     fresh();
     wm.has_anchor=1;wm.layer_enabled=layer_focus=1;anchor_view=1;wm_can_undo=1;octave=1;running=recording=1;
+    step_primed=1;step_index=1;step_clock=0; /* on the beat: PLAY and REC pulse bright */
     notice=0;
     host_leds=host_glow=((uint64_t)1<<41)-1;leds_initialised=0;
     app_leds();assert(host_leds==((1u<<1)|(1u<<5)|(1u<<6)|(1u<<9)|(1u<<12)|(1u<<13)));
@@ -89,7 +90,8 @@ int main(void)
         if(settings_open)assert(host_leds==((1u<<3)|(1u<<12)));
     }
     panic();settings_open=0;wm.has_anchor=wm.layer_enabled=layer_focus=wm_can_undo=anchor_view=octave=0;
-    app_leds();assert(!host_leds&&!host_glow);
+    app_leds();assert(!host_leds&&!(host_glow&0x3fffu)); /* only root-key landmarks glow */
+    for(uint32_t key=0;key<27u;key++)assert(((host_glow>>KEY_LED(key))&1u)==((KEY0+key)%12u==wm.root));
     note_on(60,100,1);app_leds();assert(host_leds==((uint64_t)1<<21));
     note_off(60,1);app_leds();assert(!host_leds);
     puts("complete LED scenes, stale-mask cleanup, 10000 view transitions and note releases pass");

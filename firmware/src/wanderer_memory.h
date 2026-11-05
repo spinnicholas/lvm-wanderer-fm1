@@ -192,11 +192,18 @@ static uint8_t wm_memory_playable(void)
     for(uint32_t i=0;i<wm.loop_steps;i++)if(wm_step_notes(&wm.memory,i))return 1;
     return 0;
 }
+static uint8_t wm_protect_source(void);
 static uint8_t wm_catch(void)
 {
     if(!wm_memory_playable())return 0;
     if(wm.has_anchor)return 0; /* Catch may never overwrite the source. */
-    wm_mark();wm.anchor=wm.memory;wm.has_anchor=1;wm.anchor_patch=wm.patch_valid?wm.patch:*ws_factory_patch(wm.preset_bank,wm.sound);wm.anchor_patch_valid=(uint8_t)!wm.legacy;wm.anchor_legacy=wm.legacy;wm.anchor_sound=wm.sound;wm.anchor_preset_bank=wm.preset_bank;return 1;
+    wm_mark();return wm_protect_source();
+}
+/* The Anchor copy itself. Wander calls this without touching Undo. */
+static uint8_t wm_protect_source(void)
+{
+    if(wm.has_anchor||!wm_memory_playable())return 0;
+    wm.anchor=wm.memory;wm.has_anchor=1;wm.anchor_patch=wm.patch_valid?wm.patch:*ws_factory_patch(wm.preset_bank,wm.sound);wm.anchor_patch_valid=(uint8_t)!wm.legacy;wm.anchor_legacy=wm.legacy;wm.anchor_sound=wm.sound;wm.anchor_preset_bank=wm.preset_bank;return 1;
 }
 static uint8_t wm_record(uint32_t step,uint32_t note,uint32_t vel)
 {
