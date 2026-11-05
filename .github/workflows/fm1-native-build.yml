@@ -1,0 +1,79 @@
+name: FM-1 native firmware build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/fm1-firmware-overhaul-33i8f8
+    paths:
+      - 'firmware/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'build.sh'
+      - 'RELEASE'
+      - '.github/workflows/fm1-native-build.yml'
+permissions:
+  contents: write
+concurrency:
+  group: fm1-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  compile-native-fm1:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout the exact source commit
+        uses: actions/checkout@v4
+      - name: Install build support
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q xz-utils python3-pil
+      - name: Download verified JieLi compiler and pinned AC79 SDK
+        env:
+          JIELI_DIR: ${{ runner.temp }}/jieli
+          AC79_SDK: ${{ runner.temp }}/fw-AC79_AIoT_SDK
+        run: |
+          set -euo pipefail
+          mkdir -p "$JIELI_DIR"
+          curl -fL --retry 3 -o "$RUNNER_TEMP/jieli-toolchain.tar.xz" \
+            https://jl-update.oss-cn-shenzhen.aliyuncs.com/jieli-linux-toolchains-20250324.1.tar.xz
+          echo 'f686586bcfb45e0f0bb27fd2b39c7a7f313cb4f0e88a66a14da621ffa8225958  '"$RUNNER_TEMP/jieli-toolchain.tar.xz" | sha256sum -c -
+          tar -xJf "$RUNNER_TEMP/jieli-toolchain.tar.xz" -C "$JIELI_DIR"
+          TOOLCHAIN_ROOT="$(find "$JIELI_DIR" -mindepth 1 -maxdepth 1 -type d -name 'jieli-linux-toolchains-*' -print -quit)"
+          test -x "$TOOLCHAIN_ROOT/pi32v2/bin/clang"
+          echo "JIELI_TOOLCHAIN=$TOOLCHAIN_ROOT" >> "$GITHUB_ENV"
+          git clone --depth 1 --branch AC79NN_SDK_V1.2.1_2023-12-13 \
+            https://gitee.com/Jieli-Tech/fw-AC79_AIoT_SDK.git "$AC79_SDK"
+          echo "AC79_SDK=$AC79_SDK" >> "$GITHUB_ENV"
+      - name: Host regressions, native compile and installer validation
+        run: |
+          RELEASE="$(cat RELEASE)" sh tools/compile_native.sh
+      - name: Publish the compiled package back to this branch
+        run: |
+          set -eu
+          REL="$(cat RELEASE)"
+          mkdir -p dist
+          cp "build/dinghy-$REL.fwsc" "dist/LVM-Wanderer-$REL-FM1.fwsc"
+          {
+            echo "LVM Wanderer $REL native FM-1 build"
+            echo "Source commit: $GITHUB_SHA"
+            echo "Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            grep -E "image|RAM|pool|register|ram_text|FLASHABLE" build/native-build.log || true
+            echo
+            sha256sum "dist/LVM-Wanderer-$REL-FM1.fwsc"
+          } > "dist/BUILD-$REL.txt"
+          cat "dist/BUILD-$REL.txt"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "dist/LVM-Wanderer-$REL-FM1.fwsc" "dist/BUILD-$REL.txt"
+          if git diff --cached --quiet; then echo "Package unchanged"; exit 0; fi
+          git commit -m "Native FM-1 build of $REL from ${GITHUB_SHA::12} [skip ci]"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+      - name: Upload flashable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LVM-Wanderer-native-fm1
+          path: |
+            build/dinghy-*.fwsc
+            build/native-build.log
+          if-no-files-found: error
