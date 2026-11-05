@@ -25,6 +25,10 @@ typedef struct {
  uint16_t lines[4],diffusers[2],pre,early[2];
  uint8_t diffusion,damp,feedback,range,width;
 } reverb_profile_t;
+/* 3.0 network refinements, per type: in-loop modulation depth (Q8 samples),
+ * low-cut shift (higher = lower corner; 0 = none) and output tap density. */
+static const uint8_t VERB_MOD[RV_COUNT]={0,96,40,0,128,224,0};
+static const uint8_t VERB_LOWCUT[RV_COUNT]={6,7,7,0,7,8,0};
 /* Delay lengths are samples at the 16 kHz wet clock. Every geometry fits
  * the legacy buffers. The feedback matrix is shared across all seven types. */
 static const reverb_profile_t VERB_PROFILES[RV_COUNT]={
@@ -41,6 +45,7 @@ static uint32_t wow_phase,flutter_phase,phaser_phase,crush_count;
 static uint16_t verb_pos[4],ap_pos[2],verb_age,verb_pre_pos,verb_gain;
 static uint8_t verb_type;
 static int32_t verb_input_tone;
+static int32_t verb_low[4],verb_fb[4];
 static int32_t verb_tone[4],mix_smooth[7],phaser_s[2][6],phaser_y[2],phaser_a[2];
 static int32_t fx_input,tape_tone,tape_dc,tape_l,tape_r,tape_old_l,tape_old_r,fold_lp,crush_hold;
 static int32_t wet_l,wet_r,wet_old_l,wet_old_r;
@@ -50,6 +55,7 @@ static void verb_restart(uint8_t type)
 {
  verb_type=type;verb_age=verb_pre_pos=0;verb_input_tone=0;
  memset(verb_pos,0,sizeof verb_pos);memset(verb_tone,0,sizeof verb_tone);memset(ap_pos,0,sizeof ap_pos);
+ memset(verb_low,0,sizeof verb_low);
 }
 static uint32_t fx_clear_part,fx_clear_at;
 static const uint8_t FX_HOLD[16]={1,2,3,4,5,6,8,10,12,16,20,24,32,40,48,64};
@@ -127,16 +133,30 @@ static int32_t verb_history(uint32_t samples)
 {
  return verb_age>=samples?verb_pre[(verb_pre_pos-samples)&VERB_PRE_MASK]:0;
 }
-static int32_t verb_modulated_tap(const int16_t *line,uint32_t pos,uint32_t length,uint32_t phase)
+static int32_t verb_modulated_tap(const int16_t *line,uint32_t pos,uint32_t length,uint32_t phase,uint32_t depth)
 {
  if(verb_age<length)return 0;
  uint32_t triangle=phase>>20;
  if(triangle>=2048u)triangle=4095u-triangle;
- uint32_t q=triangle*5u>>3;
+ uint32_t q=triangle*depth>>8; /* up to depth*8 Q8 samples */
  uint32_t at=pos+(q>>8);
  if(at>=length)at-=length;
  uint32_t next=at+1u==length?0u:at+1u;
  return line[at]+(((line[next]-line[at])*(int32_t)(q&255u))>>8);
+}
+/* Every line decays at the same rate per second: a longer line loses more per
+ * pass. First-order g^(L/Lavg) keeps the tail even instead of ringing on its
+ * shortest line. Q12, recomputed once per block from the Q7 network gain. */
+static void verb_line_gains(uint8_t type,int32_t feedback)
+{
+ if(type==RV_AMBIENT)return; /* Ambient keeps its own Q15 loss path. */
+ const reverb_profile_t *p=&VERB_PROFILES[type];
+ uint32_t avg=((uint32_t)p->lines[0]+p->lines[1]+p->lines[2]+p->lines[3])/4u;
+ int32_t loss=(128-feedback)*32;
+ for(uint32_t k=0;k<4;k++){
+  int32_t lk=(int32_t)((uint32_t)loss*p->lines[k]/(avg?avg:1u));
+  verb_fb[k]=ws_clamp(4096-lk,0,4064);
+ }
 }
 static int32_t verb_feedback(uint8_t type)
 {
@@ -190,6 +210,10 @@ static void verb_process(int32_t input,int32_t feedback,int32_t damp,int32_t *le
   tap[k]=0;
   if(verb_age>=p->lines[k]){
    tap[k]=lines[k][pos];
+   /* Lines 2 and 4 wander a few samples against each other, so the
+    * modes keep moving instead of ringing as a fixed comb. */
+   if(VERB_MOD[verb_type]&&(k&1u))
+    tap[k]=verb_modulated_tap(lines[k],pos,p->lines[k],motion_phase+(k>>1)*0x40000000u,VERB_MOD[verb_type]);
    if(ambient){
     uint32_t frac_at=AMB_OFFSET[k]+pos,shift=(frac_at&1u)*4u;
     tap[k]=tap[k]*16+((verb_frac[frac_at>>1]>>shift)&15);
@@ -201,11 +225,14 @@ static void verb_process(int32_t input,int32_t feedback,int32_t damp,int32_t *le
   /* A light low-pass blend keeps the wash dark without stripping the
    * mids at every trip around the long-decay network. */
   filtered[k]=ambient?tap[k]-(tap[k]-verb_tone[k])*ambient_damp/256:verb_tone[k];
+  if(VERB_LOWCUT[verb_type]){
+   /* Gentle low cut inside the loop: long tails stay clear, never muddy. */
+   /* Q8 state rounded toward zero: the correction itself falls to zero in
+    * silence, so the low cut can never sustain a limit cycle. */
+   verb_low[k]+=(filtered[k]*256-verb_low[k])/(1<<VERB_LOWCUT[verb_type]);
+   filtered[k]-=verb_low[k]/256;
+  }
   sum+=filtered[k];
- }
- if(verb_type==RV_DEEP_SPACE){
-  tap[1]=verb_modulated_tap(verb_b,verb_pos[1],p->lines[1],motion_phase);
-  tap[3]=verb_modulated_tap(verb_d,verb_pos[3],p->lines[3],motion_phase+0x40000000u);
  }
  for(uint32_t k=0;k<4;k++){
   int32_t reflected=filtered[k]-(ambient?sum/2:sum>>1);
@@ -222,8 +249,7 @@ static void verb_process(int32_t input,int32_t feedback,int32_t damp,int32_t *le
    *frac=(uint8_t)((*frac&~(15u<<shift))|(((uint32_t)value&15u)<<shift));
   }else{
    int32_t injection=(verb_type==RV_SPRING||verb_type==RV_DEEP_SPACE)&&(k&1u)?-vin:vin;
-   int32_t fed=reflected*feedback;
-   fed=verb_type==RV_ROOM?fed>>7:fed/128;
+   int32_t fed=(reflected*verb_fb[k])/4096; /* rounds toward silence */
    lines[k][verb_pos[k]]=fx_bound((wm.fx_on&4u)?injection+fed:0);
   }
   if(++verb_pos[k]==p->lines[k])verb_pos[k]=0;
@@ -231,6 +257,16 @@ static void verb_process(int32_t input,int32_t feedback,int32_t damp,int32_t *le
  if(verb_age<2048u)verb_age++;
  int32_t l=tap[0]+tap[2],r=tap[1]+tap[3];
  if(ambient){l/=16;r/=16;}
+ else if(verb_type!=RV_ROOM&&verb_age>=2048u){
+  /* Decorrelated output taps from inside the other side's lines thicken the
+   * stereo image without adding feedback paths. */
+  uint32_t a=verb_pos[1]+p->lines[1]/3u,b=verb_pos[3]+p->lines[3]*2u/3u;
+  uint32_t c=verb_pos[0]+p->lines[0]/2u,d=verb_pos[2]+p->lines[2]/5u;
+  if(a>=p->lines[1])a-=p->lines[1];if(b>=p->lines[3])b-=p->lines[3];
+  if(c>=p->lines[0])c-=p->lines[0];if(d>=p->lines[2])d-=p->lines[2];
+  int32_t xl=(verb_b[a]-verb_d[b])/2,xr=(verb_a[c]-verb_c[d])/2;
+  l=(l*3+xl*2)/4;r=(r*3+xr*2)/4;
+ }
  if(verb_type!=RV_ROOM){
   int32_t mid=(l+r)/2,side=((l-r)*p->width)/256;
   /* Parallel early reflections define the enclosure without destabilizing feedback. */
@@ -259,6 +295,7 @@ static void fx_process(int32_t *out,uint32_t n)
  int32_t room_damp=room->damp-(wm.reverb_damp>>1);
  int32_t next_fb=verb_feedback(wm.reverb_type);
  int32_t next_damp=next->damp-(wm.reverb_damp>>1);
+ verb_line_gains(verb_type,verb_type==wm.reverb_type?next_fb:room_fb);
  for(uint32_t i=0;i<n;i++){
   if(mix_moving){mix_moving=0;for(uint32_t k=0;k<7;k++){mix_smooth[k]=fx_slew(mix_smooth[k],targets[k],7);mix_moving|=mix_smooth[k]!=targets[k];}}
   int32_t dry=out[i*2];
@@ -272,6 +309,8 @@ static void fx_process(int32_t *out,uint32_t n)
   int32_t left=dry,right=dry;
   if(mix_smooth[5]){phaser_awake=1;left=fx_phaser(dry,0);right=fx_phaser(dry,1);}
   else if(phaser_awake){memset(phaser_s,0,sizeof phaser_s);phaser_y[0]=phaser_y[1]=0;phaser_awake=0;}
+  /* Voice spread arrives as a side signal in the right slot. */
+  int32_t side=out[i*2+1];left+=side;right-=side;
   int32_t send=(left+right)/2;
   fx_input+=(send-fx_input)/2;
   /* Below halfway this is the original additive send. Above halfway,

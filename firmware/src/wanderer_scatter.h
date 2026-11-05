@@ -4,13 +4,19 @@
  */
 #pragma once
 enum { SC_CLEAN,SC_STUTTER,SC_HOP,SC_JUMP,SC_HOLD,SC_DROP,SC_RUSH,SC_REVERSE,SC_TAPE,SC_CLOUD,SC_PITCH };
-static struct {uint32_t rng,serial;uint16_t offset;uint8_t kind,divisions,rest,walk;} scatter={.rng=0x735ca771u};
+static struct {uint32_t rng,serial,motif;uint16_t offset;uint8_t kind,divisions,rest,walk;} scatter={.rng=0x735ca771u};
+/* 3.0: Scatter gestures belong to a motif. Each step's decision is a hash of
+ * the motif and the step, so a gesture returns in the same place next loop
+ * and the result is a rhythm, not noise. Variation sets how often a new
+ * motif replaces the old one at the loop start (0 = never, full = every loop). */
+static uint32_t scatter_hash(uint32_t x)
+{x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;x^=x>>16;return x;}
 static uint32_t scatter_random(void)
 {uint32_t x=scatter.rng;if(!x)x=0x735ca771u;x^=x<<13;x^=x>>17;x^=x<<5;scatter.rng=x;return x;}
 static void scatter_clear(void)
 {scatter.kind=SC_CLEAN;scatter.divisions=1;scatter.offset=0;}
 static void scatter_seed(uint32_t seed)
-{scatter.rng=seed?seed:0x735ca771u;scatter.rest=0;scatter.serial=0;scatter.walk=3;scatter_clear();}
+{scatter.rng=seed?seed:0x735ca771u;scatter.rest=0;scatter.serial=0;scatter.walk=3;scatter.motif=0;scatter_clear();}
 /* These algorithms run once per musical step, never in the audio callback.
  * Free retains legacy scheduling. The other patterns follow the loop playhead.
  * Probability affects event density, not transport or source memory. */
@@ -37,11 +43,18 @@ static uint8_t scatter_pattern_gate(uint32_t r,uint32_t amount,uint32_t slot,uin
 static void scatter_plan(uint32_t amount,uint8_t bypass,uint32_t slot,uint32_t cycle)
 {
  scatter_clear();if(!amount||bypass)return;
- uint32_t r=scatter_random();scatter.serial++;
+ if(!slot||!scatter.motif){
+  uint32_t change=scatter_random();
+  if(!scatter.motif||(change&127u)<wm.scatter_variation)scatter.motif=scatter_random()|1u;
+ }
+ uint32_t r=scatter_hash(scatter.motif^(slot*0x9e3779b1u));
+ scatter.serial++;
  if(!wm.scatter_pattern){
-  if(scatter.rest){scatter.rest--;return;}
-  /* Free leaves sparse clean gaps between bursts. */
+  /* Free: the downbeat stays clean below high amounts, and phrase
+   * endings attract gestures. */
+  if(!slot&&amount<100u)return;
   uint32_t chance=2u+amount*amount/190u;
+  if(slot+2u>=wm.loop_steps)chance=chance*2u>100u?100u:chance*2u;
   if(r%100u>=chance)return;
  }else{
   if(!scatter_pattern_gate(r,amount,slot,cycle))return;
@@ -51,7 +64,7 @@ static void scatter_plan(uint32_t amount,uint8_t bypass,uint32_t slot,uint32_t c
  uint32_t range=amount<40?3u:amount<88?5u:8u;
  scatter.divisions=divs[(r>>16)%range];
  scatter.offset=(uint16_t)(1u+(((r>>3)&127u)<wm.scatter_variation?(r>>21)%7u:(scatter.serial/4u)%3u));
- if(!wm.scatter_pattern){if((r>>12)%5u==0)scatter.rest=(uint8_t)(amount<70?3u:1u);return;}
+ if(!wm.scatter_pattern)return;
  /* Constrain patterns to musical gestures. Keep sound style independent:
   * step_play still selects Pitched/Cloud/Tape after we choose the timing. */
  switch(wm.scatter_pattern){

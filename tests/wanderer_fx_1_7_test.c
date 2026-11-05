@@ -14,7 +14,7 @@ static uint32_t hash(uint32_t chunk)
  wm=(wm_state_t)WM_DEFAULTS;wm.fx_on=7;wm.fx_new_on=15;wm.crush_mix=wm.fold_mix=80;wm.tape_sync=0;wm.tape_time=25;
  clear();uint32_t h=0,pos=0;
  while(pos<FS*2){uint32_t n=FS*2-pos;if(n>chunk)n=chunk;
-  for(uint32_t i=0;i<n;i++)pcm[i*2]=wn_sine_i((pos+i)*0x01900000u)/4;
+  for(uint32_t i=0;i<n;i++){pcm[i*2]=wn_sine_i((pos+i)*0x01900000u)/4;pcm[i*2+1]=0;} /* platform contract: out arrives zeroed */
   fx_process(pcm,n);for(uint32_t i=0;i<n*2;i++){assert(abs(pcm[i])<32767);h=h*33u+(uint32_t)pcm[i];}pos+=n;
  }return h;
 }

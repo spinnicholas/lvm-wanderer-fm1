@@ -18,7 +18,11 @@ typedef struct {
  int32_t coef_cut,coef_res,coef_mode,fm_index;
  ws_lp_stage_t lp[2];
  wn_lad_coef_t ladder;wn_lad_state_t ladder_state;wn_pd_t pd[2];uint8_t modern,modal_decay[4];
+ int32_t drift; /* slow analog pitch wander, Q4 cents */
 } ws_voice_t;
+/* A small fixed stereo spread per voice slot, applied as a side signal that the
+ * effect chain adds to left and subtracts from right (Q8). */
+static const int8_t WS_SPREAD[NV]={-36,36,-22,22};
 static ws_voice_t ws_voice[NV];
 static int16_t ws_string[NV][4096] __attribute__((section(".pool")));
 static int32_t ws_clamp(int32_t x,int32_t lo,int32_t hi){return wn_clampi(x,lo,hi);}
@@ -135,6 +139,13 @@ static void ws_control(uint32_t v,uint8_t gate,int32_t melt)
  s->amp_step=(amp-s->amp_now)/16;
  if(p->engine==1||p->engine==4)for(uint32_t o=0;o<4;o++){int32_t e=ws_env(&s->op[o],p->op_env[o],gate);s->op_step[o]=(e-s->op_now[o])/16;}
  s->lfo+=WS_LFO[p->lfo_rate];int32_t lf=wn_sine_i(s->lfo),cents=p->lfo_dest==2?(lf*p->lfo_depth)>>15:0;
+ /* Analog and phase voices drift a few cents like real oscillators; the
+  * amount grows with the patch's Detune. Bounded random walk, no DC creep. */
+ if(p->engine==0||p->engine==2){
+  int32_t limit=(2+p->detune/24)*16;
+  if(!(s->control&1023u)){uint32_t r=wn_random(s);s->drift+=(int32_t)(r>>30)-(int32_t)((r>>28)&3u)-s->drift/limit;}
+  s->drift=ws_clamp(s->drift,-limit,limit);cents+=s->drift/16;
+ }
  s->pitch_step=(uint32_t)(((uint64_t)voice[v].inc*WN_CENTS[ws_clamp(cents,-127,127)+127])>>16);
  s->shape=ws_clamp(p->shape+p->morph[1]*melt/127+(p->lfo_dest==1?(lf*p->lfo_depth)>>15:0),0,127);
  if(p->engine==1){
@@ -149,7 +160,11 @@ static void ws_control(uint32_t v,uint8_t gate,int32_t melt)
  if(p->engine<2)cut+=((int32_t)voice[v].note-60)*p->position*256/127;
  if(p->engine!=2||modern_lp)cut+=(fe*p->envdepth*(modern_lp?9:21))/(127*32);
  if(p->lfo_dest==0)cut+=(lf*p->lfo_depth*(modern_lp?1:3))>>10;
- cut+=p->morph[0]*melt*256/127;s->cut_sm+=(ws_clamp(cut,modern_lp?25*256:0,(modern_lp?130:136)*256)-s->cut_sm)/4;
+ cut+=p->morph[0]*melt*256/127;
+ /* Velocity colours tone as well as level: 100 (the keys) is neutral, softer
+  * notes (including Melt's weak beats) close the filter. */
+ cut+=(s->velocity-100)*48;
+ s->cut_sm+=(ws_clamp(cut,modern_lp?25*256:0,(modern_lp?130:136)*256)-s->cut_sm)/4;
  if(s->coef_cut!=s->cut_sm||s->coef_res!=p->resonance||s->coef_mode!=(p->engine*WS_FILTER_COUNT+p->filter)){
  s->coef_cut=s->cut_sm;s->coef_res=p->resonance;s->coef_mode=p->engine*WS_FILTER_COUNT+p->filter;
  int32_t i=s->cut_sm>>8,g=WN_SVF_G[i];if(i<136)g+=((WN_SVF_G[i+1]-g)*(s->cut_sm&255))>>8;
@@ -284,6 +299,6 @@ static void ws_render(uint32_t v,int32_t *out,uint32_t n,int32_t melt)
   x=x*s->p.level/256;
   if(voice[v].splice_left){uint32_t t=voice[v].splice_left--;x=(x*(int32_t)(32u-t)+voice[v].splice*(int32_t)t)/32;}
   s->last=x;voice[v].last=x;voice[v].amp=s->p.engine==5?(!wn_fm6[v].done?32768:0):(s->amp.value>>10)*s->velocity;
-  if(s->amp.value&&!voice[v].amp&&s->p.engine!=5)voice[v].amp=1;out[i*2u]+=x;
+  if(s->amp.value&&!voice[v].amp&&s->p.engine!=5)voice[v].amp=1;out[i*2u]+=x;out[i*2u+1u]+=(x*WS_SPREAD[v])>>8;
  }voice[v].remain=remain;
 }

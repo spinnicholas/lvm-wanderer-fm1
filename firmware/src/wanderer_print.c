@@ -36,7 +36,9 @@ static uint32_t wp_drift_offset;
 static uint32_t wp_scatter_origin,wp_scatter_elapsed,wp_scatter_duration,wp_scatter_delay;
 static int32_t wp_scatter_mix,wp_scatter_last,wp_scatter_splice;
 static uint8_t wp_scatter_fade,wp_scatter_rushed;
-static uint32_t wp_scatter_cache_elapsed=0xffffffffu,wp_scatter_cache_size,wp_scatter_cache_at,wp_scatter_cache_weight;
+static uint32_t wp_scatter_cache_elapsed=0xffffffffu,wp_scatter_cache_size,wp_scatter_cache_at,wp_scatter_cache_weight,wp_scatter_cache_repeat;
+/* Ratchets fall away like a struck repeat: about -1 dB per repeat, with a floor. */
+static const uint8_t WP_RATCHET[12]={255,227,203,181,162,145,130,117,106,97,90,84};
 static uint32_t wp_scatter_rate=4096u,wp_scatter_window;static int32_t wp_scatter_tone;
 static uint32_t wp_tape_wow,wp_tape_flutter;
 static int32_t wp_tape_mod_q12;
@@ -212,7 +214,7 @@ static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
   /* Elapsed only advances at 16 kHz, not at the 44.1 kHz callback rate.
    * Cache modulo and taper weight across the two/three repeated host samples. */
   if(wp_scatter_cache_elapsed!=elapsed||wp_scatter_cache_size!=size){
-   wp_scatter_cache_at=elapsed%size;
+   wp_scatter_cache_repeat=elapsed/size;wp_scatter_cache_at=elapsed-wp_scatter_cache_repeat*size;
    uint32_t edge=wp_scatter_cache_at<size-wp_scatter_cache_at?wp_scatter_cache_at:size-wp_scatter_cache_at;
    uint32_t weight=edge*65536u/size;
    wp_scatter_cache_weight=weight>32768u?32768u:weight;
@@ -246,6 +248,10 @@ static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
     int32_t blend=scatter.kind==SC_CLOUD?127:wm.scatter_edge;
     affected=hard+((smooth-hard)*blend)/127;
    }else affected=hard;
+  }
+  if(scatter.kind==SC_STUTTER||scatter.kind==SC_RUSH){
+   uint32_t n=wp_scatter_cache_repeat<11u?wp_scatter_cache_repeat:11u;
+   affected=(affected*(int32_t)WP_RATCHET[n])>>8;
   }
   /* Tone and level follow the wet signal; no nonlinear clipping of fragments. */
   int32_t coeff=768+wm.scatter_tone*224;
@@ -288,6 +294,8 @@ static void wp_input(int32_t *out,uint32_t n)
    dry+=sample;
   }else{dry=wp_scatter_audio(dry,0);}
   out[i*2]=dry;
+  /* Scattered or printed audio replaces the dry voice; fade its spread too. */
+  if(wp_scatter_mix||(running&&wp_active))out[i*2+1]=(out[i*2+1]*(256-ws_clamp(wp_active?256:wp_scatter_mix,0,256)))>>8;
   if(running){wp_phase+=16000;if(wp_phase>=FS){wp_phase-=FS;
     if(wp_active){if(++wp_pos>=wp_length)wp_pos=0;}
     else if(!wp_repeat_on){ring[wp_ring_write]=(int16_t)ws_clamp(wp_ring_tone,-32767,32767);if(++wp_ring_write==WP_RING_SAMPLES)wp_ring_write=0;if(wp_ring_count<WP_RING_SAMPLES)wp_ring_count++;}
