@@ -257,17 +257,7 @@ static wm_event_t wm_evolve(wm_event_t e,uint32_t step,uint32_t cycle)
     if(!e.velocity)e.velocity=1;
     return e;
  }
- int32_t degree=wm_drift_answer(step,cycle);
- if(degree&&e.note%12u!=wm.root)e.note=wm_scale_move(e.note,degree);
- /* Melt breathes into a phrase: softer and slightly shorter offbeats,
-  * stronger landmarks. Long notes and the zero setting remain intact. */
- uint32_t melt=(uint32_t)wm.melt*((cycle&3u)==2u?3u:2u)/3u;
- if(melt){
-    int32_t velocity=(int32_t)e.velocity;
-    velocity+=step&3u?-(int32_t)(melt*(step&1u?15u:7u)/127u):(int32_t)(melt*9u/127u);
-    e.velocity=(uint8_t)(velocity<1?1:velocity>127?127:velocity);
-    if((step&1u)&&e.gate>=48u&&e.gate<=256u)e.gate=(uint16_t)(e.gate*(512u-melt)>>9);
- }
+ /* 3.0 projects wander cumulatively (wanderer_wander.h); this path is legacy only. */
  return e;
 }
 /* Fill density follows phrase endings. Low amounts leave three full cycles untouched. */

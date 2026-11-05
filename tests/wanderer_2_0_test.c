@@ -67,11 +67,12 @@ int main(void)
  assert(loaded.preset_bank==WS_BANK_1_9&&!loaded.layer_sound&&!loaded.midi_channel&&loaded.reverb_type==RV_PLATE);
  assert(!strcmp(ws_factory_name(loaded.preset_bank,loaded.sound),"ROUND SUB"));
  assert(!slot_load(3,&old,sizeof old)&&old.version==13u);
- wm.drift=85;wm.melt=0;
+ /* 3.0: modern Memory no longer uses the stateless four-loop evolve; it
+  * wanders cumulatively (tests/wanderer_3_0_test.c). Legacy is unchanged. */
+ wm.drift=85;wm.melt=127;wm.legacy=0;
  const wm_event_t before={64,100,192};
- assert(wm_evolve(before,15,0).note==64&&wm_evolve(before,15,4).note==64);
- assert(wm_evolve(before,12,2).note==64&&wm_evolve(before,15,2).note!=64);
- wm.melt=127;assert(wm_evolve(before,15,2).gate<192&&wm_evolve(before,12,2).velocity>100);
+ assert(!memcmp(&before,&(wm_event_t){wm_evolve(before,15,2).note,wm_evolve(before,15,2).velocity,wm_evolve(before,15,2).gate},sizeof before));
+ wm.legacy=0;
  editor_page=EDIT_SCATTER;editor_move(1);assert(editor_page==EDIT_PATTERN);
  puts("2.0 defaults, holds, split sounds, MIDI ownership, musical motion, accessible screens and migration pass.");
 }

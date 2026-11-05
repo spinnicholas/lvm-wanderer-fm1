@@ -92,11 +92,13 @@ static void control_row(uint32_t k,int32_t y,const char *label,const char *value
  int32_t units=width(&FONT_T,unit);
  int32_t end=220-(units?units+7:0);
  char n[12];
- card(8,y,224,48,pa,selected?accent:guide,selected);
- aa_text(16,y+4,&FONT_T,number(k+1u,n),fg);
- aa_text(40,y+4,&FONT_T,label,fg);
- aa_text(end-width(f,value),y+(numeric?22:25),f,value,fg);
- if(units)aa_text(220-units,y+25,&FONT_T,unit,guide);
+ /* The knob being turned is a solid, high-contrast block, not just a border. */
+ uint16_t ink=selected?theme_palette()->bg:fg;
+ card(8,y,224,48,selected?accent:pa,selected?fg:guide,selected);
+ aa_text(16,y+4,&FONT_T,number(k+1u,n),ink);
+ aa_text(40,y+4,&FONT_T,label,ink);
+ aa_text(end-width(f,value),y+(numeric?22:25),f,value,ink);
+ if(units)aa_text(220-units,y+25,&FONT_T,unit,selected?ink:guide);
 }
 static void knob_tabs(uint32_t count,uint32_t selected,int32_t y,uint16_t fg,uint16_t pa,uint16_t guide)
 {

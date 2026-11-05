@@ -207,7 +207,7 @@ static void screen_home(uint16_t fg,uint16_t guide)
         char b[12];number(ww.loops>99u?99u:ww.loops,b);
         aa_text(226-width(&FONT_T,b),51,&FONT_T,b,fg);
     }
-    int32_t icon_y=wm.extra_large?64:80;
+    int32_t icon_y=wm.extra_large?54:80;
     if(wm.extra_large){
         zoom_blit(13,icon_y,ICO_ANCHOR,theme->anchor);
         zoom_blit(131,icon_y,ICO_MEMORY,theme->evolve);
@@ -216,7 +216,7 @@ static void screen_home(uint16_t fg,uint16_t guide)
         icon_blit(147,icon_y,ICO_MEMORY,theme->evolve);
     }
     if(wander){
-        int32_t bar_y=wm.extra_large?161:150,fill=ww.distance*92/100;
+        int32_t bar_y=wm.extra_large?153:150,fill=ww.distance*92/100;
         panel(133,bar_y,92,10,guide);
         panel(135,bar_y+2,88,6,theme->memory);
         if(fill>4)panel(133,bar_y,fill,10,theme->evolve);
@@ -247,6 +247,13 @@ static void screen_focus(uint16_t fg,uint16_t guide)
     status_header(focus_icon(),focus==3&&wm.legacy?"DECAY":titles[focus],fg,guide);
     icon_blit(88,44,focus_icon(),fg);
     large_value(value,122,focus!=4,fg);
+    /* A plain word for where the knob sits, in Normal size. */
+    if(!wm.extra_large&&focus>=1&&focus<=3&&!(focus==3&&wm.legacy)){
+        static const char *const words[3][4]={{"DRY","SOFT","MELTING","LIQUID"},
+            {"STILL","GENTLE","WANDERING","FAR"},{"CLEAN","SPARSE","BUSY","WILD"}};
+        uint32_t band=focus_value?1u+(focus_value>=48u)+(focus_value>=96u):0u;
+        text_center(188,&FONT_T,words[focus-1u][band],fg);
+    }
     gauge(16,215,208,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide);
 }
 static void screen_message(uint16_t fg,uint16_t guide)
