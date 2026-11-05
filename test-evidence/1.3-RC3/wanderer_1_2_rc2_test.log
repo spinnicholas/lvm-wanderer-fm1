@@ -1,0 +1,5 @@
+full chord replaces oldest held onset after retriggers, preserving recently played notes
+full chord reuses released positions before shortening another held note
+capture-pool replacement preserves chronology across unsigned serial wrap
+local chord batch retains one quantized onset while scheduler crosses a half-step
+HOME listening return releases previous sequence and finishes capture while preserving live keys

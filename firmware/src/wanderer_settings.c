@@ -1,24 +1,37 @@
 /* SPDX-License-Identifier: GPL-3.0-only */
+static uint8_t settings_fx_bit(void)
+{return settings_page==9?1:settings_page==10?2:settings_page==12?4:settings_page==13?8:0;}
+static uint8_t *settings_fx_param(uint32_t k)
+{
+ uint8_t *p[5][4]={{0,&wm.crush_mix,&wm.crush_bits,&wm.crush_rate},
+  {0,&wm.tape_mix,&wm.tape_time,&wm.tape_feedback},{&wm.tape_tone,&wm.tape_wow,&wm.tape_heads,&wm.tape_sync},
+  {0,&wm.phaser_mix,&wm.phaser_rate,&wm.phaser_depth},{0,&wm.fold_mix,&wm.fold_drive,&wm.fold_tone}};
+ return p[settings_page-9u][k];
+}
 static uint8_t settings_bool(uint32_t k)
 {
- return (settings_page==0u)||(settings_page>=1u&&settings_page<=3u&&k==0u)||
- (settings_page==4u&&k==3u)||(settings_page==5u&&k==1u)||
+ return (settings_page==SETTINGS_MIDI&&k==3u)||(settings_page==SETTINGS_LAYER)||(settings_page>=9u&&k==0u&&settings_fx_bit())||(settings_page==0u&&k!=0u)||(settings_page>=1u&&settings_page<SETTINGS_REVERB&&k==0u)||
+ (settings_page==4u&&k==3u)||(settings_page==SETTINGS_OUTPUT&&k==2u)||
  (settings_page==6u&&k==0u)||(settings_page==7u&&k==2u)||(settings_page==SETTINGS_ACCESS_FEEL&&k==3u);
 }
 static uint32_t settings_get(uint32_t k)
 {
- if(settings_page==0u)return k==0?wm.light:k==1?wm.extra_large:wm.reduced_motion;
+ if(settings_page==SETTINGS_MIDI)return k==0u?wm.midi_input:k==1u?wm.midi_channel:k==2u?wm.arp_clock:!wm.midi_ignore_program;
+ if(settings_page==SETTINGS_LAYER)return k==0u?layer_focus:k==1u?wm.layer_enabled:ws_layer_own();
+ if(settings_page>=9){uint8_t *p=settings_fx_param(k);return p?*p:(wm.fx_new_on&settings_fx_bit())!=0;}
+ if(settings_page==0u)return k==0?color_theme:k==1?wm.extra_large:wm.reduced_motion;
  if(settings_page>=1u&&settings_page<=3u){
   uint32_t effect=settings_page==1u?1u:settings_page==2u?2u:4u;
-  if(!k)return (wm.fx_on&effect)!=0;
+  if(!k)return settings_page==SETTINGS_REVERB?((wm.fx_on&4u)?wm.reverb_type+1u:0u):(wm.fx_on&effect)!=0;
   if(k==1u)return settings_page==1u?wm.chorus_mix:settings_page==2u?wm.delay_mix:wm.reverb_mix;
+  if(settings_page==1u)return k==2u?wm.chorus_rate:wm.chorus_depth;
   return settings_page==2u?(k==2u?wm.delay_div:wm.delay_feedback):(k==2u?wm.reverb_size:wm.reverb_damp);
  }
  if(settings_page==4u)return k==0u?wm.root:k==1u?wm.scale:k==2u?wm.loop_steps:wm.keyboard_scale;
- if(settings_page==5u)return k==0u?vol:k==1u?cues_enabled:project_slot;
+ if(settings_page==SETTINGS_OUTPUT)return k==0u?vol:k==1u?project_slot:metronome_on;
  if(settings_page==6u)return k==0u?wm.arp_on:k==1u?wm.arp_mode:k==2u?wm.arp_rate:wm.arp_octaves;
  if(settings_page==SETTINGS_ACCESS_FEEL)return k==0u?display_hold:k==1u?(cues_enabled?(cue_detail?2u:1u):0u):k==2u?cue_level:zoom_steady;
- return k==0u?wm.arp_gate:k==1u?wm.arp_swing:k==2u?wm.arp_latch:wm.arp_clock;
+ return k==0u?wm.arp_gate:k==1u?wm.arp_swing:wm.arp_latch;
 }
 static const char *settings_value(uint32_t k,char *buf)
 {
@@ -29,41 +42,89 @@ static const char *settings_value(uint32_t k,char *buf)
   if(k==2u){number(percent(v),buf);uint32_t n=0;while(buf[n])n++;buf[n++]='%';buf[n]=0;return buf;}
  }
  if(settings_page==0u){
-  if(k==0u)return v?"LIGHT":"DARK";
+  if(k==0u)return WM_THEMES[v].name;
   if(k==2u)return v?"REDUCED":"FULL";
  }
+ if(settings_page==SETTINGS_REVERB&&!k){
+  static const char *const names[RV_COUNT+1]={"OFF","ROOM","HALL","PLATE","SPRING","CAVERN","DEEP SPACE","AMBIENT"};
+  return names[v];
+ }
+ if(settings_page==SETTINGS_LAYER){
+  if(!k)return v?"2 LAYER":"1 MEMORY";
+  if(k==1u)return v?"PLAY":"MUTE";
+  return v?"INDEPENDENT":"FOLLOW MEMORY";
+ }
+ if(settings_page==SETTINGS_MIDI){
+  static const char *const inputs[]={"USB + TRS","USB","TRS"};
+  static const char *const clocks[]={"INTERNAL","USB","TRS"};
+  if(!k)return inputs[v];
+  if(k==1u&&!v)return "OMNI";
+  if(k==2u)return clocks[v];
+ }
  if(settings_bool(k))return v?"ON":"OFF";
+ if(settings_page==9u&&k==3u)return number(FS/FX_HOLD[v],buf);
+ if(settings_page==10u&&k==2u)return number(fx_tape_ms(),buf);
+ if(settings_page==11u&&k==2u){const char *names[3]={"SINGLE","DOUBLE","TRIPLE"};return names[v];}
+ if(settings_page==11u&&k==3u){const char *names[4]={"FREE","1/8","3/16","1/4"};return names[v];}
  if(settings_page==2u&&k==2u){static const char * const n[4]={"1/16","1/8","3/16","1/4"};return n[v];}
  if(settings_page==4u){
   if(!k){static const char * const n[12]={"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};return n[v];}
   if(k==1u){static const char * const n[8]={"FREE","MAJOR","MINOR","DORIAN","MIN PENT","MAJ PENT","MIXOLYD","HARM MIN"};return n[v];}
  }
  if(settings_page==6u){if(k==1u)return ARP_MODES[v];if(k==2u)return ARP_RATES[v];}
- if(settings_page==7u&&k==3u){static const char * const n[3]={"INTERNAL","USB","TRS"};return n[v];}
- return number(settings_page==5u&&k==2u?v+1u:v,buf);
+ return number(settings_page==SETTINGS_OUTPUT&&k==1u?v+1u:v,buf);
 }
 static void settings_adjust(uint32_t k,int32_t d)
 {
  if(k>=settings_count()||!d)return;
  settings_index=(uint8_t)k;
- if(settings_page!=0u&&settings_page!=5u&&settings_page!=SETTINGS_ACCESS_FEEL)wm_mark();
+ if(settings_page!=SETTINGS_LAYER&&settings_page!=0u&&settings_page!=SETTINGS_OUTPUT&&settings_page!=SETTINGS_ACCESS_FEEL&&!(settings_page==SETTINGS_MUSIC&&k==2u))wm_mark();
+ if(settings_page==10u&&k==2u&&wm.tape_sync){uint32_t ms=fx_tape_ms();wm.tape_time=(uint8_t)((ms-40u)*127u/960u);wm.tape_sync=0;}
  uint32_t old=settings_get(k);int32_t value=(int32_t)old+d;
  if(settings_bool(k))value=d>0?1:0;
  volatile uint8_t *p=0;int32_t lo=0,hi=127;
- if(settings_page==0u){p=k==0u?&wm.light:k==1u?&wm.extra_large:&wm.reduced_motion;hi=1;}
+ if(settings_page==SETTINGS_MIDI){
+  if(k==3u)wm.midi_ignore_program=(uint8_t)!value;
+  else{
+   hi=k==1u?16:2;
+   p=k==0u?&wm.midi_input:k==1u?&wm.midi_channel:&wm.arp_clock;
+  }
+ }else if(settings_page==SETTINGS_LAYER){
+  hi=1;
+  if(!k)layer_target_locked((uint8_t)value);
+  else if(k==1u)layer_playback_locked((uint8_t)value);
+  else if(old!=(uint32_t)value){
+   wm_mark();
+   if(value)ws_layer_unlink();
+   else wm.layer_link=1;
+  }
+ }else if(settings_page>=9u){
+  p=settings_fx_param(k);
+  if(!p){uint8_t bit=settings_fx_bit();if(value)wm.fx_new_on|=bit;else wm.fx_new_on&=(uint8_t)~bit;hi=1;}
+  if(settings_page==9u&&k==2u){lo=1;hi=16;}
+  if(settings_page==9u&&k==3u)hi=15;
+  if(settings_page==11u&&k>=2u)hi=k==2u?2:3;
+ }
+ else if(settings_page==0u){p=k==0u?&color_theme:k==1u?&wm.extra_large:&wm.reduced_motion;hi=k==0u?THEME_COUNT-1u:1u;}
  else if(settings_page>=1u&&settings_page<=3u){
-  if(!k){uint8_t bit=(uint8_t)(1u<<(settings_page-1u));if(value)wm.fx_on|=bit;else wm.fx_on&=(uint8_t)~bit;}
+  if(settings_page==SETTINGS_REVERB&&!k){
+   hi=RV_COUNT;value=ws_clamp(value,0,hi);
+   if(value){wm.reverb_type=(uint8_t)(value-1);wm.fx_on|=4u;}
+   else wm.fx_on&=(uint8_t)~4u;
+  }
+  else if(!k){uint8_t bit=(uint8_t)(1u<<(settings_page-1u));if(value)wm.fx_on|=bit;else wm.fx_on&=(uint8_t)~bit;}
   else if(k==1u)p=settings_page==1u?&wm.chorus_mix:settings_page==2u?&wm.delay_mix:&wm.reverb_mix;
+  else if(settings_page==1u)p=k==2u?&wm.chorus_rate:&wm.chorus_depth;
   else if(settings_page==2u){p=k==2u?&wm.delay_div:&wm.delay_feedback;if(k==2u)hi=3;}
   else p=k==2u?&wm.reverb_size:&wm.reverb_damp;
  }
  else if(settings_page==4u){
-  if(k==2u){uint8_t save=settings_index;settings_index=2;music_adjust(d);settings_index=save;}
+  if(k==2u)length_adjust_locked(d);
   else {p=k==0u?&wm.root:k==1u?&wm.scale:&wm.keyboard_scale;hi=k==0u?11:k==1u?7:1;}
  }
- else if(settings_page==5u){p=k==0u?&vol:k==1u?&cues_enabled:&project_slot;hi=k==0u?127:k==1u?1:7;}
+ else if(settings_page==SETTINGS_OUTPUT){p=k==0u?&vol:k==1u?&project_slot:&metronome_on;hi=k==0u?127:k==1u?NSLOT-1u:1u;}
  else if(settings_page==6u){p=k==0u?&wm.arp_on:k==1u?&wm.arp_mode:k==2u?&wm.arp_rate:&wm.arp_octaves;lo=k==3u?1:0;hi=k==0u?1:k==1u?WM_ARP_MODES-1:k==2u?WM_ARP_RATES-1:4;}
- else if(settings_page==7u){p=k==0u?&wm.arp_gate:k==1u?&wm.arp_swing:k==2u?&wm.arp_latch:&wm.arp_clock;lo=k==0u?5:0;hi=k==0u?100:k==1u?50:k==2u?1:2;}
+ else if(settings_page==7u){p=k==0u?&wm.arp_gate:k==1u?&wm.arp_swing:&wm.arp_latch;lo=k==0u?5:0;hi=k==0u?100:k==1u?50:1;}
  else{
   if(k==0u){p=&display_hold;hi=3;}
   else if(k==1u){hi=2;uint32_t mode=(uint32_t)ws_clamp(value,0,2);cues_enabled=mode!=0u;if(mode)cue_detail=mode==2u;}
@@ -71,22 +132,41 @@ static void settings_adjust(uint32_t k,int32_t d)
   else{p=&zoom_steady;hi=1;}
  }
  if(p)*p=(uint8_t)ws_clamp(value,lo,hi);
- if(settings_page==6u||settings_page==7u)arp_update_config();
+ if(settings_page==0u&&k==0u)wm.light=color_theme==THEME_LIGHT;
+ if(settings_page==6u||settings_page==7u||settings_page==SETTINGS_MIDI)arp_update_config();
+ if(settings_page==SETTINGS_MIDI&&k<2u&&old!=settings_get(k)){
+  uint32_t prior_count=arp_count;
+  for(uint32_t source=1;source<=2;source++)for(uint32_t ch=0;ch<16;ch++){
+   if(!midi_route_allows(source,ch+1u)){
+    uint32_t owner=2u+(source-1u)*16u+ch;
+    sustain_pedal[owner-2u]=0;arp_forget_owner(owner);
+    for(uint32_t v=0;v<NV;v++)if(voice[v].live==owner)voice[v].gate=0,voice[v].sustained=0;
+    for(uint32_t c=0;c<CAPTURE_COUNT;c++)if(capture[c].active&&capture[c].owner==owner)capture_finish(c);
+   }
+  }
+  if(arp_count!=prior_count){arp_release();arp_until=0;}
+ }
  uint32_t now=settings_get(k);
  if(!cues_enabled||!cue_level)cue_stop();
- else if(old!=now){
-  if(settings_bool(k))cue_toggle((uint8_t)(now!=0));
+ else if(old!=now&&!(settings_page==SETTINGS_LAYER&&k<2u)){
+  if(settings_bool(k)||(settings_page==SETTINGS_REVERB&&!k&&(!old||!now)))cue_toggle((uint8_t)(now!=0));
   else if(settings_page==SETTINGS_ACCESS_FEEL&&k==2u)cue(72u);
   else if(settings_page==SETTINGS_ACCESS_FEEL&&k==1u)cue_toggle(1);
   else cue_boundary(old,now,(uint32_t)lo,(uint32_t)hi);
  }
- settings_detail=settings_detail_kind=0;page_dirty=1;
+ page_dirty=1;
 }
 static void settings_press(void)
-{settings_adjust(settings_index,settings_bool(settings_index)&&settings_get(settings_index)?-1:1);}
+{
+ if(settings_page==SETTINGS_REVERB&&!settings_index){
+  int32_t selected=(int32_t)wm.reverb_type+1;
+  settings_adjust(0,(wm.fx_on&4u)?-selected:selected);
+ }else settings_adjust(settings_index,settings_bool(settings_index)&&settings_get(settings_index)?-1:1);
+}
 static void screen_parameters(uint16_t fg,uint16_t pa,uint16_t guide)
 {
- aa_text(10,7,&FONT_T,SETTINGS_TITLES[settings_page],fg);transport_symbol(209,6,fg);cv_rect(12,33,216,2,guide);
+ uint16_t accent=theme_palette()->anchor;
+ aa_text(10,7,&FONT_T,SETTINGS_TITLES[settings_page],fg);transport_symbol(209,6,fg);section_rule(accent,guide);
  uint32_t count=settings_count();
  if(wm.extra_large){
   uint32_t k=settings_index;char buf[12];const char *v=settings_value(k,buf);
@@ -94,26 +174,26 @@ static void screen_parameters(uint16_t fg,uint16_t pa,uint16_t guide)
    zoom_text(12,42,216,40,34,SETTINGS_LABELS[0][k],0,fg);
    zoom_text(12,88,216,88,104,v,1,fg);
   }else{
-   uint8_t digits=(settings_page==5u&&k==2u)||(settings_page==6u&&k==3u)?1u:
+   uint8_t digits=settings_page==9u&&k==3u?5u:(settings_page==SETTINGS_OUTPUT&&k==1u)||(settings_page==6u&&k==3u)?1u:
     (settings_page==4u&&k==2u)||(settings_page==7u&&k==1u)?2u:3u;
+   panel(8,39,224,164,pa);
    zoom_parameter_range(SETTINGS_LABELS[settings_page][k],v,"",digits,0,fg);
   }
   int32_t y=settings_page==0u?185:208;
-  for(uint32_t j=0;j<count;j++){int32_t x=18+(int32_t)j*55;card(x,y,40,30,pa,j==k?fg:guide,j==k);char b[12];aa_text(x+12,y+6,&FONT_T,number(j+1u,b),fg);}
-  if(settings_page==0u&&settings_index==1u)text_center(219,&FONT_T,"ZOOM HOME+EDIT",fg);
+  knob_tabs(count,k,y,fg,pa,guide);
+  if(settings_page==0u&&settings_index==1u)text_center(219,&FONT_T,"HOLD OCT UP",fg);
  }else{
   for(uint32_t k=0;k<count;k++){
-   /* Two full-size lines need clearance from the three-pixel selection frame. */
-   int32_t y=38+(int32_t)k*49;card(8,y,224,48,pa,k==settings_index?fg:guide,k==settings_index);
-   char buf[12],n[12];aa_text(16,y+15,&FONT_T,number(k+1u,n),guide);
-   aa_text(40,y+5,&FONT_T,SETTINGS_LABELS[settings_page][k],guide);
-   const char *v=settings_value(k,buf);aa_text(220-width(&FONT_T,v),y+25,&FONT_T,v,fg);
+   char buf[12];const char *value=settings_value(k,buf);
+   control_row(k,37+(int32_t)k*50,SETTINGS_LABELS[settings_page][k],value,"",value==buf,
+       k==settings_index,fg,pa,guide,accent);
   }
   if(settings_page==0u){
    static const char * const help[3]={"SCREEN COLORS","LARGER TEXT","LESS MOVEMENT"};
    text_center(191,&FONT_T,help[settings_index],guide);
-   if(settings_index==1u)text_center(215,&FONT_T,"ZOOM HOME+EDIT",fg);
+   if(settings_index==1u)text_center(215,&FONT_T,"HOLD OCT UP",fg);
   }
-  for(uint32_t i=0;i<SETTINGS_PAGES;i++)cv_rect(19+(int32_t)i*23,237,17,settings_page==i?3:1,settings_page==i?fg:guide);
+  uint32_t position=settings_position();
+  for(uint32_t i=0;i<SETTINGS_PAGES;i++)cv_rect(12+(int32_t)(i*216u/SETTINGS_PAGES),237,216u/SETTINGS_PAGES-4u,position==i?3:1,position==i?fg:guide);
  }
 }

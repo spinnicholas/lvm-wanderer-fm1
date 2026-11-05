@@ -8,7 +8,7 @@ uint8_t osc1,osc2,mix,ratio,detune,sustain,cutoff,contour,fm,resonance,sub,drive
 uint16_t attack,decay,release,contour_decay,fm_decay;
 uint32_t lfo_step;
 } wm_preset_t;
-static const wm_preset_t WM_PRESETS[WM_PRESET_COUNT]={
+static const wm_preset_t WM_PRESETS[WM_LEGACY_PRESET_COUNT]={
 {WAVE_SAW,WAVE_SAW,54,16,10,100,112,32,0,1,14,10,3,0,0,100,1049,21,10,15,21,38957u}, /* 1 Warm Wander */
 {WAVE_SINE,WAVE_SINE,54,32,10,42,190,32,28,1,0,10,3,0,0,100,11796,9,19,15,9,38957u}, /* 2 Glass Lantern */
 {WAVE_PULSE,WAVE_TRI,54,16,4,100,128,32,0,1,0,10,3,0,22,100,3932,21,19,15,21,38957u}, /* 3 Hollow Beacon */

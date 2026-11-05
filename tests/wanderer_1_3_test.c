@@ -14,12 +14,12 @@ static void fresh(void)
 int main(void)
 {
  fresh();
- for(uint32_t p=0;p<100;p++){
+ for(uint32_t p=0;p<WM_PRESET_COUNT;p++){
   fresh();ws_select(p);note_on(60,110,1);frames(FS/2);if(energy<=1000000)fprintf(stderr,"quiet patch %u %s energy %lld\n",p,WS_NAMES[p],(long long)energy);CHECK(energy>1000000);note_off(60,1);frames(FS*3);CHECK(!voice[0].gate);
  }
- puts("100 engines/patches audible; release paths bounded");
+ puts("150 engines/patches audible; release paths bounded");
  for(uint32_t engine=0;engine<5;engine++){
-  fresh();ws_select(engine*20+2);wm.melt=127;wm.fx_on=7;wm.chorus_mix=wm.delay_mix=wm.reverb_mix=127;
+  fresh();uint32_t preset=0;while(WS_PRESETS[preset].engine!=engine)preset++;ws_select(preset);wm.melt=127;wm.fx_on=7;wm.chorus_mix=wm.delay_mix=wm.reverb_mix=127;
   for(uint32_t v=0;v<4;v++)note_on(36+v*7,127,1);frames(FS);panic();frames(FS/2);for(uint32_t v=0;v<4;v++)CHECK(!voice[v].gate&&!voice[v].amp);
  }
  fresh();wm.drift=127;wm.decay=127;

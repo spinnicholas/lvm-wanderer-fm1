@@ -1,0 +1,4 @@
+up/down toggle motifs, minimum/midpoint/maximum, sample-counted gaps, rate limiting, no clamped repeats, action priority and mute pass
+identical audio across six callback sizes, independent cue level, bounded output and clean scope trace pass
+audible cues stay out of the printed Anchor, capture events and four synth voices
+30 seconds: dense cue retriggers with both layers, arp, Scatter and maximum effects remain bounded; Anchor and panic pass

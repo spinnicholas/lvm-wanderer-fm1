@@ -1,0 +1,19 @@
+{
+  "firmware": "FM-1_932",
+  "package_sha256": "e1a18e8f2d700399f6cac736e9587031d4a91cc7f286cc32172b45d0489ef378",
+  "emulated_ms": 7000,
+  "frames": 301312,
+  "rate": 44100,
+  "peak": 2504,
+  "rms": 304.96,
+  "captures": [
+    1800,
+    4100,
+    4400,
+    5300,
+    6400,
+    6800
+  ],
+  "physical_hardware": "pending",
+  "limitations": "Emulation and unknown MMIO are not physical timing/flash/DAC qualification."
+}

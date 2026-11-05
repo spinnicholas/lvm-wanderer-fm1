@@ -1,0 +1,43 @@
+1000 btn 12
+1100 btndown 6
+1900 shot
+2050 shot
+2150 btnup 6
+2200 shot
+2300 btndown 6
+3250 btnup 6
+3300 shot
+3400 btndown 0
+4450 btnup 0
+4500 shot
+4750 btn 1
+4900 btndown 0
+4950 btndown 1
+6550 btnup 1
+6600 btnup 0
+6700 btndown 1
+6750 btndown 0
+8350 btnup 0
+8400 btnup 1
+8500 btn 3
+8650 enc 6 4
+8750 enc 4 -1
+8850 shot
+8950 enc 3 -1
+9100 btn 8
+9150 shot
+9200 btndown 1
+10800 btnup 1
+10900 btndown 6
+11850 btnup 6
+11900 shot
+12000 btndown 6
+13000 btndown 8
+13050 btnup 8
+13100 btnup 6
+13200 shot
+13300 btndown 8
+13350 btndown 6
+13400 btnup 6
+13450 btnup 8
+13600 end

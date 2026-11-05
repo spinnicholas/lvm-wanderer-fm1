@@ -17,17 +17,32 @@ static int32_t wp_last_sample,wp_splice;
 static uint32_t wp_length,wp_pos,wp_phase,wp_write_phase,wp_generation;
 static int32_t wp_dry[256];
 #define WP_CACHES 8u
-static int16_t wp_cache[WP_CACHES][256];static uint32_t wp_cache_block[WP_CACHES];
+static int16_t wp_cache[WP_CACHES][256] __attribute__((section(".pool")));static uint32_t wp_cache_block[WP_CACHES];
 static uint8_t wp_cache_arena[WP_CACHES],wp_cache_valid[WP_CACHES],wp_cache_replace;
 static void wp_invalidate(void){memset(wp_cache_valid,0,sizeof wp_cache_valid);}
 /* A small dedicated history keeps Undo arenas untouched in Event view too. */
-static int16_t wp_ring[4096] __attribute__((section(".pool")));
+/* 512 ms is unchanged; 768 ms uses a fixed window at the RAM limit.
+ * 12,288 samples at 16 kHz = 24 KiB history; 4 KiB above tested RC4.
+ * The native RC4 RAM build had only ~9 KiB spare, so do not enlarge this
+ * without reproducing the target linker map. No audio-rate division. */
+#define WP_RING_SAMPLES 12288u
+#define WP_RC4_RING_SAMPLES 10240u
+static int16_t wp_ring[WP_RING_SAMPLES];
+static uint32_t wp_ring_wrap(uint32_t at)
+{return at>=WP_RING_SAMPLES?at-WP_RING_SAMPLES:at;}
 static uint32_t wp_ring_count;static int32_t wp_ring_tone;
-static uint32_t wp_ring_write,wp_ring_start,wp_repeat_size,wp_repeat_at;static uint8_t wp_repeat_on;
+static uint32_t wp_ring_write,wp_ring_start,wp_repeat_size;static uint8_t wp_repeat_on;
+static uint32_t wp_drift_offset;
 static uint32_t wp_scatter_origin,wp_scatter_elapsed,wp_scatter_duration,wp_scatter_delay;
 static int32_t wp_scatter_mix,wp_scatter_last,wp_scatter_splice;
 static uint8_t wp_scatter_fade,wp_scatter_rushed;
+static uint32_t wp_scatter_cache_elapsed=0xffffffffu,wp_scatter_cache_size,wp_scatter_cache_at,wp_scatter_cache_weight;
 static uint32_t wp_scatter_rate=4096u,wp_scatter_window;static int32_t wp_scatter_tone;
+static uint32_t wp_tape_wow,wp_tape_flutter;
+static int32_t wp_tape_mod_q12;
+/* Triangle wave in 20-bit phase: fast, bounded and table-free. */
+static int32_t wp_tape_tri(uint32_t p)
+{p&=0xfffffu;return (int32_t)(p<524288u?p:1048575u-p)-262144;}
 /* Two Butterworth sections before 16 kHz capture; no floating point in firmware. */
 static const int32_t WP_AA[2][5]={{1926,3851,1926,-11062,2381},{2569,5137,2569,-14756,8647}};
 static int32_t wp_aa_state[2][2][4],wp_melt_f1,wp_melt_f2;
@@ -61,7 +76,7 @@ static void wp_encode(wp_encoder_t *e,int32_t sample)
 }
 static int32_t wp_sample(uint8_t arena,uint32_t pos)
 {
- if(!wp_length)return 0;pos%=wp_length;uint32_t block=pos>>8;
+ if(!wp_length)return 0;if(pos>=wp_length)pos%=wp_length;uint32_t block=pos>>8;
  uint32_t slot;
  for(slot=0;slot<WP_CACHES;slot++)if(wp_cache_valid[slot]&&wp_cache_arena[slot]==arena&&wp_cache_block[slot]==block)break;
  if(slot==WP_CACHES){slot=wp_cache_replace;wp_cache_replace=(wp_cache_replace+1u)%WP_CACHES;
@@ -74,7 +89,7 @@ static int32_t wp_sample(uint8_t arena,uint32_t pos)
 }
 static void wp_cancel(void){wp_armed=wp_writing=0;wp_invalidate();}
 static void wp_reset(void)
-{wp_cancel();wp_active=wp_has_anchor=wp_undo_valid=wp_redo=0;wp_current=1;wp_spare=2;wp_length=wp_pos=wp_phase=wp_generation=0;wp_ring_count=wp_ring_write=0;wp_ring_tone=0;wp_scatter_mix=wp_scatter_last=wp_scatter_tone=0;scatter_clear();wp_repeat_on=wp_undo_anchor=wp_source_anchor=wp_dry_view=wp_splice_left=0;}
+{wp_cancel();wp_active=wp_has_anchor=wp_undo_valid=wp_redo=0;wp_current=1;wp_spare=2;wp_length=wp_pos=wp_phase=wp_generation=0;wp_ring_count=wp_ring_write=0;wp_ring_tone=wp_melt_f1=wp_melt_f2=0;wp_drift_offset=0;wp_scatter_mix=wp_scatter_last=wp_scatter_tone=wp_tape_mod_q12=0;wp_tape_wow=wp_tape_flutter=0;scatter_clear();wp_repeat_on=wp_undo_anchor=wp_source_anchor=wp_dry_view=wp_splice_left=0;}
 static uint8_t wp_undo(void)
 {
  if(wp_armed||wp_writing){wp_cancel();return 1;}
@@ -89,6 +104,8 @@ static void wp_restore(void)
  wp_splice=wp_last_sample;wp_splice_left=32;wp_pos=wp_phase=0;
  /* Anchor listening is read-only. A new Print from Anchor writes into spare. */
 }
+static uint8_t wp_timing_locked(void)
+{return wp_has_anchor||wp_armed||wp_writing;}
 static uint8_t wp_arm(void)
 {
  if(wp_writing||wp_armed){wp_cancel();return 1;}
@@ -117,21 +134,31 @@ static void wp_scatter_begin(void)
 {
  wp_repeat_on=(uint8_t)(scatter.kind!=SC_CLEAN);
  uint32_t step16=step_samples*160u/441u;
+ if(wp_active&&wp_length){
+  int32_t answer=wm_drift_answer(step_index,cycle_index);
+  uint32_t hop=step16<wp_length?step16:step16%wp_length;
+  uint32_t offset=answer>0?hop:answer<0?wp_length-hop:0u;
+  if(offset==wp_length)offset=0;
+  if(offset!=wp_drift_offset){wp_splice=wp_last_sample;wp_splice_left=32;wp_drift_offset=offset;}
+ }else wp_drift_offset=0;
  wp_repeat_size=step16/(scatter.divisions?scatter.divisions:1u);
  if(scatter.kind==SC_HOLD)wp_repeat_size=step16/2u;
  if(scatter.kind==SC_CLOUD&&wp_repeat_size<1024u)wp_repeat_size=1024u;
  /* Auto retains the tempo-derived windows. Manual sizes vary +/-25% per
   * gesture using the planner's existing seed: no allocation or audio RNG. */
  if(wm.grain_size){uint32_t base=(uint32_t)WM_GRAIN_MS[wm.grain_size]*16u;
-  wp_repeat_size=base*(6u+(scatter.offset%5u))/8u;}
- uint32_t cap=wm.grain_size?2560u:2048u;
+  wp_repeat_size=wm.grain_size==WM_GRAIN_COUNT-1u?base:base*(6u+(scatter.offset%5u))/8u;}
+ uint32_t cap=wm.grain_size?WP_RING_SAMPLES:2048u;
  if(wp_repeat_size<32u)wp_repeat_size=32u;if(wp_repeat_size>cap)wp_repeat_size=cap;
  if(!wp_active&&wp_ring_count<wp_repeat_size)wp_repeat_on=0;
- wp_ring_start=(wp_ring_write+4096u-wp_repeat_size)&4095u;
+ wp_ring_start=wp_ring_wrap(wp_ring_write+WP_RING_SAMPLES-wp_repeat_size);
  if(wp_repeat_on&&!wp_active&&(scatter.kind==SC_HOP||scatter.kind==SC_JUMP)){
-  uint32_t available=wp_ring_count-wp_repeat_size;
+  /* Keep the RC4 hop/jump lookback limits for existing sizes. */
+  uint32_t history_cap=wm.grain_size<=6u?4096u:wm.grain_size<WM_GRAIN_V11_COUNT?WP_RC4_RING_SAMPLES:WP_RING_SAMPLES;
+  uint32_t history=wp_ring_count<history_cap?wp_ring_count:history_cap;
+  uint32_t available=history-wp_repeat_size;
   uint32_t back=available?scatter.offset*137u%(available+1u):0u;
-  wp_ring_start=(wp_ring_start+4096u-back)&4095u;
+  wp_ring_start=wp_ring_wrap(wp_ring_start+WP_RING_SAMPLES-back);
  }
  wp_scatter_rate=4096u;
  if(scatter.kind==SC_TAPE)wp_scatter_rate=2048u;
@@ -141,10 +168,8 @@ static void wp_scatter_begin(void)
   uint8_t fifth=1;for(uint32_t pc=0;pc<12u;pc++)if((WM_SCALES[wm.scale]>>pc&1u)&&!(WM_SCALES[wm.scale]>>((pc+7u)%12u)&1u))fifth=0;
   wp_scatter_rate=(scatter.offset&1u)?2048u:(fifth&&wm.scatter_variation>90u?6137u:8192u);
  }
- /* Cloud may enlarge Auto after the original history check. */
- if(!wp_active&&wp_ring_count<wp_repeat_size)wp_repeat_on=0;
  wp_scatter_window=wp_repeat_size*4096u/wp_scatter_rate;if(wp_scatter_window<32u)wp_scatter_window=32u;
- wp_repeat_at=wp_scatter_elapsed=0;wp_scatter_duration=step16;wp_scatter_delay=(scatter.offset%4u)*step16/16u;wp_scatter_rushed=0;
+ wp_scatter_elapsed=0;wp_scatter_cache_elapsed=0xffffffffu;wp_scatter_duration=step16;wp_scatter_delay=(scatter.offset%4u)*step16/16u;wp_scatter_rushed=0;
  if(wp_active&&wp_length){
   uint32_t back=wp_repeat_size;
   if(scatter.kind==SC_HOP)back=(scatter.offset&1u)?step16:wp_length-step16%wp_length;
@@ -156,26 +181,44 @@ static void wp_scatter_begin(void)
 /* Fractional bounded reads never borrow an Undo arena or modify the source.
  * Every wrap is inside a fixed captured window. The second head is half a window
  * apart; complementary triangular weights remove repeated hard grain edges. */
-static int32_t wp_scatter_read(uint32_t phase,uint32_t size,uint8_t arena,uint8_t reverse)
+/* Caller computes interpolated source coordinate once for BOTH heads. */
+static int32_t wp_scatter_read_at(uint32_t at,uint32_t frac,uint8_t arena,uint8_t reverse)
 {
- uint32_t q=phase*wp_scatter_rate+((wp_phase*4096u/FS)*wp_scatter_rate>>12);
- uint32_t at=q>>12,frac=q&4095u;
  if(at>=wp_repeat_size)at=wp_repeat_size-1u;
  uint32_t a=reverse?wp_repeat_size-1u-at:at;
  uint32_t b=reverse?(a?a-1u:a):(a+1u==wp_repeat_size?a:a+1u);
  int32_t x,y;
- if(wp_active){x=wp_sample(arena,(wp_scatter_origin+a)%wp_length);y=wp_sample(arena,(wp_scatter_origin+b)%wp_length);}
- else{x=wp_ring[(wp_ring_start+a)&4095u];y=wp_ring[(wp_ring_start+b)&4095u];}
+ if(wp_active){x=wp_sample(arena,wp_scatter_origin+a);y=wp_sample(arena,wp_scatter_origin+b);}
+ else{x=wp_ring[wp_ring_wrap(wp_ring_start+a)];y=wp_ring[wp_ring_wrap(wp_ring_start+b)];}
  return x+(((y-x)*(int32_t)frac)>>12);
+}
+/* Test/utility entry point keeps the original signature but shares the renderer. */
+static int32_t wp_scatter_read(uint32_t phase,uint32_t size,uint8_t arena,uint8_t reverse)
+{
+ (void)size;
+ int32_t q=(int32_t)(phase*wp_scatter_rate+(wp_phase*wp_scatter_rate)/FS);
+ if(scatter.kind==SC_TAPE)q+=wp_tape_mod_q12;
+ if(q<0)q=0;
+ return wp_scatter_read_at((uint32_t)q>>12,(uint32_t)q&4095u,arena,reverse);
 }
 static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
 {
  uint8_t enabled=(uint8_t)(running&&wp_repeat_on&&wp_scatter_elapsed>=wp_scatter_delay&&wm.decay&&!wm.legacy&&!anchor_view&&!wp_dry_view);
+ if(!enabled&&!wp_scatter_mix)return clean;
  int32_t affected=wp_scatter_last;
  if(enabled){
   uint32_t elapsed=wp_scatter_elapsed-wp_scatter_delay,size=wp_scatter_window;
   if(scatter.kind==SC_RUSH&&elapsed>wp_scatter_duration/2u){if(!wp_scatter_rushed){wp_scatter_splice=wp_scatter_last;wp_scatter_fade=32;wp_scatter_rushed=1;}size/=2u;if(size<32u)size=32u;}
-  uint32_t at=elapsed%size;
+  /* Elapsed only advances at 16 kHz, not at the 44.1 kHz callback rate.
+   * Cache modulo and taper weight across the two/three repeated host samples. */
+  if(wp_scatter_cache_elapsed!=elapsed||wp_scatter_cache_size!=size){
+   wp_scatter_cache_at=elapsed%size;
+   uint32_t edge=wp_scatter_cache_at<size-wp_scatter_cache_at?wp_scatter_cache_at:size-wp_scatter_cache_at;
+   uint32_t weight=edge*65536u/size;
+   wp_scatter_cache_weight=weight>32768u?32768u:weight;
+   wp_scatter_cache_elapsed=elapsed;wp_scatter_cache_size=size;
+  }
+  uint32_t at=wp_scatter_cache_at;
   if(scatter.kind==SC_DROP){
    uint32_t gap=wm.grain_size?size:wp_scatter_duration/4u;
    if(gap>wp_scatter_duration*3u/4u)gap=wp_scatter_duration*3u/4u;
@@ -184,13 +227,21 @@ static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
    affected=wp_scatter_last+ws_clamp(affected-wp_scatter_last,-1024,1024);
   }else{
    uint8_t reverse=(uint8_t)(scatter.kind==SC_REVERSE||(scatter.kind==SC_CLOUD&&(scatter.offset&1u)));
-   int32_t one=wp_scatter_read(at,size,arena,reverse);
+   int32_t q=(int32_t)(at*wp_scatter_rate+(wp_phase*wp_scatter_rate)/FS);
+   if(scatter.kind==SC_TAPE)q+=wp_tape_mod_q12;
+   if(q<0)q=0;
+   uint32_t aq=(uint32_t)q;
+   int32_t one=wp_scatter_read_at(aq>>12,aq&4095u,arena,reverse);
    uint32_t edge=at<size-at?at:size-at;
    int32_t hard=edge<16u?(one*(int32_t)edge)>>4:one;
    if(wm.scatter_edge||scatter.kind==SC_CLOUD){
-    uint32_t other=(at+size/2u)%size;
-    int32_t two=wp_scatter_read(other,size,arena,reverse);
-    int32_t weight=(int32_t)(edge*65536u/size);if(weight>32768)weight=32768;
+    uint32_t other=at+size/2u;
+    if(other>=size)other-=size;
+    /* Difference is signed: do not wrap into a huge source index. */
+    int32_t oqs=q+((int32_t)other-(int32_t)at)*(int32_t)wp_scatter_rate;
+    if(oqs<0)oqs=0;uint32_t oq=(uint32_t)oqs;
+    int32_t two=wp_scatter_read_at(oq>>12,oq&4095u,arena,reverse);
+    int32_t weight=(int32_t)wp_scatter_cache_weight;
     int32_t smooth=(one*weight+two*(32768-weight))>>15;
     int32_t blend=scatter.kind==SC_CLOUD?127:wm.scatter_edge;
     affected=hard+((smooth-hard)*blend)/127;
@@ -211,24 +262,23 @@ static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
 static void wp_input(int32_t *out,uint32_t n)
 {
  int16_t *ring=wp_ring;
+ uint8_t capture_dry=wp_writing&&!wp_has_anchor;
  for(uint32_t i=0;i<n;i++){
-  int32_t dry=out[i*2];wp_dry[i]=dry;wp_ring_tone+=(dry-wp_ring_tone)>>1;
+  int32_t dry=out[i*2];if(capture_dry)wp_dry[i]=dry;wp_ring_tone+=(dry-wp_ring_tone)>>1;
   if(running&&wp_active){
    uint32_t pos=wp_pos;
-   if(wm.drift&&!anchor_view&&(cycle_index%8u)&&((step_index+wm.loop_steps-1u)%4u)){
-     uint32_t slice=step_samples*160u/441u;
-     if(((step_index*5u+cycle_index*3u)%16u)<(wm.drift+7u)/8u)pos=(pos+slice*(cycle_index&1u?1u:wm.loop_steps-1u))%wp_length;
+   if(!anchor_view&&!wp_dry_view){
+    pos+=wp_drift_offset;if(pos>=wp_length)pos-=wp_length;
    }
    uint8_t arena=anchor_view||wp_dry_view?0:wp_current;int32_t a=wp_sample(arena,pos),b=wp_sample(arena,pos+1);
    uint32_t frac=(wp_phase*32768u)/FS;
    int32_t sample=a+(((b-a)*(int32_t)frac)>>15);
    sample=wp_scatter_audio(sample,arena);
    uint32_t edge=wp_pos<wp_length-wp_pos?wp_pos:wp_length-wp_pos;
-   if(wm.drift&&!anchor_view){uint32_t slice=step_samples*160u/441u;uint32_t part=wp_pos%slice;uint32_t se=part<slice-part?part:slice-part;if(edge>se)edge=se;}
    if(edge<32u)sample=(sample*(int32_t)edge)>>5;
    if(wp_splice_left){sample=(sample*(32-wp_splice_left)+wp_splice*wp_splice_left)>>5;wp_splice_left--;}
    wp_last_sample=sample;
-   if(wm.melt&&!anchor_view){
+   if(wm.melt&&!anchor_view&&!wp_dry_view){
     uint32_t cutoff=220u-wm.melt/2u;int32_t cf=FILTER_G[cutoff],h=FILTER_H[0][cutoff];
     int32_t v1=((wp_melt_f1+((cf*(sample-wp_melt_f2))>>14))*h)>>14;
     int32_t v2=wp_melt_f2+((cf*v1)>>14);wp_melt_f1=ws_clamp(2*v1-wp_melt_f1,-65535,65535);wp_melt_f2=ws_clamp(2*v2-wp_melt_f2,-65535,65535);
@@ -240,8 +290,13 @@ static void wp_input(int32_t *out,uint32_t n)
   out[i*2]=dry;
   if(running){wp_phase+=16000;if(wp_phase>=FS){wp_phase-=FS;
     if(wp_active){if(++wp_pos>=wp_length)wp_pos=0;}
-    else if(!wp_repeat_on){ring[wp_ring_write]=(int16_t)ws_clamp(wp_ring_tone,-32767,32767);wp_ring_write=(wp_ring_write+1)&4095u;if(wp_ring_count<4096)wp_ring_count++;}
-    if(wp_repeat_on){wp_repeat_at=(wp_repeat_at+1)%wp_repeat_size;wp_scatter_elapsed++;}
+    else if(!wp_repeat_on){ring[wp_ring_write]=(int16_t)ws_clamp(wp_ring_tone,-32767,32767);if(++wp_ring_write==WP_RING_SAMPLES)wp_ring_write=0;if(wp_ring_count<WP_RING_SAMPLES)wp_ring_count++;}
+    if(wp_repeat_on){wp_scatter_elapsed++;}
+    /* Keep tape transport phase moving while stopped from scatter, so a new
+     * Tape event does not always restart at the same artificial wobble. */
+    wp_tape_wow+=23u;wp_tape_flutter+=426u;
+    if(wp_repeat_on&&scatter.kind==SC_TAPE)
+     wp_tape_mod_q12=((wp_tape_tri(wp_tape_wow)*6144)>>18)+((wp_tape_tri(wp_tape_flutter)*1024)>>18);
   }}
  }
 }

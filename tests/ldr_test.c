@@ -129,9 +129,15 @@ static uint8_t *load_logical(const char *path, size_t *len)
     uint8_t *raw = malloc(0x200000), *lg;
     size_t n, i;
     if (!f) { perror(path); exit(2); }
+    if (!raw) { fclose(f); exit(2); }
     n = fread(raw, 1, 0x200000, f);
+    if (ferror(f) || fgetc(f) != EOF || n < 0x414u) {
+        fprintf(stderr, "%s: invalid package length\n", path);
+        free(raw); fclose(f); exit(2);
+    }
     fclose(f);
     lg = malloc(n);
+    if (!lg) { free(raw); exit(2); }
     for (i = 0; i < 20; i++) memcpy(lg + i * 47, raw + i * 48, 47);
     memcpy(lg + 20 * 47, raw + 20 * 48, n - 20 * 48);
     *len = n - 20;
@@ -146,6 +152,7 @@ static uint32_t flash_off(const uint8_t *lg)        /* flash.bin offset in the l
     memcpy(h, lg, sizeof h);
     ota_jl_enc(h, 0x40);
     n = ota_rd16(h + 8);
+    if (!n || n > (sizeof h - 0x40u) / 0x50u) return 0;
     for (i = 0; i < n; i++) {
         uint8_t *e = h + 0x40 + i * 0x50u;
         ota_jl_enc(e, 0x50);
@@ -205,6 +212,11 @@ int main(int argc, char **argv)
     logical = load_logical(argv[2], &logical_len);
     ofo = flash_off(old);
     nfo = flash_off(logical);
+    if (!ofo || ofo > olen || olen - ofo < T_APP_HI ||
+        !nfo || nfo > logical_len || logical_len - nfo < T_APP_HI) {
+        fprintf(stderr, "missing or truncated flash image\n");
+        free(old); free(logical); return 2;
+    }
     /* device: OLD installed, plus a valid update record at 0xE4F00 */
     memset(nor, 0xFF, sizeof nor);
     memcpy(nor, old + ofo, T_APP_HI);

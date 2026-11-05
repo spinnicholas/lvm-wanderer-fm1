@@ -29,8 +29,13 @@ static void host_verify_app(void)
         else if(!strcmp(field,"anchor"))got=wm.has_anchor;
         else if(!strcmp(field,"anchorview"))got=anchor_view;
         else if(!strcmp(field,"layer"))got=wm.layer_enabled;
+        else if(!strcmp(field,"layerfocus"))got=layer_focus;
+        else if(!strcmp(field,"layersound"))got=wm.layer_sound;
+        else if(!strcmp(field,"layerown"))got=ws_layer_own();
         else if(!strcmp(field,"slot"))got=project_slot;
         else if(!strcmp(field,"sound"))got=wm.sound;
+        else if(!strcmp(field,"zoom"))got=wm.extra_large;
+        else if(!strcmp(field,"octave"))got=octave;
         else if(!strcmp(field,"volume"))got=vol;
         else if(!strcmp(field,"cues"))got=cues_enabled;
         else if(!strcmp(field,"focus"))got=focus;

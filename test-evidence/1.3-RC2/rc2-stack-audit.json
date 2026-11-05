@@ -1,0 +1,22 @@
+{
+  "frames_bytes": {
+    "app_main": 288,
+    "project_read_slot": 20,
+    "wm_valid_v5": 8,
+    "wm_valid_v4": 8,
+    "wm_valid_v3": 8,
+    "wm_valid_legacy": 8,
+    "wm_migrate_v5_ptr": 8,
+    "wm_migrate_v4_ptr": 2068,
+    "wm_migrate_v3_ptr": 2068,
+    "wm_migrate_legacy_ptr": 2068,
+    "wm_migrate_phrase": 532,
+    "wm_migrate_phrase_v4": 528
+  },
+  "conservative_boot_migration_chain_bytes": 2916,
+  "scanner_frame_limit": 64,
+  "boot_chain_limit": 4096,
+  "rc1_fault_pc": "0x020062AC",
+  "rc1_return_pc": "0x02008BC0",
+  "rc1_scanner_local_allocation": 26488
+}

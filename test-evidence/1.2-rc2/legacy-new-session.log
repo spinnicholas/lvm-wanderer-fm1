@@ -1,0 +1,24 @@
+font X: ttf h 70, 11534 B
+font B: ttf h 60, 9391 B
+font H: ttf h 41, 7199 B
+font W: ttf h 32, 5380 B
+font N: ttf h 21, 3506 B
+46 source-backed symbols, 306688 packed bytes
+7680 bytes of band-limited oscillator tables
+100 patch coefficients and stable resonant filter tables compiled
+Generated antialiased masks: 16693 C source characters
+   500 ms  screen -> build/host/dinghy-500.ppm
+  1000 ms  screen -> build/host/dinghy-1000.ppm
+  2300 ms  screen -> build/host/dinghy-2300.ppm
+  2500 ms  screen -> build/host/dinghy-2500.ppm
+  3000 ms  screen -> build/host/dinghy-3000.ppm
+  4300 ms  screen -> build/host/dinghy-4300.ppm
+  4500 ms  screen -> build/host/dinghy-4500.ppm
+sound  -> build/host/dinghy.wav (202752 frames)
+screen -> build/host/dinghy-1000.png
+screen -> build/host/dinghy-2300.png
+screen -> build/host/dinghy-2500.png
+screen -> build/host/dinghy-3000.png
+screen -> build/host/dinghy-4300.png
+screen -> build/host/dinghy-4500.png
+screen -> build/host/dinghy-500.png

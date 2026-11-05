@@ -1,0 +1,18 @@
+handshake answered                                   ok
+identity frame is FM-1_920                           ok
+recovery identity is distinct from a successful normal boot ok
+  76 requests
+session commits                                      ok
+headers + loader + confirm (stock also verifies device head) ok
+staged body == the package's loader                  ok
+LOADER.BIN head CRC                                  ok
+record at the area end - 256 == RAM record           ok
+parm identity ota-FM-1_015, zero to +0x27            ok
+record CRC / type / magic / ota_addr                 ok
+nothing written outside the staging area             ok
+boot cleanup erases the area                         ok
+second boot: nothing to do                           ok
+different device flash head rejects stock before erase ok
+host gone -> no commit, area clean                   ok
+no 'success' -> -13, no commit, area clean           ok
+ota test passed

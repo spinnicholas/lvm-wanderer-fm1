@@ -1,0 +1,34 @@
+  1000 ms  screen -> build/host/final-navigation-1000.ppm
+  1250 ms  assertion editor = 1 passed
+  1250 ms  assertion layer = 0 passed
+  1300 ms  screen -> build/host/final-navigation-1300.ppm
+  1600 ms  screen -> build/host/final-navigation-1600.ppm
+  1750 ms  assertion editor = 0 passed
+  1850 ms  assertion settings = 1 passed
+  1850 ms  assertion page = 4 passed
+  2000 ms  screen -> build/host/final-navigation-2000.ppm
+  2050 ms  assertion root = 2 passed
+  3000 ms  screen -> build/host/final-navigation-3000.ppm
+  3250 ms  assertion page = 0 passed
+  3300 ms  screen -> build/host/final-navigation-3300.ppm
+  4550 ms  assertion layer = 1 passed
+  4600 ms  screen -> build/host/final-navigation-4600.ppm
+  4750 ms  assertion recording = 1 passed
+  5550 ms  assertion recording = 0 passed
+  6650 ms  assertion editor = 1 passed
+  6650 ms  assertion editpage = 13 passed
+  6700 ms  screen -> build/host/final-navigation-6700.ppm
+  6850 ms  assertion printing = 1 passed
+  8000 ms  screen -> build/host/final-navigation-8000.ppm
+ 10000 ms  screen -> build/host/final-navigation-10000.ppm
+ 11200 ms  screen -> build/host/final-navigation-11200.ppm
+ 11300 ms  assertion printed = 1 passed
+ 11300 ms  assertion generation = 1 passed
+ 13500 ms  screen -> build/host/final-navigation-13500.ppm
+ 16000 ms  screen -> build/host/final-navigation-16000.ppm
+ 17000 ms  assertion generation = 2 passed
+ 17700 ms  screen -> build/host/final-navigation-17700.ppm
+ 18250 ms  assertion running = 0 passed
+ 18250 ms  assertion gates = 0 passed
+ 18300 ms  screen -> build/host/final-navigation-18300.ppm
+sound  -> build/host/final-navigation.wav (815616 frames)

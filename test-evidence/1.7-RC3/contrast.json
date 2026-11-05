@@ -1,0 +1,32 @@
+[
+  {
+    "name": "CONTRAST",
+    "minimum_text_contrast": 16.82,
+    "minimum_accent_contrast": 15.91
+  },
+  {
+    "name": "DARK",
+    "minimum_text_contrast": 12.39,
+    "minimum_accent_contrast": 7.99
+  },
+  {
+    "name": "LIGHT",
+    "minimum_text_contrast": 9.31,
+    "minimum_accent_contrast": 6.32
+  },
+  {
+    "name": "AMBER",
+    "minimum_text_contrast": 14.85,
+    "minimum_accent_contrast": 11.82
+  },
+  {
+    "name": "OCEAN",
+    "minimum_text_contrast": 15.0,
+    "minimum_accent_contrast": 12.69
+  },
+  {
+    "name": "VIOLET",
+    "minimum_text_contrast": 14.35,
+    "minimum_accent_contrast": 12.11
+  }
+]

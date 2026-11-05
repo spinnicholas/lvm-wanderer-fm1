@@ -1,0 +1,376 @@
+{
+  "results": [
+    {
+      "test": "wanderer_memory_test-compile",
+      "status": "passed",
+      "seconds": 0.39,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_memory_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_release_test-compile",
+      "status": "passed",
+      "seconds": 5.82,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_release_test",
+      "status": "passed",
+      "seconds": 2.4,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_scope_test-compile",
+      "status": "passed",
+      "seconds": 5.9,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_scope_test",
+      "status": "passed",
+      "seconds": 0.02,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_ui_test-compile",
+      "status": "passed",
+      "seconds": 5.52,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_ui_test",
+      "status": "passed",
+      "seconds": 0.17,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_splash_test-compile",
+      "status": "passed",
+      "seconds": 5.47,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_splash_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_1_test-compile",
+      "status": "passed",
+      "seconds": 6.48,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_1_test",
+      "status": "passed",
+      "seconds": 0.75,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_1_stress-compile",
+      "status": "passed",
+      "seconds": 5.9,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_1_stress",
+      "status": "passed",
+      "seconds": 7.34,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_2_test-compile",
+      "status": "passed",
+      "seconds": 5.74,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_2_test",
+      "status": "passed",
+      "seconds": 1.67,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_2_rc2_test-compile",
+      "status": "passed",
+      "seconds": 5.66,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_2_rc2_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_stop_led_test-compile",
+      "status": "passed",
+      "seconds": 5.33,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_stop_led_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "ui_rows_test-compile",
+      "status": "passed",
+      "seconds": 5.66,
+      "exit_code": 0
+    },
+    {
+      "test": "ui_rows_test",
+      "status": "passed",
+      "seconds": 0.95,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_3_test-compile",
+      "status": "passed",
+      "seconds": 5.59,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_3_test",
+      "status": "passed",
+      "seconds": 5.03,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_editor_test-compile",
+      "status": "passed",
+      "seconds": 5.49,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_editor_test",
+      "status": "passed",
+      "seconds": 1.5,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_timing_1_3-compile",
+      "status": "passed",
+      "seconds": 5.69,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_timing_1_3",
+      "status": "passed",
+      "seconds": 3.97,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_operations_1_3-compile",
+      "status": "passed",
+      "seconds": 5.66,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_operations_1_3",
+      "status": "passed",
+      "seconds": 0.25,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_range_1_3-compile",
+      "status": "passed",
+      "seconds": 5.87,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_range_1_3",
+      "status": "passed",
+      "seconds": 1.94,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_scatter_test-compile",
+      "status": "passed",
+      "seconds": 5.91,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_scatter_test",
+      "status": "passed",
+      "seconds": 1.85,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_4_test-compile",
+      "status": "passed",
+      "seconds": 6.04,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_1_4_test",
+      "status": "passed",
+      "seconds": 7.51,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_zoom_fit_test-compile",
+      "status": "passed",
+      "seconds": 5.68,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_zoom_fit_test",
+      "status": "passed",
+      "seconds": 0.27,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_zoom_shortcut_test-compile",
+      "status": "passed",
+      "seconds": 5.49,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_zoom_shortcut_test",
+      "status": "passed",
+      "seconds": 0.0,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_bank_1_5_test-compile",
+      "status": "passed",
+      "seconds": 5.23,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_bank_1_5_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_accessibility_test-compile",
+      "status": "passed",
+      "seconds": 5.76,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_accessibility_test",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_cue_test-compile",
+      "status": "passed",
+      "seconds": 5.97,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_cue_test",
+      "status": "passed",
+      "seconds": 0.99,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_steady_zoom_test-compile",
+      "status": "passed",
+      "seconds": 5.62,
+      "exit_code": 0
+    },
+    {
+      "test": "wanderer_steady_zoom_test",
+      "status": "passed",
+      "seconds": 14.46,
+      "exit_code": 0
+    },
+    {
+      "test": "ota_test-compile",
+      "status": "passed",
+      "seconds": 0.39,
+      "exit_code": 0
+    },
+    {
+      "test": "ldr_test-compile",
+      "status": "passed",
+      "seconds": 0.38,
+      "exit_code": 0
+    },
+    {
+      "test": "ota",
+      "status": "passed",
+      "seconds": 0.01,
+      "exit_code": 0
+    },
+    {
+      "test": "loader-up",
+      "status": "passed",
+      "seconds": 0.16,
+      "exit_code": 0
+    },
+    {
+      "test": "loader-down",
+      "status": "passed",
+      "seconds": 0.22,
+      "exit_code": 0
+    },
+    {
+      "test": "host-compile",
+      "status": "passed",
+      "seconds": 5.15,
+      "exit_code": 0
+    },
+    {
+      "test": "new-navigation",
+      "status": "passed",
+      "seconds": 2.57,
+      "exit_code": 0
+    },
+    {
+      "test": "editor-save-navigation",
+      "status": "passed",
+      "seconds": 0.21,
+      "exit_code": 0
+    },
+    {
+      "test": "access-feel-navigation",
+      "status": "passed",
+      "seconds": 0.61,
+      "exit_code": 0
+    },
+    {
+      "test": "icon_rle_test",
+      "status": "passed",
+      "seconds": 0.53,
+      "exit_code": 0
+    },
+    {
+      "test": "install_test",
+      "status": "passed",
+      "seconds": 4.63,
+      "exit_code": 0
+    },
+    {
+      "test": "stock_install_test",
+      "status": "passed",
+      "seconds": 2.38,
+      "exit_code": 0
+    },
+    {
+      "test": "ui_assets_audit",
+      "status": "passed",
+      "seconds": 0.51,
+      "exit_code": 0
+    },
+    {
+      "test": "splash_input_audit",
+      "status": "passed",
+      "seconds": 0.33,
+      "exit_code": 0
+    }
+  ]
+}

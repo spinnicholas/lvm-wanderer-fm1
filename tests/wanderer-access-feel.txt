@@ -1,6 +1,6 @@
 100 btndown 3
 1100 btnup 3
-1200 enc 6 -1
+1200 enc 6 1
 1300 enc 2 3
 1400 btn 8
 1500 enc 6 1
@@ -9,7 +9,7 @@
 5100 btn 8
 5200 btndown 3
 6200 btnup 3
-6300 enc 6 -1
+6300 enc 6 1
 6400 enc 2 -3
 6500 btn 8
 6600 enc 6 1

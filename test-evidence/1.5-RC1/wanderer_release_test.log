@@ -1,0 +1,24 @@
+MIDI notes, sources, channels, sustain, velocity-zero, retrigger, preset and CC pass
+nearest-step recording, Anchor restore and undo pass
+layer switch gates sequenced playback as well as selecting the recording lane
+     0 ms  slot 0 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 1 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 2 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 3 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 4 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 5 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 6 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 7 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  settings 0 saved (16 B)
+eight independent slots, stopped-only saves, invalid-load rejection and preferences pass
+complete LED scenes, stale-mask cleanup, 10000 view transitions and note releases pass
+12800 preset/note pairs, full-wet bounds, complete master mute and panic silence pass
+WANDERER CORE RELEASE TESTS PASSED

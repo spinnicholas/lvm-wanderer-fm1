@@ -12,8 +12,8 @@ int main(void)
     assert(sizeof(wm_state_v5_t)==2076u);
     assert(sizeof(wm_state_t)>2076u&&sizeof(wm_state_t)<4096u);
     assert(sizeof(wm_disk_v5_t)==2084u);
-    assert(wm_preset_move(0,-1,0)==99 && wm_preset_move(99,1,0)==0);
-    assert(wm_preset_move(0,-1,1)==90 && wm_preset_move(99,1,1)==9);
+    assert(wm_preset_move(0,-1,0)==149 && wm_preset_move(149,1,0)==0);
+    assert(wm_preset_move(0,-1,1)==140 && wm_preset_move(149,1,1)==9);
     assert(wm_preset_move(37,2,1)==57 && wm_preset_move(37,2,0)==39);
     assert(!wm_catch());
     assert(!wm_branch_now(0));
@@ -31,7 +31,7 @@ int main(void)
     assert(after.note!=before.note);
     assert(wm_evolve(wm.memory.e[0],0,15).velocity<before.velocity);
     assert(wm.anchor.e[0].note==before.note && wm.anchor.e[0].velocity==before.velocity);
-    wm.layer_enabled=1;
+    wm.layer_enabled=layer_focus=1;
     assert(wm_record(5,67,111));
     assert(wm.layer.e[5].note==67 && !wm.memory.e[5].velocity);
     assert(wm_branch_now(1));
@@ -47,7 +47,8 @@ int main(void)
     d.state.anchor.e[0].note=255;assert(!wm_valid(&d));
     d.state.anchor.e[0].note=60;d.version=WM_DISK_VERSION;d.state.sound=2;assert(wm_valid(&d));
     d.state.sound=99;assert(wm_valid(&d));
-    d.state.sound=100;assert(!wm_valid(&d));d.state.sound=0;
+    d.state.sound=149;d.state.legacy=0;assert(wm_valid(&d));
+    d.state.sound=150;assert(!wm_valid(&d));d.state.sound=0;
     d.version=2;assert(!wm_valid(&d));
     d.version=WM_DISK_VERSION;d.size=0;assert(!wm_valid(&d));
     d=(wm_disk_t){WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};

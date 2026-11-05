@@ -17,6 +17,20 @@ complete source under the same licence too.
 
 ## Third-party material
 
+Wanderer 1.7 includes an adapted Apache-2.0 MSFA/Dexed six-operator core from
+Skiff/Felucca (Google Inc., Pascal Gauthier, Leo Kuroshita / Hügelton Instruments).
+Its complete licence is `assets/dsp/Apache-2.0-msfa.txt`. The FM6 table generator
+and band-limited hard-sync adaptation retain Felucca/Skiff's GPL-3.0-only
+notices. Pinned revisions and changes are recorded in `assets/dsp/SOURCES.md`.
+
+Wanderer 1.6 adapts Felucca-Engines' interpolated sine, PolyBLEP oscillators,
+soft saturation and eight phase-distortion waveforms (MIT, Leo Kuroshita /
+Hügelton Instruments), and OberVave's trapezoidal feedback ladder
+(GPL-3.0-only, zvenson). Exact pinned source revisions and adaptation locations
+are in `assets/dsp/SOURCES.md`; the full MIT notice is in
+`assets/dsp/Felucca-Engines-LICENSE.txt`. These additions are distributed with
+the complete GPL-3.0-only Wanderer source.
+
 | What | Licence | Where |
 | --- | --- | --- |
 | Terminus font 8x16 (ter-u16n), rendered into `firmware/gen/felucca_font.h` | SIL OFL 1.1 | `assets/fonts/Terminus-LICENSE.txt` |

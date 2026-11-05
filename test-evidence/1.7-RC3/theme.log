@@ -1,0 +1,15 @@
+   100 ms  settings 0 saved (16 B)
+PALETTE 0 CONTRAST 0 32 2113 65535 61277 47101 59167 65365
+   100 ms  settings 0 saved (16 B)
+PALETTE 1 DARK 2179 4357 4326 63454 53020 28507 42367 65102
+   100 ms  settings 0 saved (16 B)
+PALETTE 2 LIGHT 61374 65535 63423 2276 12841 2763 12817 35393
+   100 ms  settings 0 saved (16 B)
+PALETTE 3 AMBER 2080 4192 6272 65468 63255 65165 65431 65012
+   100 ms  settings 0 saved (16 B)
+PALETTE 4 OCEAN 66 131 164 63455 53087 36797 48831 65300
+   100 ms  settings 0 saved (16 B)
+PALETTE 5 VIOLET 2082 4163 4196 65471 59102 56863 42879 65237
+   100 ms  settings 0 saved (16 B)
+   100 ms  settings 0 saved (16 B)
+Theme defaults, all settings/Zoom/editor/home/messages/scope renders, preference round trips, v1 migration and invalid records pass

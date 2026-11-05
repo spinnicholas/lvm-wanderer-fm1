@@ -46,11 +46,13 @@ static void app_leds(void)
         glow|=((uint64_t)1u<<BTN_HOME)|((uint64_t)1u<<BTN_FX);
     }else{
         if(recording)bright|=(uint64_t)1u<<(BTN_REC);
-        if(wm.has_anchor||wp_has_anchor)bright|=(uint64_t)1u<<(BTN_SAVE);
-        if(!wm.has_anchor&&wm_has_notes(&wm.memory))glow|=(uint64_t)1u<<(BTN_SAVE);
-        if(wm.layer_enabled)bright|=(uint64_t)1u<<(BTN_EDIT);
+        uint8_t anchored=(uint8_t)(wm.has_anchor||wp_has_anchor);
+        uint8_t memory_ready=(uint8_t)(!anchored&&wm_memory_playable());
+        if(anchored)bright|=(uint64_t)1u<<BTN_SAVE;
+        if(memory_ready)glow|=(uint64_t)1u<<BTN_SAVE;
+        if(layer_focus)bright|=(uint64_t)1u<<(BTN_EDIT);
         if(anchor_view)bright|=(uint64_t)1u<<(BTN_LFO);
-        if((wm.has_anchor||wp_has_anchor)&&!anchor_view)glow|=(uint64_t)1u<<(BTN_LFO);
+        if(!anchor_view&&(anchored||(!recording&&memory_ready)))glow|=(uint64_t)1u<<BTN_LFO;
         if(wm.has_anchor||wp_has_anchor)glow|=(uint64_t)1u<<(BTN_GLO);
         if(wm_can_undo)glow|=(uint64_t)1u<<(BTN_ENV);
     }

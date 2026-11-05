@@ -5,7 +5,7 @@
 #undef main
 #include <assert.h>
 static void frames(uint32_t count){while(count){uint32_t n=count>256?256:count;int32_t o[512]={0};app_audio(o,n);for(uint32_t i=0;i<n*2;i++)assert(abs(o[i])<=32767);count-=n;}}
-static void fresh(void){running=recording=0;reset_performance();wp_reset();wm=(wm_state_t)WM_DEFAULTS;memset(voice,0,sizeof voice);memset(ws_voice,0,sizeof ws_voice);memset(arp_configured,0,sizeof arp_configured);arp_clock_seen=arp_clock_ticks=0;arp_clock_quarter=0;ages=audio_frames=0;step_index=step_clock=cycle_index=step_primed=0;step_samples=FS*15/wm.bpm;ws_select(0);wm.fx_on=0;cues_enabled=0;confirm=settings_open=editor_open=anchor_view=0;}
+static void fresh(void){running=recording=0;reset_performance();wp_reset();wm=(wm_state_t)WM_DEFAULTS;memset(voice,0,sizeof voice);memset(ws_voice,0,sizeof ws_voice);memset(arp_configured,0,sizeof arp_configured);arp_clock_seen=0;arp_clock_quarter=0;ages=audio_frames=0;step_index=step_clock=cycle_index=step_primed=0;step_samples=FS*15/wm.bpm;ws_select(0);wm.fx_on=0;cues_enabled=0;confirm=settings_open=editor_open=anchor_view=0;}
 static void expect_pattern(uint8_t mode,const uint8_t *expected,uint32_t count){fresh();wm.arp_on=1;wm.arp_mode=mode;performance_on(60,100,1);performance_on(64,100,1);performance_on(67,100,1);for(uint32_t i=0;i<count;i++){frames(1);assert(arp_note==expected[i]);uint32_t n=arp_until;frames(n);}}
 int main(void){
  uint8_t up[]={60,64,67,60},down[]={67,64,60,67},bounce[]={60,64,67,64,60},doubleup[]={60,60,64,64,67,67},repeat[]={60,64,67,67,64,60,60};

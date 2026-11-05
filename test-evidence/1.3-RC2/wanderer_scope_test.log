@@ -1,0 +1,8 @@
+both chord orders, release isolation, underlying context and solo actions pass
+real sample capture, freeze, protected reader ownership and silent flatline pass
+    20 ms  settings 0 saved (16 B)
+    20 ms  settings 0 saved (16 B)
+earcons stay out of trace, off suppresses new cues, saved on/off preferences pass
+live instrument trace and panic flatline pass
+10000 scope open/close cycles preserve musical state
+RC2 SCOPE, CHORD AND EARCON TESTS PASSED

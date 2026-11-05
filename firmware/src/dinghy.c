@@ -14,6 +14,7 @@ static void project_undo(void);
 #define WM_MARK_HOOK() project_mark()
 #define WM_UNDO_HOOK() project_undo()
 #include "wanderer_memory.h"
+#include "wanderer_themes.h"
 
 /* Atkinson Hyperlegible, SIL OFL. Offline generated 4-bit run-length glyphs. */
 typedef struct {uint8_t h,n;const char *chars;const uint8_t *adv,*bw;const uint32_t *off;const uint8_t *data;} font_t;
@@ -24,7 +25,7 @@ typedef struct {uint8_t h,n;const char *chars;const uint8_t *adv,*bw;const uint3
 #include "wanderer_filter.h"
 #define NV 4u
 #define KEY0 53u
-#define DARK RGB(7,19,24)
+#define DARK RGB(0,0,0)
 #define PALE RGB(231,245,242)
 #define INK RGB(13,29,35)
 #define CYAN RGB(105,232,218)
@@ -34,13 +35,14 @@ enum {
     N_NONE, N_ORIGINAL_SAFE, N_ANCHORED, N_ANCHOR_SAFE, N_NO_PHRASE,
     N_BRANCHED, N_CATCH_FIRST, N_UNDO, N_NO_UNDO, N_STILL, N_LIVE,
     N_LAYER_CLEARED, N_NEW_SESSION, N_SAVE_FAILED, N_SAVED,
-    N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK
+    N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN
 };
+enum {PATCH_MEMORY,PATCH_LAYER,PATCH_ANCHOR};
 static struct {
     volatile uint32_t inc;volatile int32_t gate;
     uint32_t ph,ph2,ph3,lfo,inc2,age,remain;
     int32_t amp,f1,f2,tone,brightness,fm_brightness,last,splice;
-    uint8_t note,live,patch,band1,band2,stage,sustained,splice_left,seq_lane;
+    uint8_t note,live,patch,band1,band2,stage,sustained,splice_left,seq_lane,patch_source;
 } voice[NV];
 static uint32_t motion_phase;
 static uint32_t ages,step_clock,step_index,cycle_index,step_samples=5906u;
@@ -95,9 +97,16 @@ static uint32_t capture_age(uint32_t c)
 static void capture_on_at(uint32_t note,uint32_t velocity,uint32_t owner,uint32_t at)
 {
     if(note>127u||!velocity||velocity>127u||owner>33u||at>=wm.loop_steps)return;
-    uint32_t lane=wm.layer_enabled?1u:0u,slot=WM_POLY;
+    uint32_t lane=layer_focus,slot=WM_POLY;
     wm_phrase_t *p=lane?&wm.layer:&wm.memory;
-    if(record_undo_pending){wm_mark();if(!wm_has_notes(&wm.memory))wm.transpose_base=wm.root;record_undo_pending=0;}
+    if(record_undo_pending){
+        wm_mark();
+        if(!wm_has_notes(&wm.memory)&&!wm_has_notes(&wm.layer))wm.transpose_base=wm.root;
+        record_undo_pending=0;
+    }
+    /* A re-struck input owns one capture even across target changes. */
+    for(uint32_t c=0;c<CAPTURE_COUNT;c++)
+        if(capture[c].active&&capture[c].owner==owner&&capture[c].note==note)capture_finish(c);
     for(uint32_t v=0;v<WM_POLY;v++){
         wm_event_t e=wm_get(p,at,v);
         if(e.velocity&&e.note==note){slot=v;break;}
@@ -121,7 +130,6 @@ static void capture_on_at(uint32_t note,uint32_t velocity,uint32_t owner,uint32_
     uint32_t pick=lane*WM_POLY,oldest_age=0;
     for(uint32_t c=lane*WM_POLY;c<(lane+1u)*WM_POLY;c++){
         if(capture[c].active&&capture[c].step==at&&capture[c].slot==slot)capture_finish(c);
-        if(capture[c].active&&capture[c].owner==owner&&capture[c].note==note)capture_finish(c);
     }
     for(uint32_t c=lane*WM_POLY;c<(lane+1u)*WM_POLY;c++){
         if(!capture[c].active){pick=c;break;}
@@ -146,9 +154,9 @@ static volatile uint32_t cue_left,cue_phase,cue_step;
 static volatile uint32_t cue_follow_step,cue_total;
 static volatile uint8_t cue_stage,cue_priority;
 static volatile uint8_t running,recording,anchor_view,vol=100;
-static uint8_t octave,held[27],page_dirty=1,confirm,focus,focus_value;
-static uint8_t settings_open,settings_index,settings_page,settings_detail;
-static uint8_t settings_detail_kind;
+static volatile uint8_t page_dirty=1;
+static uint8_t octave,held[27],confirm,focus,focus_value;
+static uint8_t settings_open,settings_index,settings_page;
 static uint32_t ui_pending;
 static uint8_t ui_chord_latched;
 static uint8_t zoom_chord_latched;
@@ -157,11 +165,15 @@ static uint8_t notice;
 static uint32_t notice_until;
 static uint32_t fx_down,arp_down;static uint8_t arp_pending;
 static uint32_t home_down,anchor_down,save_down;
+static uint32_t octave_up_down,play_down,performance_pending;
+static uint8_t play_tap,play_recall,anchor_pending,sel_can_open,edit_layer_done;
 static uint8_t save_pending;
 static uint8_t project_slot,cues_enabled=1;
+static uint8_t metronome_on;
+static uint32_t click_left,click_phase,click_step;
 static uint8_t display_hold,cue_detail=1,cue_level=64,zoom_steady=1;
 static uint16_t access_signature(void)
-{return (uint16_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|(cue_level<<4));}
+{return (uint16_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|(cue_level<<4)|(metronome_on<<11)|(color_theme<<12));}
 static uint8_t ui_time_before(uint32_t deadline)
 {return !deadline||(int32_t)(fm1_ms-deadline)<0;}
 static uint32_t display_deadline(void)
@@ -184,7 +196,7 @@ static uint16_t clean_access,access_undo;
 static wm_state_t project_checkpoint=WM_DEFAULTS,checkpoint_undo=WM_DEFAULTS;
 static uint8_t origin_undo=255u,level_undo=100u,cues_undo=1u,prefs_undo;
 static uint32_t project_save_serial,undo_save_serial,last_project_poll;
-static union {wm_disk_t current;wm_disk_v7_t v7;wm_disk_v5_t v5;wm_disk_v4_t v4;wm_disk_v3_t v3;wm_disk_legacy_t old;} project_read_buffer;
+static union {wm_disk_t current;wm_disk_v14_t v14;wm_disk_v13_t v13;wm_disk_v11_t v11;wm_disk_v10_t v10;wm_disk_v8_t v8;wm_disk_v7_t v7;wm_disk_v5_t v5;wm_disk_v4_t v4;wm_disk_v3_t v3;wm_disk_legacy_t old;} project_read_buffer;
 static uint8_t project_read_slot(uint32_t slot,wm_state_t *out)
 {
     if(slot>=NSLOT)return 0;
@@ -192,6 +204,22 @@ static uint8_t project_read_slot(uint32_t slot,wm_state_t *out)
     if(current_read&&wm_valid(&project_read_buffer.current)){
         if(out)*out=project_read_buffer.current.state;
         return 1;
+    }
+    if(!slot_load(slot,&project_read_buffer.v14,sizeof project_read_buffer.v14)){
+        const wm_state_t *m=wm_migrate_v14_ptr(&project_read_buffer.v14);if(m){if(out)*out=*m;return 1;}
+    }
+    if(!slot_load(slot,&project_read_buffer.v13,sizeof project_read_buffer.v13)){
+        const wm_state_t *m=wm_migrate_v13_ptr(&project_read_buffer.v13);if(m){if(out)*out=*m;return 1;}
+    }
+    if(!slot_load(slot,&project_read_buffer.v11,sizeof project_read_buffer.v11)){
+        const wm_state_t *m=wm_migrate_v11_v12_ptr(&project_read_buffer.v11);if(m){if(out)*out=*m;return 1;}
+    }
+    if(!slot_load(slot,&project_read_buffer.v10,sizeof project_read_buffer.v10)){
+        const wm_state_t *m=wm_migrate_v9_ptr(&project_read_buffer.v10);if(m){if(out)*out=*m;return 1;}
+    }
+    if(!slot_load(slot,&project_read_buffer.v8,sizeof project_read_buffer.v8)){
+        const wm_state_t *migrated=wm_migrate_v8_ptr(&project_read_buffer.v8);
+        if(migrated){if(out)*out=*migrated;return 1;}
     }
     if(!slot_load(slot,&project_read_buffer.v7,sizeof project_read_buffer.v7)&&wm_valid_v7(&project_read_buffer.v7)){
         if(out)*out=*wm_migrate_v7_ptr(&project_read_buffer.v7);return 1;
@@ -328,10 +356,13 @@ static int32_t cue_sample(void)
 }
 #include "wanderer_sound.c"
 /* Owner 0: sequencer; 1: local keys; 2..33: USB/TRS source and channel. */
-static uint32_t note_on(uint32_t note,uint32_t vel,uint32_t owner)
+static uint32_t note_on_lane(uint32_t note,uint32_t vel,uint32_t owner,uint8_t lane)
 {
     uint32_t v,pick=0,best=0xffffffffu;
-    const wm_preset_t *p=&WM_PRESETS[anchor_view&&wm.has_anchor?wm.anchor_sound:wm.sound];
+    uint8_t source=lane&&ws_layer_own()?PATCH_LAYER:
+        !lane&&anchor_view&&wm.has_anchor?PATCH_ANCHOR:PATCH_MEMORY;
+    uint32_t legacy_index=source==PATCH_LAYER?wm.layer_sound-1u:source==PATCH_ANCHOR?wm.anchor_sound:wm.sound;
+    const wm_preset_t *p=&WM_PRESETS[legacy_index<WM_LEGACY_PRESET_COUNT?legacy_index:0u];
     if(note>127u||!vel||vel>127u||owner>34u)return NV;
     if(owner)for(v=0;v<NV;v++)if(voice[v].gate&&voice[v].live==owner&&voice[v].note==note){pick=v;goto chosen;}
     for(v=0;v<NV;v++){
@@ -345,7 +376,7 @@ chosen:
     voice[pick].splice_left=32u;
     voice[pick].note=(uint8_t)note;voice[pick].age=++ages;
     voice[pick].inc=tone_step(note);voice[pick].gate=(int32_t)(vel*64u*256u);
-    voice[pick].patch=anchor_view&&wm.has_anchor?wm.anchor_sound:wm.sound;
+    voice[pick].patch=(uint8_t)legacy_index;
     /* Q4 oscillator ratio: 8 = sub, 16 = unison, 32 = octave.
      * High-register intervals return to unison before phase wrap aliases. */
     uint32_t ratio=note>84u&&p->ratio>16u?16u:p->ratio;
@@ -361,9 +392,12 @@ chosen:
     voice[pick].stage=0u;
     voice[pick].remain=owner?0u:step_samples*3u/4u;
     voice[pick].live=(uint8_t)owner;voice[pick].sustained=0;
+    voice[pick].patch_source=source;
     ws_start(pick,note,vel);
     return pick;
 }
+static uint32_t note_on(uint32_t note,uint32_t vel,uint32_t owner)
+{return note_on_lane(note,vel,owner,layer_focus);}
 static void note_off(uint32_t note,uint32_t owner)
 {
     uint32_t v;
@@ -375,13 +409,11 @@ static void note_off(uint32_t note,uint32_t owner)
 #include "wanderer_scatter.h"
 #include "wanderer_print.c"
 #include "wanderer_arp.c"
-static wm_event_t repeat_events[NV];static uint8_t repeat_lanes[NV];
-static uint32_t repeat_count,repeat_parts,repeat_done,repeat_interval,repeat_next;
 static void sequence_event(wm_event_t e,uint32_t lane)
 {
     if(!e.velocity)return;
     for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==lane&&voice[v].note==e.note)voice[v].gate=0;
-    uint32_t v=note_on(e.note,e.velocity,0);
+    uint32_t v=note_on_lane(e.note,e.velocity,0,(uint8_t)lane);
     if(v<NV){
         uint32_t ticks=e.gate?e.gate:192u;
         if(ticks>wm.loop_steps*256u)ticks=wm.loop_steps*256u;
@@ -393,42 +425,38 @@ static void step_play(void)
 {
     uint32_t i=step_index;
     if(!i)wp_boundary();
-    repeat_count=repeat_done=0;repeat_parts=1;repeat_next=0;
-    scatter_plan(wm.decay,(uint8_t)(wm.legacy||anchor_view||wp_dry_view));
+    if(recording&&metronome_on&&!(i&3u)){click_left=FS/80u;click_phase=0;click_step=i?0x05000000u:0x07800000u;}
+    scatter_plan(wm.decay,(uint8_t)(wm.legacy||anchor_view||wp_dry_view),i,cycle_index);
     /* Scatter processes audio history, so original held-note gates keep advancing. */
     if(scatter.kind&&wm.repeat_style==1u){static const uint8_t kinds[3]={SC_STUTTER,SC_HOLD,SC_RUSH};scatter.kind=kinds[scatter.offset%3u];}
     if(scatter.kind&&wm.repeat_style==2u){static const uint8_t kinds[3]={SC_HOP,SC_JUMP,SC_DROP};scatter.kind=kinds[scatter.offset%3u];}
     if(scatter.kind&&wm.repeat_style>=3u){
       static const uint8_t kinds[5]={SC_REVERSE,SC_TAPE,SC_CLOUD,SC_PITCH,SC_RUSH};
       scatter.kind=kinds[wm.repeat_style-3u];
-      if(wm.repeat_style==7u)scatter.divisions=2u+(i&3u)*2u;
     }
-    uint32_t source_i=i;
-    if(repeat_parts>1u){repeat_interval=step_samples/repeat_parts;repeat_next=repeat_interval;}
     wp_scatter_begin();
-    const wm_phrase_t *main=anchor_view?&wm.anchor:&wm.memory;
-    uint32_t main_count=wm_step_notes(main,source_i),layer_count=!anchor_view&&wm.layer_enabled?wm_step_notes(&wm.layer,source_i):0;
-    uint32_t main_limit=main_count,layer_limit=layer_count;
-    if(main_count&&layer_count&&main_count+layer_count>NV){
-        main_limit=main_count>3u?3u:main_count;layer_limit=NV-main_limit;
-    }
-    for(uint32_t lane=0;lane<2u;lane++){
-        uint32_t remaining=lane?layer_limit:main_limit;
-        const wm_phrase_t *phrase=lane?&wm.layer:main;
-        for(uint32_t v=0;v<WM_POLY&&remaining;v++){
-            wm_event_t e=wm_get(phrase,source_i,v);
-            if(!e.velocity)continue;
-            remaining--;
-            if(capture_holds(lane,i,v))continue;
-            if(!lane&&!anchor_view)e=wm_evolve(e,i,cycle_index);
-            if(!anchor_view&&!wm.legacy){int32_t note=(int32_t)e.note+wm.root-wm.transpose_base;e.note=(uint8_t)ws_clamp(note,0,127);}
-            if(repeat_count<NV){repeat_lanes[repeat_count]=(uint8_t)lane;repeat_events[repeat_count++]=e;}
-            if(!wp_active){
+    if(!wp_active){
+        const wm_phrase_t *main=anchor_view?&wm.anchor:&wm.memory;
+        uint32_t main_count=wm_step_notes(main,i),layer_count=!anchor_view&&wm.layer_enabled?wm_step_notes(&wm.layer,i):0;
+        uint32_t main_limit=main_count,layer_limit=layer_count;
+        if(main_count&&layer_count&&main_count+layer_count>NV){
+            main_limit=main_count>3u?3u:main_count;layer_limit=NV-main_limit;
+        }
+        for(uint32_t lane=0;lane<2u;lane++){
+            uint32_t remaining=lane?layer_limit:main_limit;
+            const wm_phrase_t *phrase=lane?&wm.layer:main;
+            for(uint32_t v=0;v<WM_POLY&&remaining;v++){
+                wm_event_t e=wm_get(phrase,i,v);
+                if(!e.velocity)continue;
+                remaining--;
+                if(capture_holds(lane,i,v))continue;
+                if(!lane&&!anchor_view)e=wm_evolve(e,i,cycle_index);
+                if(!anchor_view&&!(lane&&ws_layer_own()?wm.layer_legacy:wm.legacy)){int32_t note=(int32_t)e.note+wm.root-wm.transpose_base;e.note=(uint8_t)ws_clamp(note,0,127);}
                 sequence_event(e,lane);
             }
         }
     }
-    step_index=(i+1u)%wm.loop_steps;
+    step_index=(i+1u)&(wm.loop_steps-1u);
     if(!step_index)cycle_index++;
 }
 #include "wanderer_fx.c"
@@ -439,6 +467,9 @@ static void app_audio_core(int32_t *out,uint32_t n)
     uint32_t v,i;int32_t melt=anchor_view?0:(int32_t)wm.branch_melt+wm.melt;
     if(melt>127)melt=127;
     for(v=0;v<NV;v++){
+        /* Silent slots can retain a modern 100..149 index after a reset. Never
+         * dereference the frozen 100-entry legacy bank for an inactive slot. */
+        if(!voice[v].amp&&!voice[v].gate)continue;
         if(ws_voice[v].modern){ws_render(v,out,n,melt);continue;}
         uint32_t ph=voice[v].ph,ph2=voice[v].ph2,ph3=voice[v].ph3,inc=voice[v].inc,
           inc2=voice[v].inc2,remain=voice[v].remain,patch=voice[v].patch;
@@ -457,7 +488,6 @@ static void app_audio_core(int32_t *out,uint32_t n)
         inc=(uint32_t)((int32_t)inc+((int32_t)(inc>>16)*pitch_mod)/1731);
         inc2=(uint32_t)((int32_t)inc2+((int32_t)(inc2>>16)*pitch_mod)/1731);
         uint32_t pulse_width=(uint32_t)(128+((motion*(int32_t)p->pwm)>>7))<<24;
-        if(!amp&&!g)continue;
         for(i=0;i<n;i++){
             int32_t s,cut;
             if(remain&&!--remain){g=0;voice[v].gate=0;}
@@ -538,15 +568,24 @@ static void app_audio_core(int32_t *out,uint32_t n)
             int32_t probe_left=fx_limit((left*master_smooth)/25600);
             int32_t probe_right=fx_limit((right*master_smooth)/25600);
             scope_feed((probe_left+probe_right)/2);
+            if(!cue_left&&!click_left){
+                out[i*2u]=probe_left;out[i*2u+1u]=probe_right;
+                continue;
+            }
         }
         if(cue_left){
             int32_t audible=cue_sample();left+=audible;right+=audible;
+        }
+        if(click_left){
+            if(!running||!recording||!metronome_on)click_left=0;
+            else{int32_t tick=wn_sine_i(click_phase)*(int32_t)click_left/(int32_t)(FS/80u)/12;
+                click_phase+=click_step;click_left--;left+=tick;right+=tick;}
         }
         out[i*2u]=fx_limit((left*master_smooth)/25600);
         out[i*2u+1u]=fx_limit((right*master_smooth)/25600);
     }
 }
-static void app_idle(void){} /* audio and input stay independent of LCD DMA */
+static void app_idle(void); /* defined with local performance input below */
 
 /* Glyphs are blended into the band, with measured advances and no scale-up jaggies. */
 static uint32_t letter(const font_t *f,uint8_t c)
@@ -567,17 +606,9 @@ static void app_audio(int32_t *out,uint32_t n)
   if(running){
    if(!step_primed){step_play();step_primed=1;}
    if(step_clock>=step_samples){step_clock-=step_samples;step_play();}
-   if(repeat_next&&step_clock>=repeat_next){
-    if(wm.decay&&!anchor_view&&!wp_dry_view&&wm.repeat_style!=1u&&!wp_active)for(uint32_t k=0;k<repeat_count;k++){
-      wm_event_t e=repeat_events[k];e.gate=(uint16_t)(192u/repeat_parts);e.velocity=(uint8_t)((e.velocity*(127u-repeat_done*10u))/127u);sequence_event(e,repeat_lanes[k]);
-    }
-    repeat_done++;repeat_next=repeat_done+1u<repeat_parts?repeat_interval*(repeat_done+1u):0;
-    if(repeat_next&&scatter.kind==SC_RUSH)repeat_next=step_clock+(step_samples-step_clock)/(repeat_parts-repeat_done+1u);
-   }
   }
   uint32_t chunk=n>256u?256u:n;
-  if(running){uint32_t left=step_samples-step_clock;if(chunk>left)chunk=left;
-   if(repeat_next>step_clock&&chunk>repeat_next-step_clock)chunk=repeat_next-step_clock;}
+  if(running){uint32_t left=step_samples-step_clock;if(chunk>left)chunk=left;}
   if(arp_until&&chunk>arp_until)chunk=arp_until;
   if(arp_gate_left&&chunk>arp_gate_left)chunk=arp_gate_left;
   if(!chunk)continue;
@@ -591,6 +622,30 @@ static void app_audio(int32_t *out,uint32_t n)
 #include "wanderer_settings.h"
 static int32_t width(const font_t *f,const char *s)
 {int32_t w=0;while(*s)w+=f->adv[letter(f,(uint8_t)*s++)];return w;}
+/* LCD data is already byte-swapped. Whole opaque runs need no read or blend. */
+static void alpha_span(int32_t x,int32_t y,uint32_t count,uint32_t alpha,uint16_t fg)
+{
+    int32_t end=x+(int32_t)count;
+    if(x<0)x=0;
+    if(end>(int32_t)cv_w)end=(int32_t)cv_w;
+    if(x>=end)return;
+    uint16_t *pixel=cv_px+(uint32_t)y*cv_w+(uint32_t)x;
+    uint16_t *stop=pixel+(end-x);
+    if(alpha==15u){
+        uint16_t color=swap16(fg);
+        while(pixel<stop)*pixel++=color;
+        return;
+    }
+    uint32_t inv=15u-alpha;
+    uint32_t fr=(fg>>11)*alpha+7u,fgreen=((fg>>5)&63u)*alpha+7u,fb=(fg&31u)*alpha+7u;
+    while(pixel<stop){
+        uint16_t old=swap16(*pixel);
+        uint32_t r=((old>>11)*inv+fr)/15u;
+        uint32_t g=(((old>>5)&63u)*inv+fgreen)/15u;
+        uint32_t b=((old&31u)*inv+fb)/15u;
+        *pixel++=swap16((r<<11)|(g<<5)|b);
+    }
+}
 static void aa_text(int32_t x,int32_t y,const font_t *f,const char *s,uint16_t fg)
 {
 #ifdef DINGHY_HOST
@@ -610,16 +665,8 @@ static void aa_text(int32_t x,int32_t y,const font_t *f,const char *s,uint16_t f
             if(!run){uint32_t b=*d++;alpha=b>>4;run=(b&15u)+1u;if(run==16u)run+=*d++;}
             count=run<w-gx?run:w-gx;
             int32_t py=y+(int32_t)gy+cv_oy;
-            if(alpha&&(uint32_t)py<cv_h)for(uint32_t t=0;t<count;t++){
-                int32_t px=x-FONT_PAD+(int32_t)gx+(int32_t)t;
-                if((uint32_t)px<cv_w){
-                    uint16_t old=swap16(cv_px[(uint32_t)py*cv_w+(uint32_t)px]);
-                    uint32_t r=(((old>>11)* (15u-alpha)+(fg>>11)*alpha)+7u)/15u;
-                    uint32_t g=((((old>>5)&63u)*(15u-alpha)+((fg>>5)&63u)*alpha)+7u)/15u;
-                    uint32_t b=(((old&31u)*(15u-alpha)+(fg&31u)*alpha)+7u)/15u;
-                    cv_px[(uint32_t)py*cv_w+(uint32_t)px]=swap16((r<<11)|(g<<5)|b);
-                }
-            }
+            if(alpha&&(uint32_t)py<cv_h)
+                alpha_span(x-FONT_PAD+(int32_t)gx,py,count,alpha,fg);
             gx+=count;run-=count;
         }
         x+=f->adv[k];
@@ -640,12 +687,13 @@ static void reset_performance(void)
     for(uint32_t c=0;c<CAPTURE_COUNT;c++)capture[c].active=0;
     for(uint32_t v=0;v<NV;v++)voice[v].gate=voice[v].amp=0;
     for(uint32_t k=0;k<32u;k++)sustain_pedal[k]=0;
-    arp_reset();
+    arp_reset();click_left=0;
     cue_stop();wp_cancel();wp_repeat_on=0;wp_scatter_mix=0;scatter_clear();fx_reset();
 }
 static void panic(void)
 {
     fm1_irq_off();capture_finish_all();record_undo_pending=0;running=recording=0;reset_performance();fm1_irq_on();
+    performance_pending=0;play_tap=play_recall=anchor_pending=0;
     save_pending=0;save_down=0;confirm=focus=notice=0;wp_cancel();edit_pending=rec_pending=arp_pending=0;ui_pending&=~(1u<<BTN_HOME);page_dirty=1;
 }
 static uint32_t capture_step(void)
@@ -659,39 +707,53 @@ typedef struct {
 } wm_preferences_t;
 static uint8_t preferences_valid(const wm_preferences_t *p)
 {
-    return p->magic==WM_MAGIC&&p->version==1&&p->size==sizeof *p&&
-      p->light<2u&&p->zoom<2u&&p->still<2u&&p->level<=127u&&p->cues<2u&&p->slot<NSLOT&&
-      ((p->reserved[1]&128u)?p->reserved[0]<16u:(!p->reserved[0]&&!p->reserved[1]));
+    return p->magic==WM_MAGIC&&(p->version==1||p->version==2)&&p->size==sizeof *p&&
+      p->light<(p->version==1?2u:THEME_COUNT)&&p->zoom<2u&&p->still<2u&&p->level<=127u&&p->cues<2u&&p->slot<NSLOT&&
+      ((p->reserved[1]&128u)?p->reserved[0]<32u:(!p->reserved[0]&&!p->reserved[1]));
 }
 static void preferences_load(void)
 {
     wm_preferences_t p;
     if(!settings_load(&p,sizeof p)&&preferences_valid(&p)){
-        wm.light=p.light;wm.extra_large=p.zoom;wm.reduced_motion=p.still;
+        color_theme=p.version==1?(p.light?THEME_LIGHT:0u):p.light;
+        wm.light=color_theme==THEME_LIGHT;wm.extra_large=p.zoom;wm.reduced_motion=p.still;
         vol=p.level;cues_enabled=p.cues;project_slot=p.slot;
         if(p.reserved[1]&128u){
             display_hold=p.reserved[0]&3u;cue_detail=(p.reserved[0]>>2)&1u;
-            zoom_steady=(p.reserved[0]>>3)&1u;cue_level=p.reserved[1]&127u;
+            zoom_steady=(p.reserved[0]>>3)&1u;metronome_on=(p.reserved[0]>>4)&1u;cue_level=p.reserved[1]&127u;
         }else{display_hold=0;cue_detail=zoom_steady=1;cue_level=64;}
         master_smooth=(int32_t)vol*256;
     }
 }
 static int preferences_save(void)
 {
-    wm_preferences_t p={WM_MAGIC,1,sizeof p,wm.light,wm.extra_large,
+    wm_preferences_t p={WM_MAGIC,2,sizeof p,color_theme,wm.extra_large,
         wm.reduced_motion,vol,cues_enabled,project_slot,
-        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)),(uint8_t)(128u|cue_level)}},verify;
+        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|(metronome_on<<4)),(uint8_t)(128u|cue_level)}},verify;
     if(settings_save(&p,sizeof p)||settings_load(&verify,sizeof verify))return -1;
     return memcmp(&p,&verify,sizeof p)?-1:0;
 }
-static void transport(void)
+static void transport_locked(void)
 {
-    fm1_irq_off();
     capture_finish_all();record_undo_pending=0;running=!running;recording=0;step_index=step_clock=cycle_index=0;step_primed=0;
     if(running)scatter_seed((fm1_ms+1u)*747796405u^audio_frames^scatter.rng);else scatter_clear();
     if(!running){arp_reset();release_sequence();wp_cancel();wp_repeat_on=0;}
-    fm1_irq_on();
+}
+static void transport(void)
+{
+    fm1_irq_off();transport_locked();fm1_irq_on();
     cue_toggle(running);page_dirty=1;
+}
+static void tempo_set(uint8_t bpm)
+{
+    if(wp_timing_locked()){show_notice(N_AUDIO_LOCK);return;}
+    if(bpm==wm.bpm)return;
+    fm1_irq_off();
+    capture_finish_all();
+    uint32_t duration=(FS*15u)/bpm;
+    step_clock=step_clock*duration/step_samples;
+    step_samples=duration;wm.bpm=bpm;
+    fm1_irq_on();
 }
 static void recording_end(void)
 {capture_finish_all();recording=0;record_undo_pending=0;}
@@ -699,10 +761,32 @@ static void listening_set(uint8_t anchor)
 {
     if(anchor_view==anchor)return;
     fm1_irq_off();recording_end();release_sequence();anchor_view=anchor;fm1_irq_on();
+    if(!anchor&&notice==N_ANCHOR_LISTEN)notice=0;
+}
+static void anchor_preview(void)
+{
+    if(!(wm.has_anchor||wp_has_anchor)){
+        /* A first comparison can protect a completed Memory take. Leave an
+         * in-progress take alone and never take Layer 2 as the Anchor. */
+        if(recording||!wm_memory_playable()){
+            cue(48u);show_notice(N_CATCH_FIRST);return;
+        }
+        fm1_irq_off();wm_catch();fm1_irq_on();
+    }
+    focus=notice=0;
+    listening_set((uint8_t)!anchor_view);
+    cue(anchor_view?79u:67u);page_dirty=1;
 }
 static void recording_toggle(void)
 {
-    if(wp_active){fm1_irq_off();wp_arm();fm1_irq_on();if(!running)transport();page_dirty=1;return;}
+    if(anchor_view){cue(48u);show_notice(N_ANCHOR_LISTEN);return;}
+    if(notice==N_CATCH_FIRST)notice=0;
+    if(wp_active){
+        fm1_irq_off();uint8_t ok=wp_arm();fm1_irq_on();
+        if(ok&&!running)transport();
+        if(!ok)show_notice(N_NO_PHRASE);
+        page_dirty=1;return;
+    }
     fm1_irq_off();
     if(recording)recording_end();
     else{
@@ -711,6 +795,26 @@ static void recording_toggle(void)
         for(uint32_t lane=0;lane<2u;lane++)for(uint32_t i=0;i<WM_STEPS;i++)record_replace[lane][i]=0;
     }
     fm1_irq_on();cue_toggle(recording);page_dirty=1;
+}
+/* Caller holds the audio lock. Both screens restore the same scheduler state. */
+static uint8_t undo_events_locked(void)
+{
+    notice=0;
+    if(!wm_can_undo)return 0;
+    if(wp_timing_locked()&&(wm.bpm!=wm_undo.bpm||wm.loop_steps!=wm_undo.loop_steps)){
+        show_notice(N_AUDIO_LOCK);return 0;
+    }
+    recording_end();
+    uint8_t old_length=wm.loop_steps;
+    uint32_t old_samples=step_samples;
+    wm_undo_once();
+    step_samples=(FS*15u)/wm.bpm;
+    if(old_length!=wm.loop_steps){step_index=step_clock=cycle_index=0;step_primed=0;}
+    else if(old_samples!=step_samples)step_clock=step_clock*step_samples/old_samples;
+    if(!(wm.has_anchor||wp_has_anchor))anchor_view=0;
+    editor_check_page();
+    reset_performance();
+    return 1;
 }
 static void apply_confirm(void)
 {
@@ -724,9 +828,9 @@ static void apply_confirm(void)
         fm1_irq_off();wm_mark();wm_clear_phrase(&wm.layer);for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==1u)voice[v].gate=0;fm1_irq_on();
         show_notice(N_LAYER_CLEARED);
     }else if(confirm==4){
-        wm_state_t fresh=WM_DEFAULTS;
+        wm_state_t fresh=WM_NEW_DEFAULTS;
         fresh.light=wm.light;fresh.extra_large=wm.extra_large;fresh.reduced_motion=wm.reduced_motion;
-        fm1_irq_off();wm_mark();wm=fresh;running=recording=anchor_view=0;
+        fm1_irq_off();wm_mark();wm=fresh;running=recording=anchor_view=layer_focus=0;
         step_clock=step_index=cycle_index=0;step_primed=0;
         step_samples=(FS*15u)/wm.bpm;
         reset_performance();wp_reset();project_checkpoint=wm;project_origin_slot=255u;
@@ -734,7 +838,7 @@ static void apply_confirm(void)
     }else if(confirm==5){
         if(wm.has_anchor||wp_has_anchor){
             fm1_irq_off();wm_mark();if(wm.has_anchor){wm.memory=wm.anchor;wm.sound=wm.anchor_sound;
-                wm.legacy=wm.anchor_legacy;wm.patch_valid=wm.anchor_patch_valid;if(wm.patch_valid)wm.patch=wm.anchor_patch;}
+                wm.legacy=wm.anchor_legacy;wm.preset_bank=wm.anchor_preset_bank;wm.patch_valid=wm.anchor_patch_valid;if(wm.patch_valid)wm.patch=wm.anchor_patch;}
             wm.has_branch=wm.branch_melt=wm.melt=wm.drift=wm.decay=0;
             anchor_view=0;reset_performance();if(wp_has_anchor)wp_restore();fm1_irq_on();
             cue(79u);show_notice(N_ORIGINAL_SAFE);
@@ -760,7 +864,7 @@ static void apply_confirm(void)
         if(!valid){cue(45u);show_notice(N_NO_VALID_SAVE);}
         else{
             fm1_irq_off();wm_mark();wm=loaded;
-            running=recording=anchor_view=record_undo_pending=0;
+            running=recording=anchor_view=record_undo_pending=layer_focus=0;
             step_index=step_clock=cycle_index=0;step_primed=0;
             step_samples=(FS*15u)/wm.bpm;
             reset_performance();wp_reset();project_checkpoint=wm;project_origin_slot=project_slot;
@@ -774,44 +878,54 @@ static void apply_confirm(void)
 #ifdef DINGHY_HOST
 static void host_verify_app(void);
 #endif
-static void music_adjust(int32_t d)
+/* Called by the Settings dispatcher with audio interrupts disabled. */
+static void length_adjust_locked(int32_t d)
 {
-    if(settings_index==0u)wm.root=(uint8_t)(((int32_t)wm.root+d%12+12)%12);
-    else if(settings_index==1u)wm.scale=(uint8_t)(((int32_t)wm.scale+d%WM_SCALE_COUNT+WM_SCALE_COUNT)%WM_SCALE_COUNT);
-    else{
-        if(wp_has_anchor){show_notice(N_AUDIO_LOCK);return;}
-        if(running||recording){show_notice(N_STOP_FIRST);return;}
-        uint8_t length=d>0?32u:16u;
-        fm1_irq_off();capture_finish_all();
-        if(wm_set_length(length)){step_index=step_clock=cycle_index=0;step_primed=0;release_sequence();}
-        fm1_irq_on();
+    if(wp_timing_locked()){show_notice(N_AUDIO_LOCK);return;}
+    if(running||recording){show_notice(N_STOP_FIRST);return;}
+    capture_finish_all();
+    if(wm_set_length(d>0?32u:16u)){
+        step_index=step_clock=cycle_index=0;step_primed=0;release_sequence();
     }
     page_dirty=1;
+}
+static void layer_target_locked(uint8_t target);
+static void layer_playback_locked(uint8_t enabled)
+{
+ if(wm.layer_enabled==enabled)return;
+ wm_mark();
+ wm.layer_enabled=enabled;
+ if(!enabled){
+  for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==1u)voice[v].gate=0;
+ }
+ cue_toggle(enabled);page_dirty=1;
 }
 #include "wanderer_settings.c"
 /* Release-dispatched HOME/SEL avoid either chord order executing a solo action.
  * A held HOME still panics from its original press time, without a release action. */
 static uint32_t ui_edges(uint32_t b,uint32_t released)
 {
-    const uint32_t pair=(1u<<BTN_HOME)|(1u<<BTN_SEL);
+    const uint32_t sel=1u<<BTN_SEL,pair=(1u<<BTN_HOME)|sel;
     uint32_t ready=0,held=fm1_in.buttons;
     const uint32_t zoom_pair=(1u<<BTN_HOME)|(1u<<BTN_EDIT);
     /* HOME and EDIT dispatch on release, so either press order is safe.
      * Do not reinterpret an already-held Scope chord or a three-button chord. */
-    if(!ui_chord_latched&&!zoom_chord_latched&&(held&zoom_pair)==zoom_pair&&!(held&(1u<<BTN_SEL))){
+    if(!ui_chord_latched&&!zoom_chord_latched&&!edit_layer_done&&
+       (home_down||(b&(1u<<BTN_HOME)))&&(held&zoom_pair)==zoom_pair&&!(held&sel)){
         zoom_chord_latched=1;wm.extra_large=(uint8_t)!wm.extra_large;
         cue_toggle(wm.extra_large);page_dirty=1;
     }
     if(zoom_chord_latched){
         ui_pending&=~pair;home_down=edit_down=sel_down=0;
-        edit_pending=sel_held_action=0;
+        edit_pending=0;
         if(!(held&(zoom_pair|(1u<<BTN_SEL))))zoom_chord_latched=0;
         return b&~(zoom_pair|(1u<<BTN_SEL));
     }
     if(b&(1u<<BTN_HOME))home_down=fm1_ms+1u;
+    if(b&sel){sel_down=fm1_ms;sel_can_open=(uint8_t)(!confirm&&!scope_open);}
     ui_pending|=b&pair;b&=~pair;
     if((held&pair)==pair&&!ui_chord_latched){
-        ui_chord_latched=1;ui_pending&=~pair;home_down=anchor_down=fx_down=0;
+        ui_chord_latched=1;ui_pending&=~pair;home_down=fx_down=0;anchor_pending=0;
         scope_set_open((uint8_t)!scope_open);focus=0;cue(78u);page_dirty=1;
     }
     if(ui_chord_latched){
@@ -840,6 +954,14 @@ static uint32_t save_edges(uint32_t b,uint32_t released)
     if((released&bit)&&save_pending){save_pending=0;save_down=0;b|=bit;}
     return b;
 }
+static void layer_target_locked(uint8_t target)
+{
+ if(layer_focus==target)return;
+ /* A held note keeps its original lane and duration. */
+ layer_focus=target;editor_mark_ms=0;
+ editor_check_page();
+ cue_toggle(target);page_dirty=1;
+}
 static uint32_t detail_edges(uint32_t b,uint32_t released)
 {
  const uint32_t edit=1u<<BTN_EDIT,rec=1u<<BTN_REC,sel=1u<<BTN_SEL,arp=1u<<BTN_ARP;
@@ -849,26 +971,120 @@ static uint32_t detail_edges(uint32_t b,uint32_t released)
   editor_open=confirm=focus=notice=0;settings_open=1;settings_page=6;settings_index=0;page_dirty=1;
  }
  if(released&arp){if(arp_pending)b|=arp;arp_pending=0;}
- if(b&edit){edit_down=fm1_ms+1u;edit_pending=1;b&=~edit;}
+ uint8_t edit_available=(uint8_t)(!scope_open&&!settings_open&&!confirm&&(!notice_error()||notice==N_CATCH_FIRST));
+ if(!edit_available)edit_pending=0;
+ if(b&edit){edit_down=fm1_ms;edit_pending=edit_available;b&=~edit;}
  if(b&rec){rec_down=fm1_ms+1u;rec_pending=1;b&=~rec;}
- if((fm1_in.buttons&edit)&&edit_pending&&!scope_open&&!settings_open&&!confirm&&fm1_ms+1u-edit_down>=900u){
-  edit_pending=0;wm.layer_enabled=!wm.layer_enabled;
-  if(!wm.layer_enabled)for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==1)voice[v].gate=0;
-  cue_toggle(wm.layer_enabled);page_dirty=1;
+ if(((fm1_in.buttons|released)&edit)&&edit_pending&&fm1_ms-edit_down>=900u){
+  edit_pending=0;edit_layer_done=1;
+  fm1_irq_off();layer_target_locked((uint8_t)!layer_focus);fm1_irq_on();
+  focus=notice=0;
  }
  if((fm1_in.buttons&rec)&&rec_pending&&fm1_ms+1u-rec_down>=900u){
   rec_pending=0;scope_set_open(0);fm1_irq_off();recording_end();fm1_irq_on();editor_open=1;editor_page=EDIT_PRINT;settings_open=confirm=focus=notice=0;page_dirty=1;
  }
- if(released&edit){if(edit_pending)b|=edit;edit_pending=0;}
+ if(released&edit){if(edit_pending)b|=edit;edit_pending=edit_layer_done=0;}
  if(released&rec){if(rec_pending)b|=rec;rec_pending=0;}
- if((fm1_in.buttons&sel)&&!ui_chord_latched&&!zoom_chord_latched&&!sel_held_action){
-  if(!sel_down)sel_down=fm1_ms+1u;
-  if(fm1_ms+1u-sel_down>=900u){sel_held_action=1;ui_pending&=~sel;editor_open=0;settings_open=1;settings_page=settings_index=0;focus=notice=confirm=0;page_dirty=1;}
+ /* A long SELECT consumes the release even in a confirmation or Scope. */
+ if(((ui_pending|b)&sel)&&fm1_ms-sel_down>=900u){
+  ui_pending&=~sel;b&=~sel;
+  if(sel_can_open&&!confirm&&!scope_open){
+   editor_open=0;settings_open=1;settings_page=settings_index=0;focus=notice=0;page_dirty=1;
+  }
  }
- if(released&sel){if(sel_held_action)b&=~sel;sel_down=0;sel_held_action=0;}
+ if(released&sel)sel_down=0;
  if(ui_chord_latched){sel_down=0;edit_pending=rec_pending=0;}
  if(zoom_chord_latched){sel_down=0;edit_pending=0;}
+
+ const uint32_t anchor=1u<<BTN_LFO;
+ uint8_t anchor_available=(uint8_t)(!scope_open&&!settings_open&&!confirm);
+ if(!anchor_available)anchor_pending=0;
+ if(b&anchor){b&=~anchor;anchor_down=fm1_ms;anchor_pending=anchor_available;}
+ if(anchor_pending&&((fm1_in.buttons|released)&anchor)&&fm1_ms-anchor_down>=1200u){
+  anchor_pending=0;
+  if(!(wm.has_anchor||wp_has_anchor))show_notice(N_CATCH_FIRST);
+  else if(running||recording){cue(45u);show_notice(N_STOP_FIRST);}
+  else {confirm=5;focus=notice=0;cue(55u);page_dirty=1;}
+ }
+ if(released&anchor){if(anchor_pending)b|=anchor;anchor_pending=0;}
  return b;
+}
+/* Long presses consume their tap. A running PLAY/STOP still stops on
+ * contact. From idle, play starts on release so a hold never starts the loop. */
+static uint32_t performance_edges(uint32_t b,uint32_t released)
+{
+ const uint32_t oct=1u<<BTN_OCT_UP,down=1u<<BTN_OCT_DOWN,play=1u<<BTN_PLAY;
+ uint32_t held=fm1_in.buttons;
+ uint8_t on_home=(uint8_t)(!scope_open&&!settings_open&&!editor_open&&!confirm&&!notice_error());
+ uint32_t oct_edges=held|released|b;
+ if(b&oct){octave_up_down=fm1_ms;performance_pending|=oct;b&=~oct;}
+ if(b&down){performance_pending|=down;b&=~down;}
+ if((oct_edges&(oct|down))==(oct|down)||zoom_chord_latched)performance_pending&=~(oct|down);
+ if(released&down){b|=performance_pending&down;performance_pending&=~down;}
+ if((performance_pending&oct)&&fm1_ms-octave_up_down>=1500u){
+  performance_pending&=~oct;wm.extra_large=!wm.extra_large;
+  cue_toggle(wm.extra_large);page_dirty=1;
+ }
+ if(released&oct){b|=performance_pending&oct;performance_pending&=~oct;}
+ if(!on_home)play_recall=0;
+ if(b&play){
+  play_down=fm1_ms;performance_pending|=play;play_tap=(uint8_t)!running;
+  play_recall=on_home;
+  if(play_tap)b&=~play;
+ }
+ if((performance_pending&play)&&fm1_ms-play_down>=2000u){
+  performance_pending&=~play;play_tap=0;
+  if(running)transport();
+  if(play_recall){
+   if(anchor_view&&!layer_focus)listening_set(0);
+   notice=0;
+   fm1_irq_off();wm_mark();ws_select(0);fm1_irq_on();
+   focus_show(7,1);cue(76u);
+  }
+ }
+ if(released&play){if(play_tap)b|=play;play_tap=play_recall=0;performance_pending&=~play;}
+ return b;
+}
+static void local_notes(uint32_t keys,uint32_t down,uint32_t up,uint32_t base)
+{
+    if(!(down|up))return;
+    uint32_t k;
+    /* All local onsets detected in this pass share one quantization decision.
+     * Keep audio enabled between individual keys, including in four-note chords. */
+    fm1_irq_off();uint32_t local_step=capture_step();fm1_irq_on();
+    for(k=0;k<27u;k++){
+        if(down>>k&1u){
+            held[k]=(uint8_t)(wm.keyboard_scale?wm_scale_move((uint8_t)(base-base%12u+wm.root),(int32_t)k):base+k);
+            fm1_irq_off();performance_on(held[k],100u,1);
+            /* A latched tap that ended during a redraw still plays, then releases. */
+            if(!(keys>>k&1u))for(uint32_t v=0;v<NV;v++)
+                if(voice[v].live==1u&&voice[v].note==held[k])voice[v].remain=FS/32u;
+            if(!wm.arp_on&&recording&&!anchor_view&&!confirm&&!settings_open&&!wp_active){
+                capture_on_at(held[k],100u,1u,local_step);
+                if(!(keys>>k&1u))capture_off(held[k],1u,0);
+            }
+            fm1_irq_on();page_dirty=1;
+        }
+        if(up>>k&1u){fm1_irq_off();capture_off(held[k],1u,0);performance_off(held[k],1u,0);fm1_irq_on();}
+    }
+}
+/* Called during LCD DMA and between render bands. Only performance input is
+ * serviced here; menu/button commands remain in the outer control pass. */
+static void app_idle(void)
+{
+    app_midi();
+    uint32_t keys=fm1_in.notes,down=(keys&~prev_notes)|fm1_input_note_edges(),up=prev_notes&~keys;
+    prev_notes=keys;
+    if(down||up)splash_dismiss();
+    local_notes(keys,down,up,(uint32_t)((int32_t)KEY0+(int8_t)octave*12));
+}
+static uint32_t screen_refresh_interval(void)
+{
+    if(scope_open)return scope_hold?0u:wm.reduced_motion?250u:80u;
+    if(wm.reduced_motion)return 0;
+    if(running&&!settings_open&&!editor_open&&!confirm&&!notice&&!focus&&!splash_active)
+        return 250u;
+    return 0;
 }
 static void app_main(void)
 {
@@ -880,12 +1096,12 @@ static void app_main(void)
     for(;;){
         uint32_t b,rel,keys,down,up,k,base,transition;
         int32_t d;
-        uint8_t prior_recording=recording,prior_lane=wm.layer_enabled;
+        uint8_t prior_recording=recording;
         platform_poll();splash_tick();
         app_midi();
         b=fm1_input_edges(&rel);
         if(b)splash_dismiss();
-        b=ui_edges(b,rel);b=save_edges(b,rel);b=detail_edges(b,rel);
+        b=ui_edges(b,rel);b=save_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
         if(!scope_open&&notice&&notice_sticky()&&(b&((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX)))){
             notice=0;b&=~((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX));page_dirty=1;
         }
@@ -896,12 +1112,11 @@ static void app_main(void)
         keys=fm1_in.notes;down=(keys&~prev_notes)|fm1_input_note_edges();up=prev_notes&~keys;prev_notes=keys;
         if(down||up)splash_dismiss();
         if(down&&notice_success()){notice=0;page_dirty=1;}
-        base=(uint32_t)((int32_t)KEY0+(int8_t)octave*12);
         if(scope_open){
             if(b&(1u<<BTN_HOME)){scope_set_open(0);focus=0;page_dirty=1;}
             else if(b&(1u<<BTN_SEL)){scope_set_hold((uint8_t)!scope_hold);cue_toggle(scope_hold);page_dirty=1;}
             if(b&(1u<<BTN_PLAY))transport();
-            if((b&(1u<<BTN_REC))&&!settings_open&&!confirm&&!anchor_view){
+            if((b&(1u<<BTN_REC))&&!settings_open&&!confirm){
                 recording_toggle();
                 page_dirty=1;
             }
@@ -926,70 +1141,54 @@ static void app_main(void)
                     if(ok&&!running)transport();if(!ok)show_notice(N_NO_PHRASE);page_dirty=1;
                 }else recording_toggle();
             }
-            if(b&(1u<<BTN_ENV)){fm1_irq_off();uint8_t ok=(editor_page==EDIT_PRINT)?wp_undo():wm_undo_once();if(ok&&editor_page!=EDIT_PRINT)reset_performance();fm1_irq_on();cue(ok?71u:48u);page_dirty=1;}
-            if(b&(1u<<BTN_LFO)){anchor_down=fm1_ms+1u;if(wp_has_anchor||wm.has_anchor){listening_set((uint8_t)!anchor_view);page_dirty=1;}}
+            if(b&(1u<<BTN_ENV)){
+                uint8_t print=editor_page==EDIT_PRINT;
+                fm1_irq_off();uint8_t ok=print?wp_undo():undo_events_locked();fm1_irq_on();
+                cue(ok?71u:48u);page_dirty=1;
+                if(!print&&notice!=N_AUDIO_LOCK)show_notice(ok?N_UNDO:N_NO_UNDO);
+            }
+            if(b&(1u<<BTN_LFO))anchor_preview();
         }
         else if(settings_open){
             if(b&(1u<<BTN_PLAY))transport();
             if(b&(1u<<BTN_SEL)){fm1_irq_off();settings_press();fm1_irq_on();page_dirty=1;}
         }
-else{
+        else{
             if(b&(1u<<BTN_PLAY))transport();
-            if(b&(1u<<BTN_REC)){
-                if(anchor_view){cue(48u);show_notice(N_ORIGINAL_SAFE);}
-                else{recording_toggle();page_dirty=1;}
-            }
-            if(b&(1u<<BTN_SAVE)){fm1_irq_off();capture_finish_all();uint8_t ok=wm_catch();fm1_irq_on();cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_NO_PHRASE);}
-            if(b&(1u<<BTN_EDIT)){editor_ensure();editor_open=1;editor_page=editor_selected=0;focus=notice=0;page_dirty=1;}
-            if(b&(1u<<BTN_LFO)){
-                anchor_down=fm1_ms+1u;
-                if(wm.has_anchor||wp_has_anchor){listening_set((uint8_t)!anchor_view);cue(anchor_view?79u:67u);}
-                else{cue(48u);show_notice(N_CATCH_FIRST);}
-                page_dirty=1;
-            }
+            if(b&(1u<<BTN_REC))recording_toggle();
+            if(b&(1u<<BTN_SAVE)){fm1_irq_off();capture_finish_all();uint8_t ok=wm_catch();fm1_irq_on();cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_CATCH_FIRST);}
+            if(b&(1u<<BTN_EDIT)){editor_open=1;editor_page=editor_selected=0;focus=notice=0;page_dirty=1;}
+            if(b&(1u<<BTN_LFO))anchor_preview();
             if(b&(1u<<BTN_GLO)){fm1_irq_off();capture_finish_all();uint8_t ok=wp_active?wp_arm():wm_branch_now(cycle_index);fm1_irq_on();cue(ok?88u:48u);if(!wp_active)show_notice(ok?N_BRANCHED:N_CATCH_FIRST);else page_dirty=1;}
-            if(b&(1u<<BTN_ENV)){fm1_irq_off();capture_finish_all();uint8_t ok=(wp_armed||wp_writing||wp_active)?wp_undo():wm_undo_once();step_samples=(FS*15u)/wm.bpm;if(ok)reset_performance();fm1_irq_on();cue(ok?71u:48u);show_notice(ok?N_UNDO:N_NO_UNDO);}
+            if(b&(1u<<BTN_ENV)){
+                fm1_irq_off();
+                uint8_t ok;
+                if(wp_armed||wp_writing||wp_active){
+                    notice=0;capture_finish_all();ok=wp_undo();if(ok)reset_performance();
+                }
+                else ok=undo_events_locked();
+                fm1_irq_on();
+                cue(ok?71u:48u);if(notice!=N_AUDIO_LOCK)show_notice(ok?N_UNDO:N_NO_UNDO);
+            }
             if(b&(1u<<BTN_FX)){confirm=1;fx_down=fm1_ms;page_dirty=1;cue(55u);}
             if(b&(1u<<BTN_SEQ)){confirm=2;page_dirty=1;cue(57u);}
             if(b&(1u<<BTN_ARP)){confirm=3;page_dirty=1;cue(59u);}
             if(b&(1u<<BTN_SEL)){settings_open=1;recording=0;settings_index=0;
-                settings_page=SETTINGS_MUSIC;settings_detail=settings_detail_kind=0;focus=notice=0;cue(78u);page_dirty=1;}
+                settings_page=SETTINGS_MUSIC;focus=notice=0;cue(78u);page_dirty=1;}
         }
-        if(prior_recording&&(!recording||anchor_view||confirm||settings_open||prior_lane!=wm.layer_enabled)){
+        if(prior_recording&&(!recording||anchor_view||confirm||settings_open)){
             fm1_irq_off();recording_end();fm1_irq_on();
         }
         if(home_down&&(fm1_in.buttons&(1u<<BTN_HOME))&&fm1_ms+1u-home_down>=1000u){panic();home_down=0;}
         if(!(fm1_in.buttons&(1u<<BTN_HOME)))home_down=0;
-        if(anchor_down&&!scope_open&&!settings_open&&!confirm&&(fm1_in.buttons&(1u<<BTN_LFO))&&fm1_ms+1u-anchor_down>=1200u){
-            if(wm.has_anchor||wp_has_anchor){confirm=5;cue(55u);page_dirty=1;}
-            else show_notice(N_CATCH_FIRST);
-            anchor_down=0;
-        }
-        if(!(fm1_in.buttons&(1u<<BTN_LFO)))anchor_down=0;
         if(fx_down&&!scope_open&&confirm==1&&(fm1_in.buttons&(1u<<BTN_FX))&&fm1_ms-fx_down>=1600u){
             confirm=4;fx_down=0;cue(47u);page_dirty=1;
         }
         if(!(fm1_in.buttons&(1u<<BTN_FX)))fx_down=0;
         if(b&(1u<<BTN_OCT_DOWN)){if((int8_t)octave> -2)octave=(uint8_t)((int8_t)octave-1);page_dirty=1;}
         if(b&(1u<<BTN_OCT_UP)){if((int8_t)octave<2)octave=(uint8_t)((int8_t)octave+1);page_dirty=1;}
-        /* All local onsets detected in this pass share one quantization decision.
-         * Keep audio enabled between individual keys, including in four-note chords. */
-        fm1_irq_off();uint32_t local_step=capture_step();fm1_irq_on();
-        for(k=0;k<27u;k++){
-            if(down>>k&1u){
-                held[k]=(uint8_t)(wm.keyboard_scale?wm_scale_move((uint8_t)(base-base%12u+wm.root),(int32_t)k):base+k);
-                fm1_irq_off();performance_on(held[k],100u,1);
-                /* A latched tap that ended during a redraw still plays, then releases. */
-                if(!(keys>>k&1u))for(uint32_t v=0;v<NV;v++)
-                    if(voice[v].live==1u&&voice[v].note==held[k])voice[v].remain=FS/32u;
-                if(!wm.arp_on&&recording&&!anchor_view&&!confirm&&!settings_open&&!wp_active){
-                    capture_on_at(held[k],100u,1u,local_step);
-                    if(!(keys>>k&1u))capture_off(held[k],1u,0);
-                }
-                fm1_irq_on();page_dirty=1;
-            }
-            if(up>>k&1u){fm1_irq_off();capture_off(held[k],1u,0);performance_off(held[k],1u,0);fm1_irq_on();}
-        }
+        base=(uint32_t)((int32_t)KEY0+(int8_t)octave*12);
+        local_notes(keys,down,up,base);
         if(transition)for(k=0;k<7u;k++)(void)fm1_enc_take(k);
         for(k=0;k<3u;k++){
             d=fm1_enc_take(ENC_KNOB1+k);
@@ -999,7 +1198,7 @@ else{
                 else if(k==1u&&!scope_hold)scope_time=(uint8_t)ws_clamp((int32_t)scope_time+d,0,5);
                 else if(k==2u)scope_set_hold((uint8_t)(d>0));
                 page_dirty=1;
-            }else if(d&&!scope_open&&editor_open&&!confirm){if(anchor_view)listening_set(0);fm1_irq_off();editor_adjust(k,d);fm1_irq_on();}
+            }else if(d&&!scope_open&&editor_open&&!confirm){if(anchor_view&&!layer_focus)listening_set(0);fm1_irq_off();editor_adjust(k,d);fm1_irq_on();}
             else if(d&&!scope_open&&settings_open&&!confirm){fm1_irq_off();settings_adjust(k,d);fm1_irq_on();
             }else if(d&&!confirm&&!settings_open){
                 uint8_t *p=k==0?&wm.melt:k==1?&wm.drift:&wm.decay;
@@ -1013,7 +1212,7 @@ else{
         if(d)splash_dismiss();
         if(d&&scope_open){
             uint32_t old=vol;int32_t n=(int32_t)vol+d*4;vol=(uint8_t)(n<0?0:n>127?127:n);cue_boundary(old,vol,0,127);page_dirty=1;
-        }else if(d&&editor_open&&!confirm){if(anchor_view)listening_set(0);fm1_irq_off();editor_adjust(3u,d);fm1_irq_on();
+        }else if(d&&editor_open&&!confirm){if(anchor_view&&!layer_focus)listening_set(0);fm1_irq_off();editor_adjust(3u,d);fm1_irq_on();
         }else if(d&&settings_open&&!confirm){fm1_irq_off();settings_adjust(3u,d);fm1_irq_on();page_dirty=1;
         }else if(d&&!confirm&&!settings_open){
             uint32_t old=vol;int32_t n=(int32_t)vol+d*4;vol=(uint8_t)(n<0?0:n>127?127:n);cue_boundary(old,vol,0,127);
@@ -1023,13 +1222,11 @@ else{
         if(d)splash_dismiss();
         if(d&&scope_open){
             /* Parameter editing belongs to the four numbered knobs. */
-        }else if(d&&!confirm&&!settings_open&&!editor_open&&wp_has_anchor){show_notice(N_AUDIO_LOCK);
+        }else if(d&&!confirm&&!settings_open&&!editor_open&&wp_timing_locked()){show_notice(N_AUDIO_LOCK);
         }else if(d&&!confirm&&!settings_open&&!editor_open){
             uint32_t old=wm.bpm;int32_t n=(int32_t)wm.bpm+d;
-            capture_finish_all();
-            wm.bpm=(uint8_t)(n<60?60:n>180?180:n);
+            tempo_set((uint8_t)ws_clamp(n,60,180));
             cue_boundary(old,wm.bpm,60,180);
-            step_samples=(FS*15u)/wm.bpm;
             focus_show(4u,wm.bpm);
         }
         d=fm1_enc_take(ENC_SELECT);
@@ -1042,25 +1239,24 @@ else{
             cue(60u+project_slot*2u);
         }else if(d&&settings_open){
             settings_index=(uint8_t)(((int32_t)settings_index+d%(int32_t)settings_count()+(int32_t)settings_count())%(int32_t)settings_count());
-            settings_detail=settings_detail_kind=0;
             cue(66u+settings_index*3u);page_dirty=1;
         }else if(d&&!confirm&&!settings_open){
             /* Bank jump preserves position within each group of ten. Zoom lives in settings. */
-            ws_select(wm_preset_move(wm.sound,d,1u));
-            focus_show(7u,(uint8_t)(wm.sound+1u));cue(68u+(uint32_t)wm.sound/10u);
+            fm1_irq_off();ws_select(wm_preset_move(ws_edit_sound(),d,1u));fm1_irq_on();
+            focus_show(7u,ws_edit_sound()+1u);cue(68u+ws_edit_sound()/10u);
         }
         d=fm1_enc_take(ENC_PRESETS);
         if(d)splash_dismiss();
         if(d&&scope_open){
-            if(!settings_open&&!confirm){ws_select(wm_preset_move(wm.sound,d,0u));page_dirty=1;}
+            /* Scope is a monitor. Preset changes belong to Home. */
         }else if(d&&editor_open&&!confirm){editor_move(d);
         }else if(d&&settings_open){
-            settings_page=(uint8_t)(((int32_t)settings_page+d%(int32_t)SETTINGS_PAGES+(int32_t)SETTINGS_PAGES)%(int32_t)SETTINGS_PAGES);
-            settings_index=settings_detail=settings_detail_kind=0;cue(77u);page_dirty=1;
+            settings_page=settings_move(d);
+            settings_index=0;cue(77u);page_dirty=1;
         }else if(d&&!confirm&&!settings_open){
-            ws_select(wm_preset_move(wm.sound,d,0u));
-            focus_show(7u,(uint8_t)(wm.sound+1u));
-            cue(60u+(uint32_t)wm.sound/10u*2u);
+            fm1_irq_off();ws_select(wm_preset_move(ws_edit_sound(),d,0u));fm1_irq_on();
+            focus_show(7u,ws_edit_sound()+1u);
+            cue(60u+ws_edit_sound()/10u*2u);
         }
 #ifdef DINGHY_HOST
         if(step_samples!=(FS*15u)/wm.bpm){fprintf(stderr,"Wanderer tempo and scheduler diverged\n");exit(3);}
@@ -1071,9 +1267,9 @@ else{
 #ifdef DINGHY_HOST
         host_verify_app();
 #endif
-        if(page_dirty||fm1_ms-last_ui>(scope_open&&!wm.reduced_motion?80u:250u)){
-            if(page_dirty||!wm.reduced_motion||scope_open){screen();last_ui=fm1_ms;}
-            page_dirty=0;
+        uint32_t refresh=screen_refresh_interval();
+        if(page_dirty||(refresh&&fm1_ms-last_ui>=refresh)){
+            page_dirty=0;screen();last_ui=fm1_ms;
         }
     }
 }

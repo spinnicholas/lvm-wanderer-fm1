@@ -1,0 +1,5 @@
+    21 ms  assertion gates = 1 passed
+    21 ms  assertion leds = 2097152 passed
+    70 ms  assertion gates = 0 passed
+    70 ms  assertion leds = 0 passed
+sound  -> build/short-tap.wav (8704 frames)

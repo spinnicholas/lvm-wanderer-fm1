@@ -15,7 +15,7 @@ def frame(text,name):
  if re.search(r'sp = r\d+',prologue):
   constants=re.findall(r'r\d+ = -(\d+)',prologue);assert constants,'unresolved dynamic stack frame';size+=int(constants[0])
  return size
-s=(R/'build/dinghy.dis').read_text();names=['app_main','project_read_slot','wm_valid_v7','wm_migrate_v7_ptr','wm_valid_v5','wm_valid_v4','wm_valid_v3','wm_valid_legacy','wm_migrate_v5_ptr','wm_migrate_v4_ptr','wm_migrate_v3_ptr','wm_migrate_legacy_ptr','wm_migrate_phrase','wm_migrate_phrase_v4'];frames={n:frame(s,n) for n in names}
+s=(R/'build/dinghy.dis').read_text();names=['app_main','project_read_slot','wm_valid_v7','wm_migrate_v7_ptr','wm_valid','wm_migrate_v8_ptr','wm_migrate_v9_ptr','wm_migrate_v11_v12_ptr','wm_migrate_v13_ptr','wm_migrate_v14_ptr','wm_valid_v5','wm_valid_v4','wm_valid_v3','wm_valid_legacy','wm_migrate_v5_ptr','wm_migrate_v4_ptr','wm_migrate_v3_ptr','wm_migrate_legacy_ptr','wm_migrate_phrase','wm_migrate_phrase_v4'];frames={n:frame(s,n) for n in names}
 assert frames['project_read_slot']<=64
 assert max(frames.values())<=3072
 bound=frames['app_main']+frames['project_read_slot']+max(frames[n] for n in names if n.startswith('wm_valid_'))+max(frames[n] for n in names if '_ptr' in n)+max(frames[n] for n in names if n.startswith('wm_migrate_phrase'))

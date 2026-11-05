@@ -1,0 +1,25 @@
+font X: ttf h 70, 11663 B
+font B: ttf h 60, 9484 B
+font H: ttf h 41, 7199 B
+font W: ttf h 32, 5380 B
+font N: ttf h 21, 3506 B
+font T: ttf h 18, 4215 B
+font P: ttf h 23, 5964 B
+font V: ttf h 34, 8886 B
+font Q: ttf h 46, 12519 B
+font R: ttf h 60, 17242 B
+font Z: ttf h 76, 23856 B
+47 licensed symbols; 191609 bytes incl row indices
+7680 bytes of band-limited oscillator tables
+100 patch coefficients and stable resonant filter tables compiled
+Interpolated sine, saturation, continuous cutoff, cents and physical decay tables generated
+150 presets; 20 authored MSFA FM6 voices, band-limited sync/ring and brighter ensembles
+Supplied splash: 29462 bytes, full artwork retained
+loader: image 10456 B at 0x1c0a800, bss end 0x1c0ff30
+loader: ota.bin 9040 B
+  ok    .ram_text: 916 insns, no calls
+  ok    image 538068 B of 581564; RAM .data+.bss 72864 B of 98304; pool 343040 B of 344064
+  ok    register access: hal/ only (src/, loader/ clean)
+app      /workspace/scratch/9748044da7d7/wanderer-1.4/build/dinghy.bin  538068 B
+loader   /workspace/scratch/9748044da7d7/wanderer-1.4/build/loader/ota.bin  9040 B
+package  /workspace/scratch/9748044da7d7/wanderer-1.4/build/dinghy-1.7-RC3.fwsc  612196 B, identity FM-1_929

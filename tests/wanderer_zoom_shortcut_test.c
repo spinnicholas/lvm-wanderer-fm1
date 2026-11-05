@@ -13,7 +13,7 @@ static void clear_input(void)
 {
  ui_pending=ui_chord_latched=zoom_chord_latched=0;
  home_down=sel_down=edit_down=save_down=0;
- edit_pending=rec_pending=save_pending=sel_held_action=0;
+ edit_pending=rec_pending=save_pending=0;
  fm1_in.buttons=0;fm1_ms=100;
 }
 int main(void)

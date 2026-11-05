@@ -1,0 +1,271 @@
+{
+  "current_native_views": 964,
+  "contact_sheets": 40,
+  "old_comparison": [
+    {
+      "name": "01-home-dark",
+      "equal": true
+    },
+    {
+      "name": "02-home-phrase-layer",
+      "equal": true
+    },
+    {
+      "name": "03-home-playing",
+      "equal": true
+    },
+    {
+      "name": "04-home-recording",
+      "equal": true
+    },
+    {
+      "name": "05-anchor-listening",
+      "equal": true
+    },
+    {
+      "name": "06-anchor-zoom",
+      "equal": true
+    },
+    {
+      "name": "07-memory-zoom",
+      "equal": true
+    },
+    {
+      "name": "08-home-light",
+      "equal": true
+    },
+    {
+      "name": "09-zoom-light",
+      "equal": true
+    },
+    {
+      "name": "10-settings-system",
+      "equal": true
+    },
+    {
+      "name": "11-settings-effects",
+      "equal": true
+    },
+    {
+      "name": "12-settings-performance",
+      "equal": true
+    },
+    {
+      "name": "13-delay-division",
+      "equal": true
+    },
+    {
+      "name": "14-reverb-size",
+      "equal": true
+    },
+    {
+      "name": "15-cues-disabled",
+      "equal": true
+    },
+    {
+      "name": "16-settings-light",
+      "equal": true
+    },
+    {
+      "name": "17-confirm-clear-layer",
+      "equal": true
+    },
+    {
+      "name": "18-confirm-save-slot8",
+      "equal": true
+    },
+    {
+      "name": "19-confirm-load-slot8",
+      "equal": true
+    },
+    {
+      "name": "20-confirm-new-session",
+      "equal": true
+    },
+    {
+      "name": "21-confirm-restore-anchor",
+      "equal": true
+    },
+    {
+      "name": "22-melt",
+      "equal": true
+    },
+    {
+      "name": "23-drift",
+      "equal": true
+    },
+    {
+      "name": "24-decay",
+      "equal": false
+    },
+    {
+      "name": "25-tempo",
+      "equal": true
+    },
+    {
+      "name": "26-master",
+      "equal": true
+    },
+    {
+      "name": "27-preset100",
+      "equal": false
+    },
+    {
+      "name": "28-saved",
+      "equal": true
+    },
+    {
+      "name": "29-stop-first",
+      "equal": true
+    },
+    {
+      "name": "30-invalid-save",
+      "equal": true
+    },
+    {
+      "name": "31-settings-zoom",
+      "equal": true
+    },
+    {
+      "name": "32-feedback-zero-zoom",
+      "equal": true
+    },
+    {
+      "name": "33-damping-zoom",
+      "equal": true
+    },
+    {
+      "name": "34-delay-timing-zoom",
+      "equal": true
+    },
+    {
+      "name": "35-save-normal",
+      "equal": true
+    },
+    {
+      "name": "36-save-zoom",
+      "equal": true
+    },
+    {
+      "name": "37-scope-live",
+      "equal": false
+    },
+    {
+      "name": "38-scope-held",
+      "equal": false
+    },
+    {
+      "name": "39-scope-light",
+      "equal": false
+    },
+    {
+      "name": "40-scope-silence",
+      "equal": true
+    },
+    {
+      "name": "41-write-failure",
+      "equal": true
+    },
+    {
+      "name": "42-empty-slot",
+      "equal": true
+    },
+    {
+      "name": "43-stop-first-persistent",
+      "equal": true
+    },
+    {
+      "name": "44-splash-dark",
+      "equal": true
+    },
+    {
+      "name": "45-splash-light",
+      "equal": true
+    },
+    {
+      "name": "46-two-bar-held-notes",
+      "equal": true
+    },
+    {
+      "name": "47-two-bar-zoom",
+      "equal": true
+    },
+    {
+      "name": "48-music-root-fsharp",
+      "equal": true
+    },
+    {
+      "name": "49-music-minor",
+      "equal": false
+    },
+    {
+      "name": "50-music-free",
+      "equal": false
+    },
+    {
+      "name": "51-music-length32",
+      "equal": true
+    },
+    {
+      "name": "52-music-length16",
+      "equal": true
+    },
+    {
+      "name": "53-music-root-zoom-light",
+      "equal": true
+    },
+    {
+      "name": "54-music-dorian-light",
+      "equal": false
+    },
+    {
+      "name": "55-music-length-light",
+      "equal": true
+    },
+    {
+      "name": "56-polyphonic-memory",
+      "equal": true
+    },
+    {
+      "name": "57-saved-project-home",
+      "equal": true
+    },
+    {
+      "name": "58-unsaved-edits-home",
+      "equal": true
+    },
+    {
+      "name": "59-digital-mute-home",
+      "equal": true
+    },
+    {
+      "name": "60-status-zoom",
+      "equal": true
+    },
+    {
+      "name": "61-save-existing-slot",
+      "equal": true
+    },
+    {
+      "name": "62-save-no-valid-project",
+      "equal": true
+    },
+    {
+      "name": "63-project-saved-preferences-failed",
+      "equal": true
+    },
+    {
+      "name": "64-persistent-save-success",
+      "equal": true
+    },
+    {
+      "name": "65-persistent-load-success",
+      "equal": true
+    },
+    {
+      "name": "66-edited-status-light-zoom",
+      "equal": true
+    }
+  ],
+  "limits": "Contact sheets reviewed visually; full native captures and range/overlap tests provide finer coverage. Intentional changes include Repeat, preset names, scale names, modern scope output and corrected labels."
+}

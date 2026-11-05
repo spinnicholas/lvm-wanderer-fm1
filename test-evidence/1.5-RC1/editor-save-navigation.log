@@ -1,0 +1,21 @@
+  1000 ms  screen -> build/host/editor-save-1000.ppm
+  1250 ms  assertion editor = 1 passed
+  2350 ms  assertion confirm = 2 passed
+  2550 ms  assertion slot = 1 passed
+  2600 ms  screen -> build/host/editor-save-2600.ppm
+  2701 ms  slot 1 saved (2224 B)
+  2701 ms  settings 0 saved (16 B)
+  2750 ms  assertion confirm = 0 passed
+  2750 ms  assertion notice = 14 passed
+  2750 ms  assertion editor = 1 passed
+  2850 ms  screen -> build/host/editor-save-2850.ppm
+  3000 ms  screen -> build/host/editor-save-3000.ppm
+  3050 ms  assertion notice = 0 passed
+  3050 ms  assertion editor = 1 passed
+  3100 ms  screen -> build/host/editor-save-3100.ppm
+  4150 ms  assertion confirm = 2 passed
+  4280 ms  assertion confirm = 0 passed
+  4280 ms  assertion editor = 1 passed
+  4300 ms  screen -> build/host/editor-save-4300.ppm
+  4450 ms  assertion editor = 0 passed
+sound  -> build/host/editor-save.wav (198400 frames)

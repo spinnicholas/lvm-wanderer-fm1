@@ -4,7 +4,7 @@
 #undef main
 #include <assert.h>
 int main(void){fm1_ms=100;uint32_t checks=0;editor_open=1;
-for(uint32_t engine=0;engine<5;engine++)for(uint32_t zoom=0;zoom<2;zoom++)for(uint32_t theme=0;theme<2;theme++){
+for(uint32_t engine=0;engine<WS_ENGINES;engine++)for(uint32_t zoom=0;zoom<2;zoom++)for(uint32_t theme=0;theme<2;theme++){
  ws_select(engine*20);wm.extra_large=zoom;wm.light=theme;
  for(uint32_t page=0;page<EDIT_PAGES;page++){
   editor_page=page;

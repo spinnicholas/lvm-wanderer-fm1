@@ -1,0 +1,48 @@
+{
+  "firmware_sha256": "b5f50a6608d569ba11a057026de1eb2d55c6429b797dd96709a7f3eb5212e788",
+  "emulator": "fm1-emu 0.3.0",
+  "emulated_ms": 8800,
+  "frames": 380672,
+  "peak": 3415,
+  "rms": 389.85,
+  "average_isr_percent": 15.2,
+  "captures": [
+    {
+      "ms": 1800,
+      "label": "Tempo and four FM voices",
+      "sha256": "7d2e55125ffd8a5ade6daf6a86da387d1cd3bca0264d85e046245e237cb268b3"
+    },
+    {
+      "ms": 3700,
+      "label": "Print page",
+      "sha256": "4fc92aaa0a66ea9cdf443be5ccf893c221616d8ab5692c48c4fe5fd1811372f3"
+    },
+    {
+      "ms": 4500,
+      "label": "First Print in progress",
+      "sha256": "9d3eee9d5f521c7d3cc2bb5568215e22dd485d6e76dc599205fdaff58700bf9f"
+    },
+    {
+      "ms": 5500,
+      "label": "Completed / next Print",
+      "sha256": "d05776c3b0e61b26e14a8ede4df29a74b27007476a1e5c572213fb68a0d064c4"
+    },
+    {
+      "ms": 7300,
+      "label": "Second Print in progress",
+      "sha256": "7b4eaa2595e85fba6ed1c340589e822b7391733c0864e78e44b2573dc4c452aa"
+    },
+    {
+      "ms": 8170,
+      "label": "Undo completed audio",
+      "sha256": "0293c041509f7bf3ed1cee2284a9d87a0f3cd1b362ee73c4220c1e812ab4c49b"
+    },
+    {
+      "ms": 8500,
+      "label": "Transport stopped",
+      "sha256": "3a2261b86c00ff7e4f201dc959ce3c78cbe3ae96704317ff602c626171287d07"
+    }
+  ],
+  "physical_hardware": false,
+  "limitations": "Emulated average ISR instruction load is not a physical worst-case audio deadline measurement. The emulator reports incomplete MMIO modeling; installation/DAC/hardware LED behavior remains unqualified."
+}

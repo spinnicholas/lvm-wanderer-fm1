@@ -23,7 +23,7 @@ int main(void){cues_enabled=0;vol=100;wm=(wm_state_t)WM_DEFAULTS;ws_select(38);w
  assert(wp_arm());running=1;frames(step_samples*32+1);assert(wp_active&&wp_has_anchor&&wp_length==128000);assert(wp_undo()&&wp_dry_view);assert(wp_undo()&&!wp_dry_view);
  assert(wp_arm());frames(step_samples*64);assert(wp_generation==2&&wp_undo_valid);transport();editor_open=1;editor_page=EDIT_PRINT;host_leds|=((uint64_t)1<<KEY_LED(7));leds_was_running=1;app_leds();assert(!(host_leds&((((uint64_t)1<<27)-1)<<14)));
  wp_restore();assert(wp_dry_view&&!anchor_view&&wp_active);listening_set(0);assert(wp_dry_view);assert(wp_undo()&&!wp_dry_view);
- settings_index=2;settings_open=1;settings_page=3;uint8_t steps=wm.loop_steps;music_adjust(-1);assert(notice==N_AUDIO_LOCK&&wm.loop_steps==steps);settings_open=0;
+ settings_index=2;settings_open=1;settings_page=3;uint8_t steps=wm.loop_steps;length_adjust_locked(-1);assert(notice==N_AUDIO_LOCK&&wm.loop_steps==steps);settings_open=0;
  /* Audio history is RAM-only; loading the notes/patch never pretends to restore it. */
  confirm=3;apply_confirm();assert(notice==N_LOADED&&!wp_active&&!wp_has_anchor&&!memcmp(&wm.patch,&edited,sizeof edited));
  fm1_ms=2000;fm1_in.buttons=1u<<BTN_REC;detail_edges(1u<<BTN_REC,0);assert(rec_pending);panic();fm1_in.buttons=0;assert(!(detail_edges(0,1u<<BTN_REC)&(1u<<BTN_REC)));

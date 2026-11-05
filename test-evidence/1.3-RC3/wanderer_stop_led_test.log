@@ -1,0 +1,5 @@
+stop clears stale bright and dim keyboard lamps independently of cached scene
+stop clears held sequence notes in Home, settings, scope and confirmation scenes
+stopped LED scenes exclude sequencer gates even before voice cleanup
+live key feedback while stopped and note release remain correct
+256 repeated loop start/stop cases leave no keyboard lamps on

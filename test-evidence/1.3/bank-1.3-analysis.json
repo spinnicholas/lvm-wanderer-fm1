@@ -1,0 +1,810 @@
+{
+  "all_audible": true,
+  "all_bounded": true,
+  "min_rms": 106.2,
+  "max_rms": 1762.7,
+  "peak": 4204,
+  "nearest_spectral_matches": [
+    {
+      "preset": 1,
+      "name": "VELVET REED",
+      "rms": 1187.3,
+      "peak": 2653,
+      "nearest": 17,
+      "spectral_cosine": 0.9977
+    },
+    {
+      "preset": 2,
+      "name": "COPPER BASS",
+      "rms": 512.2,
+      "peak": 2704,
+      "nearest": 13,
+      "spectral_cosine": 0.9908
+    },
+    {
+      "preset": 3,
+      "name": "DUSK STRINGS",
+      "rms": 1357.8,
+      "peak": 2522,
+      "nearest": 16,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 4,
+      "name": "HOLLOW WOOD",
+      "rms": 379.6,
+      "peak": 2738,
+      "nearest": 1,
+      "spectral_cosine": 0.9924
+    },
+    {
+      "preset": 5,
+      "name": "PAPER ORGAN",
+      "rms": 1097.1,
+      "peak": 2550,
+      "nearest": 70,
+      "spectral_cosine": 0.9068
+    },
+    {
+      "preset": 6,
+      "name": "SOFT EDGE",
+      "rms": 833.9,
+      "peak": 2538,
+      "nearest": 11,
+      "spectral_cosine": 0.9928
+    },
+    {
+      "preset": 7,
+      "name": "SLOW GLASS",
+      "rms": 1548.6,
+      "peak": 2614,
+      "nearest": 1,
+      "spectral_cosine": 0.9963
+    },
+    {
+      "preset": 8,
+      "name": "NARROW LIGHT",
+      "rms": 106.2,
+      "peak": 1108,
+      "nearest": 78,
+      "spectral_cosine": 0.8683
+    },
+    {
+      "preset": 9,
+      "name": "WARM BRASS",
+      "rms": 865.6,
+      "peak": 2522,
+      "nearest": 50,
+      "spectral_cosine": 0.994
+    },
+    {
+      "preset": 10,
+      "name": "SUB CURRENT",
+      "rms": 1073.2,
+      "peak": 2738,
+      "nearest": 13,
+      "spectral_cosine": 0.9937
+    },
+    {
+      "preset": 11,
+      "name": "SILK PULSE",
+      "rms": 818.3,
+      "peak": 2197,
+      "nearest": 6,
+      "spectral_cosine": 0.9928
+    },
+    {
+      "preset": 12,
+      "name": "BROKEN RADIO",
+      "rms": 147.0,
+      "peak": 1487,
+      "nearest": 74,
+      "spectral_cosine": 0.9475
+    },
+    {
+      "preset": 13,
+      "name": "LOW TIDE",
+      "rms": 1007.1,
+      "peak": 2584,
+      "nearest": 10,
+      "spectral_cosine": 0.9937
+    },
+    {
+      "preset": 14,
+      "name": "GOLDEN FIFTH",
+      "rms": 818.4,
+      "peak": 2593,
+      "nearest": 85,
+      "spectral_cosine": 0.8196
+    },
+    {
+      "preset": 15,
+      "name": "DUST FLUTE",
+      "rms": 1340.9,
+      "peak": 2737,
+      "nearest": 50,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 16,
+      "name": "WIDE HORIZON",
+      "rms": 1481.1,
+      "peak": 2576,
+      "nearest": 3,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 17,
+      "name": "ROUND SQUARE",
+      "rms": 1285.4,
+      "peak": 2671,
+      "nearest": 1,
+      "spectral_cosine": 0.9977
+    },
+    {
+      "preset": 18,
+      "name": "MOSS PAD",
+      "rms": 509.7,
+      "peak": 1371,
+      "nearest": 9,
+      "spectral_cosine": 0.9502
+    },
+    {
+      "preset": 19,
+      "name": "SILVER SAW",
+      "rms": 457.1,
+      "peak": 4204,
+      "nearest": 46,
+      "spectral_cosine": 0.9565
+    },
+    {
+      "preset": 20,
+      "name": "NIGHT CHORD",
+      "rms": 963.3,
+      "peak": 2170,
+      "nearest": 13,
+      "spectral_cosine": 0.9453
+    },
+    {
+      "preset": 21,
+      "name": "FELT TINES",
+      "rms": 560.4,
+      "peak": 3447,
+      "nearest": 15,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 22,
+      "name": "BRONZE BELL",
+      "rms": 347.7,
+      "peak": 2684,
+      "nearest": 15,
+      "spectral_cosine": 0.9933
+    },
+    {
+      "preset": 23,
+      "name": "ICE KEYS",
+      "rms": 636.7,
+      "peak": 3486,
+      "nearest": 11,
+      "spectral_cosine": 0.9728
+    },
+    {
+      "preset": 24,
+      "name": "RUBBER BASS",
+      "rms": 836.6,
+      "peak": 3370,
+      "nearest": 40,
+      "spectral_cosine": 0.8831
+    },
+    {
+      "preset": 25,
+      "name": "WIRE CHOIR",
+      "rms": 667.0,
+      "peak": 2332,
+      "nearest": 59,
+      "spectral_cosine": 0.9745
+    },
+    {
+      "preset": 26,
+      "name": "BAMBOO FM",
+      "rms": 699.1,
+      "peak": 3446,
+      "nearest": 61,
+      "spectral_cosine": 0.8749
+    },
+    {
+      "preset": 27,
+      "name": "CRYSTAL DROP",
+      "rms": 743.7,
+      "peak": 3182,
+      "nearest": 17,
+      "spectral_cosine": 0.9947
+    },
+    {
+      "preset": 28,
+      "name": "METAL REED",
+      "rms": 693.5,
+      "peak": 3073,
+      "nearest": 29,
+      "spectral_cosine": 0.9715
+    },
+    {
+      "preset": 29,
+      "name": "WOODEN GONG",
+      "rms": 382.9,
+      "peak": 3275,
+      "nearest": 28,
+      "spectral_cosine": 0.9715
+    },
+    {
+      "preset": 30,
+      "name": "NEON PLUCK",
+      "rms": 360.9,
+      "peak": 2519,
+      "nearest": 74,
+      "spectral_cosine": 0.9073
+    },
+    {
+      "preset": 31,
+      "name": "QUIET RHODES",
+      "rms": 621.1,
+      "peak": 3348,
+      "nearest": 46,
+      "spectral_cosine": 0.9238
+    },
+    {
+      "preset": 32,
+      "name": "TUNED PLATE",
+      "rms": 391.2,
+      "peak": 2840,
+      "nearest": 37,
+      "spectral_cosine": 0.6912
+    },
+    {
+      "preset": 33,
+      "name": "GLASS ORGAN",
+      "rms": 510.1,
+      "peak": 1702,
+      "nearest": 51,
+      "spectral_cosine": 0.99
+    },
+    {
+      "preset": 34,
+      "name": "SOFT MALLET",
+      "rms": 478.0,
+      "peak": 2914,
+      "nearest": 58,
+      "spectral_cosine": 0.9951
+    },
+    {
+      "preset": 35,
+      "name": "CLOCK CHIME",
+      "rms": 532.7,
+      "peak": 3475,
+      "nearest": 12,
+      "spectral_cosine": 0.9449
+    },
+    {
+      "preset": 36,
+      "name": "DEEP MARIMBA",
+      "rms": 256.6,
+      "peak": 2085,
+      "nearest": 41,
+      "spectral_cosine": 0.994
+    },
+    {
+      "preset": 37,
+      "name": "ELECTRIC HARP",
+      "rms": 530.4,
+      "peak": 3183,
+      "nearest": 75,
+      "spectral_cosine": 0.807
+    },
+    {
+      "preset": 38,
+      "name": "AIR COLUMN",
+      "rms": 935.1,
+      "peak": 2746,
+      "nearest": 19,
+      "spectral_cosine": 0.9429
+    },
+    {
+      "preset": 39,
+      "name": "COLD BRASS",
+      "rms": 1762.7,
+      "peak": 3370,
+      "nearest": 58,
+      "spectral_cosine": 0.9858
+    },
+    {
+      "preset": 40,
+      "name": "IRON DRUM",
+      "rms": 369.0,
+      "peak": 2689,
+      "nearest": 24,
+      "spectral_cosine": 0.8831
+    },
+    {
+      "preset": 41,
+      "name": "FOLDED SINE",
+      "rms": 352.4,
+      "peak": 2834,
+      "nearest": 36,
+      "spectral_cosine": 0.994
+    },
+    {
+      "preset": 42,
+      "name": "PRISM KEYS",
+      "rms": 184.2,
+      "peak": 2625,
+      "nearest": 57,
+      "spectral_cosine": 0.9972
+    },
+    {
+      "preset": 43,
+      "name": "ANGLED BASS",
+      "rms": 1255.4,
+      "peak": 2943,
+      "nearest": 60,
+      "spectral_cosine": 0.9997
+    },
+    {
+      "preset": 44,
+      "name": "BENT REED",
+      "rms": 877.3,
+      "peak": 2981,
+      "nearest": 56,
+      "spectral_cosine": 0.9996
+    },
+    {
+      "preset": 45,
+      "name": "PHASE CHOIR",
+      "rms": 1508.1,
+      "peak": 2941,
+      "nearest": 50,
+      "spectral_cosine": 0.9992
+    },
+    {
+      "preset": 46,
+      "name": "WAX LEAD",
+      "rms": 351.9,
+      "peak": 2877,
+      "nearest": 49,
+      "spectral_cosine": 0.9866
+    },
+    {
+      "preset": 47,
+      "name": "SOFT TEETH",
+      "rms": 197.0,
+      "peak": 2634,
+      "nearest": 57,
+      "spectral_cosine": 0.9971
+    },
+    {
+      "preset": 48,
+      "name": "CERAMIC",
+      "rms": 1224.4,
+      "peak": 2903,
+      "nearest": 3,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 49,
+      "name": "WAVING GLASS",
+      "rms": 1498.9,
+      "peak": 3156,
+      "nearest": 41,
+      "spectral_cosine": 0.993
+    },
+    {
+      "preset": 50,
+      "name": "SLOPE ORGAN",
+      "rms": 1568.8,
+      "peak": 2920,
+      "nearest": 15,
+      "spectral_cosine": 0.9998
+    },
+    {
+      "preset": 51,
+      "name": "VECTOR PAD",
+      "rms": 1621.8,
+      "peak": 2893,
+      "nearest": 41,
+      "spectral_cosine": 0.993
+    },
+    {
+      "preset": 52,
+      "name": "PAPER EDGE",
+      "rms": 182.3,
+      "peak": 2677,
+      "nearest": 57,
+      "spectral_cosine": 0.9968
+    },
+    {
+      "preset": 53,
+      "name": "ROUND FOLD",
+      "rms": 1290.9,
+      "peak": 2935,
+      "nearest": 48,
+      "spectral_cosine": 0.9992
+    },
+    {
+      "preset": 54,
+      "name": "GHOST HORN",
+      "rms": 862.8,
+      "peak": 2857,
+      "nearest": 44,
+      "spectral_cosine": 0.9995
+    },
+    {
+      "preset": 55,
+      "name": "RIBBON",
+      "rms": 1611.1,
+      "peak": 2987,
+      "nearest": 60,
+      "spectral_cosine": 0.9987
+    },
+    {
+      "preset": 56,
+      "name": "LANTERN",
+      "rms": 1638.1,
+      "peak": 2894,
+      "nearest": 44,
+      "spectral_cosine": 0.9996
+    },
+    {
+      "preset": 57,
+      "name": "SPLIT LIGHT",
+      "rms": 188.8,
+      "peak": 2673,
+      "nearest": 42,
+      "spectral_cosine": 0.9972
+    },
+    {
+      "preset": 58,
+      "name": "THIN ICE",
+      "rms": 1491.7,
+      "peak": 2936,
+      "nearest": 48,
+      "spectral_cosine": 0.999
+    },
+    {
+      "preset": 59,
+      "name": "CHALK PULSE",
+      "rms": 892.8,
+      "peak": 2831,
+      "nearest": 60,
+      "spectral_cosine": 0.9968
+    },
+    {
+      "preset": 60,
+      "name": "SHADOW SYNC",
+      "rms": 1536.6,
+      "peak": 2979,
+      "nearest": 43,
+      "spectral_cosine": 0.9997
+    },
+    {
+      "preset": 61,
+      "name": "CEDAR STRING",
+      "rms": 340.2,
+      "peak": 2959,
+      "nearest": 78,
+      "spectral_cosine": 0.9024
+    },
+    {
+      "preset": 62,
+      "name": "PALM MUTE",
+      "rms": 352.6,
+      "peak": 2891,
+      "nearest": 65,
+      "spectral_cosine": 0.8944
+    },
+    {
+      "preset": 63,
+      "name": "NYLON HARP",
+      "rms": 413.0,
+      "peak": 3203,
+      "nearest": 74,
+      "spectral_cosine": 0.9138
+    },
+    {
+      "preset": 64,
+      "name": "STEEL THREAD",
+      "rms": 286.7,
+      "peak": 2716,
+      "nearest": 46,
+      "spectral_cosine": 0.8433
+    },
+    {
+      "preset": 65,
+      "name": "DARK KOTO",
+      "rms": 230.8,
+      "peak": 2100,
+      "nearest": 62,
+      "spectral_cosine": 0.8944
+    },
+    {
+      "preset": 66,
+      "name": "RUBBER WIRE",
+      "rms": 239.6,
+      "peak": 2416,
+      "nearest": 38,
+      "spectral_cosine": 0.9274
+    },
+    {
+      "preset": 67,
+      "name": "PAPER GUITAR",
+      "rms": 327.6,
+      "peak": 3063,
+      "nearest": 68,
+      "spectral_cosine": 0.8661
+    },
+    {
+      "preset": 68,
+      "name": "BRASS WIRE",
+      "rms": 262.5,
+      "peak": 2351,
+      "nearest": 77,
+      "spectral_cosine": 0.8952
+    },
+    {
+      "preset": 69,
+      "name": "GLASS STRING",
+      "rms": 410.2,
+      "peak": 3443,
+      "nearest": 62,
+      "spectral_cosine": 0.8151
+    },
+    {
+      "preset": 70,
+      "name": "BASS WOOD",
+      "rms": 280.3,
+      "peak": 2733,
+      "nearest": 5,
+      "spectral_cosine": 0.9068
+    },
+    {
+      "preset": 71,
+      "name": "PICKED FIFTH",
+      "rms": 519.3,
+      "peak": 2776,
+      "nearest": 38,
+      "spectral_cosine": 0.9197
+    },
+    {
+      "preset": 72,
+      "name": "BAMBOO STRING",
+      "rms": 327.8,
+      "peak": 2757,
+      "nearest": 78,
+      "spectral_cosine": 0.9055
+    },
+    {
+      "preset": 73,
+      "name": "TAPE HARP",
+      "rms": 315.7,
+      "peak": 2751,
+      "nearest": 12,
+      "spectral_cosine": 0.917
+    },
+    {
+      "preset": 74,
+      "name": "METAL BRUSH",
+      "rms": 474.5,
+      "peak": 2971,
+      "nearest": 12,
+      "spectral_cosine": 0.9475
+    },
+    {
+      "preset": 75,
+      "name": "FELT STRING",
+      "rms": 249.9,
+      "peak": 2294,
+      "nearest": 72,
+      "spectral_cosine": 0.898
+    },
+    {
+      "preset": 76,
+      "name": "DRY KALIMBA",
+      "rms": 211.9,
+      "peak": 2231,
+      "nearest": 71,
+      "spectral_cosine": 0.8923
+    },
+    {
+      "preset": 77,
+      "name": "OPEN KORA",
+      "rms": 459.6,
+      "peak": 2892,
+      "nearest": 68,
+      "spectral_cosine": 0.8952
+    },
+    {
+      "preset": 78,
+      "name": "LOW CEDAR",
+      "rms": 369.6,
+      "peak": 2938,
+      "nearest": 72,
+      "spectral_cosine": 0.9055
+    },
+    {
+      "preset": 79,
+      "name": "DULCIMER",
+      "rms": 283.0,
+      "peak": 3733,
+      "nearest": 68,
+      "spectral_cosine": 0.7923
+    },
+    {
+      "preset": 80,
+      "name": "THUMB PIANO",
+      "rms": 475.1,
+      "peak": 3056,
+      "nearest": 12,
+      "spectral_cosine": 0.8907
+    },
+    {
+      "preset": 81,
+      "name": "CLAY BOWL",
+      "rms": 562.1,
+      "peak": 2898,
+      "nearest": 87,
+      "spectral_cosine": 0.9745
+    },
+    {
+      "preset": 82,
+      "name": "BRONZE PLATE",
+      "rms": 618.3,
+      "peak": 2836,
+      "nearest": 88,
+      "spectral_cosine": 0.9094
+    },
+    {
+      "preset": 83,
+      "name": "WOOD BLOCK",
+      "rms": 162.6,
+      "peak": 2672,
+      "nearest": 87,
+      "spectral_cosine": 0.9763
+    },
+    {
+      "preset": 84,
+      "name": "GLASS BOWL",
+      "rms": 424.7,
+      "peak": 2430,
+      "nearest": 97,
+      "spectral_cosine": 0.9888
+    },
+    {
+      "preset": 85,
+      "name": "HOLLOW DRUM",
+      "rms": 171.3,
+      "peak": 2011,
+      "nearest": 90,
+      "spectral_cosine": 0.8892
+    },
+    {
+      "preset": 86,
+      "name": "SMALL GONG",
+      "rms": 578.1,
+      "peak": 2469,
+      "nearest": 27,
+      "spectral_cosine": 0.8507
+    },
+    {
+      "preset": 87,
+      "name": "STONE BELL",
+      "rms": 541.0,
+      "peak": 3085,
+      "nearest": 83,
+      "spectral_cosine": 0.9763
+    },
+    {
+      "preset": 88,
+      "name": "WATER CUP",
+      "rms": 448.7,
+      "peak": 2623,
+      "nearest": 91,
+      "spectral_cosine": 0.9364
+    },
+    {
+      "preset": 89,
+      "name": "TUNED CAN",
+      "rms": 299.8,
+      "peak": 2717,
+      "nearest": 84,
+      "spectral_cosine": 0.9032
+    },
+    {
+      "preset": 90,
+      "name": "SKIN DRUM",
+      "rms": 175.6,
+      "peak": 1746,
+      "nearest": 85,
+      "spectral_cosine": 0.8892
+    },
+    {
+      "preset": 91,
+      "name": "BELL TREE",
+      "rms": 488.8,
+      "peak": 2428,
+      "nearest": 88,
+      "spectral_cosine": 0.9364
+    },
+    {
+      "preset": 92,
+      "name": "SOFT STEEL",
+      "rms": 646.6,
+      "peak": 2947,
+      "nearest": 97,
+      "spectral_cosine": 0.9847
+    },
+    {
+      "preset": 93,
+      "name": "MARBLE DROP",
+      "rms": 308.7,
+      "peak": 2895,
+      "nearest": 92,
+      "spectral_cosine": 0.9448
+    },
+    {
+      "preset": 94,
+      "name": "COPPER CUP",
+      "rms": 577.1,
+      "peak": 2827,
+      "nearest": 91,
+      "spectral_cosine": 0.8282
+    },
+    {
+      "preset": 95,
+      "name": "PAPER FRAME",
+      "rms": 175.4,
+      "peak": 1910,
+      "nearest": 84,
+      "spectral_cosine": 0.6913
+    },
+    {
+      "preset": 96,
+      "name": "LOW GONG",
+      "rms": 538.2,
+      "peak": 1758,
+      "nearest": 100,
+      "spectral_cosine": 0.9861
+    },
+    {
+      "preset": 97,
+      "name": "HANGING GLASS",
+      "rms": 596.2,
+      "peak": 3180,
+      "nearest": 84,
+      "spectral_cosine": 0.9888
+    },
+    {
+      "preset": 98,
+      "name": "SHORT LOG",
+      "rms": 137.5,
+      "peak": 2580,
+      "nearest": 83,
+      "spectral_cosine": 0.9693
+    },
+    {
+      "preset": 99,
+      "name": "METAL RAIN",
+      "rms": 563.4,
+      "peak": 2905,
+      "nearest": 84,
+      "spectral_cosine": 0.8274
+    },
+    {
+      "preset": 100,
+      "name": "DEEP VESSEL",
+      "rms": 582.0,
+      "peak": 2590,
+      "nearest": 96,
+      "spectral_cosine": 0.9861
+    }
+  ],
+  "limits": "Spectral similarity is diagnostic, not a subjective sound-quality rating. Decay, attack, modulation and playing register also distinguish patches."
+}

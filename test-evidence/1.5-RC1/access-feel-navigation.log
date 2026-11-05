@@ -1,0 +1,18 @@
+  1000 ms  screen -> build/host/access-feel-1000.ppm
+  1250 ms  assertion settings = 1 passed
+  1250 ms  assertion page = 8 passed
+  1350 ms  assertion displayhold = 3 passed
+  1600 ms  screen -> build/host/access-feel-1600.ppm
+  1650 ms  assertion focus = 7 passed
+  3000 ms  screen -> build/host/access-feel-3000.ppm
+  5000 ms  screen -> build/host/access-feel-5000.ppm
+  5050 ms  assertion focus = 7 passed
+  5150 ms  assertion focus = 0 passed
+  6350 ms  assertion page = 8 passed
+  6450 ms  assertion displayhold = 0 passed
+  6650 ms  assertion focus = 7 passed
+  8500 ms  screen -> build/host/access-feel-8500.ppm
+  8550 ms  assertion focus = 7 passed
+  8700 ms  screen -> build/host/access-feel-8700.ppm
+  8750 ms  assertion focus = 0 passed
+sound  -> build/host/access-feel.wav (396800 frames)

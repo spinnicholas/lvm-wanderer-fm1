@@ -1,0 +1,10 @@
+100 btndown 1
+1700 btnup 1
+1800 btn 1
+1900 enc 6 2
+2000 btndown 12
+4200 btnup 12
+4300 btn 12
+4500 btn 12
+4600 shot
+4700 end

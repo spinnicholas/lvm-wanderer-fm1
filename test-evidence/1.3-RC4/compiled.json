@@ -1,0 +1,10 @@
+{
+  "firmware_sha256": "91633c4d0e3de94fd15722fce062504243c0d623437317be96434165c3b116ce",
+  "emulated_ms": 6500,
+  "frames": 279296,
+  "peak": 3415,
+  "average_isr_percent": 16.5,
+  "physical_hardware": false,
+  "native_ui_review": "scatter-review.png",
+  "compiled_lcd_captures": "additional capture run optional; not required for the completed audio smoke test"
+}

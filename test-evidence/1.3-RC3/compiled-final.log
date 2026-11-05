@@ -1,0 +1,48 @@
+fm1-emu: 585728 bytes at 0x02000000, entry 0x02000120, ram 1048576 bytes at 0x01c00000
+stopped after 1560000000 instructions (step limit, hist top-12 of 311 classes):
+  r_mov_i_l2                   114807676 (  7.4%)
+  if_r_eq_i_goto_i             102681302 (  6.6%)
+  r_mov_r_r_5                  102494695 (  6.6%)
+  if_r_ne_i_goto_i_3           65386418 (  4.2%)
+  if_r_r_eq_i_goto_i           58793116 (  3.8%)
+  r_or_r                       58100610 (  3.7%)
+  r_mov_r_i_3                  57766812 (  3.7%)
+  r_mov_sp_i_l2                54748666 (  3.5%)
+  r_mov_i_l4                   49211492 (  3.2%)
+  r_mov_r                      47969219 (  3.1%)
+  r_add_r                      39242109 (  2.5%)
+  r_add_i                      37246821 (  2.4%)
+last executed pcs:
+0x200a40a -> 0x200a40c -> 0x200a4d0 -> 0x200a4d2 -> 0x200a4d4 -> 0x200a4d8 -> 0x200a4dc -> 0x200a4de -> 0x200a4e2 -> 0x200a4e6 -> 0x200a4ea -> 0x200a4ec
+pc histogram top-8:
+  0x0200aedc  25342824
+  0x0200add4  25342811
+  0x0200aee0  25342797
+  0x0200adde  25342794
+  0x0200ade0  25342772
+  0x0200add8  25342767
+  0x0200add0  25342753
+  0x0200adca  25342749
+cpu0: 16.9% in an ISR, 0.4% nested (41.6 M ISR instructions per emulated s)
+time 6500 ms, 64094 interrupts, 1091 audio halves (279296 samples)
+interrupts by source: c0 irq 63 x63007, c0 irq 11 x1087
+wav: scatter.wav (6.33 s)
+lcd frames=424 inverted=true display_on=true
+237 unknown MMIO accesses at 17 addresses (bring-up list, first 24):
+  read  @ 0x000100c0 first value=0x00000000 x1
+  write @ 0x01eee2c0 first value=0x01c74000 x1
+  write @ 0x01eee280 first value=0x01c740ff x1
+  write @ 0x01eee2c4 first value=0x01c7a000 x1
+  write @ 0x01eee284 first value=0x01c7a0ff x1
+  read  @ 0x01eee348 first value=0x00000000 x2
+  write @ 0x01eee348 first value=0x00000003 x2
+  read  @ 0x01eee340 first value=0x00000000 x1
+  write @ 0x01eee340 first value=0x003f0030 x1
+  write @ 0x01eee384 first value=0x02000120 x1
+  write @ 0x01eee380 first value=0x0205bdb0 x1
+  write @ 0x01eee38c first value=0x01c00000 x1
+  write @ 0x01eee388 first value=0x01c00b6b x1
+  read  @ 0x00040200 first value=0x00000000 x132
+  write @ 0x00040200 first value=0x00000000 x88
+  write @ 0x01eee2c8 first value=0x01c7fd50 x1
+  write @ 0x01eee288 first value=0x01c7ffff x1

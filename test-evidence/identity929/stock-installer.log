@@ -1,0 +1,8 @@
+models: SMK-37 Pro / Elite / MKE-P37 / Starrykey are one keyboard, FM-1 is another ok
+port names: every SMK model and every port firmware probed       ok
+running 1.2 -> stock v15: checked file, staged loader, wrote and verified returned identity (simulated)
+interrupted official-v15 loader resumes only with the verified v15 file
+unfinished custom update refuses stock; finish original package first
+one-byte-corrupt v15 refused before probing or writing a device
+dinghy-1.2-rc2.fwsc: host install/verify from 0.9, 1.0 and a custom identity pass (simulated)
+STOCK AND RELEASE INSTALLER TESTS PASSED

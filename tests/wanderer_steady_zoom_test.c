@@ -11,19 +11,19 @@ int main(void)
  for(uint32_t v=0;v<=100;v++){char b[12];number(v,b);size_t n=strlen(b);b[n]='%';b[n+1]=0;assert(zoom_number_font(b,112,3,0)==percentage);assert(width(percentage,b)+2*FONT_PAD<=216);}
  cues_enabled=0;wm.extra_large=1;editor_open=1;settings_open=0;fm1_ms=100;
  uint32_t cases=0;
- for(uint32_t engine=0;engine<5;engine++){
+ for(uint32_t engine=0;engine<WS_ENGINES;engine++){
   ws_select(engine*20);editor_ensure();
   for(editor_page=0;editor_page<EDIT_PAGES;editor_page++)if(editor_page!=EDIT_PRINT){
    for(uint32_t k=0;k<4;k++){
     wm.patch.engine=(uint8_t)engine;
     editor_selected=k;const font_t *previous=0;
     uint8_t env=editor_page==0u||editor_page==2u||(editor_page>=6u&&editor_page<=9u);
-    uint8_t fractional=(env&&k!=2u)||(editor_page==1u&&k==0u);
+    uint8_t fractional=(env&&k!=2u)||(editor_page==1u&&k==0u)||(engine==3&&((editor_page==3&&k==1)||(editor_page==4&&k==0)));
     editor_adjust(k,-10000);
     for(uint32_t v=0;v<128;v++){
      char b[12];const char *unit,*value=editor_value(k,b,&unit);
-     const font_t *font=zoom_number_font(value,unit[0]?84:112,3,fractional);
-     if(value==b){assert(font);if(previous)assert(font==previous);previous=font;assert(width(font,value)+2*FONT_PAD<=216);}
+     const font_t *font=zoom_number_font(value,unit[0]?84:112,(uint8_t)(editor_page==EDIT_SCATTER&&k==1u?4u:3u),(uint8_t)(fractional||(editor_page==EDIT_SCATTER&&k==1u)));
+     if(value==b){assert(font);if(previous&&font!=previous){fprintf(stderr,"STEADY FAIL eng=%u page=%u knob=%u v=%u value=%s unit=%s font=%p prev=%p\n",engine,editor_page,k,v,value,unit,(void*)font,(void*)previous);assert(font==previous);}previous=font;assert(width(font,value)+2*FONT_PAD<=216);}
      screen();editor_adjust(k,1);cases++;
     }
    }

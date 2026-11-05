@@ -1,0 +1,20 @@
+three-note chords retain independent held durations, replay polyphonically and survive Anchor/scale evolution/branch
+five/six-note overflow keeps four recent starts; held overdubs clear covered repeats without erasing other chord pitches
+polyphonic MIDI sustain/source isolation and two-bar wrap keep every captured gate owned correctly
+simultaneous Memory/Layer chord starts share the four sound voices predictably
+     0 ms  slot 2 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 2 saved (2224 B)
+     0 ms  slot 2 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 2 saved (2224 B)
+empty record passes retain Undo; Save establishes a reference; Undo after Save is dirty; preferences failure never falsely reports project loss or a clean session
+     0 ms  slot 0 saved (548 B)
+     0 ms  slot 1 saved (2224 B)
+     0 ms  settings 0 saved (16 B)
+v4 import retains 32-step held notes/key/sound; original slot is unchanged; boot caches slot validity without writing or auto-loading
+short Save remains Catch; held Save opens project Save without an intermediate Catch or a release action
+Undo preserves accessibility choices; project/mute/length footer and save outcomes render in both themes and sizes
+8192 rapid MIDI/sustain/overdub blocks across sources/channels, two-bar wraps and maximum effects retain valid events and bounded filters; all captures release
+persistent result/error LED scenes clear unrelated Home state, retain real transport/recording, and restore Home after acknowledgment
+WANDERER 1.2 PRODUCT REFINEMENT TESTS PASSED

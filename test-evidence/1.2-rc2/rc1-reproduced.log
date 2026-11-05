@@ -1,0 +1,3 @@
+RC1 case 1 fails as expected: rc1-reproducer: tests/wanderer_1_2_rc2_test.c:28: main: Assertion `has(62)&&has(65)&&has(67)&&has(69)&&!has(60)&&!has(64)' failed.
+RC1 case 2 fails as expected: rc1-reproducer: tests/wanderer_1_2_rc2_test.c:33: main: Assertion `has(60)&&has(64)&&has(65)&&has(67)&&!has(62)&&active(60)' failed.
+RC1 case 3 fails as expected: rc1-reproducer: tests/wanderer_1_2_rc2_test.c:38: main: Assertion `!active(60)&&active(62)&&active(64)&&active(65)&&active(72)' failed.

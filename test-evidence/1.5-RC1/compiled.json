@@ -1,0 +1,17 @@
+{
+  "firmware_sha256": "cda435a89f7b268dcef578a2df8389cd8a4adad6ddfa3c1abfcd06289d7062ce",
+  "emulated_ms": 9500,
+  "frames": 411648,
+  "peak": 4076,
+  "segment_rms": [
+    1331.1,
+    826.5,
+    697.5,
+    334.8,
+    688.0,
+    270.8
+  ],
+  "average_emulated_isr_percent": 23.2,
+  "physical_hardware": false,
+  "limits": "Known incomplete MMIO modeling; average emulated ISR load does not measure a physical worst-case audio deadline."
+}

@@ -1,0 +1,13 @@
+{
+  "identity": "FM-1_929",
+  "unchanged_protected_files": 33,
+  "loader_identical_to_accepted_1_4": true,
+  "head_identical_to_accepted_1_4": true,
+  "sha256": "c6df3cae9d57c1956c642e789c56b748a2c1924b7dae96d0e30bb0da4047c783",
+  "bytes": 612196,
+  "release": "1.7-RC3",
+  "software_checks_passed": 72,
+  "theme_count": 6,
+  "default_theme": "CONTRAST",
+  "hardware_acceptance": "pending"
+}

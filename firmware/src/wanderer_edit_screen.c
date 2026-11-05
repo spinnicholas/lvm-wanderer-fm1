@@ -84,47 +84,86 @@ static void zoom_parameter_range(const char *label,const char *value,const char 
  else zoom_text(12,88,216,h,104,value,1,fg);
  if(unit[0])zoom_text(12,175,216,27,23,unit,0,fg);
 }
+/* Label and value have separate lines, so long names and units never compete. */
+static void control_row(uint32_t k,int32_t y,const char *label,const char *value,const char *unit,
+    uint8_t numeric,uint8_t selected,uint16_t fg,uint16_t pa,uint16_t guide,uint16_t accent)
+{
+ const font_t *f=numeric?&FONT_P:&FONT_T;
+ int32_t units=width(&FONT_T,unit);
+ int32_t end=220-(units?units+7:0);
+ char n[12];
+ card(8,y,224,48,pa,selected?accent:guide,selected);
+ aa_text(16,y+4,&FONT_T,number(k+1u,n),fg);
+ aa_text(40,y+4,&FONT_T,label,fg);
+ aa_text(end-width(f,value),y+(numeric?22:25),f,value,fg);
+ if(units)aa_text(220-units,y+25,&FONT_T,unit,guide);
+}
+static void knob_tabs(uint32_t count,uint32_t selected,int32_t y,uint16_t fg,uint16_t pa,uint16_t guide)
+{
+ for(uint32_t k=0;k<count;k++){
+  int32_t x=18+(int32_t)k*55;char n[12];
+  card(x,y,40,30,pa,k==selected?fg:guide,k==selected);
+  aa_text(x+12,y+6,&FONT_T,number(k+1u,n),fg);
+ }
+}
 static const char *editor_value(uint32_t k,char *buf,const char **unit)
 {
- *unit="";const ws_patch_t *p=ws_current_patch();
+ *unit="";const ws_patch_t *p=ws_edit_patch();
  if(editor_page==EDIT_PRINT){
   if(k==0)return wp_writing?"PRINTING":wp_armed?"ARMED":"READY";
   if(k==1)return wp_redo?"REDO":wp_undo_valid?"UNDO":"CANCEL";
   if(k==2)return anchor_view?"ANCHOR":"CURRENT";
   return wp_active?"RAM":"EVENT";
  }
- uint8_t *value=editor_param(k);uint32_t v=value?*value:0;
+ const uint8_t *value=editor_param(k,p);uint32_t v=value?*value:0;
+ static const char *const filter_names[WS_FILTER_COUNT]={"LOW","BAND","HIGH","LP 12","LP 24"};
  uint8_t env=(editor_page==0||editor_page==2||(editor_page>=6&&editor_page<=9));
+ if(editor_page==EDIT_PATTERN&&k==0){static const char *names[WM_PATTERN_COUNT]={"FREE","OFFBEATS","EUCLID","CASCADE","WALK","ECHOES","LATE","BAR END","BUILD","CHAOS"};return names[v];}
  if(editor_page==EDIT_SCATTER){
-  if(k==0){const char *styles[WM_SCATTER_MODES]={"MIXED","SLICES","HOPS","REVERSE","TAPE","CLOUD","PITCHED","FILLS"};return styles[v];}
+  if(k==0){const char *styles[WM_SCATTER_MODES]={"MIXED","SLICES","HOPS","REVERSE","TAPE","CLOUD","PITCHED","RUSH"};return styles[v];}
   if(k==1){if(!v)return "AUTO";*unit="MS";v=WM_GRAIN_MS[v];}
  }
  if(env&&k!=2){*unit="MS";v=WS_MS[v];}
- else if(editor_page==1&&k==0){*unit="HZ";v=WS_HZ[v];}
- else if(editor_page==1&&k==2){const char *types[3]={"LOW","BAND","HIGH"};return types[v];}
+ else if(p->engine==3&&((editor_page==3&&k==1)||(editor_page==4&&k==0))){*unit="MS";v=WS_MS[v]<40?40:WS_MS[v];}
+ else if(editor_page==1&&k==0){*unit="HZ";v=p->filter>=WS_LP12?WN_LP_HZ[v]:WN_HZ[v];}
+ else if(editor_page==1&&k==2)return filter_names[v];
  else if(editor_page==3&&k==0)return WS_ENGINE_NAMES[v];
- else if(editor_page==3&&k==1&&p->engine==0){const char *waves[6]={"SAW","HOLLOW","PULSE","SINE","TRI","GLASS"};return waves[v];}
+ else if(editor_page==3&&k==1&&p->engine==0){const char *waves[10]={"SAW","SAW PULSE","PULSE","SINE","TRI","STACK","REED","NOISE","SYNC","RING"};return waves[v];}
+ else if(editor_page==EDIT_COLOR&&p->engine==5&&k<2){*unit="/4";}
+ else if(editor_page==EDIT_COLOR&&p->engine!=5&&((p->engine==2&&k<2)||(k==0&&p->engine))){
+  const char *pd[8]={"SAW","SQUARE","PULSE","DOUBLE SIN","SAW PULSE","RES SAW","RES TRI","RES TRAP"};
+  const char *fm[6]={"SINE","HALF","RECTIFY","SINE+2","SINE+3","SINE"};
+  const char *st[6]={"PLUCK","NOISE","HAMMER","SOFT","PLUCK","NOISE"};const char *mo[6]={"BAR","SKIN","BOWL","PIPE","ORGAN","GLASS"};
+  return p->engine==2?pd[v]:p->engine==1?fm[v]:p->engine==3?st[v]:mo[v];}
+ else if(editor_page==EDIT_COLOR&&p->engine==2&&k==3)return v==1?"RING":"BLEND";
+ else if(editor_page==EDIT_COLOR&&p->engine==3&&k==2)return filter_names[v];
  else if(editor_page==5&&k==2){const char *dest[3]={"FILTER","SHAPE","PITCH"};return dest[v];}
- else if(editor_page==10){*unit="/16";}
- else if((editor_page==12&&k==0)||(editor_page==3&&k==1&&p->engine==1)){v++;}
- else if(editor_page==12&&k>=2){*unit="/16";}
- else if(editor_page==3&&k==2&&(p->engine==1||p->engine==0)){*unit="/16";}
+ else if(editor_page==10){*unit=p->engine==5?"/4":"/16";}
+ else if((editor_page==12&&k==0)||(editor_page==3&&k==1&&(p->engine==1||p->engine==5))){v++;}
+ else if(editor_page==12&&k>=2&&p->engine!=5){*unit="/16";}
+ else if(editor_page==3&&k==2&&(p->engine==1||p->engine==0||p->engine==5)){*unit=p->engine==5?"/4":"/16";}
  if((*unit)[0]=='M'&&v>=1000u){*unit="S";number(v/1000u,buf);uint32_t n=0;while(buf[n])n++;buf[n++]='.';buf[n++]=(char)('0'+(v%1000u)/100u);buf[n]=0;return buf;}
  if((*unit)[0]=='H'&&v>=1000u){*unit="KHZ";number(v/1000u,buf);uint32_t n=0;while(buf[n])n++;buf[n++]='.';buf[n++]=(char)('0'+(v%1000u)/100u);buf[n]=0;return buf;}
  (void)p;return number(v,buf);
 }
 static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
 {
- editor_ensure();
- const char *title=wm.patch.engine==4&&editor_page==10?"MODAL RATIOS":wm.patch.engine==4&&editor_page==11?"PARTIAL LVLS":EDIT_TITLES[editor_page];
- aa_text(10,7,&FONT_T,title,fg);transport_symbol(209,6,fg);cv_rect(12,33,216,2,guide);
+ uint8_t engine=ws_edit_patch()->engine;
+ const char *title=engine==5&&editor_page==0?"OP 6 ENV":engine==5&&editor_page==2?"OP 5 ENV":engine==4&&editor_page==10?"MODAL RATIOS":engine==4&&editor_page==11?"PARTIAL LVLS":EDIT_TITLES[editor_page];
+ const wm_theme_t *theme=theme_palette();
+ uint16_t accent=editor_page==EDIT_PRINT?theme->anchor:
+    editor_page==EDIT_SCATTER||editor_page==EDIT_PATTERN?theme->layer:theme->evolve;
+ aa_text(10,7,&FONT_T,title,fg);
+ if(editor_page!=EDIT_PRINT&&editor_page!=EDIT_SCATTER&&editor_page!=EDIT_PATTERN)
+  aa_text(188,7,&FONT_T,layer_focus?"2":"1",fg);
+ transport_symbol(209,6,fg);section_rule(accent,guide);
  if(editor_page==EDIT_PRINT){
   const char *state=wp_writing?"PRINTING":wp_armed?"NEXT LOOP":wp_dry_view?"DRY ANCHOR":anchor_view?"ANCHOR":wp_redo?"UNDO LOOP":wp_active?"AUDIO LOOP":"EVENT LOOP";
   if(wm.extra_large){
    mid(96,45,wp_writing||wp_armed?ICO_RECORD:ICO_MEMORY,fg);zoom_text(12,96,216,44,44,state,0,fg);
    const char *hints[4]={"REC / PRINT",wp_writing||wp_armed?"ENV / CANCEL":wp_redo?"ENV / REDO":"ENV / UNDO","LFO / ANCHOR",!wp_has_anchor?"RAM EMPTY":wp_active?"KNOB 4 / EVENT":"KNOB 4 / RAM"};
    const char *hint=hints[editor_selected];zoom_text(12,146,216,27,23,hint,0,fg);
-   for(uint32_t j=0;j<4;j++){int32_t x=18+(int32_t)j*55;card(x,179,40,30,pa,j==editor_selected?fg:guide,j==editor_selected);char b[12];aa_text(x+12,185,&FONT_T,number(j+1,b),fg);}
+   knob_tabs(4,editor_selected,179,fg,pa,guide);
    text_center(215,&FONT_T,"RAM / SAVE NOTES",fg);return;
   }
   mini(104,42,wp_writing||wp_armed?ICO_RECORD:ICO_MEMORY,fg);text_center(83,&FONT_P,state,fg);
@@ -137,34 +176,27 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
  if(wm.extra_large){
   uint32_t k=editor_selected;char buf[12];const char *unit,*v=editor_value(k,buf,&unit);
   uint8_t env=editor_page==0u||editor_page==2u||(editor_page>=6u&&editor_page<=9u);
-  uint8_t fractional=(env&&k!=2u)||(editor_page==1u&&k==0u);
-  zoom_parameter_range(editor_label(k),v,unit,3,fractional,fg);
-  for(uint32_t j=0;j<editor_count();j++){int32_t x=18+(int32_t)j*55;card(x,208,40,30,pa,j==k?fg:guide,j==k);char b[12];aa_text(x+12,214,&FONT_T,number(j+1,b),fg);}
+  uint8_t fractional=(env&&k!=2u)||(editor_page==1u&&k==0u)||(engine==3&&((editor_page==3&&k==1)||(editor_page==4&&k==0)));
+  panel(8,39,224,164,pa);
+  zoom_parameter_range(editor_label(k),v,unit,(uint8_t)(editor_page==EDIT_SCATTER&&k==1u?4u:3u),(uint8_t)(fractional||(editor_page==EDIT_SCATTER&&k==1u)),fg);
+  knob_tabs(editor_count(),k,208,fg,pa,guide);
  }else{
   for(uint32_t k=0;k<editor_count();k++){
-   int32_t x=8,y=42+(int32_t)k*43;
-   card(x,y,224,40,pa,k==editor_selected?fg:guide,k==editor_selected);
-   const char *label=editor_page==1&&k==0?"FREQ":editor_label(k);aa_text(16,y+11,&FONT_T,label,fg);
    char buf[12];const char *unit,*value=editor_value(k,buf,&unit);
-   uint8_t numeric=value==buf;const font_t *f=numeric?&FONT_P:&FONT_T;
-   int32_t units=width(&FONT_T,unit),end=222-(units?units+4:0);
-   aa_text(end-width(f,value),y+(numeric?8:11),f,value,fg);
-   if(units)aa_text(222-units,y+13,&FONT_T,unit,fg);
+   control_row(k,37+(int32_t)k*50,editor_label(k),value,unit,value==buf,
+       k==editor_selected,fg,pa,guide,accent);
   }
-  for(uint32_t i=0;i<EDIT_PAGES;i++)cv_rect(11+(int32_t)i*15,223,10,editor_page==i?6:2,editor_page==i?fg:guide);
+  for(uint32_t i=0;i<EDIT_PAGES;i++)
+   cv_rect(12+(int32_t)(i*216u/EDIT_PAGES),237,216u/EDIT_PAGES-4u,
+       editor_page==i?3:1,editor_page==i?fg:guide);
  }
  (void)bg;
 }
 static void screen_preset_name(uint16_t fg,uint16_t guide)
 {
- status_header(ICO_SOUND,fg,guide,0);mid(96,44,ICO_SOUND,fg);
- const char *name=wm.legacy?"LEGACY":WS_NAMES[wm.sound];const font_t *font=wm.extra_large?&FONT_V:&FONT_P;
- char a[32],b[32];uint32_t split=0,n=0;while(name[n]){if(name[n]==' ')split=n;n++;}
- if(!split)split=n;for(uint32_t i=0;i<split;i++)a[i]=name[i];a[split]=0;
- uint32_t j=0;for(uint32_t i=split+(name[split]==' ');i<n;i++)b[j++]=name[i];b[j]=0;
- if(width(font,a)>216||width(font,b)>216)font=&FONT_P;
- if(width(font,name)<=216)text_center(108,font,name,fg);
- else{text_center(98,font,a,fg);text_center(wm.extra_large?137:132,font,b,fg);}
- char value[12];text_center(180,&FONT_N,number(wm.sound+1,value),fg);
- for(uint32_t i=0;i<10;i++)cv_rect(17+(int32_t)i*21,224,16,6,i==wm.sound/10?fg:guide);
+ status_header(ICO_SOUND,layer_focus?"LAYER 2":"LAYER 1",fg,guide);mid(96,44,ICO_SOUND,fg);
+ const uint8_t sound=ws_edit_sound();
+ zoom_text(12,96,216,73,wm.extra_large?34:23,ws_edit_name(),1,fg);
+ char value[12];text_center(180,&FONT_N,number(sound+1,value),fg);
+ for(uint32_t i=0;i<WM_PRESET_BANKS;i++)cv_rect(9+(int32_t)i*15,224,12,6,i==sound/10?fg:guide);
 }

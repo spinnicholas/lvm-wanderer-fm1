@@ -35,7 +35,7 @@ int main(void)
  assert(!display_hold&&cue_detail&&zoom_steady&&cue_level==64);
  for(uint32_t hold=0;hold<4;hold++)for(uint32_t detail=0;detail<2;detail++)for(uint32_t steady=0;steady<2;steady++)for(uint32_t level=0;level<128;level+=127){
   display_hold=hold;cue_detail=detail;zoom_steady=steady;cue_level=level;cues_enabled=1;
-  assert(!preferences_save());display_hold=0;cue_detail=0;zoom_steady=0;cue_level=1;preferences_load();
+  color_theme=THEME_LIGHT;assert(!preferences_save());display_hold=0;cue_detail=0;zoom_steady=0;cue_level=1;preferences_load();
   assert(display_hold==hold&&cue_detail==detail&&zoom_steady==steady&&cue_level==level);
  }
  old.reserved[0]=32;old.reserved[1]=128;assert(!preferences_valid(&old));

@@ -1,0 +1,10 @@
+{
+  "identity": "FM-1_929",
+  "sha256": "c4fb1140ef05769ef443c23aca9b7220b096a9a9cd4ff2c7aa2be27f7656ee64",
+  "bytes": 612196,
+  "identity_only_change": true,
+  "runtime_identity_verified": true,
+  "loader_identical": true,
+  "retained_head_identical": true,
+  "crc_validation": "passed"
+}

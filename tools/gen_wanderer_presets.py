@@ -7,7 +7,7 @@ def coeff(ms):return max(1,min(65000,round((1-math.exp(-6.907755/(max(.3,ms)*44.
 def main(header,catalog):
     rows=list(csv.DictReader((R/'assets/wanderer_presets.csv').open()))
     assert len(rows)==100 and len({p['name'] for p in rows})==100
-    out=['/* Original LVM 1.1 bank. Millisecond designs compiled offline. */','#pragma once','#define WAVE_SINE 3u','#define WAVE_TRI 4u','#define WAVE_PULSE 5u','typedef struct {','uint8_t osc1,osc2,mix,ratio,detune,sustain,cutoff,contour,fm,resonance,sub,drive,lfo_filter,vibrato,pwm,level;','uint16_t attack,decay,release,contour_decay,fm_decay;','uint32_t lfo_step;','} wm_preset_t;','static const wm_preset_t WM_PRESETS[WM_PRESET_COUNT]={']
+    out=['/* Original LVM 1.1 bank. Millisecond designs compiled offline. */','#pragma once','#define WAVE_SINE 3u','#define WAVE_TRI 4u','#define WAVE_PULSE 5u','typedef struct {','uint8_t osc1,osc2,mix,ratio,detune,sustain,cutoff,contour,fm,resonance,sub,drive,lfo_filter,vibrato,pwm,level;','uint16_t attack,decay,release,contour_decay,fm_decay;','uint32_t lfo_step;','} wm_preset_t;','static const wm_preset_t WM_PRESETS[WM_LEGACY_PRESET_COUNT]={']
     waves={'S':'WAVE_SAW','H':'WAVE_HOLLOW','G':'WAVE_GLASS','N':'WAVE_SINE','T':'WAVE_TRI','P':'WAVE_PULSE'}
     lines=['# Wanderer 1.1: 100 original presets','','PRESETS moves by one; SELECT jumps by ten. Durations below describe the amplitude envelope. Held notes sustain where sustain is nonzero. These are original synthesis designs, not sampled or exact brand replicas.','','|No.|Bank|Sound|Attack ms|Release ms|Sustain /127|','|---:|---|---|---:|---:|---:|']
     for p in rows:

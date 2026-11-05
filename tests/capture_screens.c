@@ -15,7 +15,7 @@ int main(void)
 {
     project_initialise();fm1_ms=100;shot("01-home-dark");
     wm_record(0,60,100);wm_record(4,64,100);wm_record(8,67,100);wm_record(12,72,100);
-    wm_catch();wm.layer_enabled=1;wm_record(2,55,90);wm_record(10,62,90);
+    wm_catch();wm.layer_enabled=layer_focus=1;wm_record(2,55,90);wm_record(10,62,90);
     shot("02-home-phrase-layer");
     running=1;step_index=4;shot("03-home-playing");
     recording=1;shot("04-home-recording");recording=0;running=0;
@@ -28,9 +28,9 @@ int main(void)
         settings_index=0;
         shot(settings_page==0?"10-settings-system":settings_page==1?"11-settings-effects":"12-settings-performance");
     }
-    settings_page=1;settings_index=1;settings_detail=3;settings_detail_kind=1;shot("13-delay-division");
-    settings_index=2;settings_detail=96;settings_detail_kind=3;wm.reverb_size=96;shot("14-reverb-size");
-    settings_detail_kind=0;settings_page=2;settings_index=1;cues_enabled=0;shot("15-cues-disabled");cues_enabled=1;
+    settings_page=2;settings_index=2;shot("13-delay-division");
+    settings_page=SETTINGS_REVERB;settings_index=2;wm.reverb_size=96;shot("14-reverb-size");
+    settings_page=SETTINGS_ACCESS_FEEL;settings_index=1;cues_enabled=0;shot("15-cues-disabled");cues_enabled=1;
     wm.light=1;settings_page=0;shot("16-settings-light");wm.light=0;settings_open=0;
     project_slot=7;
     for(confirm=1;confirm<=5;confirm++){
@@ -51,9 +51,9 @@ int main(void)
     notice=N_NO_VALID_SAVE;shot("30-invalid-save");
     notice=focus=confirm=0;notice_until=0;
     settings_open=1;wm.extra_large=1;settings_page=0;settings_index=1;shot("31-settings-zoom");
-    settings_page=1;settings_index=1;settings_detail_kind=2;wm.delay_feedback=0;shot("32-feedback-zero-zoom");
-    settings_detail_kind=4;settings_index=2;shot("33-damping-zoom");
-    settings_detail_kind=1;settings_index=1;wm.delay_div=2;shot("34-delay-timing-zoom");
+    settings_page=2;settings_index=3;wm.delay_feedback=0;shot("32-feedback-zero-zoom");
+    settings_page=SETTINGS_REVERB;settings_index=3;shot("33-damping-zoom");
+    settings_page=2;settings_index=2;wm.delay_div=2;shot("34-delay-timing-zoom");
     settings_open=0;wm.extra_large=0;confirm=2;shot("35-save-normal");
     wm.extra_large=1;shot("36-save-zoom");confirm=0;
     scope_set_open(1);cues_enabled=0;vol=100;running=0;reset_performance();

@@ -1,0 +1,3 @@
+100 engines/patches audible; release paths bounded
+Print generation commit/cancel/Undo/Redo, protected audio Anchor, stop LEDs
+37050638 assertions passed

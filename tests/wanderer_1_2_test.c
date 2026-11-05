@@ -124,7 +124,7 @@ int main(void)
     for(uint32_t source=1;source<=2;source++)for(uint32_t channel=0;channel<4;channel++)midi_message(source,0xb0u|channel,120,0);
     recording_end();assert(!capture_count());transport();reset_performance();blocks(128);
     puts("8192 rapid MIDI/sustain/overdub blocks across sources/channels, two-bar wraps and maximum effects retain valid events and bounded filters; all captures release");
-    fresh();wm.has_anchor=wm.layer_enabled=1;octave=1;
+    fresh();wm.has_anchor=wm.layer_enabled=layer_focus=1;octave=1;
     wm.memory.e[0]=(wm_event_t){60,100,800};wm_mark();wm_can_undo=1;
     const uint8_t statuses[]={N_SAVED,N_LOADED,N_SAVE_FAILED,N_PREF_FAILED,N_NO_VALID_SAVE,N_CATCH_FIRST,N_STOP_FIRST};
     for(uint32_t r=0;r<2;r++)for(uint32_t i=0;i<sizeof statuses;i++){

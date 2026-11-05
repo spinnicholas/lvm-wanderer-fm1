@@ -335,8 +335,14 @@ def main():
         if hashlib.sha256(fm1pkg_make.sdk_file(rel)).hexdigest() != sha:
             raise SystemExit(f"SDK {rel} differs from pinned AC79NN_SDK_V1.2.1; refusing a release from unverified SDK bytes")
     OUT.mkdir(parents=True, exist_ok=True)
-    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_font.py"),
-                    str(FW / "src" / "wanderer_font.h")], check=True, cwd=SRC)
+    # The generated glyph arrays are part of the GPL source. For distributions
+    # without the original typeface file, retain the checked-in header rather
+    # than replacing it with the unrelated fallback bitmap font.
+    if (SRC / "assets" / "AtkinsonHyperlegible-Bold.ttf").exists():
+        subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_font.py"),
+                        str(FW / "src" / "wanderer_font.h")], check=True, cwd=SRC)
+    elif not (FW / "src" / "wanderer_font.h").is_file():
+        raise SystemExit("missing generated font source header; supply the original typeface asset")
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_icons.py"),
                     str(FW / "src" / "wanderer_icons.h")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_waves.py"),
@@ -344,7 +350,10 @@ def main():
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_presets.py"),
                     str(FW / "src" / "wanderer_presets.h"),
                     str(SRC / "docs" / "WANDERER_PRESETS.md")], check=True, cwd=SRC)
-    subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_1_4.py")], check=True, cwd=SRC)
+    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_dsp.py")], check=True, cwd=SRC)
+    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_fm6_tables.py")], check=True, cwd=SRC)
+    subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_1_7.py")], check=True, cwd=SRC)
+    subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_2_0.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_splash.py")], check=True, cwd=SRC)
     ota = build_loader()
     img, syms, dis, rt = build_app()

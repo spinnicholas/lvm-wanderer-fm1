@@ -1,0 +1,98 @@
+{
+  "firmware_sha256": "c781efe21a524607d84d0bc94fb5a816ac97106da5fcba529f883085edaeab5e",
+  "checks_passed": 64,
+  "bank_auditions_and_probes": 1500,
+  "bank_peak": 12739,
+  "compiled_emulator": {
+    "simulated_ms": 8500,
+    "stereo_frames": 367616,
+    "sample_rate": 44100,
+    "peak": 9548,
+    "average_isr_percent": 29.8,
+    "nested_isr_percent": 0.6,
+    "lcd_frames": 196,
+    "known_unknown_mmio_accesses": 317
+  },
+  "g_neighbour_pitch": {
+    "Analog": {
+      "notes": [
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3"
+      ],
+      "cents_from_nominal": [
+        0.93,
+        1.01,
+        1.08,
+        1.0,
+        0.97
+      ]
+    },
+    "FM": {
+      "notes": [
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3"
+      ],
+      "cents_from_nominal": [
+        0.0,
+        -0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "Phase": {
+      "notes": [
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3"
+      ],
+      "cents_from_nominal": [
+        -0.17,
+        -0.16,
+        -0.15,
+        -0.14,
+        -0.13
+      ]
+    },
+    "String": {
+      "notes": [
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3"
+      ],
+      "cents_from_nominal": [
+        -0.01,
+        -0.01,
+        -0.0,
+        -0.01,
+        -0.01
+      ]
+    },
+    "Modal": {
+      "notes": [
+        "F3",
+        "F#3",
+        "G3",
+        "G#3",
+        "A3"
+      ],
+      "cents_from_nominal": [
+        -0.01,
+        0.01,
+        0.0,
+        -0.01,
+        -0.01
+      ]
+    }
+  }
+}

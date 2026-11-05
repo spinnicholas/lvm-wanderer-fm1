@@ -40,7 +40,7 @@ int main(void)
     midi_message(1,0xb1,64,0);assert(!owned(3));
     note_off(60,1);assert(!owned(1));
     midi_message(1,0x90,61,100);midi_message(1,0x90,61,120);assert(owned(2)==1);
-    midi_message(1,0xc0,99,0);assert(wm.sound==99);midi_message(1,0xc0,127,0);assert(wm.sound==99);
+    midi_message(1,0xc0,99,0);assert(wm.sound==99);midi_message(1,0xc0,127,0);assert(wm.sound==127);
     midi_message(1,0xb0,1,87);assert(wm.melt==87);
     midi_message(1,0xb0,123,0);assert(!owned(2));
     puts("MIDI notes, sources, channels, sustain, velocity-zero, retrigger, preset and CC pass");
@@ -68,13 +68,13 @@ int main(void)
     confirm=3;apply_confirm();assert(wm.sound==77);
     host_slot[7][4+8]=0;confirm=3;apply_confirm();assert(notice==N_NO_VALID_SAVE&&wm.sound==77);
     vol=37;cues_enabled=0;wm.light=wm.extra_large=wm.reduced_motion=1;
-    assert(!preferences_save());vol=100;wm.light=wm.extra_large=wm.reduced_motion=0;cues_enabled=1;
+    color_theme=THEME_LIGHT;assert(!preferences_save());vol=100;wm.light=wm.extra_large=wm.reduced_motion=0;cues_enabled=1;
     preferences_load();assert(vol==37&&!cues_enabled&&wm.light&&wm.extra_large&&wm.reduced_motion);
     /* No boot auto-write; a malformed settings record cannot modify defaults. */
     host_set[4]=0;vol=62;preferences_load();assert(vol==62);
     puts("eight independent slots, stopped-only saves, invalid-load rejection and preferences pass");
     fresh();
-    wm.has_anchor=1;wm.layer_enabled=1;anchor_view=1;wm_can_undo=1;octave=1;running=recording=1;
+    wm.has_anchor=1;wm.layer_enabled=layer_focus=1;anchor_view=1;wm_can_undo=1;octave=1;running=recording=1;
     notice=0;
     host_leds=host_glow=((uint64_t)1<<41)-1;leds_initialised=0;
     app_leds();assert(host_leds==((1u<<1)|(1u<<5)|(1u<<6)|(1u<<9)|(1u<<12)|(1u<<13)));
@@ -88,7 +88,7 @@ int main(void)
         assert(!(host_leds>>41));
         if(settings_open)assert(host_leds==((1u<<3)|(1u<<12)));
     }
-    panic();settings_open=0;wm.has_anchor=wm.layer_enabled=wm_can_undo=anchor_view=octave=0;
+    panic();settings_open=0;wm.has_anchor=wm.layer_enabled=layer_focus=wm_can_undo=anchor_view=octave=0;
     app_leds();assert(!host_leds&&!host_glow);
     note_on(60,100,1);app_leds();assert(host_leds==((uint64_t)1<<21));
     note_off(60,1);app_leds();assert(!host_leds);

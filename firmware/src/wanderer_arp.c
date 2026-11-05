@@ -8,7 +8,7 @@ static struct {uint8_t note,velocity,owner,held;} arp_keys[ARP_HELD];
 static uint32_t arp_count,arp_cursor,arp_until,arp_gate_left,arp_rng=0x615af4e7u;
 static uint32_t arp_note=128u,arp_tick_serial;
 static uint8_t arp_configured[8],arp_clock_seen;
-static uint32_t arp_clock_last,arp_clock_quarter,arp_clock_ticks,arp_clock_frame;
+static uint32_t arp_clock_last,arp_clock_quarter,arp_clock_frame;
 static const char * const ARP_MODES[WM_ARP_MODES]={"UP","DOWN","UP DOWN","DOWN UP","UP UP","DOWN DOWN","PLAYED","RANDOM","CONVERGE","DIVERGE","UP REPEAT","DOWN REPEAT","CHORD"};
 static const char * const ARP_RATES[WM_ARP_RATES]={"1/4","1/4 DOT","1/4 TRI","1/8","1/8 DOT","1/8 TRI","1/16","1/16 DOT","1/16 TRI","1/32","1/32 DOT","1/32 TRI"};
 static void arp_release(void)
@@ -73,7 +73,7 @@ static void arp_update_config(void)
   capture_finish_all();
  }
  if(!wm.arp_latch)for(uint32_t i=arp_count;i>0;i--)if(!arp_keys[i-1u].held)arp_remove(i-1u);
- if(config[7]!=arp_configured[7]){arp_clock_seen=0;arp_clock_ticks=0;}
+ if(config[7]!=arp_configured[7]){arp_clock_seen=0;arp_clock_quarter=0;}
  memcpy(arp_configured,config,8);
 }
 static uint32_t arp_period(void)

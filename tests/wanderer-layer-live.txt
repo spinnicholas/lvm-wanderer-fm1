@@ -1,0 +1,28 @@
+1000 enc 6 4
+1100 btn 12
+1250 btndown 6
+2200 btnup 6
+2260 shot
+2300 enc 6 2
+2450 btndown 6
+3400 btnup 6
+3460 shot
+3500 enc 6 1
+3600 btn 3
+3700 enc 6 4
+3800 enc 3 -1
+3900 enc 2 1
+4000 enc 4 -1
+4100 btn 8
+4170 shot
+4200 enc 6 3
+4300 shot
+4450 btndown 1
+6050 btnup 1
+6200 btndown 6
+7150 btnup 6
+7200 shot
+7300 btndown 6
+8250 btnup 6
+8300 shot
+8450 end

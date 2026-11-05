@@ -1,0 +1,1356 @@
+{
+  "presets": 150,
+  "metrics": [
+    {
+      "number": 1,
+      "name": "ROUND SUB",
+      "engine": "Analog",
+      "peak": 2085,
+      "rms": 954.91,
+      "active_rms": 1204.2,
+      "sha256": "093ca0bfcfce4699e2e5f9a9db4595628b49dc6fc70b5119126d679af6741f27"
+    },
+    {
+      "number": 2,
+      "name": "LADDER BASS",
+      "engine": "Analog",
+      "peak": 3706,
+      "rms": 963.08,
+      "active_rms": 1202.37,
+      "sha256": "65e57c0cd48803145cd90d1bc8949a0a524cfbcda3b183c25b83fc521e0f4830"
+    },
+    {
+      "number": 3,
+      "name": "PULSE ANCHOR",
+      "engine": "Analog",
+      "peak": 2897,
+      "rms": 938.48,
+      "active_rms": 1189.92,
+      "sha256": "e6da21dfb1f704d0b03ace53d65ae1175351e2320c46f53a5fd9c07a9a145a6a"
+    },
+    {
+      "number": 4,
+      "name": "RUBBER STEP",
+      "engine": "Phase",
+      "peak": 3485,
+      "rms": 995.09,
+      "active_rms": 1209.0,
+      "sha256": "e0edcddf60061366bb3a9746275f0a03b95a9cbc8c910224fc8695dd8834cd07"
+    },
+    {
+      "number": 5,
+      "name": "SINE WEIGHT",
+      "engine": "FM",
+      "peak": 1750,
+      "rms": 952.77,
+      "active_rms": 1223.34,
+      "sha256": "699b57b6fa82128d4b217e567954aba1cfde82c7ae6664b97bd59f02cffdb50f"
+    },
+    {
+      "number": 6,
+      "name": "OCTAVE FLOOR",
+      "engine": "Analog",
+      "peak": 3201,
+      "rms": 918.52,
+      "active_rms": 1205.22,
+      "sha256": "f848beeb0d6e4bbe1ba0ffd3cfcde0dbd3c0a6cff82c5b0c84b8370ff8f3422a"
+    },
+    {
+      "number": 7,
+      "name": "SOFT REESE",
+      "engine": "Analog",
+      "peak": 2397,
+      "rms": 935.54,
+      "active_rms": 1194.5,
+      "sha256": "056def42261ea0dfb258f4b7d631ea1514c1fcf6671d4f794d9644bc859554e9"
+    },
+    {
+      "number": 8,
+      "name": "PLUCK ROOT",
+      "engine": "String",
+      "peak": 2700,
+      "rms": 371.54,
+      "active_rms": 526.84,
+      "sha256": "addba942594d292b3fe5c237be926e63eede16733fc2bbeb03919f84ba3dabe3"
+    },
+    {
+      "number": 9,
+      "name": "HOLLOW LOW",
+      "engine": "Phase",
+      "peak": 1830,
+      "rms": 930.01,
+      "active_rms": 1193.23,
+      "sha256": "ca388020d01917a17cef28d086b3bc91fcce886c8a8c50eec805bba341a46284"
+    },
+    {
+      "number": 10,
+      "name": "FELT BASS",
+      "engine": "Modal",
+      "peak": 2681,
+      "rms": 783.28,
+      "active_rms": 1246.65,
+      "sha256": "650b699e6c6648e1967f239088ccffc4e242498b2fbf87f3668a666863fcb7a6"
+    },
+    {
+      "number": 11,
+      "name": "ACID POCKET",
+      "engine": "Analog",
+      "peak": 6453,
+      "rms": 1096.56,
+      "active_rms": 1194.63,
+      "sha256": "8d0d07d66710d07b9e42aa23278295c86965c515cc35f33c08eb6cd4fe1ac806"
+    },
+    {
+      "number": 12,
+      "name": "NARROW PULSE",
+      "engine": "Analog",
+      "peak": 5028,
+      "rms": 951.23,
+      "active_rms": 1205.01,
+      "sha256": "bbbff8079059ba0a5e0e84fae83a3f0086f482bd6843212b8df21961677d32ec"
+    },
+    {
+      "number": 13,
+      "name": "WOOD KNOCK",
+      "engine": "FM",
+      "peak": 6547,
+      "rms": 1034.27,
+      "active_rms": 1205.64,
+      "sha256": "cbc7267063e2bf1c0c135fb4a6f19dbe5fc29a573af7b1a63b79d72fcaaa570f"
+    },
+    {
+      "number": 14,
+      "name": "ANGLED BASS",
+      "engine": "Phase",
+      "peak": 2333,
+      "rms": 895.0,
+      "active_rms": 1191.63,
+      "sha256": "9286aa9505dc55e1ad4bd5d3ffd482c1b707ddb5624328ab8d9e49f62616c5a8"
+    },
+    {
+      "number": 15,
+      "name": "SAW PRESSURE",
+      "engine": "Analog",
+      "peak": 2690,
+      "rms": 934.49,
+      "active_rms": 1188.46,
+      "sha256": "9f37ec3bbe523e9366660df1ba48ee66334ca947970162005458c46a916f0850"
+    },
+    {
+      "number": 16,
+      "name": "MUTED WIRE",
+      "engine": "String",
+      "peak": 2017,
+      "rms": 251.75,
+      "active_rms": 319.56,
+      "sha256": "7bcb13e92a48fd012180c1c59a867fd036f869a22c1cd5bb13e51fcb9dca5ec8"
+    },
+    {
+      "number": 17,
+      "name": "BROKEN TRI",
+      "engine": "Phase",
+      "peak": 2252,
+      "rms": 942.12,
+      "active_rms": 1216.86,
+      "sha256": "353db708e671a2c9a89e5daaa4340f37558384537092adeb59e03b6e63f11a84"
+    },
+    {
+      "number": 18,
+      "name": "BRIDGE BASS",
+      "engine": "String",
+      "peak": 3146,
+      "rms": 575.37,
+      "active_rms": 867.52,
+      "sha256": "53e4f86daae62a7bec2167209350cc458227200c15cd4ac8431c27dc2bdb2786"
+    },
+    {
+      "number": 19,
+      "name": "COPPER GROWL",
+      "engine": "Analog",
+      "peak": 1763,
+      "rms": 878.91,
+      "active_rms": 1189.0,
+      "sha256": "4178f348e4771a9cd7e449b8b884d4220ec4b81790d90a1970bb00103c2aa2f4"
+    },
+    {
+      "number": 20,
+      "name": "CLAY LOW",
+      "engine": "Modal",
+      "peak": 4072,
+      "rms": 781.9,
+      "active_rms": 1256.54,
+      "sha256": "f12df6ba955016ba90bba6553dde3514b4d814dbe802dd03205abd2d2668fbb9"
+    },
+    {
+      "number": 21,
+      "name": "VELVET SAW",
+      "engine": "Analog",
+      "peak": 2977,
+      "rms": 941.24,
+      "active_rms": 1203.89,
+      "sha256": "458f61544a06d85f12ae89004f74bd0f229e97ceea6444293327100acacd117c"
+    },
+    {
+      "number": 22,
+      "name": "SINGING PULSE",
+      "engine": "Analog",
+      "peak": 2399,
+      "rms": 915.56,
+      "active_rms": 1196.13,
+      "sha256": "cc5a7b75d7e2984e663a6099f0ee9fdc64e1616bb194536ca204d219b5a4a4eb"
+    },
+    {
+      "number": 23,
+      "name": "ROUND WHISTLE",
+      "engine": "Phase",
+      "peak": 1624,
+      "rms": 988.7,
+      "active_rms": 1199.57,
+      "sha256": "52d9bcace7dde235f1e124a6d4f0b3d02c3876c7feb81cf4f123a34a455ba941"
+    },
+    {
+      "number": 24,
+      "name": "COPPER SOLO",
+      "engine": "Analog",
+      "peak": 3212,
+      "rms": 864.26,
+      "active_rms": 1208.53,
+      "sha256": "c2f34dd0007ac94f8290a9e900315e47f962b699e19b03e9be64f2db41093384"
+    },
+    {
+      "number": 25,
+      "name": "PRISM LEAD",
+      "engine": "Phase",
+      "peak": 1764,
+      "rms": 956.32,
+      "active_rms": 1191.72,
+      "sha256": "53e63d64a0db0320e4d0037e0abc0ea0a28b4258e5773ce7cf024c5a7e1c6ded"
+    },
+    {
+      "number": 26,
+      "name": "FIFTH BEACON",
+      "engine": "Analog",
+      "peak": 2645,
+      "rms": 948.1,
+      "active_rms": 1196.89,
+      "sha256": "10e4bae66f1f9cb824d9b191178ed7929712e662e5aadf9e53bc9a6f2fa817e6"
+    },
+    {
+      "number": 27,
+      "name": "SOFT CHANT",
+      "engine": "Modal",
+      "peak": 2113,
+      "rms": 972.65,
+      "active_rms": 1250.08,
+      "sha256": "a6314aa2e06fae483827d31af4faedbfb06fab213998ccf021451e15731be7f7"
+    },
+    {
+      "number": 28,
+      "name": "NEON REED",
+      "engine": "FM",
+      "peak": 1679,
+      "rms": 932.53,
+      "active_rms": 1215.52,
+      "sha256": "31861516cee13eb8e167bf9ecf07b3aff63fefe82cf97c9c7e6a4d6a9e600799"
+    },
+    {
+      "number": 29,
+      "name": "BENT RIBBON",
+      "engine": "Phase",
+      "peak": 1831,
+      "rms": 995.53,
+      "active_rms": 1217.57,
+      "sha256": "df6046e7c46067501b3518c79cff7385b5776c40aec810418c8e4a11f89c82f4"
+    },
+    {
+      "number": 30,
+      "name": "OCTAVE TORCH",
+      "engine": "Analog",
+      "peak": 2975,
+      "rms": 940.8,
+      "active_rms": 1201.41,
+      "sha256": "4ef6ca4d6f2d4948fb9b417cf24805acd2ca5d4ef7c0936b41adff32b6476b9b"
+    },
+    {
+      "number": 31,
+      "name": "WARM POLY",
+      "engine": "Analog",
+      "peak": 2999,
+      "rms": 847.99,
+      "active_rms": 1202.89,
+      "sha256": "ae589147d7221ff02b515a177800b87a54c286c2e16a417ce04eef8110959009"
+    },
+    {
+      "number": 32,
+      "name": "PULSE COMP",
+      "engine": "Analog",
+      "peak": 2865,
+      "rms": 913.7,
+      "active_rms": 1196.91,
+      "sha256": "e8837192caf6d85b8ce9f546984df0b761b94642d64c1791ef62a63b706263f9"
+    },
+    {
+      "number": 33,
+      "name": "WAX KEYS",
+      "engine": "Phase",
+      "peak": 2045,
+      "rms": 846.87,
+      "active_rms": 1182.19,
+      "sha256": "5c17ecbafb7687eb225917a2bc01865dc8cd0059edd90f1c104e5848477c151d"
+    },
+    {
+      "number": 34,
+      "name": "DUST CHORDS",
+      "engine": "Analog",
+      "peak": 2421,
+      "rms": 855.61,
+      "active_rms": 1190.4,
+      "sha256": "7f053a9dc40817b246aaa612fe0b23fc998660e221ff0acfa63702be03b0f7c3"
+    },
+    {
+      "number": 35,
+      "name": "GLASS POLY",
+      "engine": "Phase",
+      "peak": 1972,
+      "rms": 881.99,
+      "active_rms": 1205.24,
+      "sha256": "0c9dee6abb5baf4ef51c45a5d4a16183929ac08af4d91fd300e2b598ddbabf61"
+    },
+    {
+      "number": 36,
+      "name": "BRASS COMP",
+      "engine": "Analog",
+      "peak": 3221,
+      "rms": 826.22,
+      "active_rms": 1202.15,
+      "sha256": "d878850079704f5b8723ddfdf19b72435c9d64100e892d279650743b4c5d7ee7"
+    },
+    {
+      "number": 37,
+      "name": "CLEAN DIGITAL",
+      "engine": "FM",
+      "peak": 2430,
+      "rms": 878.72,
+      "active_rms": 1204.99,
+      "sha256": "0fa3f197aa0d721dcf139deb950a1264d1cb1ca624b778f56ef39b3e99e7950b"
+    },
+    {
+      "number": 38,
+      "name": "VELVET FIFTH",
+      "engine": "Analog",
+      "peak": 1784,
+      "rms": 948.99,
+      "active_rms": 1191.15,
+      "sha256": "45985b16d121ef9fbe7307ff1604b077e8d0656251aa51442fec4860e45b57e3"
+    },
+    {
+      "number": 39,
+      "name": "PAPER IVORY",
+      "engine": "Phase",
+      "peak": 2047,
+      "rms": 822.08,
+      "active_rms": 1186.52,
+      "sha256": "c599a9ac109a40de01a90d3d68312bda6bf2d0c1a2be8b8f40a90beb8a060ba0"
+    },
+    {
+      "number": 40,
+      "name": "HARMONIC KEYS",
+      "engine": "Modal",
+      "peak": 2702,
+      "rms": 788.08,
+      "active_rms": 1251.74,
+      "sha256": "9ca092a10623dbdebaab2596b17ab91ce944267a8d1aa2f27e69c8e075bd7969"
+    },
+    {
+      "number": 41,
+      "name": "FELT TINES",
+      "engine": "FM",
+      "peak": 2225,
+      "rms": 761.75,
+      "active_rms": 1204.36,
+      "sha256": "c3e8d7f09775853fa6e01746c7642599096af710ba4cb74ca67350ae5cb6de4d"
+    },
+    {
+      "number": 42,
+      "name": "ROUND EP",
+      "engine": "FM",
+      "peak": 2570,
+      "rms": 786.74,
+      "active_rms": 1200.05,
+      "sha256": "8f1de2e5f61cd8dc4d6fe59904c79cd54b80b85a480b6aca53a88ad9ca5fe28d"
+    },
+    {
+      "number": 43,
+      "name": "GLASS TINES",
+      "engine": "FM",
+      "peak": 2276,
+      "rms": 773.27,
+      "active_rms": 1212.08,
+      "sha256": "88f41cc5621f80b5ed89ff301d0380b7c678371d5289016628210468e0a8d41e"
+    },
+    {
+      "number": 44,
+      "name": "REED KEYS",
+      "engine": "FM",
+      "peak": 2414,
+      "rms": 807.38,
+      "active_rms": 1203.14,
+      "sha256": "9e7e62de923733da9ca5d68bb3ba63b51cc070ea244b02fff3935aba79942916"
+    },
+    {
+      "number": 45,
+      "name": "WAX PIANO",
+      "engine": "Phase",
+      "peak": 2118,
+      "rms": 765.79,
+      "active_rms": 1190.08,
+      "sha256": "7a9dd07af0567b22f5b2b24659217418729127a4755bcbc2c3038b4f980ea914"
+    },
+    {
+      "number": 46,
+      "name": "FELT STRINGS",
+      "engine": "String",
+      "peak": 2444,
+      "rms": 385.86,
+      "active_rms": 594.23,
+      "sha256": "71115a95ec2f59846d9e20f0786e6fa1da18d052df14c831d9c7dda47df433ed"
+    },
+    {
+      "number": 47,
+      "name": "PAPER TINES",
+      "engine": "Modal",
+      "peak": 3087,
+      "rms": 793.86,
+      "active_rms": 1246.75,
+      "sha256": "581fe4e2ad65576871bf2d3f1026bbe13b9950eea5dc128b9b304700d38adc34"
+    },
+    {
+      "number": 48,
+      "name": "WOOD IVORY",
+      "engine": "Modal",
+      "peak": 3436,
+      "rms": 779.24,
+      "active_rms": 1247.26,
+      "sha256": "e17c3c5b3341946c4a7764baef877c108ec946d3b280fe5439f1e66740d376f0"
+    },
+    {
+      "number": 49,
+      "name": "ROUND CELESTA",
+      "engine": "Phase",
+      "peak": 2467,
+      "rms": 754.54,
+      "active_rms": 1198.54,
+      "sha256": "7a4d72ab1298e98814ad6e0e4b90ca5bb6405384ff37473dfe225e7b973595d5"
+    },
+    {
+      "number": 50,
+      "name": "NYLON KEYS",
+      "engine": "String",
+      "peak": 3007,
+      "rms": 547.46,
+      "active_rms": 856.35,
+      "sha256": "f112a767c57ecc2baefbcde26f254f3652dca33d2b63d7a34a8fc1a0aff0c0d8"
+    },
+    {
+      "number": 51,
+      "name": "DRAWBAR LIGHT",
+      "engine": "FM",
+      "peak": 2147,
+      "rms": 976.57,
+      "active_rms": 1190.64,
+      "sha256": "b2ed146b764b281ccd0796c53d1991a11bffff995bf864c59b8200db77c32e3c"
+    },
+    {
+      "number": 52,
+      "name": "DRAWBAR DEEP",
+      "engine": "FM",
+      "peak": 1859,
+      "rms": 977.03,
+      "active_rms": 1188.94,
+      "sha256": "ba920190ecfd86d31d86c2235fc6717454e11fc588262219bf29220309cda929"
+    },
+    {
+      "number": 53,
+      "name": "HOLLOW ORGAN",
+      "engine": "Analog",
+      "peak": 1543,
+      "rms": 974.67,
+      "active_rms": 1178.18,
+      "sha256": "0f05bdeedb2c92ee4539d66c5c1a674167be454bbd20f0d27d3884cded488aed"
+    },
+    {
+      "number": 54,
+      "name": "PULSE ORGAN",
+      "engine": "Analog",
+      "peak": 1800,
+      "rms": 989.73,
+      "active_rms": 1198.09,
+      "sha256": "75daf2d81712dc21ca76eb62fcc3ad2fb49fdacb999e6eed3e2ec32918a645da"
+    },
+    {
+      "number": 55,
+      "name": "PHASE REED",
+      "engine": "Phase",
+      "peak": 1765,
+      "rms": 991.32,
+      "active_rms": 1216.34,
+      "sha256": "995563d57173f5e5bde560e379bce076af825c3ff33f5571bc248c23d5d9fb2e"
+    },
+    {
+      "number": 56,
+      "name": "SOFT FLUTE",
+      "engine": "Analog",
+      "peak": 1926,
+      "rms": 995.44,
+      "active_rms": 1216.88,
+      "sha256": "6d997eb904f2d2bbb2e302f8a5ba101330d4aef21c18d1c0718323cc79db51ee"
+    },
+    {
+      "number": 57,
+      "name": "ODD CHOIR",
+      "engine": "Modal",
+      "peak": 1536,
+      "rms": 992.51,
+      "active_rms": 1250.01,
+      "sha256": "48479916f0bf1d920ae7485887be0de200fe5e4ee99bf0c5e6d9258674c388f9"
+    },
+    {
+      "number": 58,
+      "name": "ROUND HARMONIUM",
+      "engine": "Analog",
+      "peak": 1663,
+      "rms": 991.68,
+      "active_rms": 1211.49,
+      "sha256": "a3771dde3052770037e3303909a5926a3a868d609b67c4451b701e206a64b1b4"
+    },
+    {
+      "number": 59,
+      "name": "DIGITAL PIPE",
+      "engine": "FM",
+      "peak": 1771,
+      "rms": 984.28,
+      "active_rms": 1193.66,
+      "sha256": "a39302b3fd273c4d8524d7c16360edc549f48a51230c739309a42a24a2099d93"
+    },
+    {
+      "number": 60,
+      "name": "WAX ACCORDION",
+      "engine": "Phase",
+      "peak": 1902,
+      "rms": 988.18,
+      "active_rms": 1222.35,
+      "sha256": "952be6fce765be31acbdf267c353f773ffe47d9b7f92cbf5ae2c98a4fbe8786b"
+    },
+    {
+      "number": 61,
+      "name": "OPEN BRASS",
+      "engine": "Analog",
+      "peak": 2849,
+      "rms": 827.06,
+      "active_rms": 1199.27,
+      "sha256": "ed2266ae0dae3478bdd134cfb1de6f20f9d00629afe6537e55cc49eabf6b97df"
+    },
+    {
+      "number": 62,
+      "name": "MUTED HORN",
+      "engine": "Analog",
+      "peak": 3341,
+      "rms": 829.1,
+      "active_rms": 1200.68,
+      "sha256": "9a50b2015b6b2d3c70dab412dca630bb4763d80e82d5c6436a22c59dee553eb6"
+    },
+    {
+      "number": 63,
+      "name": "OCTAVE BRASS",
+      "engine": "Analog",
+      "peak": 2405,
+      "rms": 904.0,
+      "active_rms": 1202.56,
+      "sha256": "1fb0308cd2a7c5d1273602ea6cf8d5493681e2fbcdcd9a571cca08e5274e0413"
+    },
+    {
+      "number": 64,
+      "name": "SOFT TROMBONE",
+      "engine": "Analog",
+      "peak": 3169,
+      "rms": 865.36,
+      "active_rms": 1201.78,
+      "sha256": "940b9b69115760463edf8c224a328aed8e6c84b12d4300f031e41b8bc30ab337"
+    },
+    {
+      "number": 65,
+      "name": "PHASE HORN",
+      "engine": "Phase",
+      "peak": 1764,
+      "rms": 966.51,
+      "active_rms": 1211.52,
+      "sha256": "dd8ff1fef76d4e5e2487af4c8592bf832b77e674856ed07f633910227910d3ff"
+    },
+    {
+      "number": 66,
+      "name": "COPPER WIND",
+      "engine": "Phase",
+      "peak": 1761,
+      "rms": 965.73,
+      "active_rms": 1192.04,
+      "sha256": "5ece3770bf7f326577e8b5b0307593a051e98d2888f65d54d317283b38b867b6"
+    },
+    {
+      "number": 67,
+      "name": "BAMBOO AIR",
+      "engine": "String",
+      "peak": 3097,
+      "rms": 587.09,
+      "active_rms": 907.55,
+      "sha256": "06b8d30ec95422f145b78f804a2b928c034140d6391328eb9c583a75a707b528"
+    },
+    {
+      "number": 68,
+      "name": "HOLLOW CLARINET",
+      "engine": "Analog",
+      "peak": 1899,
+      "rms": 923.71,
+      "active_rms": 1208.99,
+      "sha256": "14f05208f6e9e1f61e0ee350bfd69e2af49e1d9a0ac7dee3b6f10ea635505f98"
+    },
+    {
+      "number": 69,
+      "name": "GOLDEN HORN",
+      "engine": "FM",
+      "peak": 2136,
+      "rms": 927.64,
+      "active_rms": 1185.39,
+      "sha256": "aa74fcb945b864e4cfe8278442b009e0d48ce25f33ac84d100d9ad00fb3b2b73"
+    },
+    {
+      "number": 70,
+      "name": "CERAMIC WIND",
+      "engine": "Modal",
+      "peak": 1878,
+      "rms": 971.48,
+      "active_rms": 1250.04,
+      "sha256": "50c7389fa1adf08d839c055008e68ea9d24e1fb1dcafcc442b68318aa810e0db"
+    },
+    {
+      "number": 71,
+      "name": "SILK STRINGS",
+      "engine": "Analog",
+      "peak": 2593,
+      "rms": 929.29,
+      "active_rms": 1192.84,
+      "sha256": "ef5031b65b5818a4419b889bab0c110e3e9bdc2f2ff73196c565a29f535d262b"
+    },
+    {
+      "number": 72,
+      "name": "WARM CELLOS",
+      "engine": "Analog",
+      "peak": 2941,
+      "rms": 1030.86,
+      "active_rms": 1196.76,
+      "sha256": "3393907cad4c605af489f30465730319e19b3303c1ccd367122af153f98b443e"
+    },
+    {
+      "number": 73,
+      "name": "PULSE ENSEMBLE",
+      "engine": "Analog",
+      "peak": 2315,
+      "rms": 972.58,
+      "active_rms": 1193.83,
+      "sha256": "699a21748b7b871bc16cdde9448a572d7b5606b46909f4c7a8becaf34651e6ce"
+    },
+    {
+      "number": 74,
+      "name": "HIGH VIOLAS",
+      "engine": "Analog",
+      "peak": 2824,
+      "rms": 1025.63,
+      "active_rms": 1195.73,
+      "sha256": "a610fa3f0c13ad1d76f6111226845a50d436ddb4eea29924c762750904bb845b"
+    },
+    {
+      "number": 75,
+      "name": "CHAMBER STRINGS",
+      "engine": "Analog",
+      "peak": 2011,
+      "rms": 948.68,
+      "active_rms": 1195.78,
+      "sha256": "6c67454c583d6acf2fd7dfaa1cef49eec3b419d1b67a2c1599373b5b856ab57d"
+    },
+    {
+      "number": 76,
+      "name": "PRISM STRINGS",
+      "engine": "Phase",
+      "peak": 1625,
+      "rms": 1040.13,
+      "active_rms": 1226.12,
+      "sha256": "8bdaa9f5b76a7480b7a6df347d972a044a29e5dd1d3cbebac2b2c0aab948d7f6"
+    },
+    {
+      "number": 77,
+      "name": "SOFT PHASE BOW",
+      "engine": "Phase",
+      "peak": 1830,
+      "rms": 985.72,
+      "active_rms": 1210.4,
+      "sha256": "dc0fb6c1799272a98f639761cec7ad0f41b3e5f0935acc34db6bef5b9265f156"
+    },
+    {
+      "number": 78,
+      "name": "HARP ENSEMBLE",
+      "engine": "String",
+      "peak": 3488,
+      "rms": 578.76,
+      "active_rms": 897.68,
+      "sha256": "a8341cbbd7f3c9b294dbd1a8ed12b4a3d29f4c2211b35d2fe3210e44d0fe16e9"
+    },
+    {
+      "number": 79,
+      "name": "DARK ZITHER",
+      "engine": "String",
+      "peak": 2164,
+      "rms": 521.28,
+      "active_rms": 786.34,
+      "sha256": "35ad9e471df76bf0bdbb2ca9b6f25eab75e1b407d4c8484f924efcfd3e2f055f"
+    },
+    {
+      "number": 80,
+      "name": "HARMONIC VEIL",
+      "engine": "Modal",
+      "peak": 2060,
+      "rms": 994.27,
+      "active_rms": 1252.73,
+      "sha256": "df1a35a2a380ec68038026556ea5016b377ea85ab50a15494628fa1672fda310"
+    },
+    {
+      "number": 81,
+      "name": "AMBER HORIZON",
+      "engine": "Analog",
+      "peak": 2364,
+      "rms": 872.33,
+      "active_rms": 1202.2,
+      "sha256": "cb4ddb41f06b384cecce21fd8163a7492c00b1fdef5feb7a3f5cdc042ddfc62a"
+    },
+    {
+      "number": 82,
+      "name": "MOSS CHOIR",
+      "engine": "Phase",
+      "peak": 1688,
+      "rms": 983.85,
+      "active_rms": 1195.28,
+      "sha256": "6e215b6693099e6c7fb81b366acd4dd72fb57aa7db6498446de6054b2c11f41a"
+    },
+    {
+      "number": 83,
+      "name": "WARM CURRENT",
+      "engine": "Analog",
+      "peak": 2361,
+      "rms": 865.65,
+      "active_rms": 1196.7,
+      "sha256": "272bda54309353a15346983559b19ab6258eba0d15fccd503823ec7bf1187d82"
+    },
+    {
+      "number": 84,
+      "name": "LOW ORBIT",
+      "engine": "Phase",
+      "peak": 1555,
+      "rms": 939.64,
+      "active_rms": 1192.23,
+      "sha256": "006efc96bcbf92145065527eda6c61702886cf596de28068e4357b6c50f3d6f0"
+    },
+    {
+      "number": 85,
+      "name": "CLOUD HARMONICS",
+      "engine": "Modal",
+      "peak": 1792,
+      "rms": 947.68,
+      "active_rms": 1249.46,
+      "sha256": "d15fde9d525034ab538399a9b126ce6a0f44dd7c333b72943d18b39577751690"
+    },
+    {
+      "number": 86,
+      "name": "SILVER CHOIR",
+      "engine": "Phase",
+      "peak": 2103,
+      "rms": 964.13,
+      "active_rms": 1215.21,
+      "sha256": "eb66ecac50a00900fe189ceb4dc76a6da02a464f96637eeb9f217ee25cb5faad"
+    },
+    {
+      "number": 87,
+      "name": "DARK GLASS",
+      "engine": "FM",
+      "peak": 2016,
+      "rms": 941.41,
+      "active_rms": 1208.98,
+      "sha256": "495768fa6c775172c5844159d77f185015147c8cdcd0e606df341fc8ccc30025"
+    },
+    {
+      "number": 88,
+      "name": "PAPER SKY",
+      "engine": "Analog",
+      "peak": 2003,
+      "rms": 920.17,
+      "active_rms": 1199.45,
+      "sha256": "556a08afb4b5fe7001abc8018ab273f05434d92c2091d6a3b41e5992ad92c242"
+    },
+    {
+      "number": 89,
+      "name": "BOWL HAZE",
+      "engine": "Modal",
+      "peak": 2314,
+      "rms": 852.13,
+      "active_rms": 1257.81,
+      "sha256": "646c255338e70159d14ffa3ec02069871d3001969805238de518d5cdc386fefa"
+    },
+    {
+      "number": 90,
+      "name": "PHASE DUSK",
+      "engine": "Phase",
+      "peak": 1761,
+      "rms": 955.55,
+      "active_rms": 1208.25,
+      "sha256": "167f798755c66d1338f999bae7fc2ec9d971e5e7b2e3193b73b54814b0219d4a"
+    },
+    {
+      "number": 91,
+      "name": "TIDAL FILTER",
+      "engine": "Analog",
+      "peak": 2407,
+      "rms": 934.55,
+      "active_rms": 1195.5,
+      "sha256": "36af3a7b19b03f5ebaf0fca07b7d170ca1b873d45364ad9323c5181297ffb0f7"
+    },
+    {
+      "number": 92,
+      "name": "LANTERN PHASE",
+      "engine": "Phase",
+      "peak": 1554,
+      "rms": 991.39,
+      "active_rms": 1175.22,
+      "sha256": "927d917b653537a8330f7287698e9c3bcbbdac354bce59972d66a74447ddd4b9"
+    },
+    {
+      "number": 93,
+      "name": "RIBBON CURRENT",
+      "engine": "Phase",
+      "peak": 1691,
+      "rms": 995.88,
+      "active_rms": 1180.91,
+      "sha256": "8536d2024cc961d792a85193fb034cb06d5387fef6f3684d50687dca124ae99a"
+    },
+    {
+      "number": 94,
+      "name": "HOLLOW TIDE",
+      "engine": "Analog",
+      "peak": 2384,
+      "rms": 983.39,
+      "active_rms": 1210.36,
+      "sha256": "b5e3b1c0be1b17a5d38c36fdc5fe962f7b6ea4a06f7f9b30b4c7ff921fedb80f"
+    },
+    {
+      "number": 95,
+      "name": "SLOW PRISM",
+      "engine": "Phase",
+      "peak": 1554,
+      "rms": 988.93,
+      "active_rms": 1215.26,
+      "sha256": "48541466d77292e1d565fc96c49711099d3798e2358e8ec194334d9f3434ef9e"
+    },
+    {
+      "number": 96,
+      "name": "BELL AURORA",
+      "engine": "Modal",
+      "peak": 2504,
+      "rms": 966.39,
+      "active_rms": 1256.67,
+      "sha256": "6262e7cd69cf35ffb35896f46c21f60d9c683163456dbd2f1e7ebd1ae4ad08d9"
+    },
+    {
+      "number": 97,
+      "name": "FM SHIMMER",
+      "engine": "FM",
+      "peak": 1578,
+      "rms": 926.97,
+      "active_rms": 1184.01,
+      "sha256": "d3ea1bc548d70e5418fa68288f89b0745cd6d8d5bbbc2f45aceefa65e28762c2"
+    },
+    {
+      "number": 98,
+      "name": "WAX WAVES",
+      "engine": "Phase",
+      "peak": 1833,
+      "rms": 985.1,
+      "active_rms": 1185.74,
+      "sha256": "694670a645f8feea440e98348466b792793235149102b7010dbbe337b757640e"
+    },
+    {
+      "number": 99,
+      "name": "STRING HALO",
+      "engine": "String",
+      "peak": 4235,
+      "rms": 653.94,
+      "active_rms": 1001.38,
+      "sha256": "16a293a4ede55b56a75ff1ccd15fe0123de6f327bd5ab28a8ea6476db7d26187"
+    },
+    {
+      "number": 100,
+      "name": "COPPER SWELL",
+      "engine": "Modal",
+      "peak": 2433,
+      "rms": 902.05,
+      "active_rms": 1243.46,
+      "sha256": "bf06cc23bf8cc94425066e899770ebf15c1bc69a2a528506a140a7b423ff6e01"
+    },
+    {
+      "number": 101,
+      "name": "CEDAR PLUCK",
+      "engine": "String",
+      "peak": 2930,
+      "rms": 416.99,
+      "active_rms": 639.91,
+      "sha256": "57ef458328c74ba4f444afc48ead1560afd3230260d4ac2cd55f573d6f8161cc"
+    },
+    {
+      "number": 102,
+      "name": "NYLON HARP",
+      "engine": "String",
+      "peak": 3351,
+      "rms": 555.6,
+      "active_rms": 869.97,
+      "sha256": "6e5697dade2fc4bdcecdabc799ae09e8efc7a3dfbaaa00479e760363820f6b44"
+    },
+    {
+      "number": 103,
+      "name": "STEEL THREAD",
+      "engine": "String",
+      "peak": 5094,
+      "rms": 501.36,
+      "active_rms": 683.71,
+      "sha256": "1b0ab6424634d67049c2b99abf341e0434117cffbaf00e31f6f3858312d05ede"
+    },
+    {
+      "number": 104,
+      "name": "DARK KOTO",
+      "engine": "String",
+      "peak": 3434,
+      "rms": 316.95,
+      "active_rms": 401.35,
+      "sha256": "4700a80994f447d5f111bb92be8d62b4a84e6ea5e598c2d1c56202d1a1e44f0a"
+    },
+    {
+      "number": 105,
+      "name": "PALM MUTE",
+      "engine": "String",
+      "peak": 3077,
+      "rms": 288.37,
+      "active_rms": 307.39,
+      "sha256": "7a92e8858b0512416aadb70d6a191489668cf72caf7f5f0788ea5bed5c7e33bf"
+    },
+    {
+      "number": 106,
+      "name": "OPEN KORA",
+      "engine": "String",
+      "peak": 3972,
+      "rms": 640.77,
+      "active_rms": 984.98,
+      "sha256": "2b593da52bcdbb92d73ee1e551492dbec17ca250d9a127f4410e3fb33dd4e46b"
+    },
+    {
+      "number": 107,
+      "name": "DULCIMER WIRE",
+      "engine": "String",
+      "peak": 4717,
+      "rms": 385.27,
+      "active_rms": 455.37,
+      "sha256": "e376e2e9cad5d4bebe4f3678e1613408faa7ae123cadf13d02186906d87518fc"
+    },
+    {
+      "number": 108,
+      "name": "THUMB PIANO",
+      "engine": "String",
+      "peak": 3274,
+      "rms": 521.22,
+      "active_rms": 786.35,
+      "sha256": "96e90f16f3940d5ad20589cf862364a41bf878ebba78433028fd999850e81e40"
+    },
+    {
+      "number": 109,
+      "name": "LOW CEDAR",
+      "engine": "String",
+      "peak": 2963,
+      "rms": 520.71,
+      "active_rms": 789.9,
+      "sha256": "e5743bc92cb18999937ba9fcbdcbe1d1c6ac4eb7ac7d17b6919adc2aaf845510"
+    },
+    {
+      "number": 110,
+      "name": "FELT HARP",
+      "engine": "String",
+      "peak": 2671,
+      "rms": 486.28,
+      "active_rms": 766.79,
+      "sha256": "24261624ec704ce316f4c9049b4e3985530b4988d2687eb232fb6983935d6984"
+    },
+    {
+      "number": 111,
+      "name": "BRIDGE GLASS",
+      "engine": "String",
+      "peak": 6860,
+      "rms": 409.26,
+      "active_rms": 337.63,
+      "sha256": "40a73a1f1064bd2516e6834a5b22d70917e6b9cf21c960770d75d3ee36e6d8f7"
+    },
+    {
+      "number": 112,
+      "name": "PAPER GUITAR",
+      "engine": "String",
+      "peak": 2839,
+      "rms": 478.23,
+      "active_rms": 687.33,
+      "sha256": "f7cdc56e0ce0be11204dc466d36f43d93379774049344915c36ff57f5d425ab1"
+    },
+    {
+      "number": 113,
+      "name": "RUBBER WIRE",
+      "engine": "String",
+      "peak": 3192,
+      "rms": 506.94,
+      "active_rms": 780.52,
+      "sha256": "ea3494787d5b3c39910ce51ff61ac0eddc114b76e12151d52a5a0b30fded138e"
+    },
+    {
+      "number": 114,
+      "name": "LONG ZITHER",
+      "engine": "String",
+      "peak": 4234,
+      "rms": 603.68,
+      "active_rms": 901.44,
+      "sha256": "be3f3d7742e6c9a26b632e6a154d7b2593b46a64b00599f747c1fe3925455381"
+    },
+    {
+      "number": 115,
+      "name": "METAL BRUSH",
+      "engine": "String",
+      "peak": 6240,
+      "rms": 409.53,
+      "active_rms": 298.14,
+      "sha256": "b45591bd5a34d6f3462bcd82ff7a04901d62910927b1be782c5a4f5bada7271c"
+    },
+    {
+      "number": 116,
+      "name": "TAPE HARP",
+      "engine": "String",
+      "peak": 2679,
+      "rms": 510.05,
+      "active_rms": 806.51,
+      "sha256": "ee7c706329785754e1de3d8d62b504a605fcd987b3accd21bf6c39a8d6fd49a9"
+    },
+    {
+      "number": 117,
+      "name": "WOOD CHIRP",
+      "engine": "String",
+      "peak": 4306,
+      "rms": 185.86,
+      "active_rms": 42.37,
+      "sha256": "2895195288938d8cbb55e1a64b7c528c99cc27d30a3cc242c88cde9435cf4982"
+    },
+    {
+      "number": 118,
+      "name": "OPEN WIRE",
+      "engine": "String",
+      "peak": 4589,
+      "rms": 667.13,
+      "active_rms": 999.92,
+      "sha256": "6562f7a50561fb3a4353d2ba19b8c04e67b588db5875381ee0cbfb739a0e02d2"
+    },
+    {
+      "number": 119,
+      "name": "DARK BRIDGE",
+      "engine": "String",
+      "peak": 2240,
+      "rms": 433.95,
+      "active_rms": 677.63,
+      "sha256": "5d15b1180335407f1a0f1e694d942a26499d5d8523d8170d5d4c189f83a1fd1f"
+    },
+    {
+      "number": 120,
+      "name": "SOFT KALIMBA",
+      "engine": "String",
+      "peak": 3048,
+      "rms": 472.5,
+      "active_rms": 726.18,
+      "sha256": "74176d2a33883aad128c0886d6cd6dc01d45f0db8c846e70733a81622e018e94"
+    },
+    {
+      "number": 121,
+      "name": "DEEP MARIMBA",
+      "engine": "Modal",
+      "peak": 3712,
+      "rms": 783.16,
+      "active_rms": 1253.68,
+      "sha256": "9e7f385d4e7eaa79676ebc0c819ac168a13f2537eba920d557e5755eebcfc261"
+    },
+    {
+      "number": 122,
+      "name": "WOOD MALLET",
+      "engine": "Modal",
+      "peak": 4550,
+      "rms": 771.67,
+      "active_rms": 1182.77,
+      "sha256": "ae04730c91c0f1ab006006200d99161968c08760e9e2bb6e958e00a50fc95a7d"
+    },
+    {
+      "number": 123,
+      "name": "SOFT VIBES",
+      "engine": "Modal",
+      "peak": 2978,
+      "rms": 858.81,
+      "active_rms": 1253.83,
+      "sha256": "01ee959e1bc0f244ce61eb183868e740c467f86e3362a4bed076f43257038622"
+    },
+    {
+      "number": 124,
+      "name": "FELT BAR",
+      "engine": "Modal",
+      "peak": 3127,
+      "rms": 773.59,
+      "active_rms": 1244.75,
+      "sha256": "1fa31d6a162f63e03cd3fd809ae609a27a2a98f946bd94f893fc7aeae5e8486b"
+    },
+    {
+      "number": 125,
+      "name": "BAMBOO BLOCK",
+      "engine": "Modal",
+      "peak": 4139,
+      "rms": 575.75,
+      "active_rms": 650.32,
+      "sha256": "d1f95f75d5531268750ee4bb24d3c6ac20a77171c8ec39665577b257a9c10920"
+    },
+    {
+      "number": 126,
+      "name": "CERAMIC DROP",
+      "engine": "Modal",
+      "peak": 3714,
+      "rms": 799.0,
+      "active_rms": 1252.49,
+      "sha256": "c09c61728439521a9cf70562fa53e01c4019d0e828848cf21affa318bc79930b"
+    },
+    {
+      "number": 127,
+      "name": "FM MARIMBA",
+      "engine": "FM",
+      "peak": 3732,
+      "rms": 763.27,
+      "active_rms": 1198.29,
+      "sha256": "713a24c75337393e9bad1f35945485860e18604f39e4296eef00e4a3c1ee81a4"
+    },
+    {
+      "number": 128,
+      "name": "SOFT HAMMER",
+      "engine": "Phase",
+      "peak": 2610,
+      "rms": 752.21,
+      "active_rms": 1211.04,
+      "sha256": "fa3c670241f7f007ca659175b4c2fd8117e1be22cf6d2391dd7c01f61afbf5e4"
+    },
+    {
+      "number": 129,
+      "name": "PICK MALLET",
+      "engine": "String",
+      "peak": 3515,
+      "rms": 384.23,
+      "active_rms": 499.97,
+      "sha256": "4e6f1d2f438f82349a6da39b0587458e578ba747c3ea8771a98e909117869fb0"
+    },
+    {
+      "number": 130,
+      "name": "STONE CHIME",
+      "engine": "Modal",
+      "peak": 3243,
+      "rms": 802.41,
+      "active_rms": 1249.79,
+      "sha256": "ebc1d27e3507ad3d35176a5b279fac79304415c66d20a44abfb5bef285fcc92f"
+    },
+    {
+      "number": 131,
+      "name": "BRONZE BOWL",
+      "engine": "Modal",
+      "peak": 3111,
+      "rms": 887.45,
+      "active_rms": 1253.15,
+      "sha256": "d4e4aacc16e8ff20985d0168d5839353ed5e20e51da8ac7c9e4389b009d439a0"
+    },
+    {
+      "number": 132,
+      "name": "SMALL GONG",
+      "engine": "Modal",
+      "peak": 2994,
+      "rms": 872.33,
+      "active_rms": 1257.83,
+      "sha256": "790d2caa3506882f74f0607a5624b1578febcbc07064fbe871b6d0759fa43dff"
+    },
+    {
+      "number": 133,
+      "name": "GLASS BELL",
+      "engine": "Modal",
+      "peak": 3028,
+      "rms": 867.04,
+      "active_rms": 1247.12,
+      "sha256": "ed64a33821c77f1b7c1cad74f8a14bd66f00ea5ab0020f64a8e8653af70839f6"
+    },
+    {
+      "number": 134,
+      "name": "COPPER CUP",
+      "engine": "Modal",
+      "peak": 3549,
+      "rms": 819.12,
+      "active_rms": 1250.42,
+      "sha256": "d73deb3b4dac64746b10bedf0680d1552cd75127402c436df51a8d388132207c"
+    },
+    {
+      "number": 135,
+      "name": "IRON PLATE",
+      "engine": "Modal",
+      "peak": 3564,
+      "rms": 829.11,
+      "active_rms": 1249.3,
+      "sha256": "8c50e2248efee5f11f642689297ba06156993eae657579c463011aa54d521e80"
+    },
+    {
+      "number": 136,
+      "name": "HANGING GLASS",
+      "engine": "Modal",
+      "peak": 3057,
+      "rms": 895.32,
+      "active_rms": 1250.36,
+      "sha256": "7f621dbbe64bba7ba10c2550d0759bfdcd71f75014069fa808f42f23d534d972"
+    },
+    {
+      "number": 137,
+      "name": "TEMPLE BELL",
+      "engine": "Modal",
+      "peak": 2984,
+      "rms": 911.83,
+      "active_rms": 1250.71,
+      "sha256": "d7fcea84bd36591547984be3fad42c295a9d79e85f3b4d9f8eef90bd8ffb2231"
+    },
+    {
+      "number": 138,
+      "name": "METAL RAIN",
+      "engine": "Modal",
+      "peak": 3785,
+      "rms": 792.65,
+      "active_rms": 1253.09,
+      "sha256": "9e61e591038b4d7e0c992c696592198334f4b587f2680af0f352b15ab5e4ac5a"
+    },
+    {
+      "number": 139,
+      "name": "FM CHIME",
+      "engine": "FM",
+      "peak": 2046,
+      "rms": 811.52,
+      "active_rms": 1210.39,
+      "sha256": "2c1e9ed5530acf240fa090729b3365ea67393930b87e0ba8a1a31dd2f250010e"
+    },
+    {
+      "number": 140,
+      "name": "PHASE CRYSTAL",
+      "engine": "Phase",
+      "peak": 1975,
+      "rms": 797.99,
+      "active_rms": 1199.88,
+      "sha256": "84e4e835da416d84b53e67655f64f594d97722a0f9b68b6dd044e4cec9b42517"
+    },
+    {
+      "number": 141,
+      "name": "SKIN TOM",
+      "engine": "Modal",
+      "peak": 5663,
+      "rms": 800.71,
+      "active_rms": 1195.19,
+      "sha256": "2d8662c3b0f78ba7cc2c8d2a246445e79832973f2851c8ee01c9f08b90eeec91"
+    },
+    {
+      "number": 142,
+      "name": "CLAY DRUM",
+      "engine": "Modal",
+      "peak": 5648,
+      "rms": 714.12,
+      "active_rms": 959.42,
+      "sha256": "448a48e81f8e60b47219d324f8d969b19e2fef132878f7e17d0e339e526a36e0"
+    },
+    {
+      "number": 143,
+      "name": "SHORT LOG",
+      "engine": "Modal",
+      "peak": 4203,
+      "rms": 423.6,
+      "active_rms": 213.67,
+      "sha256": "075b1488b46cb2e497c44baf11c1e482d71f310d46855eaad5e20904ac2a1274"
+    },
+    {
+      "number": 144,
+      "name": "TUNED CAN",
+      "engine": "Modal",
+      "peak": 5299,
+      "rms": 797.21,
+      "active_rms": 1250.43,
+      "sha256": "ccb1b608848a66694b1e0dede1c8a4bfcd4d19a6da0e314c5c9336d87d8a0e4a"
+    },
+    {
+      "number": 145,
+      "name": "LOW VESSEL",
+      "engine": "Modal",
+      "peak": 3381,
+      "rms": 800.46,
+      "active_rms": 1251.51,
+      "sha256": "bc0d8416a2f5da1ea3aa8c928ea2e0a6c884d55f4dbfbe19697208df3c7fc1d0"
+    },
+    {
+      "number": 146,
+      "name": "PULSE TICK",
+      "engine": "Phase",
+      "peak": 8829,
+      "rms": 915.07,
+      "active_rms": 111.11,
+      "sha256": "1d57b629bc22d70628d2ea31444d13f55bdd99799414b67b9788f366f4503031"
+    },
+    {
+      "number": 147,
+      "name": "WIRE SNAP",
+      "engine": "String",
+      "peak": 5734,
+      "rms": 202.14,
+      "active_rms": 2.69,
+      "sha256": "7968ce0090357acb621ba65910063f85eff41a954b133136d0aa5fed24e74ec7"
+    },
+    {
+      "number": 148,
+      "name": "RESONANT TAP",
+      "engine": "Analog",
+      "peak": 8418,
+      "rms": 581.97,
+      "active_rms": 94.43,
+      "sha256": "16db40f9a1f491c17065e43564893e6e9985c609549b3579105a116f1a08bde1"
+    },
+    {
+      "number": 149,
+      "name": "BROKEN GLASS",
+      "engine": "Phase",
+      "peak": 4754,
+      "rms": 966.85,
+      "active_rms": 1202.12,
+      "sha256": "596b2fe9070016dd6485a53aedaff54bb56ddd7c7999db04800f29597a1e8341"
+    },
+    {
+      "number": 150,
+      "name": "DRIFTING WIRE",
+      "engine": "String",
+      "peak": 3661,
+      "rms": 674.81,
+      "active_rms": 1001.65,
+      "sha256": "b212163b23c529a4e80b81f1818a896ecc4618cf2b8933b36b5eb24bdafaa2ab"
+    }
+  ],
+  "limits": "Metrics screen levels and safety; they do not establish subjective sound quality or hardware acceptance."
+}

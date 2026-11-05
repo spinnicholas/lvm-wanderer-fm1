@@ -1,0 +1,160 @@
+{
+  "identity": "FM-1_929",
+  "package_bytes": 612196,
+  "sha256": "b5f50a6608d569ba11a057026de1eb2d55c6429b797dd96709a7f3eb5212e788",
+  "regions": {
+    "app": {
+      "used": 362776,
+      "limit": 581564,
+      "free": 218788
+    },
+    "ram": {
+      "used": 39488,
+      "limit": 98304,
+      "free": 58816
+    },
+    "pool": {
+      "used": 315392,
+      "limit": 344064,
+      "free": 28672
+    }
+  },
+  "protected_files": [
+    {
+      "path": "firmware/hal/fm1_input.h",
+      "sha256": "4f9d543ad1cd5a8e21ee63d208df4c5eb908bc952f04c236ca4abdc72151c700"
+    },
+    {
+      "path": "firmware/hal/fm1_cc.h",
+      "sha256": "21aadf8620c2ac002d1d1931f18be29b0b3308a4d6d26a49452fe169d337e70a"
+    },
+    {
+      "path": "firmware/hal/fm1_vec.S",
+      "sha256": "8f9e787871332f522157d561dc3cfe8906ed0abf160139ed5819cfdeab66f01a"
+    },
+    {
+      "path": "firmware/hal/fm1_guard.h",
+      "sha256": "dda2ebdd3024aab7700f8ef00cc55de23c0b369be1d889741d2058eb5c33ce74"
+    },
+    {
+      "path": "firmware/hal/smk_input.h",
+      "sha256": "8f17040269056a5afd0ce19dc961dfd7246701bc80e5087b027992154c9ab46d"
+    },
+    {
+      "path": "firmware/hal/fm1_flash.h",
+      "sha256": "bb5d36edee8e2c5404b34aa2a4cd9f1f70364d6207540453d26efad7c5a7671c"
+    },
+    {
+      "path": "firmware/hal/fm1_flash_map.h",
+      "sha256": "f3da8fddd948b9efa50426bc77204339ad64bd2b3324c8b442b46d5dba1052b3"
+    },
+    {
+      "path": "firmware/hal/fm1_usb.h",
+      "sha256": "667289a678a027221343b6496b61870222eb80394a696d7dd896dbc2ffe303d4"
+    },
+    {
+      "path": "firmware/hal/fm1_adc.h",
+      "sha256": "1917870bd802de9134d33335efbcf886b296705dff06688925fd7325589c0c1a"
+    },
+    {
+      "path": "firmware/hal/fm1_gpio.h",
+      "sha256": "5e3937e32a3b4b9b9ae622c5b42c8819ec8a16f2d76dbddec91654703c77a216"
+    },
+    {
+      "path": "firmware/hal/fm1_lcd_hw.h",
+      "sha256": "70e058d571a89021d668c5581e105837e144433368d01f46ec2400f09cd9c2ec"
+    },
+    {
+      "path": "firmware/hal/fm1_xip.h",
+      "sha256": "dcba6ddb9cd2403e1d97c4db49d836110ef2805d2369db7ed323e3fbe26c56ed"
+    },
+    {
+      "path": "firmware/hal/fm1_audio.h",
+      "sha256": "22351440699748546e932098e3016c618d6137dd0ae34557e08a107641d4e62e"
+    },
+    {
+      "path": "firmware/hal/fm1_uart.h",
+      "sha256": "482da9e67231a7b42bff63362dec60aa8f43ca6e8d4962df57f8be6f9ea5d8c9"
+    },
+    {
+      "path": "firmware/hal/fm1_sys.h",
+      "sha256": "5d56781274406b0a1bf816c66d86c0b0b23b49757cc6f5644df566127827a9a7"
+    },
+    {
+      "path": "firmware/hal/fm1_isr.S",
+      "sha256": "5e45c960577354184efa3bf984a1c14bffb0c5967cbdb643e1f4c9cc196105c5"
+    },
+    {
+      "path": "firmware/hal/fm1_time.h",
+      "sha256": "e83c725eae2ec5a163771ca2b8f1c0779354456f2e20a32febc7b6755758a97d"
+    },
+    {
+      "path": "firmware/hal/fm1_irq.h",
+      "sha256": "b54beeaf8bceab5a4e0bcd6d9fee1280fcba1a072f73c94160488d1b6ebcbc58"
+    },
+    {
+      "path": "firmware/hal/fm1_timer.h",
+      "sha256": "1ec236ce4a75a5b94b9c16999dcdf7d71e4e0c5e0d2f14dbfb87bbaf025e1004"
+    },
+    {
+      "path": "firmware/loader/crt0_ldr.S",
+      "sha256": "bd4149b97520d1dcc271f730c5a046b0dbf97909e48e968e0ba18304ffc37841"
+    },
+    {
+      "path": "firmware/loader/loader.c",
+      "sha256": "93b7ca3fb76a46a625f07a101d5962c4666969a863cf177326baf4e67ac1fb27"
+    },
+    {
+      "path": "firmware/loader/ldr_core.c",
+      "sha256": "8e4f8a2d858aac131d717c1fc3e118949e49b03788fa5acf698ddc70bfdf7561"
+    },
+    {
+      "path": "firmware/loader/loader.ld",
+      "sha256": "4acae8c9a16cf9a70f53a546f9175b5a86d2bc5cb6bce39513a2ff3c4fdba4ae"
+    },
+    {
+      "path": "firmware/loader/ldr_screen.c",
+      "sha256": "80a3c05f762d948bda7b35abc360f3c63cb116a02109949be1a4599d8782358d"
+    },
+    {
+      "path": "firmware/src/platform.c",
+      "sha256": "e59516f182f7f666708417b91ee8a9366294b8b073fe4000183a448e49f27967"
+    },
+    {
+      "path": "firmware/src/usb.c",
+      "sha256": "0aa9af8620a7c193dd3c3376db58201b006201fa37bd497194346545167707c0"
+    },
+    {
+      "path": "firmware/src/ota.c",
+      "sha256": "72add803551126ad9deed91f4fcd6e02067686a29ecbe6ff6caaea7ba3b87696"
+    },
+    {
+      "path": "firmware/src/recovery.c",
+      "sha256": "da1d5c0602851758a46c08411cc77940c6776bd19cdb9abf8cae6c1cfd8139cb"
+    },
+    {
+      "path": "firmware/src/bootguard.h",
+      "sha256": "d01ed7e1ab9ad71395f1bb3495618f5fd52dbbdc3061b38a9452e827248d82d5"
+    },
+    {
+      "path": "firmware/src/store.h",
+      "sha256": "52fcf88d1f7154ebbfd3f687879b444f6cbb568a2a8405f4f4b4baf6b6d5e1cb"
+    },
+    {
+      "path": "firmware/src/libc.c",
+      "sha256": "344b09afe33da826feefeb1ea2a1a7c50732f91c133fee30174819645edc131a"
+    },
+    {
+      "path": "firmware/crt0.S",
+      "sha256": "2212471c4a70e94022ba24ef65a4b208fadd5f7e33f80745c5f5e8b9f4aa840c"
+    },
+    {
+      "path": "firmware/app.ld",
+      "sha256": "6a9f41205e482fbdf2d24dc418416e45a3a8e1781d3e594279d751335af8942a"
+    }
+  ],
+  "compressed_loader_identical_to_09": true,
+  "package_head_identical_to_09": true,
+  "physical_hardware": "not tested",
+  "firmware_release": "1.3-RC1"
+}

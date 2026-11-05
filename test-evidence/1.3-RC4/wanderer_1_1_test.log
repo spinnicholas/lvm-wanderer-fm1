@@ -1,0 +1,26 @@
+98304 key/scale/note/phase cases: scale-bound moves, bounded intervals, phrase resolution, duration and Anchor preservation
+held local note records ~700 ms and replays through multiple steps before release
+32-step second-bar and boundary-spanning recording; shortening preserves hidden events; Undo restores length
+MIDI source isolation, sustain pedal, replaced note, transport finalization and whole-loop hold cap pass
+     0 ms  slot 0 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 1 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 2 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 3 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 4 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 5 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 6 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 7 saved (2212 B)
+     0 ms  settings 0 saved (16 B)
+     0 ms  slot 0 saved (160 B)
+     0 ms  slot 1 saved (152 B)
+all eight v4 slots and v1/v2/v3 imports pass; malformed musical metadata rejected
+slow pad sustains after 1.6 s, releases gradually and reaches silence
+1152 Music page renders plus 32-step Home views fit 240x240
+WANDERER 1.1 MUSICAL RECORDING AND ENGINE TESTS PASSED

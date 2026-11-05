@@ -1,0 +1,13 @@
+# Wanderer 1.2 refinement brief
+
+Act as the product engineer responsible for a trustworthy, accessible musical instrument. Review the released 1.1 RC2 source and screenshots, anticipate feedback from first-time and returning players, and implement the most useful refinements. Preserve the approved splash and licensed symbol style, the meaningful LED scenes and the musical 1.1 synth. Use no normal on-device words other than WANDERER, retaining permitted musical note notation. Keep one-handed operation and low-vision readability central.
+
+Prioritize the mismatch between a polyphonic keyboard and a monophonic recorder; independent held gates, MIDI sustain, overdubbing, Anchor, branch, Undo and save/load must agree. Keep the four-voice limit explicit rather than pretending two lanes provide eight voices. Make project identity, unsaved work, digital mute and loop length visible on Home. Show trustworthy slot information, and distinguish project-write success from preference-write failure. Do not auto-save, auto-load or overwrite old-format projects during import.
+
+Make ambiguous transitions predictable. Recording must finish when its target or valid listening context changes. Empty recording passes should retain Undo. Save and Load results should remain readable. Give the hardware SAVE label a discoverable project-save path without losing Catch. Preserve scope chord ordering, panic and startup rescue.
+
+Review real renderer screenshots in both themes and sizes. Add targeted tests of independent releases, sustain/source isolation, repeated pitches, four-note overflow, loop wrap, dirty checkpoints, Undo after saving/loading, write/readback faults and legacy project validation. Run inherited audio, UI, MIDI, LED, scope, loader and installer gates and compiled emulation. Retain the exact safety foundation and rollback packages, including verified stock-v15 handling. Package source, licenses, every major page screenshot, listening references, a usable guide and honest hardware acceptance limits. Complete the implementation before presenting the candidate.
+
+## RC2 follow-through
+
+Reproduce ordinary performance failures against RC1 before correcting them. Keep a local chord batch together across a scheduler boundary, preserve recent retriggers when a full recorded step needs replacement, prefer released positions, and make HOME use the same listening release as LFO. Retain the v5 layout, four voices, UI, sound bank and protected recovery foundation. Verify old failing cases, the entire release gate, compiled Save/Load/Anchor/HOME behavior, package reproducibility and actual previous-package rollback simulations.

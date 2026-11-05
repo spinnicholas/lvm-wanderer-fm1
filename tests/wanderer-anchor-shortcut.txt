@@ -1,0 +1,24 @@
+1200 btn 5
+1250 shot
+1300 btndown 6
+2300 btnup 6
+2400 btn 13
+2450 keys 128
+2550 keys 0
+2600 btn 13
+2700 btn 5
+2800 btndown 6
+3800 btnup 6
+3900 btn 13
+3950 keys 256
+4100 keys 0
+4150 btn 5
+4200 shot
+4250 btn 13
+4350 btn 5
+4400 shot
+4450 btn 5
+4500 shot
+4600 btndown 5
+5900 btnup 5
+6000 end
