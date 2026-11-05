@@ -47,7 +47,16 @@ jobs:
       - name: Host regressions, native compile and installer validation
         run: |
           RELEASE="$(cat RELEASE)" sh tools/compile_native.sh
+      - name: Upload flashable package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LVM-Wanderer-native-fm1
+          path: |
+            build/dinghy-*.fwsc
+            build/native-build.log
+          if-no-files-found: error
       - name: Publish the compiled package back to this branch
+        continue-on-error: true
         run: |
           set -eu
           REL="$(cat RELEASE)"
@@ -69,11 +78,3 @@ jobs:
           if git diff --cached --quiet; then echo "Package unchanged"; exit 0; fi
           git commit -m "Native FM-1 build of $REL from ${GITHUB_SHA::12} [skip ci]"
           git push origin "HEAD:$GITHUB_REF_NAME"
-      - name: Upload flashable package
-        uses: actions/upload-artifact@v4
-        with:
-          name: LVM-Wanderer-native-fm1
-          path: |
-            build/dinghy-*.fwsc
-            build/native-build.log
-          if-no-files-found: error
