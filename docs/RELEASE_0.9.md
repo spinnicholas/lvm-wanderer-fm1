@@ -1,5 +1,3 @@
-> Historical build/design notes. Current 1.0 behavior and verification are documented in USER_GUIDE_1.0.md and TEST_REPORT_1.0.md. Later user hardware reports cover 0.9, not the 1.0 candidate.
-
 # Wanderer 0.9 for FM-1 — 100-sound build
 
 This is an experimental, flashable FM-1 `.fwsc` candidate with a new 100-sound engine. No physical FM-1 was connected or flashed during development.
@@ -39,4 +37,8 @@ python3 tools/fm1_install.py /path/to/LVM-Wanderer-0.9-FM1.fwsc
 
 On Home, PRESETS moves through sounds 1–100 and SELECT jumps banks of ten. The display shows the large sound number, and the [companion catalog](WANDERER_PRESETS_0.9.md) names each number. Zoom is in the system settings page. Confirmed slot 1 Save (SEQ, SEL) while stopped keeps the sound and effect settings. The record format remains compatible with the previous 0.8 slot; older Wanderer slots migrate on Load. The three former sounds are represented by numbers 1–3. None of these slots import SLOOP projects.
 
-Hardware installation, playback on the speaker, actual control increments, flash save/load and switching back to other firmware remain to be tested. Do not publish this as a hardware-validated firmware until those checks pass.
+Subsequent author report: I have physically tested Wanderer 0.9 on my FM-1 and successfully rolled back to another firmware. Wider hardware coverage and detailed per-feature results are still being documented. See [HARDWARE_TESTING.md](HARDWARE_TESTING.md) for the recorded scope.
+
+## Public testing release
+
+See [STATUS.md](STATUS.md) for current limitations and [PUBLICATION_CHECKS.json](PUBLICATION_CHECKS.json) for the additional host and package checks. This is not a Firmware Hub listing or approval. The author has since confirmed a physical FM-1 test and successful rollback; see [HARDWARE_TESTING.md](HARDWARE_TESTING.md).

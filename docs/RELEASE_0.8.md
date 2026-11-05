@@ -1,5 +1,3 @@
-> Historical build/design notes. Current 1.0 behavior and verification are documented in USER_GUIDE_1.0.md and TEST_REPORT_1.0.md. Later user hardware reports cover 0.9, not the 1.0 candidate.
-
 # Wanderer 0.8 FM-1 package
 
 This is a flashable FM-1 `.fwsc` package, built from Wanderer's 0.8 source. It is an experimental hardware candidate, not a physically qualified release.

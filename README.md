@@ -1,29 +1,9 @@
-# LVM Wanderer 2.0 RC11 for M-VAVE FM-1
+# LVM Wanderer 1.4 for M-VAVE FM-1
 
-Use `LVM-Wanderer-2.0-RC11-FM1.fwsc` for hardware testing with your usual
-FM-1 updater. The permanent device identity is `FM-1_929`.
+> **Wanderer 3.0 RC1 (test build, not yet hardware-tested).** Melt and Drift now carry Memory a little further from the Anchor on every loop. Tap GLO to keep where it has wandered; hold GLO to return. The release also adds a smoother reverb, Scatter that repeats as rhythmic motifs, beat-pulsing LEDs and glowing root keys. [What changed](docs/CHANGES_3.0.md) · [Touch-first low-vision guide](https://spinnicholas.github.io/lvm-wanderer-fm1/guide-3.0.html) · Firmware: `dist/LVM-Wanderer-3.0-RC1-FM1.fwsc` (built by the native build workflow).
 
-Home puts the protected Anchor on the left and the working Memory on the
-right. The numbered switch above them shows which layer you are editing.
-Hold **EDIT** for about one second to switch layers while both keep playing.
-**PRESET**, the keys and **REC** follow the selected layer. **Settings → Layer**
-sets Layer 2 playback and lets it use its own patch or follow Layer 1.
-Tap **LFO** to compare Anchor and Memory. With no Anchor yet, the first
-tap protects the completed Layer 1 loop and listens to it.
+> **Wanderer 1.7 RC4 has been thoroughly hardware-tested by its author.** The exact firmware and matching source archive have been verified, and [release details, compatibility notes and checksums](docs/RELEASE_1.7_RC4.md) are available. **The RC4 download is not hosted on GitHub yet.** The 1.4 link below remains the latest installable GitHub release until RC4 assets are uploaded. See the [RC4 hardware-test record](docs/HARDWARE_TESTING_1.7_RC4.md).
 
-Hold **OCT+** for 1.5 seconds to toggle Zoom. Home keeps the same layout
-and enlarges both icons. **Settings → Access Feel** has display hold,
-steady numbers, and the cue mode and level. Afterglow is preset 1 and
-the startup sound. Hold **PLAY/STOP** on Home for two seconds to recall it.
-
-![Normal Home with Layer 1 selected, and Zoom Home with Layer 2 selected](docs/screenshots-2.0/anchor-memory.png)
-
-[2.0 controls, compatibility and verification](docs/FLASHABLE_BUILD_STATUS.md)
-
-Build with `sh tools/compile_scatter_1_8.sh` and the
-[documented JieLi toolchain and AC79 SDK](README-DINGHY.md).
-
-## Published 1.4 baseline
 
 ![Wanderer Home screen with the protected Anchor, evolving memory and layer controls](docs/screenshots-1.4/home-large.png)
 
@@ -41,7 +21,7 @@ The arpeggiator adds 13 patterns, 12 timing options, octave range, gate, swing, 
 
 Adaptive Zoom enlarges words to fit and wraps longer values where useful. Steady numeric Zoom keeps numbers the same size across a parameter’s range and unit changes. Display hold offers two, five or ten seconds, or Hold until dismissed. Cues offers Off, Actions and Full with a separate level; Full adds rising/falling switch patterns and range landmarks. Press **HOME + EDIT together**, then release both, to toggle Zoom without leaving the current page.
 
-## 1.4 screens
+## Current screens
 
 | Musical Scatter | Arpeggiator | Access Feel |
 | --- | --- | --- |
@@ -61,10 +41,10 @@ Filename: `LVM-Wanderer-1.4-RC6-FM1.fwsc`. Identity: `FM-1_929`. Size: 612,196 b
 9135b62169409efb73a6492561673bb5465979563824605956ab3316c50d5b32
 ```
 
-## 1.4 installation and projects
+## Install and keep your projects
 
 Use the compiled `.fwsc` download with your FM-1 update method. The source/release bundle includes the Python installer and [installation and recovery instructions](docs/INSTALL_AND_RECOVERY.md). Start at a lower master level: the modern engine has 6 dB more gain than 1.3 RC4.
 
 New saves use project format v8. Older Wanderer projects import without overwriting their original slots; save conversions into spare slots if you need to return to an older version. Printed audio remains RAM-only and must be recorded externally. External clock controls the arpeggiator; event-memory playback and printed audio keep their existing clock.
 
-Reproducing the published 1.4 firmware requires its v1.4.0 source tag. GPL-3.0-only with retained platform, font, icon and DSP notices in [LICENSING.md](LICENSING.md). Nicholas James / Low Vision Music. Independent firmware; not affiliated with M-VAVE or the original platform authors.
+Build the exact embedded RC6 version with `sh build.sh --release 1.4-RC6`, following [the pinned toolchain instructions](README-DINGHY.md). GPL-3.0-only with retained platform, font and icon notices in [LICENSING.md](LICENSING.md). Nicholas James / Low Vision Music. Independent firmware; not affiliated with M-VAVE or the original platform authors.

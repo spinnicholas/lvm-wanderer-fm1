@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wanderer 3.0 — a low-vision, touch-first guide</title>
+<style>
+:root{color-scheme:dark;--bg:#09151b;--fg:#eff9f5;--accent:#8aeee0;--panel:#10242a;--edge:#91aeb5;--focus:#ffd180;--size:22px}
+:root.light{color-scheme:light;--bg:#ffffff;--fg:#102026;--accent:#00645c;--panel:#eef6f6;--edge:#48616a;--focus:#8a4b00}
+:root.yellow{--bg:#000000;--fg:#ffe94d;--accent:#ffffff;--panel:#111100;--edge:#ffe94d;--focus:#ffffff}
+*{box-sizing:border-box}
+html{font-size:var(--size)}
+body{margin:0;background:var(--bg);color:var(--fg);font:1rem/1.65 "Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:860px;margin:auto;padding:0 20px 80px;overflow-wrap:break-word}
+h1,h2,h3{line-height:1.2}
+h1{font-size:2rem;margin:1rem 0 .5rem}
+h2{color:var(--accent);font-size:1.5rem;margin:0}
+h3{font-size:1.15rem;margin:1.4rem 0 .4rem}
+a{color:var(--accent);text-underline-offset:.2em}
+:focus-visible{outline:5px solid var(--focus);outline-offset:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--bg);padding:12px;z-index:9}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:3px solid var(--edge);padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+button,.big{font:inherit;font-size:.85rem;color:var(--fg);background:var(--panel);border:3px solid var(--edge);border-radius:14px;min-height:56px;min-width:56px;padding:.35em .9em;cursor:pointer}
+button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;padding:0;list-style:none}
+.toc a{display:flex;align-items:center;min-height:64px;padding:.4em .9em;border:3px solid var(--edge);border-radius:14px;background:var(--panel);text-decoration:none;font-weight:700;color:var(--fg)}
+details{border:3px solid var(--edge);border-radius:16px;margin:16px 0;background:var(--panel)}
+summary{cursor:pointer;list-style:none;min-height:64px;display:flex;align-items:center;gap:.6em;padding:.5em 1em}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-weight:700;font-size:1.4rem;width:1.2em;text-align:center}
+details[open] summary::before{content:"−"}
+details>div{padding:0 1.1em 1em}
+.card{border-left:8px solid var(--accent);padding:.4em .9em;margin:12px 0;background:var(--bg);border-radius:6px}
+.card b:first-child{display:block;color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border:2px solid var(--edge);padding:10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+.key{display:inline-block;border:3px solid currentColor;border-radius:10px;padding:0 .4em;font-weight:700;white-space:nowrap}
+figure{margin:12px 0}figure img{width:100%;max-width:480px;image-rendering:pixelated;border:3px solid var(--edge);border-radius:12px;display:block}
+figcaption{font-size:.9rem}
+ol li,ul li{margin:.35em 0}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+details,h3,#start{scroll-margin-top:170px}
+@media (max-width:640px){table,tbody,tr,td,th{display:block;width:auto}tr:first-child{display:none}tr{border:3px solid var(--edge);border-radius:12px;margin:12px 0;background:var(--bg)}td{border:0;padding:6px 12px}td:first-child{font-weight:700;color:var(--accent)}}
+@media print{.bar{display:none}details{border:1px solid #000}details>div{display:block}}
+</style>
+</head>
+<body>
+<a class="skip" href="#start">Skip to the guide</a>
+<div class="bar" role="toolbar" aria-label="Reading controls">
+ <button id="bigger" aria-label="Larger text">A+</button>
+ <button id="smaller" aria-label="Smaller text">A−</button>
+ <button id="light" aria-pressed="false">Light</button>
+ <button id="yellow" aria-pressed="false">Yellow on black</button>
+ <button id="openall" aria-pressed="false">Open all</button>
+</div>
+<main id="start">
+<h1>Wanderer 3.0 — the touch-first guide</h1>
+<p>From <a href="https://www.lowvisionmusic.info">Low Vision Music</a>. Wanderer is a four-voice synthesizer
+for the M-VAVE FM-1. You record a short phrase. Wanderer keeps the original safe as the <strong>Anchor</strong>, and
+lets a copy, called <strong>Memory</strong>, wander a little further every time the loop goes round.</p>
+<p>This guide is written to be used with your hands on the instrument. Each section tells you
+<strong>where to reach</strong>, <strong>what you will hear</strong>, and <strong>what lights up</strong>. You do not
+need to read the screen to use Wanderer, but the screen helps: large words, thick bars and six colour themes.</p>
+<div class="card"><b>Status</b>3.0 RC1 is a test release. It passes the host-computer tests but has not yet been
+played on an FM-1. Keep your 2.0 RC11 file and your recovery files.</div>
+
+<nav aria-label="Sections"><ul class="toc">
+ <li><a href="#orient">1. Find your way</a></li>
+ <li><a href="#first">2. Your first loop</a></li>
+ <li><a href="#wander">3. Let it wander</a></li>
+ <li><a href="#home">4. Keep, Return, Compare</a></li>
+ <li><a href="#sound">5. Sounds and layers</a></li>
+ <li><a href="#scatter">6. Scatter and effects</a></li>
+ <li><a href="#see">7. Screen, lights, sound cues</a></li>
+ <li><a href="#save">8. Save and load</a></li>
+ <li><a href="#all">9. Every control</a></li>
+ <li><a href="#help">10. If something goes wrong</a></li>
+</ul></nav>
+
+<details id="orient"><summary><h2>1. Find your way</h2></summary><div>
+<h3>The keys</h3>
+<p>The FM-1 has 27 keys, low notes on the left. The first key is an F. Find the groups of two black keys: the white
+key just left of each pair is a <strong>C</strong>. On the Home screen every C key glows softly, so you
+can find them by sight as well as by touch. If you change the root note in Settings → Music, the keys for the new
+root glow instead.</p>
+<h3>Knobs</h3>
+<ul>
+ <li><strong>Four numbered knobs</strong> in a row. On Home they are <span class="key">1 MELT</span>
+ <span class="key">2 DRIFT</span> <span class="key">3 SCATTER</span> <span class="key">4 LEVEL</span>. In every
+ menu, the four knobs change the four rows shown on the screen, top to bottom.</li>
+ <li><strong>PRESET</strong>: turn it to change the sound. In menus it moves to the next page.</li>
+ <li><strong>SELECT</strong>: turn it on Home to jump ten sounds at a time. In menus it moves the highlight.</li>
+ <li><strong>ALGORITHM</strong>: tempo, from 60 to 180 beats per minute.</li>
+</ul>
+<h3>The three buttons that always help</h3>
+<ul>
+ <li><span class="key">HOME</span> goes back one step. <strong>Hold it for one second</strong> to stop every sound.</li>
+ <li><span class="key">PLAY</span> starts and stops. Its light flashes on every beat.</li>
+ <li><span class="key">ENV</span> is Undo: it reverses your last change.</li>
+</ul>
+<div class="card"><b>Tap and hold</b>A <em>tap</em> is press-and-let-go. A <em>hold</em> is pressing and counting.
+Each hold in this guide gives a time: “one second” is roughly “one-and”. Holds always act while you
+are still pressing, so you can let go as soon as you hear the sound cue.</div>
+</div></details>
+
+<details id="first"><summary><h2>2. Your first loop</h2></summary><div>
+<ol>
+ <li>Tap <span class="key">REC</span>. The loop starts and recording begins. The REC and PLAY lights flash with the beat.</li>
+ <li>Play a short phrase on the keys. One bar of 16 steps loops by default; notes snap to the nearest step.</li>
+ <li>Tap <span class="key">REC</span> again to stop recording. The phrase keeps playing.</li>
+ <li>Play it again: anything you play while REC is on is added to the loop.</li>
+</ol>
+<p>Made a mistake? Tap <span class="key">ENV</span> to undo the take.</p>
+<p>Want two bars? Settings → Music, knob 3 (Length) sets 16 or 32 steps (stop first).</p>
+</div></details>
+
+<details id="wander"><summary><h2>3. Let it wander</h2></summary><div>
+<p>This is the heart of 3.0. Turn <span class="key">1 MELT</span> and <span class="key">2 DRIFT</span> up a little.
+At the end of every loop, Memory changes slightly. The next loop changes a little more, and so on.</p>
+<h3>What you will hear</h3>
+<ul>
+ <li><strong>Drift</strong> moves single notes up or down one step of the scale. At low settings the first beat and
+ the root notes never move, so the tune keeps its shape. Turn it higher for wider movement and occasional
+ octave jumps.</li>
+ <li><strong>Melt</strong> softens the in-between beats, lets notes run into each other, and drips a quiet echo, one step
+ lower, into empty steps. The sound itself gets softer over several loops.</li>
+ <li>Turn either knob down and Memory slowly comes back. With both at zero, every note returns home within a few
+ loops.</li>
+</ul>
+<div class="card"><b>Your original is safe</b>The first time Memory wanders, Wanderer keeps your recording as the Anchor
+for you. You can hear it or go back to it at any time.</div>
+<figure><img src="screenshots-3.0/home-wander-z0.png" alt="Home screen: on the left an Anchor card with a lock;
+ on the right a Memory card with the number 7 in the corner and a bar about three-quarters full under the Memory symbol.">
+<figcaption>Home: the number is how many loops Memory has wandered; the bar is how far it has gone.</figcaption></figure>
+<p>Turning Melt, Drift or Scatter shows a large number and a word: for Drift, STILL, GENTLE, WANDERING or FAR.</p>
+<figure><img src="screenshots-3.0/focus-drift-z0.png" alt="Drift screen showing 76 percent, the word FAR, and a long bar."></figure>
+</div></details>
+
+<details id="home"><summary><h2>4. Keep, Return, Compare</h2></summary><div>
+<table>
+<tr><th scope="col">Do this</th><th scope="col">What happens</th><th scope="col">You hear / see</th></tr>
+<tr><td>Tap <span class="key">LFO</span></td><td><strong>Compare.</strong> Listen to the Anchor. Tap again to go back.</td><td>LFO light is bright while you listen.</td></tr>
+<tr><td>Tap <span class="key">GLO</span></td><td><strong>Keep.</strong> The Memory you hear now becomes the new Memory. Wandering starts from here.</td><td>A high cue; the screen says KEPT. Undo with ENV.</td></tr>
+<tr><td>Hold <span class="key">GLO</span> about 1 second</td><td><strong>Return.</strong> Memory goes back to what you recorded.</td><td>A falling two-note cue; the screen says BACK HOME.</td></tr>
+<tr><td>Hold <span class="key">LFO</span> 1.2 seconds (stopped)</td><td><strong>Restore Anchor.</strong> Asks first; Memory becomes the Anchor again.</td><td>Tap SELECT to confirm, HOME to cancel.</td></tr>
+<tr><td>Tap <span class="key">SAVE</span></td><td>Set the Anchor yourself from the current Memory (only if there is none yet).</td><td>The screen says ANCHOR SET.</td></tr>
+</table>
+<div class="card"><b>Lights that guide you</b>GLO glows when there is something to keep and flashes when Memory changes
+at the end of a loop. When Memory has gone more than halfway, LFO flashes once at the start of each loop, as a
+reminder to compare.</div>
+<figure><img src="screenshots-3.0/notice-home-z0.png" alt="Message screen with a large anchor symbol, the words BACK HOME and a tick."></figure>
+</div></details>
+
+<details id="sound"><summary><h2>5. Sounds and layers</h2></summary><div>
+<ul>
+ <li>Turn <strong>PRESET</strong> to choose from 150 sounds; turn <strong>SELECT</strong> to jump ten at a time. They are
+ grouped in tens: leads, basses, keys, organs, brass and winds, strings, pads, plucks, mallets, bells and drums.</li>
+ <li>Each sound now has its own Melt character. Leads and basses get darker, keys get rounder, pads and strings
+ open up and widen, plucks and bells soften.</li>
+ <li><strong>Hold PLAY for two seconds</strong> to return to the first sound, Afterglow.</li>
+ <li>Tap <span class="key">EDIT</span> to shape the sound. The four knobs change the four rows; the row you are
+ changing turns solid. Turn PRESET for the next page.</li>
+ <li><strong>Hold EDIT about one second</strong> to switch between Layer 1 (Memory) and Layer 2. The highlighted number at the
+ top of Home is the layer you are playing and recording. Layer 2 does not wander. It stays steady under Memory.</li>
+ <li>Velocity now changes tone: softer notes are darker. The FM-1 keys play at a steady, neutral velocity.</li>
+</ul>
+<figure><img src="screenshots-3.0/edit-amp-z0.png" alt="Edit screen titled AMP with four rows: Attack 7 ms, Decay 440 ms highlighted as a solid pale block, Sustain 112, Release 382 ms."></figure>
+</div></details>
+
+<details id="scatter"><summary><h2>6. Scatter and effects</h2></summary><div>
+<p><span class="key">3 SCATTER</span> on Home chops the sound into repeats, skips, reversals and pitched slices,
+in time with the loop. From quiet to loud: CLEAN, SPARSE, BUSY, WILD.</p>
+<ul>
+ <li>In 3.0 a Scatter pattern <strong>repeats</strong> each loop, so it plays as a rhythm. In Edit, page Scatter Grid,
+ knob 2 <strong>Variation</strong> sets how often a new pattern takes over: low keeps the same one, high changes it every loop.</li>
+ <li>The first beat stays clean unless Scatter is very high, and the last steps of the loop get more gestures.</li>
+ <li>Repeats fade like a real echo.</li>
+</ul>
+<p>Effects are in Settings. Hold <span class="key">SEL</span> and turn <strong>PRESET</strong> to reach Chorus, Delay,
+Reverb, Tape Echo, Phaser, Bitcrush and Wavefold. The 3.0 reverb is smoother and wider, and every type except Ambient
+fades fully to silence.</p>
+</div></details>
+
+<details id="see"><summary><h2>7. Screen, lights and sound cues</h2></summary><div>
+<h3>Make the screen easier to see</h3>
+<ul>
+ <li><strong>Zoom:</strong> hold <span class="key">OCT+</span> for 1.5 seconds, or press HOME and EDIT together.
+ Everything gets larger and keeps the same knob layout.</li>
+ <li><strong>Colour theme:</strong> hold <span class="key">OCT−</span> for 1.5 seconds to switch to the next of six
+ themes: Contrast, Dark, Light, Amber, Ocean, Violet. The theme name appears on screen.</li>
+ <li><strong>Reduced motion</strong> and display hold time: hold SEL for Accessibility, then turn PRESET one click to the right for Access Feel.</li>
+</ul>
+<figure><img src="screenshots-3.0/theme-3.png" alt="Home screen in the Amber theme: warm yellow symbols on a near-black background."></figure>
+<h3>Lights</h3>
+<table>
+<tr><th scope="col">Light</th><th scope="col">Meaning</th></tr>
+<tr><td>PLAY flashing</td><td>The loop is running; bright on every beat.</td></tr>
+<tr><td>REC flashing</td><td>Recording; bright on every beat. Solid while Print is armed or writing.</td></tr>
+<tr><td>Keys glowing softly</td><td>Root notes (C unless you change the root).</td></tr>
+<tr><td>Keys bright</td><td>Notes that are sounding.</td></tr>
+<tr><td>GLO glow / flash</td><td>Something to Keep / Memory just moved. Bright during Scatter repeats.</td></tr>
+<tr><td>LFO bright</td><td>Listening to the Anchor. A flash on the first beat means Memory is far from home.</td></tr>
+<tr><td>SAVE bright</td><td>An Anchor is stored.</td></tr>
+<tr><td>EDIT bright</td><td>Layer 2 is selected.</td></tr>
+<tr><td>OCT− / OCT+ bright</td><td>The keyboard is shifted down / up.</td></tr>
+</table>
+<h3>Sound cues</h3>
+<p>Short tones confirm actions: rising for on, falling for off; a higher tone for each menu row. In Access Feel,
+CUES sets Off, Actions or Full (Full adds tones at the ends and middle of each knob's range), and CUE LEVEL sets
+their volume. Cues are not recorded or printed.</p>
+</div></details>
+
+<details id="save"><summary><h2>8. Save and load</h2></summary><div>
+<ol>
+ <li>Stop the loop with PLAY.</li>
+ <li>Hold <span class="key">SAVE</span> about one second (or tap SEQ). Turn <strong>SELECT</strong> to choose slot 1 to 8; each slot
+ has its own cue pitch. The screen says EMPTY SLOT or OVERWRITE.</li>
+ <li>Tap <span class="key">SELECT</span> to save, or <span class="key">HOME</span> to cancel.</li>
+</ol>
+<p>To load, tap <span class="key">ARP</span>, choose a slot, and tap SELECT.</p>
+<div class="card"><b>Wandering is not saved</b>Tap GLO (Keep) before saving if you want the wandered version.
+Projects saved in 3.0 cannot be opened by 2.0. 2.0 refuses them without changing them. Save to a spare slot if
+you switch between versions.</div>
+</div></details>
+
+<details id="all"><summary><h2>9. Every control</h2></summary><div>
+<table>
+<tr><th scope="col">Control</th><th scope="col">Tap</th><th scope="col">Hold</th></tr>
+<tr><td>PLAY</td><td>Start / stop</td><td>2 s on Home: first sound (Afterglow)</td></tr>
+<tr><td>REC</td><td>Record on / off</td><td>About 1 s: Print page (record audio into RAM)</td></tr>
+<tr><td>SAVE</td><td>Set the Anchor</td><td>About 1 s: Save</td></tr>
+<tr><td>LFO</td><td>Compare with the Anchor</td><td>1.2 s, stopped: Restore Anchor</td></tr>
+<tr><td>GLO</td><td>Keep the wander</td><td>About 1 s: Return home</td></tr>
+<tr><td>ENV</td><td>Undo the last change (on the Print page: undo / redo the print)</td><td>—</td></tr>
+<tr><td>EDIT</td><td>Edit the sound</td><td>About 1 s: switch Layer 1 / 2</td></tr>
+<tr><td>FX</td><td>Clear Layer 2 (asks first)</td><td>1.6 s: New session (asks first)</td></tr>
+<tr><td>SEQ</td><td>Save</td><td>—</td></tr>
+<tr><td>ARP</td><td>Load</td><td>About 1 s: Arpeggiator settings</td></tr>
+<tr><td>SEL</td><td>Settings, Music page</td><td>About 1 s: Accessibility</td></tr>
+<tr><td>HOME</td><td>Back / cancel</td><td>1 s: stop all sound</td></tr>
+<tr><td>OCT− / OCT+</td><td>Octave down / up</td><td>1.5 s: next theme / Zoom</td></tr>
+<tr><td>HOME + EDIT</td><td colspan="2">Press together: Zoom on or off</td></tr>
+<tr><td>HOME + SEL</td><td colspan="2">Press together: oscilloscope</td></tr>
+</table>
+</div></details>
+
+<details id="help"><summary><h2>10. If something goes wrong</h2></summary><div>
+<ul>
+ <li><strong>Too much is happening:</strong> hold HOME for one second. Every sound stops; your notes are safe.</li>
+ <li><strong>Memory has gone too far:</strong> hold GLO to Return, or turn Melt and Drift to zero and let it drift home.</li>
+ <li><strong>Unexpected message:</strong> every message has a word. Tap HOME or SELECT to clear it.</li>
+ <li><strong>The FM-1 will not start:</strong> hold OCT− while switching it on. This starts the USB rescue mode,
+ where you can install 2.0 RC11 or the stock firmware again.</li>
+</ul>
+<p>Source, changes and tests: <a href="CHANGES_3.0.md">CHANGES_3.0.md</a>. Wanderer is GPL-3.0 software by Nicholas
+James / Low Vision Music. It is independent and not affiliated with M-VAVE.</p>
+</div></details>
+</main>
+<script>
+(function(){
+ var r=document.documentElement,store=window.localStorage;
+ function save(){try{store.setItem('wanderer-guide',JSON.stringify({s:r.style.getPropertyValue('--size'),c:r.className}))}catch(e){}}
+ try{var p=JSON.parse(store.getItem('wanderer-guide')||'{}');if(p.s)r.style.setProperty('--size',p.s);if(p.c)r.className=p.c}catch(e){}
+ function size(f){var n=parseFloat(getComputedStyle(r).fontSize)*f;n=Math.max(16,Math.min(48,n));r.style.setProperty('--size',n+'px');save()}
+ function mode(c,other){r.classList.toggle(c);r.classList.remove(other);sync();save()}
+ function sync(){document.getElementById('light').setAttribute('aria-pressed',r.classList.contains('light'));
+  document.getElementById('yellow').setAttribute('aria-pressed',r.classList.contains('yellow'))}
+ document.getElementById('bigger').onclick=function(){size(1.12)};
+ document.getElementById('smaller').onclick=function(){size(1/1.12)};
+ document.getElementById('light').onclick=function(){mode('light','yellow')};
+ document.getElementById('yellow').onclick=function(){mode('yellow','light')};
+ document.getElementById('openall').onclick=function(){var open=this.getAttribute('aria-pressed')!=='true';
+  this.setAttribute('aria-pressed',open);document.querySelectorAll('details').forEach(function(d){d.open=open})};
+ function openHash(){var d=location.hash&&document.querySelector(location.hash);if(d&&d.tagName==='DETAILS'){d.open=true;d.querySelector('summary').focus()}}
+ window.addEventListener('hashchange',openHash);openHash();sync();
+})();
+</script>
+</body>
+</html>
