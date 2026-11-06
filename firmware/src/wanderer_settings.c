@@ -11,7 +11,7 @@ static uint8_t *settings_fx_param(uint32_t k)
 static uint8_t settings_bool(uint32_t k)
 {
  return (settings_page==SETTINGS_MIDI&&k==3u)||(settings_page==SETTINGS_LAYER)||(settings_page>=9u&&k==0u&&settings_fx_bit())||(settings_page==0u&&k!=0u)||(settings_page>=1u&&settings_page<SETTINGS_REVERB&&k==0u)||
- (settings_page==4u&&k==3u)||(settings_page==SETTINGS_OUTPUT&&k==2u)||
+ (settings_page==4u&&k==3u)||
  (settings_page==6u&&k==0u)||(settings_page==7u&&k==2u)||(settings_page==SETTINGS_ACCESS_FEEL&&k==3u);
 }
 static uint32_t settings_get(uint32_t k)
@@ -28,7 +28,7 @@ static uint32_t settings_get(uint32_t k)
   return settings_page==2u?(k==2u?wm.delay_div:wm.delay_feedback):(k==2u?wm.reverb_size:wm.reverb_damp);
  }
  if(settings_page==4u)return k==0u?wm.root:k==1u?wm.scale:k==2u?wm.loop_steps:wm.keyboard_scale;
- if(settings_page==SETTINGS_OUTPUT)return k==0u?vol:k==1u?project_slot:metronome_on;
+ if(settings_page==SETTINGS_OUTPUT)return k==0u?vol:k==1u?project_slot:k==2u?metronome_on:click_level;
  if(settings_page==6u)return k==0u?wm.arp_on:k==1u?wm.arp_mode:k==2u?wm.arp_rate:wm.arp_octaves;
  if(settings_page==SETTINGS_ACCESS_FEEL)return k==0u?display_hold:k==1u?(cues_enabled?(cue_detail?2u:1u):0u):k==2u?cue_level:zoom_steady;
  return k==0u?wm.arp_gate:k==1u?wm.arp_swing:wm.arp_latch;
@@ -45,6 +45,8 @@ static const char *settings_value(uint32_t k,char *buf)
   if(k==0u)return WM_THEMES[v].name;
   if(k==2u)return v?"REDUCED":"FULL";
  }
+ if(settings_page==SETTINGS_OUTPUT&&k==2u){static const char *const names[3]={"OFF","REC","ALWAYS"};return names[v<3u?v:0u];}
+ if(settings_page==SETTINGS_OUTPUT&&k==3u){static const char *const names[4]={"25%","50%","75%","100%"};return names[v&3u];}
  if(settings_page==SETTINGS_REVERB&&!k){
   static const char *const names[RV_COUNT+1]={"OFF","ROOM","HALL","PLATE","SPRING","CAVERN","DEEP SPACE","AMBIENT"};
   return names[v];
@@ -122,7 +124,7 @@ static void settings_adjust(uint32_t k,int32_t d)
   if(k==2u)length_adjust_locked(d);
   else {p=k==0u?&wm.root:k==1u?&wm.scale:&wm.keyboard_scale;hi=k==0u?11:k==1u?7:1;}
  }
- else if(settings_page==SETTINGS_OUTPUT){p=k==0u?&vol:k==1u?&project_slot:&metronome_on;hi=k==0u?127:k==1u?NSLOT-1u:1u;}
+ else if(settings_page==SETTINGS_OUTPUT){p=k==0u?&vol:k==1u?&project_slot:k==2u?&metronome_on:&click_level;hi=k==0u?127:k==1u?NSLOT-1u:k==2u?2u:3u;}
  else if(settings_page==6u){p=k==0u?&wm.arp_on:k==1u?&wm.arp_mode:k==2u?&wm.arp_rate:&wm.arp_octaves;lo=k==3u?1:0;hi=k==0u?1:k==1u?WM_ARP_MODES-1:k==2u?WM_ARP_RATES-1:4;}
  else if(settings_page==7u){p=k==0u?&wm.arp_gate:k==1u?&wm.arp_swing:&wm.arp_latch;lo=k==0u?5:0;hi=k==0u?100:k==1u?50:1;}
  else{
@@ -161,6 +163,10 @@ static void settings_press(void)
  if(settings_page==SETTINGS_REVERB&&!settings_index){
   int32_t selected=(int32_t)wm.reverb_type+1;
   settings_adjust(0,(wm.fx_on&4u)?-selected:selected);
+ }else if(settings_page==SETTINGS_OUTPUT&&settings_index>=2u){
+  /* SELECT steps through OFF, REC, ALWAYS (and the four click levels), then wraps. */
+  uint32_t top=settings_index==2u?2u:3u,v=settings_get(settings_index);
+  settings_adjust(settings_index,v>=top?-(int32_t)top:1);
  }else settings_adjust(settings_index,settings_bool(settings_index)&&settings_get(settings_index)?-1:1);
 }
 static void screen_parameters(uint16_t fg,uint16_t pa,uint16_t guide)

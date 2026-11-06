@@ -183,6 +183,31 @@ int main(void)
   for(uint32_t s=0;s<wm.loop_steps;s++){wm_event_t d=ww_drip_event(s);assert(d.note<=127&&d.velocity<=90);}
  }
  puts("6000 adversarial loops with random knobs, scales, lengths, overdubs, Keep and Return stay bounded");
+ /* Metronome: OFF, REC and ALWAYS; one-bar count-in from stop; bounded,
+  * accented ticks that never reach Print; preferences round-trip. */
+ fresh();cues_enabled=0;vol=100;master_smooth=25600;wm.fx_on=wm.fx_new_on=0;step_samples=FS/8;
+ for(uint8_t mode=0;mode<3;mode++)for(uint8_t rec=0;rec<2;rec++){
+  fresh();wm.fx_on=wm.fx_new_on=0;memset(&wm.memory,0,sizeof wm.memory);step_samples=FS/8;metronome_on=mode;click_level=3;
+  running=1;recording=rec;step_primed=0;step_index=step_clock=0;uint32_t ticks=0,accents=0;int32_t peak=0;
+  for(uint32_t f=0;f<step_samples*32u;f+=64){int32_t b2[128]={0};uint32_t old=click_left;uint32_t st=click_step;app_audio(b2,64);
+   if(click_left>old||(click_left&&click_step!=st)){ticks++;accents+=click_step==0x095c0000u;}
+   for(uint32_t i=0;i<128;i++){if(abs(b2[i])>peak)peak=abs(b2[i]);}}
+  uint8_t want=mode==2||(mode==1&&rec);
+  assert(want?ticks>=8&&accents>=2:!ticks);assert(peak<=30000);
+  running=recording=0;
+ }
+ fresh();wm.fx_on=wm.fx_new_on=0;metronome_on=1;step_samples=FS/8;
+ recording_toggle();assert(count_in_total&&!running&&!recording);
+ screen(); /* the count-in screen draws in every state */
+ uint32_t counted=0;while(count_in_total&&counted<FS*10u){int32_t b2[512]={0};app_audio(b2,256);counted+=256;page_dirty=0;wander_service();}
+ assert(running&&recording&&counted>=step_samples*16u&&counted<step_samples*16u+256u);
+ recording_end();transport();
+ recording_toggle();assert(count_in_total);recording_toggle();assert(!count_in_total&&!running&&!recording);
+ recording_toggle();panic();assert(!count_in_total);
+ metronome_on=2;click_level=1;assert(!preferences_save());metronome_on=0;click_level=3;preferences_load();assert(metronome_on==2&&click_level==1);
+ settings_page=SETTINGS_OUTPUT;settings_index=2;metronome_on=2;settings_press();assert(metronome_on==0);settings_press();assert(metronome_on==1);
+ metronome_on=0;
+ puts("metronome modes, accented bars, one-bar count-in and cancel, bounded ticks and saved settings");
  puts("WANDERER 3.0 TESTS PASSED");
  return 0;
 }

@@ -26,6 +26,11 @@ static void app_leds(void)
         }
     }
     if(wp_armed||wp_writing)bright|=(uint64_t)1u<<BTN_REC;
+    if(count_in_total&&!running){
+        /* Count-in: REC flashes on each of the four beats. */
+        uint32_t beat=step_samples*4u;
+        if(beat&&count_in_pos%beat<beat/4u)bright|=(uint64_t)1u<<BTN_REC;else glow|=(uint64_t)1u<<BTN_REC;
+    }
     uint32_t played=(step_index+wm.loop_steps-1u)&(wm.loop_steps-1u);
     uint8_t on_beat=(uint8_t)(running&&step_primed&&(played&3u)==0u&&step_clock<step_samples*3u/4u);
     if(running){if(on_beat)bright|=(uint64_t)1u<<BTN_PLAY;else glow|=(uint64_t)1u<<BTN_PLAY;}

@@ -47,6 +47,27 @@ On Home, the Memory card shows **how many loops** Memory has wandered (top
 right) and a thick **distance bar** that fills as Memory moves away from
 what you recorded. It is drawn in both Normal and Zoom.
 
+## Metronome
+
+Settings → Output, knobs 3 and 4:
+
+| Knob | Setting | Behaviour |
+| --- | --- | --- |
+| 3 CLICK | OFF / REC / ALWAYS | OFF is silent. REC clicks while you record. ALWAYS clicks whenever the loop plays. SELECT steps through them. |
+| 4 CLICK LEVEL | 25 / 50 / 75 / 100% | Click volume, separate from the music. |
+
+* **Count-in.** With CLICK on REC or ALWAYS, tapping **REC** from stop counts in one bar
+  of four clicks. Recording and the loop start together on the next downbeat.
+  The screen shows a huge 4, 3, 2, 1 with four beat dots, and the REC light flashes on
+  each beat. Tap REC again (or PLAY, or hold HOME) to cancel.
+* **A better click:** a short woodblock-like tick with a natural decay, instead of
+  the old 12 ms beep that only played while recording. The first beat of every bar
+  is higher and louder.
+* The click joins the output after every effect, so it is never printed,
+  scattered or sent to the reverb.
+* CLICK and CLICK LEVEL are saved with your preferences. CLICK starts OFF, as
+  before, so REC from stop starts immediately until you turn it on.
+
 ## LEDs
 
 * **PLAY** flashes bright on each beat and stays dim between beats, so you

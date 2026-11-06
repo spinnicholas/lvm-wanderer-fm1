@@ -38,9 +38,9 @@ int main(void)
   color_theme=THEME_LIGHT;assert(!preferences_save());display_hold=0;cue_detail=0;zoom_steady=0;cue_level=1;preferences_load();
   assert(display_hold==hold&&cue_detail==detail&&zoom_steady==steady&&cue_level==level);
  }
- old.reserved[0]=32;old.reserved[1]=128;assert(!preferences_valid(&old));
+ old.reserved[0]=0x30;old.reserved[1]=128;assert(!preferences_valid(&old)); /* 3.0: click mode 3 does not exist */
  old.reserved[0]=0;old.reserved[1]=1;assert(!preferences_valid(&old));
- uint16_t sig=access_signature();assert(!settings_save(&old,sizeof old));preferences_load();assert(access_signature()==sig);
+ uint32_t sig=access_signature();assert(!settings_save(&old,sizeof old));preferences_load();assert(access_signature()==sig);
  host_fault_settings_save=1;assert(preferences_save());
  puts("legacy defaults, all extension bits, cue-level extremes, unchanged 16-byte size, malformed records and failed writes pass");
  settings_page=SETTINGS_ACCESS_FEEL;project_initialise();uint32_t writes=host_store_writes;

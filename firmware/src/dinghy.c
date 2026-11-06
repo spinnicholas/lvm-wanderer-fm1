@@ -172,11 +172,22 @@ static uint32_t octave_up_down,octave_down_down,play_down,performance_pending;
 static uint8_t play_tap,play_recall,anchor_pending,sel_can_open,edit_layer_done;
 static uint8_t save_pending;
 static uint8_t project_slot,cues_enabled=1;
-static uint8_t metronome_on;
-static uint32_t click_left,click_phase,click_step;
+/* Metronome: 0 off, 1 while recording (with count-in), 2 whenever playing.
+ * click_level 0..3 = 25..100%. The click joins the output after every effect,
+ * so it is never printed, scattered or sent to the reverb. */
+static uint8_t metronome_on,click_level=2;
+static uint32_t click_left,click_phase,click_step;static int32_t click_env,click_amp;
+static volatile uint32_t count_in_pos,count_in_total;
+static uint8_t count_in_shown;
+static void click_trigger(uint8_t accent)
+{
+    click_left=FS/10u;click_phase=0;click_step=accent?0x095c0000u:0x063d0000u; /* ~1.6 kHz / ~1.07 kHz */
+    click_env=32767;click_amp=(accent?11000:7000)*(int32_t)(click_level+1u)/4;
+}
+static uint8_t metronome_wants(void){return (uint8_t)(metronome_on==2u||(metronome_on==1u&&recording));}
 static uint8_t display_hold,cue_detail=1,cue_level=64,zoom_steady=1;
-static uint16_t access_signature(void)
-{return (uint16_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|(cue_level<<4)|(metronome_on<<11)|(color_theme<<12));}
+static uint32_t access_signature(void)
+{return (uint32_t)display_hold|((uint32_t)cue_detail<<2)|((uint32_t)zoom_steady<<3)|((uint32_t)cue_level<<4)|((uint32_t)metronome_on<<11)|((uint32_t)color_theme<<13)|((uint32_t)click_level<<16);}
 static uint8_t ui_time_before(uint32_t deadline)
 {return !deadline||(int32_t)(fm1_ms-deadline)<0;}
 static uint32_t display_deadline(void)
@@ -195,7 +206,7 @@ static uint32_t prev_notes;
 static uint8_t slot_presence[NSLOT]; /* 0 unknown/write problem, 1 no valid project, 2 valid */
 static uint8_t project_origin_slot=255u,project_dirty,preferences_pending;
 static uint8_t clean_level=100u,clean_cues=1u;
-static uint16_t clean_access,access_undo;
+static uint32_t clean_access,access_undo;
 static wm_state_t project_checkpoint=WM_DEFAULTS,checkpoint_undo=WM_DEFAULTS;
 static uint8_t origin_undo=255u,level_undo=100u,cues_undo=1u,prefs_undo;
 static uint32_t project_save_serial,undo_save_serial,last_project_poll;
@@ -440,7 +451,7 @@ static void step_play(void)
     /* A completed loop moves Memory one step further (paused while recording,
      * listening to the Anchor or playing a printed RAM loop). */
     if(!i&&cycle_index&&!anchor_view&&!recording&&!wp_active)ww_loop();
-    if(recording&&metronome_on&&!(i&3u)){click_left=FS/80u;click_phase=0;click_step=i?0x05000000u:0x07800000u;}
+    if(metronome_wants()&&!(i&3u))click_trigger((uint8_t)!(i&15u)); /* beat one of every bar is accented */
     scatter_plan(wm.decay,(uint8_t)(wm.legacy||anchor_view||wp_dry_view),i,cycle_index);
     /* Scatter processes audio history, so original held-note gates keep advancing. */
     if(scatter.kind&&wm.repeat_style==1u){static const uint8_t kinds[3]={SC_STUTTER,SC_HOLD,SC_RUSH};scatter.kind=kinds[scatter.offset%3u];}
@@ -598,9 +609,17 @@ static void app_audio_core(int32_t *out,uint32_t n)
             int32_t audible=cue_sample();left+=audible;right+=audible;
         }
         if(click_left){
-            if(!running||!recording||!metronome_on)click_left=0;
-            else{int32_t tick=wn_sine_i(click_phase)*(int32_t)click_left/(int32_t)(FS/80u)/12;
-                click_phase+=click_step;click_left--;left+=tick;right+=tick;}
+            if(!metronome_on)click_left=0;
+            else{
+                /* Woodblock-like tick: a short noise transient and a sine body
+                 * with an exponential decay, never a hard-edged beep. */
+                int32_t body=(int32_t)(((int64_t)wn_sine_i(click_phase)*click_env)>>15);
+                int32_t tick=(body*click_amp)>>15;
+                if(FS/10u-click_left<48u)tick+=(int32_t)((click_phase*2654435761u)>>21)-1024;
+                click_phase+=click_step;click_env-=click_env>>9;click_left--;
+                if(click_env<64)click_left=0;
+                left+=tick;right+=tick;
+            }
         }
         out[i*2u]=fx_limit((left*master_smooth)/25600);
         out[i*2u+1u]=fx_limit((right*master_smooth)/25600);
@@ -618,8 +637,19 @@ static uint32_t letter(const font_t *f,uint8_t c)
     return 0;
 }
 /* Split at musical boundaries: repeat timing never depends on callback size. */
+static void count_in_finish(void);
 static void app_audio(int32_t *out,uint32_t n)
 {
+ /* Count-in: one bar of clicks before recording starts on the next downbeat. */
+ if(count_in_total&&!running){
+  uint32_t beat=step_samples*4u;
+  while(n&&count_in_total){
+   if(!(count_in_pos%beat))click_trigger((uint8_t)!count_in_pos);
+   uint32_t chunk=beat-count_in_pos%beat;if(chunk>n)chunk=n;if(chunk>256u)chunk=256u;
+   app_audio_core(out,chunk);out+=chunk*2u;n-=chunk;count_in_pos+=chunk;
+   if(count_in_pos>=count_in_total)count_in_finish();
+  }
+ }
  while(n){
   arp_update_config();
   if(arp_gate_left==0u&&arp_note<128u)arp_release();
@@ -713,7 +743,7 @@ static void reset_performance(void)
 }
 static void panic(void)
 {
-    fm1_irq_off();capture_finish_all();record_undo_pending=0;running=recording=0;reset_performance();fm1_irq_on();
+    fm1_irq_off();count_in_total=0;capture_finish_all();record_undo_pending=0;running=recording=0;reset_performance();fm1_irq_on();
     performance_pending=0;play_tap=play_recall=anchor_pending=0;
     save_pending=0;save_down=0;confirm=focus=notice=0;wp_cancel();edit_pending=rec_pending=arp_pending=0;ui_pending&=~(1u<<BTN_HOME);page_dirty=1;
 }
@@ -730,7 +760,7 @@ static uint8_t preferences_valid(const wm_preferences_t *p)
 {
     return p->magic==WM_MAGIC&&(p->version==1||p->version==2)&&p->size==sizeof *p&&
       p->light<(p->version==1?2u:THEME_COUNT)&&p->zoom<2u&&p->still<2u&&p->level<=127u&&p->cues<2u&&p->slot<NSLOT&&
-      ((p->reserved[1]&128u)?p->reserved[0]<32u:(!p->reserved[0]&&!p->reserved[1]));
+      ((p->reserved[1]&128u)?(p->reserved[0]&0x30u)!=0x30u:(!p->reserved[0]&&!p->reserved[1]));
 }
 static void preferences_load(void)
 {
@@ -741,7 +771,8 @@ static void preferences_load(void)
         vol=p.level;cues_enabled=p.cues;project_slot=p.slot;
         if(p.reserved[1]&128u){
             display_hold=p.reserved[0]&3u;cue_detail=(p.reserved[0]>>2)&1u;
-            zoom_steady=(p.reserved[0]>>3)&1u;metronome_on=(p.reserved[0]>>4)&1u;cue_level=p.reserved[1]&127u;
+            zoom_steady=(p.reserved[0]>>3)&1u;metronome_on=(uint8_t)(((p.reserved[0]>>4)&1u)|(((p.reserved[0]>>5)&1u)<<1));
+            if(metronome_on>2u)metronome_on=2u;click_level=(p.reserved[0]>>6)&3u;cue_level=p.reserved[1]&127u;
         }else{display_hold=0;cue_detail=zoom_steady=1;cue_level=64;}
         master_smooth=(int32_t)vol*256;
     }
@@ -750,7 +781,7 @@ static int preferences_save(void)
 {
     wm_preferences_t p={WM_MAGIC,2,sizeof p,color_theme,wm.extra_large,
         wm.reduced_motion,vol,cues_enabled,project_slot,
-        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|(metronome_on<<4)),(uint8_t)(128u|cue_level)}},verify;
+        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|((metronome_on&1u)<<4)|((metronome_on>>1)<<5)|(click_level<<6)),(uint8_t)(128u|cue_level)}},verify;
     if(settings_save(&p,sizeof p)||settings_load(&verify,sizeof verify))return -1;
     return memcmp(&p,&verify,sizeof p)?-1:0;
 }
@@ -760,9 +791,17 @@ static void transport_locked(void)
     if(running)scatter_seed((fm1_ms+1u)*747796405u^audio_frames^scatter.rng);else scatter_clear();
     if(!running){arp_reset();release_sequence();wp_cancel();wp_repeat_on=0;}
 }
+/* Audio callback: the count-in has finished, so play and record together. */
+static void count_in_finish(void)
+{
+    count_in_total=0;
+    transport_locked();recording=1;record_undo_pending=1;
+    for(uint32_t lane=0;lane<2u;lane++)for(uint32_t i=0;i<WM_STEPS;i++)record_replace[lane][i]=0;
+    page_dirty=1;
+}
 static void transport(void)
 {
-    fm1_irq_off();transport_locked();fm1_irq_on();
+    fm1_irq_off();count_in_total=0;transport_locked();fm1_irq_on();
     cue_toggle(running);page_dirty=1;
 }
 static void tempo_set(uint8_t bpm)
@@ -807,6 +846,12 @@ static void recording_toggle(void)
         if(ok&&!running)transport();
         if(!ok)show_notice(N_NO_PHRASE);
         page_dirty=1;return;
+    }
+    if(count_in_total){fm1_irq_off();count_in_total=0;fm1_irq_on();cue(48u);page_dirty=1;return;}
+    if(!recording&&!running&&metronome_on){
+        /* From stop, count one bar in; recording begins on the downbeat. */
+        fm1_irq_off();count_in_pos=0;count_in_total=step_samples*16u;fm1_irq_on();
+        count_in_shown=0;page_dirty=1;return;
     }
     fm1_irq_off();
     if(recording)recording_end();
@@ -1129,6 +1174,10 @@ static void app_idle(void)
 static uint8_t wander_seen_loops;
 static void wander_service(void)
 {
+    if(count_in_total){
+        uint8_t beat=(uint8_t)(1u+count_in_pos/(step_samples*4u));
+        if(beat!=count_in_shown){count_in_shown=beat;page_dirty=1;}
+    }else if(count_in_shown){count_in_shown=0;page_dirty=1;}
     if(ww.want_anchor){
         ww.want_anchor=0;
         if(!wm.has_anchor&&!recording&&!wp_has_anchor){

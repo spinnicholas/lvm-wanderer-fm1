@@ -415,6 +415,19 @@ static void screen_scope(uint16_t bg,uint16_t fg,uint16_t guide)
     scope_control(8,193,"3 HOLD",scope_hold?"ON":"OFF",fg,guide);
     scope_control(124,193,"4 LEVEL",number(vol,b),fg,guide);
 }
+/* Count-in: one huge number per beat, four beat dots, and how to cancel. */
+static void screen_count_in(uint16_t fg,uint16_t guide)
+{
+    status_header(ICO_RECORD,"COUNT IN",fg,guide);
+    uint32_t beat=step_samples*4u,at=beat?count_in_pos/beat:0u;if(at>3u)at=3u;
+    char b[4]={(char)('4'-at),0};
+    text_center(52,&FONT_Z,b,theme_palette()->evolve);
+    for(uint32_t i=0;i<4u;i++){
+        int32_t cx=60+(int32_t)i*40;
+        if(i<=at)disk(cx,160,12,i?fg:theme_palette()->evolve);else{disk(cx,160,12,guide);disk(cx,160,9,theme_palette()->bg);}
+    }
+    text_center(196,&FONT_T,"REC TO CANCEL",fg);
+}
 #include "wanderer_splash.c"
 static void screen(void)
 {
@@ -426,6 +439,7 @@ static void screen(void)
         app_idle();
         cv_begin(240,60,bg);cv_oy=-band*60;
         if(scope_open)screen_scope(bg,fg,guide);
+        else if(count_in_total&&!running)screen_count_in(fg,guide);
         else if(notice&&notice_error())screen_message(fg,guide);
         else if(confirm)screen_message(fg,guide);
         else if(notice&&ui_time_before(notice_until))screen_message(fg,guide);
