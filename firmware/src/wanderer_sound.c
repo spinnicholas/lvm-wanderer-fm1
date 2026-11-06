@@ -318,8 +318,12 @@ static int32_t ws_osc(uint32_t v)
   if(cpu_lean){
    int32_t a=WS_NAIVE(ph[0]),b=WS_NAIVE(ph[5]);sum=(a+b)*3;side=(b-a)*3;
   }else{
-   int32_t y0=WS_NAIVE(ph[0]),y1=WS_NAIVE(ph[1]),y2=WS_NAIVE(ph[2]),y3=WS_NAIVE(ph[3]),y4=WS_NAIVE(ph[4]),y5=WS_NAIVE(ph[5]);
-   sum=y0+y1+y2+y3+y4+y5;side=y1+y3+y5-y0-y2-y4;
+   /* The same sums as six WS_NAIVE() calls, multiplied once: the -32768 and
+    * -sq terms cancel in the side (three odd minus three even voices). */
+   int32_t he=(int32_t)(ph[0]>>16)+(int32_t)(ph[2]>>16)+(int32_t)(ph[4]>>16),
+           ho=(int32_t)(ph[1]>>16)+(int32_t)(ph[3]>>16)+(int32_t)(ph[5]>>16),
+           be=(int32_t)((ph[0]>>31)+(ph[2]>>31)+(ph[4]>>31)),bo=(int32_t)((ph[1]>>31)+(ph[3]>>31)+(ph[5]>>31));
+   sum=sw*(he+ho-6*32768)+2*sq*(be+bo)-6*sq;side=sw*(ho-he)+2*sq*(bo-be);
   }
   #undef WS_NAIVE
   ph[0]+=ui[0];ph[1]+=ui[1];ph[2]+=ui[2];ph[3]+=ui[3];ph[4]+=ui[4];ph[5]+=ui[5];

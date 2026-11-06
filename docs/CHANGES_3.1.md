@@ -148,27 +148,30 @@ RC11. All of them now run and pass:
 
 ## Sound and performance
 
-The audio code is the same as RC3, except one bit-exact change: SUPER's square
-height now comes from a small table instead of chained comparisons.
+The audio code is the same as RC3, except two exact rewrites in SUPER's
+six-voice loop:
+
+* the square height comes from a small table instead of chained comparisons;
+* the six detuned voices are summed first and multiplied once (4 multiplies per
+  sample instead of 12). The constant terms cancel exactly in the stereo side.
 
 **The same audio.** For each of the 150 presets, with four voices and every effect
 on, the rendered output is identical to RC3's.
 
-**Instruction counts.** The table below shows the worst preset (preset 22 at `-O2`,
+**Instruction counts.** The table shows the worst preset (preset 22 at `-O2`,
 preset 18 at `-Os` for 3.1) and the mean of all 150. These are Valgrind
 instruction counts on a computer, not timings on the FM-1. Both versions were
-measured with the same harness in the same session.
+measured with the same harness.
 
 | Build | RC3 worst | 3.1 worst | RC3 mean | 3.1 mean |
 | --- | --- | --- | --- | --- |
-| `-Os` (the device's setting) | 57.98M | **57.51M** | 49.12M | **48.79M** |
-| `-O2` (as used for the 53.3M figure in 3.0's notes) | 53.28M | 53.78M | 47.47M | 47.69M |
+| `-Os` (the device's setting) | 57.98M | **57.39M** | 49.12M | **48.55M** |
+| `-O2` (as used for the 53.3M figure in 3.0's notes) | 53.28M | **52.98M** | 47.47M | 47.80M |
 
-* **At the device's own optimisation level, 3.1 costs less than RC3,** both in the
-  worst case and on average.
-* **At `-O2`, 3.1 is about 0.9% higher.** The audio is identical, and the per-line
-  profile puts the difference in unchanged lines of the SUPER loop. It comes from
-  the host compiler's code layout, not from extra work.
+* **The worst case costs less than RC3's at both settings.**
+* **At `-Os`, the average costs less too.**
+* **At `-O2`, the average is 0.7% higher.** The audio is identical, so this comes
+  from the host compiler's code layout in unchanged code, not from extra work.
 * **The load guard from RC3 is kept.**
 
 ## Build and test status
