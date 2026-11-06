@@ -5,8 +5,8 @@ the Anchor/Memory idea are unchanged, as are your saved projects and the
 `FM-1_929` identity. What changes is what happens while you listen: Memory
 now travels a little further from the Anchor every loop.
 
-**Status:** passes the host test suite. It is **not yet compiled for or tested on
-an FM-1.** See [Build and test status](#build-and-test-status).
+**Status:** compiled with the pinned JieLi toolchain and passes the host test suite.
+It has **not yet been tested on an FM-1.** See [Build and test status](#build-and-test-status).
 
 ## Melt and Drift now wander
 
@@ -61,24 +61,48 @@ what you recorded. It is drawn in both Normal and Zoom.
 
 ## Screens
 
-* Every message now shows a word as well as a symbol, for example KEPT,
-  BACK HOME, UNDONE, NOTHING TO UNDO, STOP FIRST, or the name of the new
-  theme.
-* In Edit and Settings, the row for the knob you are turning is a solid
-  colour with dark text, instead of only an outline.
-* The Melt, Drift and Scatter screens add a word for the setting: DRY,
-  SOFT, MELTING or LIQUID for Melt; STILL, GENTLE, WANDERING or FAR for Drift;
-  CLEAN, SPARSE, BUSY or WILD for Scatter.
+* **Home pictures the melody.** Each card has a mini piano roll: one bar per
+  note at its pitch and length, with thick connecting lines. The Memory card
+  draws Memory as you hear it over a faint line of the Anchor, so you can see
+  it wandering away and coming home. Melted drips show as dots. A thick
+  line marks the playhead.
+* Cards have a soft top-lit gradient in every theme.
+* Every message shows a word as well as a symbol.
+* In Edit, the row for the knob you are turning is a solid colour. **Each
+  row has a thick bar showing where the knob sits in its range.**
+* Melt, Drift, Scatter, Tempo and Level show a large number, a word, and a
+  meter made of 16 large segments.
 
 ## Sound engine
 
-* **Velocity changes the tone as well as the volume.** Velocity 100, the
-  FM-1 keys, sounds the same as before. Softer notes, including those Melt
-  softens, sound darker. Louder MIDI notes are a little brighter.
-* **Analog and phase-distortion oscillators drift slowly** by a few cents,
-  more on patches with more Detune.
-* **Voices are spread slightly in stereo**, even with every effect off.
-  Scatter and printed audio fade the spread with the dry voice.
+### Two new engines
+
+* **SUPER** (Edit → Oscillators → Engine): a modern unison voice. It plays a
+  centre oscillator plus six detuned copies, and each copy can be a saw, a pulse,
+  a saw+pulse, or a pure "glass" sine at the centre. **Spread** sets the
+  detune: fine near zero, wide at the top. **Voices** sets how loud the six
+  copies are. **Width** spreads them across real stereo. The side signal goes
+  through the same filter as the centre, so the sound stays even across the
+  stereo field. Sub and Air (noise) add weight and breath. Melt widens and
+  detunes it over the loops.
+* **VOICE:** a formant engine. A saw, pulse or breathy source, plus
+  a second detuned "choir" partner, goes through three resonances that shape
+  it into vowels. **Vowel** moves smoothly through A-E-I-O-U, **Formant**
+  makes the voice sound smaller or larger, **Focus** makes the vowels clearer,
+  and **Breath** adds air. Melt moves the vowel, so a wandering Memory
+  slowly changes the vowel it sings.
+* On the host computer both cost within about 15% of the Analog engine, which
+  already runs on the FM-1.
+
+### Every engine
+
+* **Velocity shapes tone as well as volume.** Velocity 100 (the FM-1 keys)
+  sounds as before; softer notes, including those Melt softens, are darker.
+* **Analog and Phase oscillators drift a few cents**, more with Detune.
+* **Voices spread gently in stereo.** Scatter and printed audio fade the
+  spread with the dry voice.
+* Fixed an overflow, also present in 2.0, where a very loud voice could
+  wrap the DC blocker.
 
 ## Reverb
 
@@ -103,20 +127,26 @@ what you recorded. It is drawn in both Normal and Zoom.
 * Stutter and Rush repeats get quieter with each repeat, like a real echo,
   instead of staying at the same level.
 
-## Presets
+## Presets: a new 3.0 bank
 
-The current bank (bank 4) keeps the 150 2.0 names and voicings, with two
-changes:
+150 sounds in 15 families of ten: leads, basses, modern basses, poly,
+keys and tines, organs, voices, strings/brass/winds, pads, textures, plucks,
+guitars, mallets, bells, and percussion and effects.
 
-* **Each sound has its own Melt character.** In 2.0, 135 sounds shared five
-  Melt settings. Now leads and basses get darker and thicker, keys get rounder,
-  string and pad sounds open up and widen, and plucked, mallet and bell
-  sounds soften. 142 of the 150 Melt settings are different.
-* **69 sounds have slow movement.** Pads, strings, organs and keys move
-  their filter slowly; leads and brass have light vibrato.
-
-Projects saved with 2.0 keep the 2.0 bank. v13 and v14 Layer sounds also
-keep their 2.0 sounds.
+* **76 are brand-new recipes:** 28 on SUPER, 16 on VOICE, 28 on Analog
+  and 4 on Phase. Examples: Afterglow (now a SUPER lead), Night Reese, Wide
+  Hull, Northern Lights, Slow Dawn, Aah, Ooh and Ee Choir, Monk Chant, Whisper,
+  Robot Vowel, Silk Section, Brass Section, Tide Pool, Rising Tide.
+* **74 keep the tuned 2.0 recipes** for the FM, FM6, string and modal sounds
+  (keys, organs, plucks, guitars, mallets, bells, drums). Each has a new Melt
+  journey suited to its family, and several gain movement. 34 have new names.
+* Afterglow is still preset 1, the startup sound and the hold-PLAY recall.
+* New sounds are level-matched by rendering them, against the loudness of
+  the 2.0 bank. Sustained sounds are matched by average level, plucked and
+  struck ones by their attack. Carried-over sounds keep their tuned 2.0 levels.
+  `tools/level_bank_3_0.py` repeats the measurement.
+* Projects saved with 2.0 keep the 2.0 bank, and v13 and v14 Layer sounds keep
+  their 2.0 sounds.
 
 ## Compatibility
 

@@ -42,10 +42,28 @@ static void panel(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t fill)
     disk(x+r,y+r,r,fill);disk(x+w-r-1,y+r,r,fill);
     disk(x+r,y+h-r-1,r,fill);disk(x+w-r-1,y+h-r-1,r,fill);
 }
+static uint16_t mix565(uint16_t a,uint16_t b,uint32_t t)
+{
+    uint32_t u=256u-t;
+    return (uint16_t)(((((a>>11)*u+(b>>11)*t)>>8)<<11)|(((((a>>5)&63u)*u+((b>>5)&63u)*t)>>8)<<5)|(((a&31u)*u+(b&31u)*t)>>8));
+}
+/* Rounded panel with a soft vertical gradient; only rows in the current LCD band are drawn. */
+static void soft_panel(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t top,uint16_t bottom)
+{
+    int32_t r=h/2<7?h/2:7;
+    for(int32_t row=0;row<h;row++){
+        int32_t py=y+row+cv_oy;if(py<0||py>=(int32_t)cv_h)continue;
+        int32_t dy=row<r?r-row:row>=h-r?row-(h-1-r):0,span=r;
+        while(span>0&&span*span+dy*dy>r*r)span--;
+        int32_t inset=dy?r-span:0;
+        cv_rect(x+inset,y+row,w-2*inset,1,mix565(top,bottom,(uint32_t)(row*256/(h>1?h-1:1))));
+    }
+}
 static void card(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t fill,uint16_t edge,uint8_t selected)
 {
     uint32_t inset=selected?3u:1u;panel(x,y,w,h,edge);
-    panel(x+(int32_t)inset,y+(int32_t)inset,w-2*(int32_t)inset,h-2*(int32_t)inset,fill);
+    /* A light from above: the top of every card leans a little toward its edge colour. */
+    soft_panel(x+(int32_t)inset,y+(int32_t)inset,w-2*(int32_t)inset,h-2*(int32_t)inset,mix565(fill,edge,selected?72u:40u),fill);
 }
 static void transport_symbol(int32_t x,int32_t y,uint16_t col)
 {
@@ -89,6 +107,60 @@ static void gauge(int32_t x,int32_t y,int32_t w,uint32_t percent,uint16_t fg,uin
     if(percent)cv_rect(x,y+2,(int32_t)(percent*(uint32_t)w/100u),6,fg);
 }
 static uint32_t percent(uint32_t v){return (v*100u+63u)/127u;}
+/* Sixteen chunky segments: readable at a glance, brighter as they fill. */
+static void meter(int32_t x,int32_t y,int32_t w,int32_t h,uint32_t pct,uint16_t fg,uint16_t guide,uint16_t accent)
+{
+    if(pct>100u)pct=100u;
+    uint32_t lit=(pct*16u+99u)/100u;int32_t seg=w/16;
+    for(uint32_t i=0;i<16u;i++){
+        int32_t sx=x+(int32_t)i*seg;
+        if(i<lit)panel(sx,y,seg-4,h,mix565(accent,fg,i*12u));
+        else panel(sx+(seg-4)/2-2,y+h/2-2,5,5,guide);
+    }
+}
+/* A miniature piano roll: each note a rounded bar at its pitch and length.
+ * ghost (thin) shows the Anchor beneath Memory, so the wander is visible. */
+static uint8_t roll_event(const wm_phrase_t *p,uint32_t s,uint8_t heard,wm_event_t *out)
+{
+    uint8_t found=0;
+    for(uint32_t v=0;v<WM_POLY;v++){
+        wm_event_t e=wm_get(p,s,v);if(!e.velocity)continue;
+        if(heard)e=ww_apply(e,s,v);
+        if(e.velocity&&(!found||e.note>out->note)){*out=e;found=1;}
+    }
+    return found;
+}
+static void piano_roll(int32_t x,int32_t y,int32_t w,int32_t h,const wm_phrase_t *main,const wm_phrase_t *ghost,
+    uint8_t heard,uint16_t col,uint16_t ghost_col,uint16_t guide,uint8_t playing)
+{
+    if(y+h+cv_oy<0||y+cv_oy>=(int32_t)cv_h)return;
+    uint32_t L=wm.loop_steps;int32_t lo=127,hi=0;wm_event_t e;
+    for(uint32_t s=0;s<L;s++){
+        if(roll_event(main,s,heard,&e)){if(e.note<lo)lo=e.note;if(e.note>hi)hi=e.note;}
+        if(ghost&&roll_event(ghost,s,0,&e)){if(e.note<lo)lo=e.note;if(e.note>hi)hi=e.note;}
+    }
+    for(int32_t gx=x;gx<x+w;gx+=6)cv_rect(gx,y+h-1,3,1,guide);
+    if(lo>hi)return;
+    int32_t span=hi-lo<12?12:hi-lo,mid=(hi+lo)/2;lo=mid-span/2;
+    for(uint32_t pass=ghost?0u:1u;pass<2u;pass++){
+        const wm_phrase_t *p=pass?main:ghost;int32_t px=-1,py=0;
+        for(uint32_t s=0;s<L;s++){
+            if(!roll_event(p,s,(uint8_t)(pass&&heard),&e))continue;
+            int32_t x0=x+(int32_t)(s*(uint32_t)w/L),len=(int32_t)(e.gate*(uint32_t)w/(L*256u));
+            if(len<5)len=5;if(x0+len>x+w)len=x+w-x0;
+            int32_t yy=y+h-6-(e.note-lo)*(h-12)/span;
+            if(pass){
+                if(px>=0){cv_line(px,py,x0,yy,col);cv_line(px,py+1,x0,yy+1,col);}
+                panel(x0,yy-3,len,7,col);px=x0+len-1;py=yy;
+            }else cv_rect(x0,yy,len,2,ghost_col);
+        }
+        if(pass&&heard)for(uint32_t s=0;s<L;s++){
+            wm_event_t d=ww_drip_event(s);if(!d.velocity)continue;
+            disk(x+(int32_t)(s*(uint32_t)w/L)+3,y+h-6-((int32_t)d.note-lo)*(h-12)/span,3,col);
+        }
+    }
+    if(playing){int32_t at=x+(int32_t)(((step_index+L-1u)%L)*(uint32_t)w/L);cv_rect(at,y,2,h,col);}
+}
 static void percent_sign(int32_t x,int32_t y,uint16_t fg)
 {
     disk(x+3,y+3,2,fg);disk(x+12,y+15,2,fg);
@@ -207,27 +279,26 @@ static void screen_home(uint16_t fg,uint16_t guide)
         char b[12];number(ww.loops>99u?99u:ww.loops,b);
         aa_text(226-width(&FONT_T,b),51,&FONT_T,b,fg);
     }
-    int32_t icon_y=wm.extra_large?54:80;
     if(wm.extra_large){
-        zoom_blit(13,icon_y,ICO_ANCHOR,theme->anchor);
-        zoom_blit(131,icon_y,ICO_MEMORY,theme->evolve);
+        zoom_blit(13,50,ICO_ANCHOR,theme->anchor);
+        zoom_blit(131,50,ICO_MEMORY,theme->evolve);
     }else{
-        icon_blit(29,icon_y,ICO_ANCHOR,theme->anchor);
-        icon_blit(147,icon_y,ICO_MEMORY,theme->evolve);
+        mid(37,70,ICO_ANCHOR,theme->anchor);
+        mid(155,70,ICO_MEMORY,theme->evolve);
     }
+    int32_t label_y=wm.extra_large?148:121,bar_y=label_y+21,roll_y=bar_y+11,roll_h=204-roll_y;
+    aa_text(61-width(&FONT_T,"ANCHOR")/2,label_y,&FONT_T,"ANCHOR",fg);
+    aa_text(179-width(&FONT_T,"MEMORY")/2,label_y,&FONT_T,"MEMORY",fg);
     if(wander){
-        int32_t bar_y=wm.extra_large?153:150,fill=ww.distance*92/100;
-        panel(133,bar_y,92,10,guide);
-        panel(135,bar_y+2,88,6,theme->memory);
-        if(fill>4)panel(133,bar_y,fill,10,theme->evolve);
+        int32_t fill=ww.distance*92/100;
+        panel(133,bar_y,92,7,guide);panel(134,bar_y+1,90,5,theme->memory);
+        if(fill>3)panel(133,bar_y,fill,7,theme->evolve);
     }
-    aa_text(61-width(&FONT_T,"ANCHOR")/2,170,&FONT_T,"ANCHOR",fg);
-    aa_text(179-width(&FONT_T,"MEMORY")/2,170,&FONT_T,"MEMORY",fg);
-
-    int32_t pattern_y=wm.loop_steps==32u?193:192;
-    steps(&wm.anchor,14,pattern_y,6,1,theme->anchor,guide,(uint8_t)(anchor_view&&!wp_active));
-    steps(memory,130,pattern_y,6,1,theme->evolve,guide,
-        (uint8_t)(!anchor_view&&!wp_active&&(!layer_focus||wm.layer_enabled)));
+    /* Melody pictures: the Anchor as recorded; Memory as you hear it now,
+     * over a faint line of the Anchor so its journey can be seen. */
+    piano_roll(14,roll_y,94,roll_h,&wm.anchor,0,0,theme->anchor,guide,guide,(uint8_t)(running&&anchor_view&&!wp_active));
+    piano_roll(132,roll_y,94,roll_h,memory,!layer_focus&&anchored?&wm.anchor:0,wander,theme->evolve,guide,guide,
+        (uint8_t)(running&&!anchor_view&&!wp_active&&(!layer_focus||wm.layer_enabled)));
     project_footer(fg,guide);
 }
 static void diagram_arrow(int32_t x,int32_t y,int32_t w,uint16_t fg)
@@ -254,7 +325,7 @@ static void screen_focus(uint16_t fg,uint16_t guide)
         uint32_t band=focus_value?1u+(focus_value>=48u)+(focus_value>=96u):0u;
         text_center(188,&FONT_T,words[focus-1u][band],fg);
     }
-    gauge(16,215,208,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide);
+    meter(16,212,208,18,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide,theme_palette()->evolve);
 }
 static void screen_message(uint16_t fg,uint16_t guide)
 {

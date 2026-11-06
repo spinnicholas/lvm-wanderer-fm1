@@ -294,7 +294,7 @@ static int32_t ws_osc(uint32_t v)
   s->feedback+=(a-s->feedback)/4;x=(a*(128-p->mix)+s->feedback*p->mix)>>7;
  }else if(p->engine==6){
   /* Centre voice, six detuned voices (Mix sets their level), octave sub. */
-  int32_t centre,sum=0,side=0,pw=(int32_t)s->pulse<<25;
+  int32_t centre,sum=0,side=0;uint32_t pw=(uint32_t)s->pulse<<25;
   #define WS_SUPER_WAVE(ph,inc) (p->wave==1?wn_osc_pulse(ph,inc,(uint32_t)pw)*2:p->wave==2?(wn_osc_saw(ph,inc)+wn_osc_pulse(ph,inc,(uint32_t)pw))/2:wn_osc_saw(ph,inc))
   centre=p->wave==3?wn_sine_i(s->ph[0]):WS_SUPER_WAVE(s->ph[0],inc);s->ph[0]+=inc;
   for(uint32_t k=0;k<6;k++){int32_t y=WS_SUPER_WAVE(s->uph[k],s->uinc[k]);s->uph[k]+=s->uinc[k];sum+=y;side+=(k&1u)?y:-y;}
@@ -326,7 +326,9 @@ static int32_t ws_osc(uint32_t v)
  else{if(p->wave==3||p->wave==4||p->amp[2]>60){for(uint32_t k=0;k<4;k++){int32_t y=(wn_sine_i(s->ph[k])*s->op_now[k])>>15;s->ph[k]+=s->inc[k];x+=(((y*p->op_level[k])>>9)*s->alias[k])>>15;}}
   else for(uint32_t k=0;k<4;k++){int32_t a=s->mode_x[k],b=s->mode_y[k];int32_t nx=(int32_t)(((int64_t)a*s->mode_c[k]-(int64_t)b*s->mode_s[k])>>24),ny=(int32_t)(((int64_t)a*s->mode_s[k]+(int64_t)b*s->mode_c[k])>>24);
    s->mode_x[k]=ws_clamp(nx,-24000,24000);s->mode_y[k]=ws_clamp(ny,-24000,24000);x+=((nx*s->alias[k])>>15)/3;}}
- s->dc_out=x-s->dc_prev+((s->dc_out*32670)>>15);s->dc_prev=x;return s->dc_out;
+ if(p->engine>=6)x=ws_clamp(x,-40000,40000);
+ /* 64-bit leak term: a loud voice cannot wrap the DC blocker (also present in 2.0). */
+ s->dc_out=ws_clamp(x-s->dc_prev+(int32_t)(((int64_t)s->dc_out*32670)>>15),-131071,131071);s->dc_prev=x;return s->dc_out;
 }
 static int32_t wn_filter(ws_voice_t *s,int32_t x)
 {

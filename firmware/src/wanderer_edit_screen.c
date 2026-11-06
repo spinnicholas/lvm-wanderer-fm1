@@ -85,8 +85,14 @@ static void zoom_parameter_range(const char *label,const char *value,const char 
  if(unit[0])zoom_text(12,175,216,27,23,unit,0,fg);
 }
 /* Label and value have separate lines, so long names and units never compete. */
+static void control_row_at(uint32_t k,int32_t y,const char *label,const char *value,const char *unit,
+    uint8_t numeric,uint8_t selected,uint16_t fg,uint16_t pa,uint16_t guide,uint16_t accent,int32_t position);
 static void control_row(uint32_t k,int32_t y,const char *label,const char *value,const char *unit,
     uint8_t numeric,uint8_t selected,uint16_t fg,uint16_t pa,uint16_t guide,uint16_t accent)
+{control_row_at(k,y,label,value,unit,numeric,selected,fg,pa,guide,accent,-1);}
+/* position: 0..256 along the knob's range, or -1 for choices without a scale. */
+static void control_row_at(uint32_t k,int32_t y,const char *label,const char *value,const char *unit,
+    uint8_t numeric,uint8_t selected,uint16_t fg,uint16_t pa,uint16_t guide,uint16_t accent,int32_t position)
 {
  const font_t *f=numeric?&FONT_P:&FONT_T;
  int32_t units=width(&FONT_T,unit);
@@ -99,6 +105,13 @@ static void control_row(uint32_t k,int32_t y,const char *label,const char *value
  aa_text(40,y+4,&FONT_T,label,ink);
  aa_text(end-width(f,value),y+(numeric?22:25),f,value,ink);
  if(units)aa_text(220-units,y+25,&FONT_T,unit,selected?ink:guide);
+ int32_t track=end-width(f,value)-14-16;
+ if(position>=0&&track>=40){
+  /* Where the knob sits: a thick track under the label, clear of the value. */
+  int32_t w=track*position/256;
+  panel(16,y+31,track,6,selected?mix565(accent,ink,64u):mix565(pa,guide,90u));
+  if(w>3)panel(16,y+30,w,8,ink);
+ }
 }
 static void knob_tabs(uint32_t count,uint32_t selected,int32_t y,uint16_t fg,uint16_t pa,uint16_t guide)
 {
@@ -133,7 +146,7 @@ static const char *editor_value(uint32_t k,char *buf,const char **unit)
  else if(editor_page==3&&k==1&&p->engine==0){const char *waves[10]={"SAW","SAW PULSE","PULSE","SINE","TRI","STACK","REED","NOISE","SYNC","RING"};return waves[v];}
  else if(editor_page==3&&k==1&&p->engine>=6){const char *waves[2][4]={{"SAW","PULSE","SAW PULSE","GLASS"},{"SAW","PULSE","SAW PULSE","BREATH"}};return waves[p->engine-6u][v&3u];}
  else if(editor_page==EDIT_COLOR&&p->engine==5&&k<2){*unit="/4";}
- else if(editor_page==EDIT_COLOR&&p->engine!=5&&((p->engine==2&&k<2)||(k==0&&p->engine))){
+ else if(editor_page==EDIT_COLOR&&p->engine!=5&&p->engine<6&&((p->engine==2&&k<2)||(k==0&&p->engine))){
   const char *pd[8]={"SAW","SQUARE","PULSE","DOUBLE SIN","SAW PULSE","RES SAW","RES TRI","RES TRAP"};
   const char *fm[6]={"SINE","HALF","RECTIFY","SINE+2","SINE+3","SINE"};
   const char *st[6]={"PLUCK","NOISE","HAMMER","SOFT","PLUCK","NOISE"};const char *mo[6]={"BAR","SKIN","BOWL","PIPE","ORGAN","GLASS"};
@@ -186,8 +199,11 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
  }else{
   for(uint32_t k=0;k<editor_count();k++){
    char buf[12];const char *unit,*value=editor_value(k,buf,&unit);
-   control_row(k,37+(int32_t)k*50,editor_label(k),value,unit,value==buf,
-       k==editor_selected,fg,pa,guide,accent);
+   int32_t max=editor_max(k),position=-1;
+   if(max>0){const uint8_t *v=editor_page==EDIT_SCATTER||editor_page==EDIT_PATTERN?editor_param(k,0):editor_param(k,ws_edit_patch());
+    if(v)position=(int32_t)ws_clamp((int32_t)*v,0,max)*256/max;}
+   control_row_at(k,37+(int32_t)k*50,editor_label(k),value,unit,value==buf,
+       k==editor_selected,fg,pa,guide,accent,position);
   }
   for(uint32_t i=0;i<EDIT_PAGES;i++)
    cv_rect(12+(int32_t)(i*216u/EDIT_PAGES),237,216u/EDIT_PAGES-4u,

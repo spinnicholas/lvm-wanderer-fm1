@@ -90,6 +90,30 @@ static ws_patch_t *editor_ensure(void)
  if(!wm.patch_valid){wm.patch=*ws_current_patch();wm.patch_valid=1;}
  return &wm.patch;
 }
+/* One place for every patch parameter's range; the knob and the screen share it. */
+static int32_t editor_patch_max(uint32_t k,const ws_patch_t *p,const uint8_t *value)
+{
+ int32_t max=127;
+ if(value==&p->filter||value==&p->lfo_dest)max=value==&p->filter?WS_FILTER_COUNT-1:p->engine==3?1:2;
+ if(value==&p->engine||value==&p->wave)max=value==&p->wave?(p->engine==0?9:p->engine==2?7:p->engine==3?3:p->engine==5?5:p->engine>=6?3:4):(int32_t)WS_ENGINES-1;
+ if(editor_page==EDIT_COLOR&&p->engine==1&&k==2)max=3;
+ if(editor_page==EDIT_COLOR&&p->engine==2&&k==3)max=1;
+ if(value==&p->algorithm)max=p->engine==5?31:7;
+ if(p->engine==5&&((editor_page==11)||(editor_page==4&&k==2)||(editor_page==EDIT_COLOR&&k>=2)))max=99;
+ return max;
+}
+/* Range of row k on the current page, or -1 for rows that are actions. */
+static int32_t editor_max(uint32_t k)
+{
+ if(editor_page==EDIT_PRINT)return -1;
+ if(editor_page==EDIT_SCATTER||editor_page==EDIT_PATTERN){
+  if(k==0)return editor_page==EDIT_SCATTER?(int32_t)WM_SCATTER_MODES-1:(int32_t)WM_PATTERN_COUNT-1;
+  if(k==1&&editor_page==EDIT_SCATTER)return (int32_t)WM_GRAIN_COUNT-1;
+  return 127;
+ }
+ const ws_patch_t *p=ws_edit_patch();const uint8_t *value=editor_param(k,p);
+ return value?editor_patch_max(k,p,value):-1;
+}
 static void editor_adjust(uint32_t k,int32_t d)
 {
  if(k>=editor_count())return;
@@ -109,13 +133,8 @@ static void editor_adjust(uint32_t k,int32_t d)
  }
  ws_patch_t *p=editor_ensure();
  if(layer_focus)wm.layer_legacy=0;else wm.legacy=0;
- uint8_t *value=(uint8_t*)editor_param(k,p);if(!value)return;int32_t max=127,step=2;
- if(value==&p->filter||value==&p->lfo_dest){max=value==&p->filter?WS_FILTER_COUNT-1:p->engine==3?1:2;step=1;}
- if(value==&p->engine||value==&p->wave){max=value==&p->wave?(p->engine==0?9:p->engine==2?7:p->engine==3?3:p->engine==5?5:p->engine>=6?3:4):(int32_t)WS_ENGINES-1;step=1;}
- if(editor_page==EDIT_COLOR&&p->engine==1&&k==2){max=3;step=1;}
- if(editor_page==EDIT_COLOR&&p->engine==2&&k==3){max=1;step=1;}
- if(value==&p->algorithm){max=p->engine==5?31:7;step=1;}
- if(p->engine==5&&((editor_page==11)||(editor_page==4&&k==2)||(editor_page==EDIT_COLOR&&k>=2)))max=99;
+ uint8_t *value=(uint8_t*)editor_param(k,p);if(!value)return;
+ int32_t max=editor_patch_max(k,p,value),step=max<=31?1:2;
 
  uint32_t old=*value;*value=(uint8_t)ws_clamp((int32_t)*value+d*step,0,max);
  if(value==&p->engine){p->algorithm%=p->engine==5?32:8;p->wave%=p->engine==0?10:p->engine==2?8:p->engine>=6?4:6;}
