@@ -311,7 +311,8 @@ static int32_t ws_osc(uint32_t v)
   else centre=wn_osc_saw(s->ph[0],inc);
   s->ph[0]+=inc;
   /* saw weight and square height: saw (0, 3), square (1), saw + square (2) */
-  int32_t sw=p->wave==1?0:1,sq=p->wave==1?24000:p->wave==2?12000:0,sum,side;
+  static const int16_t WS_SQ[4]={0,24000,12000,0};
+  int32_t sw=p->wave!=1,sq=WS_SQ[p->wave&3u],sum,side;
   uint32_t *ph=s->uph;const uint32_t *ui=s->uinc;
   #define WS_NAIVE(x) (sw*((int32_t)((x)>>16)-32768)+(int32_t)((x)>>31)*2*sq-sq)
   if(cpu_lean){
