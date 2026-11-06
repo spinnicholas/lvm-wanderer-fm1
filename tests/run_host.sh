@@ -8,9 +8,7 @@ cd "$(dirname "$0")/.."
 mkdir -p build/host
 python3 tools/gen_wanderer_font.py firmware/src/wanderer_font.h
 python3 tools/gen_wanderer_icons.py firmware/src/wanderer_icons.h
-python3 tools/gen_wanderer_waves.py firmware/src/wanderer_waves.h
-python3 tools/gen_wanderer_presets.py firmware/src/wanderer_presets.h docs/WANDERER_PRESETS.md
-python3 tools/design_bank_1_3.py
+python3 tools/design_bank_3_0.py
 python3 tools/gen_wanderer_splash.py
 N=dinghy; D=
 if [ "${BOARD:-fm1}" = smk37 ]; then N=dinghy-smk37; D=-DBOARD_SMK37=1; fi

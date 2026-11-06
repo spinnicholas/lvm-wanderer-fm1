@@ -24,7 +24,7 @@ int main(void)
 {
     wm=(wm_state_t)WM_DEFAULTS;wm.loop_steps=32;wm.sound=72;wm.fx_on=5;
     wm.chorus_mix=22;wm.reverb_mix=35;cues_enabled=0;vol=100;step_samples=FS*15u/wm.bpm;
-    project_initialise();recording_toggle();chord(60,63,67);chord(53,56,60);recording_end();transport();
+    project_initialise(1);recording_toggle();chord(60,63,67);chord(53,56,60);recording_end();transport();
     assert(wm_step_notes(&wm.memory,0)==3&&wm_step_notes(&wm.memory,16)==3);
     wm_phrase_t expected=wm.memory;project_slot=7;confirm=2;apply_confirm();assert(notice==N_SAVED);
     wm_clear_phrase(&wm.memory);confirm=3;apply_confirm();assert(notice==N_LOADED&&!memcmp(&expected,&wm.memory,sizeof expected));

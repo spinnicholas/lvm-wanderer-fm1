@@ -13,7 +13,7 @@ static void shot(const char *name)
 }
 int main(void)
 {
-    project_initialise();fm1_ms=100;shot("01-home-dark");
+    project_initialise(1);fm1_ms=100;shot("01-home-dark");
     wm_record(0,60,100);wm_record(4,64,100);wm_record(8,67,100);wm_record(12,72,100);
     wm_catch();wm.layer_enabled=layer_focus=1;wm_record(2,55,90);wm_record(10,62,90);
     shot("02-home-phrase-layer");

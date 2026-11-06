@@ -205,7 +205,7 @@ static int32_t wp_scatter_read(uint32_t phase,uint32_t size,uint8_t arena,uint8_
 }
 static int32_t wp_scatter_audio(int32_t clean,uint8_t arena)
 {
- uint8_t enabled=(uint8_t)(running&&wp_repeat_on&&wp_scatter_elapsed>=wp_scatter_delay&&wm.decay&&!wm.legacy&&!anchor_view&&!wp_dry_view);
+ uint8_t enabled=(uint8_t)(running&&wp_repeat_on&&wp_scatter_elapsed>=wp_scatter_delay&&wm.decay&&!anchor_view&&!wp_dry_view);
  if(!enabled&&!wp_scatter_mix)return clean;
  int32_t affected=wp_scatter_last;
  if(enabled){

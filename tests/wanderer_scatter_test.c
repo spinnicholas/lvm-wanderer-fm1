@@ -21,11 +21,8 @@ static void grain_checks(void){
   assert(size==WM_GRAIN_COUNT-1u?wp_repeat_size==WP_RING_SAMPLES:(wp_repeat_size>=base*3u/4u&&wp_repeat_size<=base*5u/4u));
   assert(wp_repeat_size>=32&&wp_repeat_size<=WP_RING_SAMPLES&&wp_ring_start<WP_RING_SAMPLES);
  }
- wm_disk_t d={WM_MAGIC,6,sizeof(wm_state_t),WM_DEFAULTS};
- d.state.grain_size=0;d.state.patch_valid=1;d.state.patch=WS_PRESETS[24];d.state.memory.e[0]=(wm_event_t){64,120,8192};d.state.repeat_style=2;
- d.state.preset_bank=d.state.anchor_preset_bank=WS_BANK_1_3;
- const wm_state_t *m=wm_migrate_v6_ptr(&d);assert(wm_valid_v6(&d)&&m&&!memcmp(m,&d.state,sizeof *m));
- d.state.grain_size=1;assert(!wm_valid_v6(&d));d.version=WM_DISK_VERSION;
+ wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof(wm_state_t),WM_DEFAULTS};
+ d.state.patch_valid=1;d.state.patch=WS_PRESETS_3[24];d.state.memory.e[0]=(wm_event_t){64,120,8192};d.state.repeat_style=2;
  for(uint32_t size=0;size<WM_GRAIN_COUNT;size++){d.state.grain_size=size;assert(wm_valid(&d));}
  d.state.grain_size=WM_GRAIN_COUNT;assert(!wm_valid(&d));
  /* The actual app callback must feed Scatter into the wet bus. A source made

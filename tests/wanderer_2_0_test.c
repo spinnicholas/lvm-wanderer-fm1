@@ -9,7 +9,6 @@ int main(void)
 {
  assert(wm.sound==0&&!(wm.fx_on&1u)&&wm.grain_size==8);
  assert(!strcmp(ws_factory_name(wm.preset_bank,wm.sound),"AFTERGLOW"));
- assert(!strcmp(ws_factory_name(WS_BANK_1_9,0),"ROUND SUB"));
  assert(ws_current_patch()->filter==WS_LP24);
  const uint32_t oct=1u<<BTN_OCT_UP,play=1u<<BTN_PLAY;
  fm1_ms=100;fm1_in.buttons=oct;assert(!performance_edges(oct,0));
@@ -60,19 +59,6 @@ int main(void)
  assert(wm_valid(&disk)&&!slot_save(2,&disk,sizeof disk));
  static wm_state_t loaded;
  assert(project_read_slot(2,&loaded)&&loaded.layer_sound==35&&loaded.midi_channel==2);
- wm_disk_v13_t old={WM_MAGIC,13,sizeof(wm_state_v13_t),{0}};
- wm.preset_bank=WS_BANK_1_9;wm.patch_valid=0;wm.sound=0;wm.reverb_type=RV_PLATE;
- memcpy(&old.state,&wm,__builtin_offsetof(wm_state_t,layer_sound));
- assert(!slot_save(3,&old,sizeof old)&&project_read_slot(3,&loaded));
- assert(loaded.preset_bank==WS_BANK_1_9&&!loaded.layer_sound&&!loaded.midi_channel&&loaded.reverb_type==RV_PLATE);
- assert(!strcmp(ws_factory_name(loaded.preset_bank,loaded.sound),"ROUND SUB"));
- assert(!slot_load(3,&old,sizeof old)&&old.version==13u);
- /* 3.0: modern Memory no longer uses the stateless four-loop evolve; it
-  * wanders cumulatively (tests/wanderer_3_0_test.c). Legacy is unchanged. */
- wm.drift=85;wm.melt=127;wm.legacy=0;
- const wm_event_t before={64,100,192};
- assert(!memcmp(&before,&(wm_event_t){wm_evolve(before,15,2).note,wm_evolve(before,15,2).velocity,wm_evolve(before,15,2).gate},sizeof before));
- wm.legacy=0;
  editor_page=EDIT_SCATTER;editor_move(1);assert(editor_page==EDIT_PATTERN);
- puts("2.0 defaults, holds, split sounds, MIDI ownership, musical motion, accessible screens and migration pass.");
+ puts("2.0 defaults, holds, split sounds, MIDI ownership, musical motion, accessible screens and saved projects pass.");
 }

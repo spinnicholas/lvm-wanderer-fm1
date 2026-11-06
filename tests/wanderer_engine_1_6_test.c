@@ -29,8 +29,8 @@ int main(void)
  uint32_t cases=0;
  /* G3 is key index 2. Compare the actual local performance entry with MIDI
   * on every key and voice slot, at matching velocity and onset state. */
- for(uint32_t engine=0;engine<6u;engine++){ /* engines with 1.9 factory patches */
-  uint32_t p=0;while(WS_PRESETS[p].engine!=engine)p++;
+ for(uint32_t engine=0;engine<6u;engine++){ /* the original six engines */
+  uint32_t p=0;while(WS_PRESETS_3[p].engine!=engine)p++;
   for(int32_t oct=-2;oct<=2;oct++)for(uint32_t key=0;key<27;key++){
    uint32_t note=(uint32_t)((int32_t)KEY0+oct*12+(int32_t)key);render(p,0,note,0,ref);
    for(uint32_t slot=0;slot<NV;slot++){
@@ -56,12 +56,8 @@ int main(void)
   for(uint32_t i=0;i<FRAMES*2;i++)assert(out[i]>-65536&&out[i]<65536);corners++;
  }
  wm=(wm_state_t)WM_DEFAULTS;ws_select(149);wm_record(0,55,100);assert(wm_catch());
- wm_disk_v10_t v9={WM_MAGIC,9,sizeof(wm_state_v10_t),{0}};memcpy(&v9.state,&wm,sizeof v9.state);
- const wm_state_t *p=wm_migrate_v9_ptr(&v9);assert(p&&!memcmp(p,&wm,sizeof wm));
- assert(!slot_save(2,&v9,sizeof v9));static wm_state_t loaded;
- assert(project_read_slot(2,&loaded)&&!memcmp(&loaded,&wm,sizeof wm));
- v9.magic=0;assert(!wm_migrate_v9_ptr(&v9));v9.magic=WM_MAGIC;
- v9.size--;assert(!wm_migrate_v9_ptr(&v9));v9.size++;
- v9.state.patch.wave=8;assert(!wm_migrate_v9_ptr(&v9));
- printf("%u exact route/voice comparisons (27 keys across five octaves, 150 presets around G3), %u new-model pitch extremes, v9 snapshot/Anchor import and malformed files pass\n",cases,corners);
+ {wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(!slot_save(2,&d,sizeof d));static wm_state_t loaded;
+  assert(project_read_slot(2,&loaded)&&!memcmp(&loaded,&wm,sizeof wm));
+  d.state.patch.wave=12;assert(!slot_save(3,&d,sizeof d)&&!project_read_slot(3,0));} /* an impossible patch is refused */
+ printf("%u exact route/voice comparisons (27 keys across five octaves, 150 presets around G3), %u new-model pitch extremes, snapshot/Anchor save and malformed files pass\n",cases,corners);
 }

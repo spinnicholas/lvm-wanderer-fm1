@@ -20,25 +20,12 @@ static void render(uint32_t n){
 int main(void){
  assert(WM_GRAIN_COUNT==10&&WM_GRAIN_MS[8]==512&&WM_GRAIN_MS[9]==768);
  assert(WP_RING_SAMPLES==12288u);
- /* v11 prefix must match exactly; do not copy its trailing pad into PATTERN. */
- assert(offsetof(wm_state_t,fx_new_on)==sizeof(wm_state_v10_t));
- assert(offsetof(wm_state_t,scatter_pattern)+1u==sizeof(wm_state_v11_t));
  wm=(wm_state_t)WM_DEFAULTS;ws_select(0);
  wm.scatter_pattern=8;wm.grain_size=9;wm.memory.e[0]=(wm_event_t){60,115,4096};
  wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof(wm_state_t),wm};
  assert(wm_valid(&d));d.state.scatter_pattern=WM_PATTERN_COUNT;assert(!wm_valid(&d));
  d.state.scatter_pattern=8;assert(!slot_save(2,&d,sizeof d));
  static wm_state_t out;assert(project_read_slot(2,&out)&&out.scatter_pattern==8&&out.grain_size==9);
- /* As recorded by version 1.7, the last byte is padding, not a pattern. */
- wm_disk_v11_t old={WM_MAGIC,11,sizeof(wm_state_v11_t),{0}};
- memcpy(&old.state,&wm,offsetof(wm_state_t,scatter_pattern));
- assert(!wm_migrate_v11_v12_ptr(&old)); /* Index 9 was introduced in v12. */
- old.state.prefix.grain_size=8;
- ((uint8_t*)&old.state)[sizeof old.state-1u]=0xff;
- assert(!slot_save(3,&old,sizeof old));
- assert(project_read_slot(3,&out)&&out.scatter_pattern==0&&out.grain_size==8&&out.memory.e[0].note==60);
- assert(!slot_load(3,&old,sizeof old)&&old.version==11u);
- assert(!wm_migrate_v11_v12_ptr(&(wm_disk_v11_t){.magic=WM_MAGIC,.version=11,.size=1}));
  /* 512 ms existing offsets remain untouched; 768 is fixed. */
  wm=(wm_state_t)WM_DEFAULTS;wp_reset();wp_ring_count=WP_RING_SAMPLES;
  for(uint32_t s=8;s<=9;s++)for(uint32_t offset=0;offset<8;offset++){
@@ -96,5 +83,5 @@ int main(void){
  assert(hash(wp_arena[0],sizeof wp_arena[0])==original);
  wm.decay=0;render(4096);assert(!wp_scatter_mix);
  panic();render(256);assert(!wp_scatter_mix&&!scatter.kind);
- printf("10 independent patterns, 512/768 ms bounds, v11 read-only migration, Print/Anchor isolation, FX headroom pass\n");
+ printf("10 independent patterns, 512/768 ms bounds, Print/Anchor isolation, FX headroom pass\n");
 }

@@ -20,18 +20,14 @@ int main(void)
   frames(FS/2,0);note_on(hi?112:55,110,1);uint64_t energy=0;frames(8192,&energy);assert(energy>1000);
   note_off(hi?112:55,1);frames(FS,0);for(uint32_t v=0;v<NV;v++)assert(!voice[v].amp);cases++;
  }
- /* Imported v9/v10 records get transparent new-effect defaults. */
+ /* 3.1: a project saved and loaded keeps its effect settings. */
  wm=(wm_state_t)WM_DEFAULTS;ws_select(0);wm_record(0,55,100);assert(wm_catch());
- wm_disk_v10_t old={WM_MAGIC,10,sizeof(wm_state_v10_t),{0}};
- memcpy(&old.state,&wm,sizeof old.state);const wm_state_t *p=wm_migrate_v9_ptr(&old);assert(p);
- assert(p->memory.e[0].note==55&&p->anchor.e[0].note==55&&!p->fx_new_on&&p->crush_bits==10);
- assert(!slot_save(2,&old,sizeof old));static wm_state_t loaded;assert(project_read_slot(2,&loaded));
- assert(loaded.crush_bits==10&&loaded.has_anchor);old.version=9;assert(wm_migrate_v9_ptr(&old));
- old.size--;assert(!wm_migrate_v9_ptr(&old));
+ {wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(!slot_save(2,&d,sizeof d));static wm_state_t loaded;
+  assert(project_read_slot(2,&loaded)&&loaded.crush_bits==10&&loaded.has_anchor&&loaded.memory.e[0].note==55);}
  /* All new effect controls preserve unrelated state and validate on disk. */
  wm=(wm_state_t)WM_DEFAULTS;settings_open=1;fm1_ms=100;
  for(settings_page=9;settings_page<SETTINGS_PAGES;settings_page++)for(uint32_t k=0;k<4;k++)for(uint32_t end=0;end<2;end++){
   settings_adjust(k,end?10000:-10000);wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(wm_valid(&d));
  }
- printf("%u MSFA six-operator algorithm/register/feedback/release cases; v9/v10 import and all new effect-control endpoints pass\n",cases);
+ printf("%u MSFA six-operator algorithm/register/feedback/release cases; saved effects and all new effect-control endpoints pass\n",cases);
 }

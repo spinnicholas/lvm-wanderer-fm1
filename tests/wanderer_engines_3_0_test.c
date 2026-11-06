@@ -8,7 +8,7 @@
 static int32_t buf[2*4096];
 static ws_patch_t patch(uint8_t engine,uint8_t wave)
 {
- ws_patch_t p=WS_PRESETS_2[0];p.engine=engine;p.wave=wave;p.filter=WS_LP24;p.cutoff=100;p.resonance=20;
+ ws_patch_t p=WS_PRESETS_3[0];p.engine=engine;p.wave=wave;p.filter=WS_LP24;p.cutoff=100;p.resonance=20;
  p.mix=90;p.detune=70;p.shape=90;p.sub=30;p.pulse=64;p.position=64;p.feedback=80;p.inharm=10;p.level=100;
  p.lfo_depth=0;memset(p.morph,0,sizeof p.morph);p.morph[1]=30;p.morph[5]=20;return p;
 }
@@ -33,8 +33,8 @@ int main(void)
  double fm6_ns=0;
  for(uint32_t e=0;e<WS_ENGINES;e++){
   ws_patch_t p=patch((uint8_t)e,0);
-  if(e==5){p=WS_PRESETS_2[0];for(uint32_t i=0;i<150;i++)if(WS_PRESETS_2[i].engine==5){p=WS_PRESETS_2[i];break;}}
-  if(e==1||e==3||e==4){for(uint32_t i=0;i<150;i++)if(WS_PRESETS_2[i].engine==e){p=WS_PRESETS_2[i];break;}}
+  if(e==5){p=WS_PRESETS_3[0];for(uint32_t i=0;i<150;i++)if(WS_PRESETS_3[i].engine==5){p=WS_PRESETS_3[i];break;}}
+  if(e==1||e==3||e==4){for(uint32_t i=0;i<150;i++)if(WS_PRESETS_3[i].engine==e){p=WS_PRESETS_3[i];break;}}
   assert(ws_patch_valid(&p));
   double rms;int32_t peak;uint32_t wide;double ns=render(&p,48,FS*2,&rms,&peak,&wide);
   if(e==5)fm6_ns=ns;

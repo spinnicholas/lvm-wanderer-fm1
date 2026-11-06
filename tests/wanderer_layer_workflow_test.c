@@ -81,14 +81,11 @@ int main(void)
  assert(wm.transpose_base==2);capture_off(75,1,0);
 
 
- /* Old v14 slots use their original bank and mute, even with dirty padding. */
+ /* A saved Layer keeps its own sound, mute and channel. */
  static wm_state_t loaded;
- wm_disk_v14_t old={WM_MAGIC,14,WM_V14_SIZE,{0}};
- wm.layer_sound=35;wm.layer_enabled=0;wm.midi_channel=9;
- memcpy(old.state,&wm,WM_V14_USED);
- memset(old.state+WM_V14_USED,255,WM_V14_SIZE-WM_V14_USED);
- assert(!slot_save(1,&old,sizeof old)&&project_read_slot(1,&loaded));
- assert(loaded.layer_sound==35&&!loaded.layer_enabled&&loaded.layer_preset_bank==WS_BANK_2_0); /* v14 indexes keep their 2.0 sounds */
+ wm.layer_sound=35;wm.layer_enabled=0;wm.midi_channel=9;wm.layer_link=0;wm.layer_patch_valid=0;
+ {wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(!slot_save(1,&d,sizeof d)&&project_read_slot(1,&loaded));}
+ assert(loaded.layer_sound==35&&!loaded.layer_enabled&&loaded.layer_preset_bank==WS_BANK_CURRENT);
  assert(loaded.midi_channel==9&&!loaded.layer_link&&!loaded.layer_patch_valid);
  wm=loaded;editor_page=1;editor_adjust(0,-1);assert(wm.layer_patch_valid);
  static wm_disk_t saved;
@@ -105,5 +102,5 @@ int main(void)
   const char *value=editor_value(0,buf,&unit);
   assert(16+width(&FONT_T,editor_label(0))+2*FONT_PAD+6<=222-width(&FONT_T,value));
  }
- puts("Layer switch, independent preset and editor, mute, link, MIDI, migration and Scatter Grid fit pass.");
+ puts("Layer switch, independent preset and editor, mute, link, MIDI, saved Layer and Scatter Grid fit pass.");
 }

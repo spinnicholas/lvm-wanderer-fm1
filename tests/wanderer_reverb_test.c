@@ -123,11 +123,5 @@ int main(void)
  assert(wm_valid(&saved)&&!slot_save(3,&saved,sizeof saved));
  assert(project_read_slot(3,&loaded)&&loaded.reverb_type==RV_AMBIENT);
  saved.state.reverb_type=RV_COUNT;assert(!wm_valid(&saved));
- wm_disk_v11_t old={WM_MAGIC,12,sizeof(wm_state_v11_t),{0}};
- wm.scatter_pattern=8;wm.grain_size=9;
- memcpy(&old.state,&wm,sizeof old.state);
- assert(!slot_save(2,&old,sizeof old)&&project_read_slot(2,&loaded));
- assert(loaded.reverb_type==RV_ROOM&&loaded.scatter_pattern==8&&loaded.grain_size==9);
- assert(!slot_load(2,&old,sizeof old)&&old.version==12u);
- puts("All reverb types, clean switching, Normal/Zoom UI and v12/current slots pass.");
+ puts("All reverb types, clean switching, Normal/Zoom UI and saved slots pass.");
 }

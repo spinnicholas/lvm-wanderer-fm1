@@ -166,9 +166,19 @@ def build_loader():
 
 # ---- app
 
+def source_commit():
+    """Short commit of the source tree; part of the firmware identity, so each
+    new build starts with a fresh data store (Wanderer 3.1)."""
+    try:
+        out = subprocess.run(["git", "rev-parse", "--short=12", "HEAD"], cwd=SRC, capture_output=True, text=True)
+        return out.stdout.strip() if out.returncode == 0 and re.fullmatch(r"[0-9a-f]{7,40}", out.stdout.strip()) else "nogit"
+    except OSError:
+        return "nogit"
+
+
 def build_app():
     flags = [*CFLAGS, *BOARD_DEFS[BOARD], "-Ifirmware/hal", "-Ifirmware/src", "-Ifirmware/gen", f'-DFELUCCA_ID="{PRODUCT}"',
-             f'-DAPP_VER="{VERSION or "0.0"}"']
+             f'-DAPP_VER="{VERSION or "0.0"}"', f'-DAPP_BUILD="{source_commit()}"']
     if BOARD == "smk37":
         if not re.fullmatch(r"[A-Z0-9]{1,7}", DATA_FAMILY):
             raise SystemExit("DATA_FAMILY: 1..7 of A-Z 0-9")
@@ -352,11 +362,6 @@ def main():
         raise SystemExit("missing generated icon header; install Inkscape to rasterize assets/icons")
     else:
         print("icons: Inkscape not found, using the checked-in wanderer_icons.h")
-    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_waves.py"),
-                    str(FW / "src" / "wanderer_waves.h")], check=True, cwd=SRC)
-    subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_presets.py"),
-                    str(FW / "src" / "wanderer_presets.h"),
-                    str(SRC / "docs" / "WANDERER_PRESETS.md")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_dsp.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "gen_wanderer_fm6_tables.py")], check=True, cwd=SRC)
     subprocess.run([sys.executable, str(SRC / "tools" / "design_bank_1_7.py")], check=True, cwd=SRC)

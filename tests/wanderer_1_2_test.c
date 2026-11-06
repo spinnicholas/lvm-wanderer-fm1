@@ -13,7 +13,7 @@ static void fresh(void)
     audio_frames=fm1_ms=0;step_samples=FS*15u/wm.bpm;vol=100;cues_enabled=0;
     notice=focus=wm_can_undo=save_pending=0;save_down=0;
     host_fault_settings_save=host_fault_slot_save=host_fault_slot_load=0;
-    reset_performance();blocks(64);project_initialise();
+    reset_performance();blocks(64);project_initialise(1);
 }
 static uint32_t lane_voices(uint32_t lane)
 {uint32_t n=0;for(uint32_t v=0;v<NV;v++)n+=voice[v].gate&&!voice[v].live&&voice[v].seq_lane==lane;return n;}
@@ -23,7 +23,7 @@ static uint32_t gate_for(const wm_phrase_t *p,uint32_t step,uint32_t note)
 {for(uint32_t v=0;v<WM_POLY;v++){wm_event_t e=wm_get(p,step,v);if(e.velocity&&e.note==note)return e.gate;}return 0;}
 int main(void)
 {
-    fresh();assert(sizeof(wm_disk_v5_t)==2084&&sizeof(wm_disk_v4_t)==548&&sizeof(wm_disk_v3_t)==160);
+    fresh();
     recording_toggle();capture_on(60,100,1);capture_on(63,95,1);capture_on(67,105,1);
     assert(capture_count()==3&&wm_step_notes(&wm.memory,0)==3);blocks(40);
     capture_off(63,1,0);assert(capture_count()==2);blocks(40);
@@ -32,7 +32,7 @@ int main(void)
     assert(gate_for(&wm.memory,0,60)>800&&gate_for(&wm.memory,0,67)>800);
     wm_phrase_t chord=wm.memory;running=0;reset_performance();step_index=0;step_play();
     assert(lane_voices(0)==3);blocks(42);assert(lane_voices(0)==2);blocks(45);assert(!lane_voices(0));
-    assert(wm_catch());wm.scale=2;wm.drift=127;assert(wm_branch_now(4));
+    assert(wm_catch());wm.scale=2;wm.drift=127;for(uint32_t l=0;l<8;l++)ww_loop();assert(ww_keep()); /* 3.1: Keep replaces branch */
     assert(wm_step_notes(&wm.memory,0)==3&&!memcmp(&wm.anchor,&chord,sizeof chord));
     for(uint32_t v=0;v<3;v++){wm_event_t e=wm_get(&wm.memory,0,v);assert(wm_in_scale(e.note));}
     puts("three-note chords retain independent held durations, replay polyphonically and survive Anchor/scale evolution/branch");
@@ -79,17 +79,18 @@ int main(void)
     host_fault_slot_load=1;confirm=2;apply_confirm();assert(notice==N_SAVE_FAILED&&project_dirty&&slot_presence[2]==0);
     assert(project_read_slot(2,&saved)); /* Written bytes may be valid; unverified is still not success. */
     puts("empty record passes retain Undo; Save establishes a reference; Undo after Save is dirty; preferences failure never falsely reports project loss or a clean session");
-    fresh();wm_disk_v4_t old={WM_MAGIC,4,sizeof(wm_state_v4_t),{.magic=WM_MAGIC,.loop_steps=16,.bpm=112}};
-    old.state.loop_steps=32;old.state.root=7;old.state.scale=3;old.state.sound=73;
-    old.state.memory.e[31]=(wm_event_t){72,110,1800};old.state.has_anchor=1;old.state.anchor=old.state.memory;
-    assert(wm_valid_v4(&old));slot_save(0,&old,sizeof old);
-    uint8_t original[sizeof old+4];memcpy(original,host_slot[0],sizeof original);
-    project_slot=0;confirm=3;apply_confirm();assert(notice==N_LOADED&&wm.loop_steps==32&&wm.root==7&&wm.scale==3&&wm.sound==73);
-    assert(wm.memory.e[31].gate==1800&&!wm.memory.extra[31][0].velocity);
-    assert(!memcmp(original,host_slot[0],sizeof original));
+    /* 3.1: projects round-trip in the current format; anything else is never loaded or rewritten. */
+    fresh();wm.loop_steps=32;wm.root=7;wm.scale=3;ws_select(73);
+    wm.memory.e[31]=(wm_event_t){72,110,1800};wm_protect_source();
+    project_slot=0;confirm=2;apply_confirm();assert(notice==N_SAVED);
+    wm=(wm_state_t)WM_DEFAULTS;project_slot=0;confirm=3;apply_confirm();assert(notice==N_LOADED&&wm.loop_steps==32&&wm.root==7&&wm.scale==3&&wm.sound==73);
+    assert(wm.memory.e[31].gate==1800&&!wm.memory.extra[31][0].velocity&&wm.has_anchor);
+    {static uint8_t foreign[64];memset(foreign,0x5a,sizeof foreign);assert(!slot_save(5,foreign,sizeof foreign));
+     uint8_t original[sizeof foreign+4];memcpy(original,host_slot[5],sizeof original);
+     project_slot=5;confirm=3;apply_confirm();assert(notice==N_NO_VALID_SAVE&&!memcmp(original,host_slot[5],sizeof original));}
     project_slot=1;confirm=2;apply_confirm();wm.memory.e[31].note=0;confirm=3;apply_confirm();assert(wm.memory.e[31].note==72);
-    uint32_t writes=host_store_writes;wm=(wm_state_t)WM_DEFAULTS;project_initialise();assert(host_store_writes==writes&&slot_presence[0]==2&&slot_presence[1]==2&&!wm_has_notes(&wm.memory)&&project_origin_slot==255);
-    puts("v4 import retains 32-step held notes/key/sound; original slot is unchanged; boot caches slot validity without writing or auto-loading");
+    uint32_t writes=host_store_writes;wm=(wm_state_t)WM_DEFAULTS;project_initialise(1);assert(host_store_writes==writes&&slot_presence[0]==2&&slot_presence[1]==2&&slot_presence[5]==1&&!wm_has_notes(&wm.memory)&&project_origin_slot==255);
+    puts("current-format projects round-trip 32-step held notes/key/sound; foreign data is refused untouched; boot caches slot validity without writing");
     fresh();wm_record(0,60,100);fm1_in.buttons=1u<<BTN_SAVE;
     assert(!(save_edges(1u<<BTN_SAVE,0)&(1u<<BTN_SAVE)));fm1_ms=901;save_edges(0,0);
     assert(confirm==2&&!wm.has_anchor&&!save_pending);fm1_in.buttons=0;assert(!save_edges(0,1u<<BTN_SAVE));
@@ -118,7 +119,6 @@ int main(void)
         blocks(1);assert(capture_count()<=WM_POLY);
         if(!(t%128u)){
             wm_disk_t check={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(wm_valid(&check));
-            for(uint32_t v=0;v<NV;v++)assert(abs(voice[v].f1)<=65535&&abs(voice[v].f2)<=65535);
         }
     }
     for(uint32_t source=1;source<=2;source++)for(uint32_t channel=0;channel<4;channel++)midi_message(source,0xb0u|channel,120,0);

@@ -28,11 +28,10 @@ int main(void)
   show_notice(N_SAVED);assert(!notice_until);fm1_ms+=20000;display_expire();assert(notice==N_SAVED);
  }
  puts("2/5/10 seconds, refresh, HOLD, persistent critical/results notices and uint32 rollover pass");
- _Static_assert(sizeof(wm_preferences_t)==16,"existing preference size must stay compatible");
- wm_preferences_t old={WM_MAGIC,1,sizeof old,1,1,1,37,0,3,{0,0}};
- assert(!settings_save(&old,sizeof old));display_hold=3;cue_detail=zoom_steady=0;cue_level=127;
- preferences_load();assert(wm.light&&wm.extra_large&&wm.reduced_motion&&vol==37&&!cues_enabled&&project_slot==3);
- assert(!display_hold&&cue_detail&&zoom_steady&&cue_level==64);
+ /* 3.1: preferences carry the firmware identity; another build's record is not this firmware's. */
+ _Static_assert(sizeof(wm_preferences_t)==20,"3.1 preference record");
+ assert(!preferences_save());wm_preferences_t old;assert(!settings_load(&old,sizeof old)&&preferences_valid(&old));
+ old.build^=2u;assert(!preferences_valid(&old));old.build^=2u;old.version=2;assert(!preferences_valid(&old));old.version=3;
  for(uint32_t hold=0;hold<4;hold++)for(uint32_t detail=0;detail<2;detail++)for(uint32_t steady=0;steady<2;steady++)for(uint32_t level=0;level<128;level+=127){
   display_hold=hold;cue_detail=detail;zoom_steady=steady;cue_level=level;cues_enabled=1;
   color_theme=THEME_LIGHT;assert(!preferences_save());display_hold=0;cue_detail=0;zoom_steady=0;cue_level=1;preferences_load();
@@ -40,10 +39,10 @@ int main(void)
  }
  old.reserved[0]=0x30;old.reserved[1]=128;assert(!preferences_valid(&old)); /* 3.0: click mode 3 does not exist */
  old.reserved[0]=0;old.reserved[1]=1;assert(!preferences_valid(&old));
- uint32_t sig=access_signature();assert(!settings_save(&old,sizeof old));preferences_load();assert(access_signature()==sig);
+ uint32_t sig=access_signature();assert(!settings_save(&old,sizeof old));preferences_load();assert(access_signature()==sig); /* a rejected record changes nothing */
  host_fault_settings_save=1;assert(preferences_save());
- puts("legacy defaults, all extension bits, cue-level extremes, unchanged 16-byte size, malformed records and failed writes pass");
- settings_page=SETTINGS_ACCESS_FEEL;project_initialise();uint32_t writes=host_store_writes;
+ puts("firmware identity, all extension bits, cue-level extremes, malformed records and failed writes pass");
+ settings_page=SETTINGS_ACCESS_FEEL;project_initialise(1);uint32_t writes=host_store_writes;
  uint8_t prior=display_hold;settings_adjust(0,prior==3?-1:1);project_poll();assert(project_dirty&&host_store_writes==writes);
  settings_adjust(0,prior==3?1:-1);project_poll();assert(!project_dirty);
  assert(host_store_writes==writes);puts("unsaved indicator detects preference changes/reverts; turning controls never writes flash");

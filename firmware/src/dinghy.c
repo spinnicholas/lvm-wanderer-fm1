@@ -4,7 +4,7 @@
  * Dinghy / platform credits and GPL notices remain in LICENSING.md.
  */
 #define APP_NAME "LVM WANDERER"
-#define STORE_MAGIC 0x314d564cu
+#define STORE_MAGIC 0x334d564cu /* LVM3: 3.1 data; older Wanderer data is never read */
 #define DATA_FAMILY "LVM"
 #define LCD_IDLE app_idle
 static void app_idle(void);
@@ -20,8 +20,6 @@ static void project_undo(void);
 typedef struct {uint8_t h,n;const char *chars;const uint8_t *adv,*bw;const uint32_t *off;const uint8_t *data;} font_t;
 #include "wanderer_font.h"
 #include "wanderer_icons.h"
-#include "wanderer_waves.h"
-#include "wanderer_presets.h"
 #include "wanderer_filter.h"
 #define NV 4u
 #define KEY0 53u
@@ -52,11 +50,12 @@ static uint32_t host_cpu_ticks;static uint32_t cpu_ticks(void){return host_cpu_t
 #else
 static uint32_t cpu_ticks(void){return fm1_ticks();}
 #endif
+/* Voice allocation and gate state. All sound is rendered by wanderer_sound.c. */
 static struct {
     volatile uint32_t inc;volatile int32_t gate;
-    uint32_t ph,ph2,ph3,lfo,inc2,age,remain;
-    int32_t amp,f1,f2,tone,brightness,fm_brightness,last,splice;
-    uint8_t note,live,patch,band1,band2,stage,sustained,splice_left,seq_lane,patch_source;
+    uint32_t age,remain;
+    int32_t amp,last,splice;
+    uint8_t note,live,patch,sustained,splice_left,seq_lane,patch_source;
 } voice[NV];
 static uint32_t motion_phase;
 static uint32_t ages,step_clock,step_index,cycle_index,step_samples=5906u;
@@ -223,50 +222,14 @@ static uint32_t clean_access,access_undo;
 static wm_state_t project_checkpoint=WM_DEFAULTS,checkpoint_undo=WM_DEFAULTS;
 static uint8_t origin_undo=255u,level_undo=100u,cues_undo=1u,prefs_undo;
 static uint32_t project_save_serial,undo_save_serial,last_project_poll;
-static union {wm_disk_t current;wm_disk_v14_t v14;wm_disk_v13_t v13;wm_disk_v11_t v11;wm_disk_v10_t v10;wm_disk_v8_t v8;wm_disk_v7_t v7;wm_disk_v5_t v5;wm_disk_v4_t v4;wm_disk_v3_t v3;wm_disk_legacy_t old;} project_read_buffer;
+static wm_disk_t project_read_buffer;
+/* 3.1 reads only its own format. A new firmware version erases older data at boot. */
 static uint8_t project_read_slot(uint32_t slot,wm_state_t *out)
 {
     if(slot>=NSLOT)return 0;
-    uint8_t current_read=(uint8_t)!slot_load(slot,&project_read_buffer.current,sizeof project_read_buffer.current);
-    if(current_read&&wm_valid(&project_read_buffer.current)){
-        if(out)*out=project_read_buffer.current.state;
-        return 1;
-    }
-    if(!slot_load(slot,&project_read_buffer.v14,sizeof project_read_buffer.v14)){
-        const wm_state_t *m=wm_migrate_v14_ptr(&project_read_buffer.v14);if(m){if(out)*out=*m;return 1;}
-    }
-    if(!slot_load(slot,&project_read_buffer.v13,sizeof project_read_buffer.v13)){
-        const wm_state_t *m=wm_migrate_v13_ptr(&project_read_buffer.v13);if(m){if(out)*out=*m;return 1;}
-    }
-    if(!slot_load(slot,&project_read_buffer.v11,sizeof project_read_buffer.v11)){
-        const wm_state_t *m=wm_migrate_v11_v12_ptr(&project_read_buffer.v11);if(m){if(out)*out=*m;return 1;}
-    }
-    if(!slot_load(slot,&project_read_buffer.v10,sizeof project_read_buffer.v10)){
-        const wm_state_t *m=wm_migrate_v9_ptr(&project_read_buffer.v10);if(m){if(out)*out=*m;return 1;}
-    }
-    if(!slot_load(slot,&project_read_buffer.v8,sizeof project_read_buffer.v8)){
-        const wm_state_t *migrated=wm_migrate_v8_ptr(&project_read_buffer.v8);
-        if(migrated){if(out)*out=*migrated;return 1;}
-    }
-    if(!slot_load(slot,&project_read_buffer.v7,sizeof project_read_buffer.v7)&&wm_valid_v7(&project_read_buffer.v7)){
-        if(out)*out=*wm_migrate_v7_ptr(&project_read_buffer.v7);return 1;
-    }
-    if(!slot_load(slot,&project_read_buffer.v5,sizeof project_read_buffer.v5)&&wm_valid_v5(&project_read_buffer.v5)){
-        if(out)*out=*wm_migrate_v5_ptr(&project_read_buffer.v5);return 1;
-    }
-    if(!slot_load(slot,&project_read_buffer.v4,sizeof project_read_buffer.v4)&&wm_valid_v4(&project_read_buffer.v4)){
-        if(out)*out=*wm_migrate_v4_ptr(&project_read_buffer.v4);
-        return 1;
-    }
-    if(!slot_load(slot,&project_read_buffer.v3,sizeof project_read_buffer.v3)&&wm_valid_v3(&project_read_buffer.v3)){
-        if(out)*out=*wm_migrate_v3_ptr(&project_read_buffer.v3);
-        return 1;
-    }
-    if(!slot_load(slot,&project_read_buffer.old,sizeof project_read_buffer.old)&&wm_valid_legacy(&project_read_buffer.old)){
-        if(out)*out=*wm_migrate_legacy_ptr(&project_read_buffer.old);
-        return 1;
-    }
-    return 0;
+    if(slot_load(slot,&project_read_buffer,sizeof project_read_buffer)||!wm_valid(&project_read_buffer))return 0;
+    if(out)*out=project_read_buffer.state;
+    return 1;
 }
 static void project_mark(void)
 {
@@ -294,45 +257,22 @@ static void project_poll(void)
     if(dirty!=project_dirty){project_dirty=dirty;page_dirty=1;}
     last_project_poll=fm1_ms;
 }
-static void project_initialise(void)
+static void project_initialise(uint8_t read_slots)
 {
     project_checkpoint=wm;project_origin_slot=255u;project_dirty=preferences_pending=0;
     clean_level=vol;clean_cues=cues_enabled;project_save_serial=0;
     clean_access=access_signature();
-    for(uint32_t i=0;i<NSLOT;i++)slot_presence[i]=project_read_slot(i,0)?2u:1u;
+    for(uint32_t i=0;i<NSLOT;i++)slot_presence[i]=read_slots&&project_read_slot(i,0)?2u:1u;
 }
 static const uint32_t INC_C9[12]={815363807u,863847862u,915214929u,969636441u,1027294024u,1088380105u,
   1153098554u,1221665363u,1294309365u,1371273005u,1452813141u,1539201906u};
 static uint32_t tone_step(uint32_t note){if(note>127u)note=127u;return INC_C9[note%12u]>>(10u-note/12u);}
-static uint8_t wave_band(uint32_t inc)
-{
-    if(inc<0x7fffffffu/12u)return 4u;
-    if(inc<0x7fffffffu/8u)return 3u;
-    if(inc<0x7fffffffu/4u)return 2u;
-    if(inc<0x7fffffffu/2u)return 1u;
-    return 0u;
-}
-static int32_t wave_sample(uint32_t ph,uint32_t wave,uint32_t band)
-{
-    uint32_t pos=ph>>24,frac=(ph>>16)&255u;
-    int32_t a=WANDERER_WAVE[wave][band][pos];
-    int32_t b=WANDERER_WAVE[wave][band][(pos+1u)&255u];
-    return a+(((b-a)*(int32_t)frac)>>8);
-}
 static int32_t sine(uint32_t ph)
 {
     int32_t x=(int32_t)ph>>16,ax=x<0?-x:x,y,ay;
     y=(x*(32768-ax))>>13;ay=y<0?-y:y;
     y+=((((y*ay)>>15)-y)*7373)>>15;
     return y>32767?32767:y< -32767?-32767:y;
-}
-static int32_t osc_sample(uint32_t ph,uint32_t wave,uint32_t band)
-{
-    if(wave<3u)return wave_sample(ph,wave,band);
-    if(wave==WAVE_SINE)return (sine(ph)*13)>>4;
-    uint32_t x=ph>>16;
-    int32_t tri=(int32_t)(x<32768u?x:65535u-x)-16384;
-    return (tri*13)>>3;
 }
 static void cue(uint32_t pitch)
 {
@@ -389,8 +329,7 @@ static uint32_t note_on_lane(uint32_t note,uint32_t vel,uint32_t owner,uint8_t l
     uint32_t v,pick=0,best=0xffffffffu;
     uint8_t source=lane&&ws_layer_own()?PATCH_LAYER:
         !lane&&anchor_view&&wm.has_anchor?PATCH_ANCHOR:PATCH_MEMORY;
-    uint32_t legacy_index=source==PATCH_LAYER?wm.layer_sound-1u:source==PATCH_ANCHOR?wm.anchor_sound:wm.sound;
-    const wm_preset_t *p=&WM_PRESETS[legacy_index<WM_LEGACY_PRESET_COUNT?legacy_index:0u];
+    uint32_t sound_index=source==PATCH_LAYER?wm.layer_sound-1u:source==PATCH_ANCHOR?wm.anchor_sound:wm.sound;
     if(note>127u||!vel||vel>127u||owner>34u)return NV;
     if(owner)for(v=0;v<NV;v++)if(voice[v].gate&&voice[v].live==owner&&voice[v].note==note){pick=v;goto chosen;}
     for(v=0;v<NV;v++){
@@ -404,20 +343,7 @@ chosen:
     voice[pick].splice_left=32u;
     voice[pick].note=(uint8_t)note;voice[pick].age=++ages;
     voice[pick].inc=tone_step(note);voice[pick].gate=(int32_t)(vel*64u*256u);
-    voice[pick].patch=(uint8_t)legacy_index;
-    /* Q4 oscillator ratio: 8 = sub, 16 = unison, 32 = octave.
-     * High-register intervals return to unison before phase wrap aliases. */
-    uint32_t ratio=note>84u&&p->ratio>16u?16u:p->ratio;
-    voice[pick].inc2=(voice[pick].inc>>4)*ratio+
-      (voice[pick].inc>>12)*p->detune;
-    voice[pick].band1=wave_band(voice[pick].inc);
-    voice[pick].band2=wave_band(voice[pick].inc2);
-    voice[pick].ph=voice[pick].ph3=0u;
-    voice[pick].ph2=ages*2654435761u;voice[pick].lfo=ages*119304647u;
-    voice[pick].tone=(int32_t)p->cutoff*256;
-    voice[pick].amp=voice[pick].f1=voice[pick].f2=0;
-    voice[pick].brightness=voice[pick].fm_brightness=32767*256;
-    voice[pick].stage=0u;
+    voice[pick].patch=(uint8_t)sound_index;voice[pick].amp=0;
     voice[pick].remain=owner?0u:step_samples*3u/4u;
     voice[pick].live=(uint8_t)owner;voice[pick].sustained=0;
     voice[pick].patch_source=source;
@@ -440,7 +366,7 @@ static void note_off(uint32_t note,uint32_t owner)
 /* Key changes made after recording follow the project's root. */
 static wm_event_t step_transpose(wm_event_t e,uint32_t lane)
 {
-    if(!anchor_view&&!(lane&&ws_layer_own()?wm.layer_legacy:wm.legacy)){
+    if(!anchor_view){
         int32_t note=(int32_t)e.note+wm.root-wm.transpose_base;e.note=(uint8_t)ws_clamp(note,0,127);
     }
     return e;
@@ -465,7 +391,7 @@ static void step_play(void)
      * listening to the Anchor or playing a printed RAM loop). */
     if(!i&&cycle_index&&!anchor_view&&!recording&&!wp_active)ww_loop();
     if(metronome_wants()&&!(i&3u))click_trigger((uint8_t)!(i&15u)); /* beat one of every bar is accented */
-    scatter_plan(wm.decay,(uint8_t)(wm.legacy||anchor_view||wp_dry_view),i,cycle_index);
+    scatter_plan(wm.decay,(uint8_t)(anchor_view||wp_dry_view),i,cycle_index);
     /* Scatter processes audio history, so original held-note gates keep advancing. */
     if(scatter.kind&&wm.repeat_style==1u){static const uint8_t kinds[3]={SC_STUTTER,SC_HOLD,SC_RUSH};scatter.kind=kinds[scatter.offset%3u];}
     if(scatter.kind&&wm.repeat_style==2u){static const uint8_t kinds[3]={SC_HOP,SC_JUMP,SC_DROP};scatter.kind=kinds[scatter.offset%3u];}
@@ -489,7 +415,7 @@ static void step_play(void)
                 if(!e.velocity)continue;
                 remaining--;
                 if(capture_holds(lane,i,v))continue;
-                if(!lane&&!anchor_view)e=wm.legacy?wm_evolve(e,i,cycle_index):ww_apply(e,i,v);
+                if(!lane&&!anchor_view)e=ww_apply(e,i,v);
                 sequence_event(step_transpose(e,lane),lane);
             }
         }
@@ -509,97 +435,11 @@ static void app_audio_core(int32_t *out,uint32_t n)
     audio_frames+=n;for(uint32_t c=0;c<CAPTURE_COUNT;c++)capture_update(c);
     /* Melt timbre deepens loop by loop (wander) and colours Memory's voices.
      * Layer 2 stays the steady companion; the Anchor is heard as recorded. */
-    uint32_t v,i;int32_t melt=anchor_view?0:(int32_t)wm.branch_melt+(wm.legacy?wm.melt:ww.timbre);
+    uint32_t v,i;int32_t melt=anchor_view?0:(int32_t)wm.branch_melt+ww.timbre;
     if(melt>127)melt=127;
     for(v=0;v<NV;v++){
-        /* Silent slots can retain a modern 100..149 index after a reset. Never
-         * dereference the frozen 100-entry legacy bank for an inactive slot. */
         if(!voice[v].amp&&!voice[v].gate)continue;
-        if(ws_voice[v].modern){ws_render(v,out,n,voice[v].patch_source==PATCH_MEMORY?melt:0);continue;}
-        uint32_t ph=voice[v].ph,ph2=voice[v].ph2,ph3=voice[v].ph3,inc=voice[v].inc,
-          inc2=voice[v].inc2,remain=voice[v].remain,patch=voice[v].patch;
-        int32_t amp=voice[v].amp,g=voice[v].gate,f1=voice[v].f1,
-          f2=voice[v].f2,tone=voice[v].tone,bright=voice[v].brightness,
-          fmbright=voice[v].fm_brightness;
-        uint8_t stage=voice[v].stage;
-        uint32_t splice_left=voice[v].splice_left;
-        int32_t last=voice[v].last,splice=voice[v].splice;
-        const wm_preset_t *p=&WM_PRESETS[patch];
-        int32_t sustain=(g*(int32_t)p->sustain)>>7;
-        int32_t motion=sine(voice[v].lfo)>>8;
-        voice[v].lfo+=p->lfo_step*n;
-        /* Subtle vibrato, per patch; no universal pitch wobble. */
-        int32_t pitch_mod=(motion*(int32_t)p->vibrato)>>4;
-        inc=(uint32_t)((int32_t)inc+((int32_t)(inc>>16)*pitch_mod)/1731);
-        inc2=(uint32_t)((int32_t)inc2+((int32_t)(inc2>>16)*pitch_mod)/1731);
-        uint32_t pulse_width=(uint32_t)(128+((motion*(int32_t)p->pwm)>>7))<<24;
-        for(i=0;i<n;i++){
-            int32_t s,cut;
-            if(remain&&!--remain){g=0;voice[v].gate=0;}
-            if(!g)stage=3u;
-            if(stage==0u){
-                amp+=p->attack;
-                if(amp>=g){amp=g;stage=1u;}
-            }else if(stage==1u){
-                int32_t delta=(((amp-sustain)>>6)*(int32_t)p->decay)>>10;
-                amp-=delta>0?delta:1;
-                if(amp<=sustain+64){amp=sustain;stage=2u;}
-            }else if(stage==2u)amp=sustain;
-            else{
-                int32_t delta=((amp>>6)*(int32_t)p->release)>>10;
-                amp-=delta>0?delta:1;if(amp<64)amp=0;
-            }
-            ph+=inc;ph2+=inc2;ph3+=inc>>1;
-            uint32_t offset=0u;
-            if(p->fm&&voice[v].note<=96u){
-                uint32_t fm=(uint32_t)(((fmbright>>8)*(int32_t)p->fm)>>15);
-                if(voice[v].note>84u)fm>>=1u;
-                offset=(uint32_t)(sine(ph2)*(int32_t)fm)*256u;
-            }
-            int32_t a=p->osc1==WAVE_PULSE?
-                (wave_sample(ph,0,voice[v].band1)-wave_sample(ph+pulse_width,0,voice[v].band1))/2:
-                osc_sample(ph+offset,p->osc1,voice[v].band1);
-            int32_t b=p->osc2==WAVE_PULSE?
-                (wave_sample(ph2,0,voice[v].band2)-wave_sample(ph2+pulse_width,0,voice[v].band2))/2:
-                osc_sample(ph2,p->osc2,voice[v].band2);
-            s=(a*(128-p->mix)+b*p->mix)>>7;
-            if(p->sub)s=(s*(128-p->sub)+(sine(ph3)*p->sub*13>>4))>>7;
-            /* Exponential filter/FM contours with sub-sample amplitude precision. */
-            if(bright>0){int32_t d=((bright>>6)*(int32_t)p->contour_decay)>>10;bright-=d>0?d:1;}
-            if(fmbright>0){int32_t d=((fmbright>>6)*(int32_t)p->fm_decay)>>10;fmbright-=d>0?d:1;}
-            cut=p->cutoff+(((bright>>8)*(int32_t)p->contour)>>15)+(melt>>2)+
-                ((motion*(int32_t)p->lfo_filter)>>7)+((int32_t)voice[v].note-60)/3;
-            /* Velocity subtly opens timbre, rather than only changing loudness. */
-            cut+=(voice[v].gate/16384-100)/8;
-            if(cut<0)cut=0;
-            if(cut>220)cut=220;
-            tone+=((cut*256-tone)>>6);cut=tone>>8;
-            /* Bounded soft saturation into a resonant topology-preserving SVF. */
-            s=(s*(128+p->drive))>>7;
-            if(s>28000)s=28000;
-            if(s< -28000)s=-28000;
-            s-=((((s*s)>>15)*s)>>15)/3;
-            int32_t cf=FILTER_G[cut],h=FILTER_H[p->resonance][cut];
-            int32_t v1=((f1+((cf*(s-f2))>>14))*h)>>14;
-            int32_t v2=f2+((cf*v1)>>14);
-            f1=2*v1-f1;f2=2*v2-f2;
-            if(f1>65535)f1=65535;
-            if(f1< -65535)f1=-65535;
-            if(f2>65535)f2=65535;
-            if(f2< -65535)f2=-65535;
-            s=(v2*(amp>>8))>>15;
-            s=(s*(int32_t)p->level)>>7;
-            s=(s*600)>>9;
-            /* A 32-sample splice keeps retriggers/voice steals continuous. */
-            if(splice_left){s=(s*(int32_t)(32u-splice_left)+splice*(int32_t)splice_left)>>5;splice_left--;}
-            last=s;
-            out[i*2u]+=s;
-        }
-        voice[v].ph=ph;voice[v].ph2=ph2;voice[v].ph3=ph3;voice[v].tone=tone;voice[v].amp=amp;
-        voice[v].f1=f1;voice[v].f2=f2;voice[v].brightness=bright;
-        voice[v].fm_brightness=fmbright;voice[v].stage=stage;
-        voice[v].remain=remain;
-        voice[v].last=last;voice[v].splice_left=(uint8_t)splice_left;
+        ws_render(v,out,n,voice[v].patch_source==PATCH_MEMORY?melt:0);
     }
     wp_input(out,n);
     fx_process(out,n);
@@ -788,36 +628,47 @@ static uint32_t capture_step(void)
     if(!step_primed)return 0;
     return step_clock<step_samples/2u?(step_index+wm.loop_steps-1u)%wm.loop_steps:step_index;
 }
+#ifndef APP_BUILD
+#define APP_BUILD ""
+#endif
+/* 3.1 settings record (v3). build identifies the firmware that wrote it: any
+ * other value means a new version and a fresh start. */
 typedef struct {
     uint32_t magic;uint16_t version,size;
     uint8_t light,zoom,still,level,cues,slot,reserved[2];
+    uint32_t build;
 } wm_preferences_t;
+/* FNV-1a of the release name and the source commit (set by tools/build.py). */
+static uint32_t build_identity(void)
+{
+    static const char id[]=APP_VER "|" APP_BUILD;uint32_t h=2166136261u;
+    for(uint32_t i=0;id[i];i++)h=(h^(uint8_t)id[i])*16777619u;
+    return h|1u;
+}
 static uint8_t preferences_valid(const wm_preferences_t *p)
 {
-    return p->magic==WM_MAGIC&&(p->version==1||p->version==2)&&p->size==sizeof *p&&
-      p->light<(p->version==1?2u:THEME_COUNT)&&p->zoom<2u&&p->still<2u&&p->level<=127u&&p->cues<2u&&p->slot<NSLOT&&
-      ((p->reserved[1]&128u)?(p->reserved[0]&0x30u)!=0x30u:(!p->reserved[0]&&!p->reserved[1]));
+    return p->magic==WM_MAGIC&&p->version==3&&p->size==sizeof *p&&p->build==build_identity()&&
+      p->light<THEME_COUNT&&p->zoom<2u&&p->still<2u&&p->level<=127u&&p->cues<2u&&p->slot<NSLOT&&
+      (p->reserved[1]&128u)&&(p->reserved[0]&0x30u)!=0x30u;
 }
 static void preferences_load(void)
 {
     wm_preferences_t p;
     if(!settings_load(&p,sizeof p)&&preferences_valid(&p)){
-        color_theme=p.version==1?(p.light?THEME_LIGHT:0u):p.light;
+        color_theme=p.light;
         wm.light=color_theme==THEME_LIGHT;wm.extra_large=p.zoom;wm.reduced_motion=p.still;
         vol=p.level;cues_enabled=p.cues;project_slot=p.slot;
-        if(p.reserved[1]&128u){
-            display_hold=p.reserved[0]&3u;cue_detail=(p.reserved[0]>>2)&1u;
-            zoom_steady=(p.reserved[0]>>3)&1u;metronome_on=(uint8_t)(((p.reserved[0]>>4)&1u)|(((p.reserved[0]>>5)&1u)<<1));
-            if(metronome_on>2u)metronome_on=2u;click_level=(p.reserved[0]>>6)&3u;cue_level=p.reserved[1]&127u;
-        }else{display_hold=0;cue_detail=zoom_steady=1;cue_level=64;}
+        display_hold=p.reserved[0]&3u;cue_detail=(p.reserved[0]>>2)&1u;
+        zoom_steady=(p.reserved[0]>>3)&1u;metronome_on=(uint8_t)(((p.reserved[0]>>4)&1u)|(((p.reserved[0]>>5)&1u)<<1));
+        click_level=(p.reserved[0]>>6)&3u;cue_level=p.reserved[1]&127u;
         master_smooth=(int32_t)vol*256;
     }
 }
 static int preferences_save(void)
 {
-    wm_preferences_t p={WM_MAGIC,2,sizeof p,color_theme,wm.extra_large,
+    wm_preferences_t p={WM_MAGIC,3,sizeof p,color_theme,wm.extra_large,
         wm.reduced_motion,vol,cues_enabled,project_slot,
-        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|((metronome_on&1u)<<4)|((metronome_on>>1)<<5)|(click_level<<6)),(uint8_t)(128u|cue_level)}},verify;
+        {(uint8_t)(display_hold|(cue_detail<<2)|(zoom_steady<<3)|((metronome_on&1u)<<4)|((metronome_on>>1)<<5)|(click_level<<6)),(uint8_t)(128u|cue_level)},build_identity()},verify;
     if(settings_save(&p,sizeof p)||settings_load(&verify,sizeof verify))return -1;
     return memcmp(&p,&verify,sizeof p)?-1:0;
 }
@@ -833,6 +684,28 @@ static void store_erase_all(void)
     fm1_wdt_feed();fl_erase4k(SETTINGS_AT,&took);
     for(uint32_t i=0;i<NSLOT*SLOT_SECT;i++){fm1_wdt_feed();fl_erase4k(SLOTS_AT+i*0x1000u,&took);}
 #endif
+}
+/* Fresh start: a new firmware version erases every sector Wanderer uses,
+ * one per splash frame (settings first, so an interrupted erase repeats on
+ * the next boot), then writes the new identity. Same-version reboots skip this. */
+#define FRESH_SECTORS (1u+NSLOT*SLOT_SECT)
+static uint8_t fresh_left;
+static void fresh_step(void)
+{
+    if(!fresh_left)return;
+    uint32_t at=FRESH_SECTORS-fresh_left;
+#ifdef DINGHY_HOST
+    if(!at)memset(host_set,0,sizeof host_set);
+    else if(!((at-1u)%SLOT_SECT))memset(host_slot[(at-1u)/SLOT_SECT],0,sizeof host_slot[0]);
+    host_store_writes++;
+#else
+    uint32_t took;fm1_wdt_feed();
+    fl_erase4k(at?SLOTS_AT+(at-1u)*0x1000u:SETTINGS_AT,&took);
+#endif
+    if(!--fresh_left){
+        for(uint32_t i=0;i<NSLOT;i++)slot_presence[i]=1u;
+        preferences_save();
+    }
 }
 static void transport_locked(void)
 {
@@ -959,7 +832,7 @@ static void apply_confirm(void)
     }else if(confirm==5){
         if(wm.has_anchor||wp_has_anchor){
             fm1_irq_off();wm_mark();if(wm.has_anchor){wm.memory=wm.anchor;wm.sound=wm.anchor_sound;
-                wm.legacy=wm.anchor_legacy;wm.preset_bank=wm.anchor_preset_bank;wm.patch_valid=wm.anchor_patch_valid;if(wm.patch_valid)wm.patch=wm.anchor_patch;}
+                wm.preset_bank=wm.anchor_preset_bank;wm.patch_valid=wm.anchor_patch_valid;if(wm.patch_valid)wm.patch=wm.anchor_patch;}
             wm.has_branch=wm.branch_melt=wm.melt=wm.drift=wm.decay=0;
             anchor_view=0;reset_performance();ww_reset();if(wp_has_anchor)wp_restore();fm1_irq_on();
             cue(79u);show_notice(N_ORIGINAL_SAFE);
@@ -1268,12 +1141,22 @@ static uint32_t screen_refresh_interval(void)
         return 250u;
     return 0;
 }
+/* This version's own settings: keep everything. Anything else (another
+ * Wanderer version, another firmware, blank or damaged): fresh start, run
+ * one sector at a time by the splash. */
+static void boot_store(void)
+{
+    wm_preferences_t probe;
+    if(!settings_load(&probe,sizeof probe)&&preferences_valid(&probe)){fresh_left=0;preferences_load();project_initialise(1);}
+    else{fresh_left=FRESH_SECTORS;project_initialise(0);}
+}
 static void app_main(void)
 {
     uint32_t last_ui=0;
-    /* Slot 1 is only read after explicit LOAD; never overwrite another firmware's data on boot. */
+    /* This version's own settings: keep everything. Anything else (another
+     * Wanderer version, another firmware, blank or damaged): fresh start. */
     lcd_fill(0,0,240,240,DARK);
-    preferences_load();project_initialise();
+    boot_store();
     splash_active=1;splash_started=fm1_ms;page_dirty=1;
     for(;;){
         uint32_t b,rel,keys,down,up,k,base,transition;
@@ -1344,7 +1227,7 @@ static void app_main(void)
             if(b&(1u<<BTN_GLO)){
                 /* Tap GLO: Keep where Memory has wandered (or arm Print in RAM view). */
                 fm1_irq_off();capture_finish_all();
-                uint8_t ok=wp_active?wp_arm():wm.legacy?wm_branch_now(cycle_index):(wm.has_anchor||ww.distance)?ww_keep():0;
+                uint8_t ok=wp_active?wp_arm():(wm.has_anchor||ww.distance)?ww_keep():0;
                 fm1_irq_on();cue(ok?88u:48u);
                 if(!wp_active)show_notice(ok?N_BRANCHED:wm.has_anchor?N_NOTHING_TO_KEEP:N_CATCH_FIRST);else page_dirty=1;
             }

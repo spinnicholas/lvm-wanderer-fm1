@@ -6,17 +6,12 @@
 int main(void)
 {
     wm_disk_t d;
-    wm_disk_legacy_t old={0};
-    wm_event_t before, after;
-    assert(sizeof(wm_state_legacy_t)==144u);
-    assert(sizeof(wm_state_v5_t)==2076u);
+    wm_event_t before;
     assert(sizeof(wm_state_t)>2076u&&sizeof(wm_state_t)<4096u);
-    assert(sizeof(wm_disk_v5_t)==2084u);
     assert(wm_preset_move(0,-1,0)==149 && wm_preset_move(149,1,0)==0);
     assert(wm_preset_move(0,-1,1)==140 && wm_preset_move(149,1,1)==9);
     assert(wm_preset_move(37,2,1)==57 && wm_preset_move(37,2,0)==39);
     assert(!wm_catch());
-    assert(!wm_branch_now(0));
     assert(!wm_record(16,60,100));
     assert(!wm_record(0,128,100));
     assert(!wm_record(0,60,0));
@@ -25,21 +20,15 @@ int main(void)
     assert(wm_catch());
     assert(!wm_catch());
     before=wm.anchor.e[0];
-    wm.legacy=1; /* legacy evolution contract; new musical behavior is tested in 1.3. */
     wm.drift=127;wm.decay=127;wm.melt=67;
-    after=wm_evolve(wm.memory.e[0],0,1);
-    assert(after.note!=before.note);
-    assert(wm_evolve(wm.memory.e[0],0,15).velocity<before.velocity);
-    assert(wm.anchor.e[0].note==before.note && wm.anchor.e[0].velocity==before.velocity);
     wm.layer_enabled=layer_focus=1;
     assert(wm_record(5,67,111));
     assert(wm.layer.e[5].note==67 && !wm.memory.e[5].velocity);
-    assert(wm_branch_now(1));
-    assert(wm.has_branch && wm.memory.e[0].note==after.note);
-    assert(wm.branch_melt==67 && wm.melt==0 && wm.drift==0 && wm.decay==0);
+    /* One-step Undo restores the whole project and leaves the Anchor alone. */
+    wm_mark();wm.melt=0;wm.drift=0;wm.memory.e[0].note=72;
     assert(wm.anchor.e[0].note==before.note && wm.anchor.e[0].velocity==before.velocity);
     assert(wm_undo_once());
-    assert(!wm.has_branch && wm.melt==67 && wm.drift==127);
+    assert(wm.melt==67 && wm.drift==127 && wm.memory.e[0].note==60);
     assert(!wm_undo_once());
     d.magic=WM_MAGIC;d.version=WM_DISK_VERSION;d.size=sizeof wm;d.state=wm;
     assert(wm_valid(&d));
@@ -47,7 +36,10 @@ int main(void)
     d.state.anchor.e[0].note=255;assert(!wm_valid(&d));
     d.state.anchor.e[0].note=60;d.version=WM_DISK_VERSION;d.state.sound=2;assert(wm_valid(&d));
     d.state.sound=99;assert(wm_valid(&d));
-    d.state.sound=149;d.state.legacy=0;assert(wm_valid(&d));
+    d.state.sound=149;assert(wm_valid(&d));
+    d.state.legacy=1;assert(!wm_valid(&d));d.state.legacy=0;           /* 3.1: no classic sounds */
+    d.state.preset_bank=3;assert(!wm_valid(&d));d.state.preset_bank=WS_BANK_CURRENT; /* one bank only */
+    d.magic=0x314d564cu;assert(!wm_valid(&d));d.magic=WM_MAGIC;        /* older LVM1 records are refused */
     d.state.sound=150;assert(!wm_valid(&d));d.state.sound=0;
     d.version=2;assert(!wm_valid(&d));
     d.version=WM_DISK_VERSION;d.size=0;assert(!wm_valid(&d));
@@ -62,15 +54,6 @@ int main(void)
         }
     }
     assert(wm_valid(&d));
-    old.magic=WM_MAGIC;old.version=2;old.size=sizeof old.state;
-    old.state.magic=WM_MAGIC;old.state.bpm=112;old.state.sound=2;
-    assert(wm_valid_legacy(&old));
-    assert(wm_migrate_legacy(&old).sound==2);
-    assert(wm_migrate_legacy(&old).reverb_mix==42);
-    old.version=1;old.state.sound=255;
-    assert(wm_valid_legacy(&old));
-    assert(wm_migrate_legacy(&old).sound==0);
-    old.state.magic=0;assert(!wm_valid_legacy(&old));
-    puts("event-memory preservation, layer, branch, undo and storage validation pass");
+    puts("event-memory preservation, layer, undo and current-format validation pass");
     return 0;
 }

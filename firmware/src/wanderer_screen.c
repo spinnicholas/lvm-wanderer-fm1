@@ -205,7 +205,7 @@ static void steps(const wm_phrase_t *p,int32_t x,int32_t y,int32_t spacing,int32
 }
 static uint32_t focus_icon(void)
 {
-    switch(focus){case 1:return ICO_MELT;case 2:return ICO_DRIFT;case 3:return wm.legacy?ICO_DECAY:ICO_REPEAT;
+    switch(focus){case 1:return ICO_MELT;case 2:return ICO_DRIFT;case 3:return ICO_REPEAT;
     case 4:return ICO_TEMPO;case 5:return ICO_LEVEL;case 7:return ICO_SOUND;default:return ICO_SIZE;}
 }
 static uint32_t notice_icon(void)
@@ -317,11 +317,11 @@ static void screen_focus(uint16_t fg,uint16_t guide)
     if(focus==7){screen_preset_name(fg,guide);return;}
     const char *titles[]={"","MELT","DRIFT","SCATTER","TEMPO","LEVEL",""};
     uint32_t value=focus==4?wm.bpm:percent(focus_value);
-    status_header(focus_icon(),focus==3&&wm.legacy?"DECAY":titles[focus],fg,guide);
+    status_header(focus_icon(),titles[focus],fg,guide);
     icon_blit(88,44,focus_icon(),fg);
     large_value(value,122,focus!=4,fg);
     /* A plain word for where the knob sits, in Normal size. */
-    if(!wm.extra_large&&focus>=1&&focus<=3&&!(focus==3&&wm.legacy)){
+    if(!wm.extra_large&&focus>=1&&focus<=3){
         static const char *const words[3][4]={{"DRY","SOFT","MELTING","LIQUID"},
             {"STILL","GENTLE","WANDERING","FAR"},{"CLEAN","SPARSE","BUSY","WILD"}};
         uint32_t band=focus_value?1u+(focus_value>=48u)+(focus_value>=96u):0u;

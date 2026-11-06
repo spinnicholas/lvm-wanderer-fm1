@@ -17,7 +17,7 @@ typedef struct {
  int32_t mode_x[4],mode_y[4],mode_c[4],mode_s[4];
  int32_t coef_cut,coef_res,coef_mode,fm_index;
  ws_lp_stage_t lp[2];
- wn_lad_coef_t ladder;wn_lad_state_t ladder_state;wn_pd_t pd[2];uint8_t modern,modal_decay[4];
+ wn_lad_coef_t ladder;wn_lad_state_t ladder_state;wn_pd_t pd[2];uint8_t modal_decay[4];
  int32_t drift; /* slow analog pitch wander, Q4 cents */
  /* 3.0 SUPER: seven-saw unison (centre + six), true stereo side signal. */
  uint32_t uph[6],uinc[6];int32_t side,side_last,g_centre,g_sides,g_side,g_out;ws_lp_stage_t side_lp;
@@ -60,14 +60,14 @@ static uint8_t ws_edit_sound(void)
 {return layer_focus&&ws_layer_own()?wm.layer_sound-1u:wm.sound;}
 static const char *ws_edit_name(void)
 {
- if(layer_focus&&ws_layer_own())return wm.layer_legacy?"CLASSIC":ws_factory_name(wm.layer_preset_bank,wm.layer_sound-1u);
- return wm.legacy?"CLASSIC":ws_factory_name(wm.preset_bank,wm.sound);
+ if(layer_focus&&ws_layer_own())return ws_factory_name(wm.layer_preset_bank,wm.layer_sound-1u);
+ return ws_factory_name(wm.preset_bank,wm.sound);
 }
 /* Restore a retained independent patch or take a snapshot of Memory when
  * splitting a linked part for the first time. */
 static void ws_layer_copy_memory(void)
 {
- wm.layer_sound=wm.sound+1u;wm.layer_preset_bank=wm.preset_bank;wm.layer_legacy=wm.legacy;
+ wm.layer_sound=wm.sound+1u;wm.layer_preset_bank=wm.preset_bank;
  wm.layer_patch_valid=wm.patch_valid;if(wm.patch_valid)wm.layer_patch=wm.patch;
  wm.layer_link=0;
 }
@@ -94,7 +94,6 @@ static void ws_start(uint32_t v,uint32_t note,uint32_t vel)
  if(source==PATCH_LAYER)s->p=*ws_layer_patch();
  else if(source==PATCH_ANCHOR)s->p=wm.anchor_patch_valid?wm.anchor_patch:*ws_factory_patch(wm.anchor_preset_bank,wm.anchor_sound);
  else s->p=*ws_current_patch();
- s->modern=!(source==PATCH_LAYER?wm.layer_legacy:source==PATCH_ANCHOR?wm.anchor_legacy:wm.legacy);
  s->last=last;s->velocity=vel;s->g_out=(int32_t)(vel*s->p.level*16384u/(127u*256u)); /* velocity x level, Q14 */
  s->rng=(ages*747796405u)^((note+1u)*2891336453u);if(!s->rng)s->rng=1;
  s->coef_cut=-1;s->coef_res=-1;s->pitch_step=tone_step(note);s->cut_sm=s->p.filter>=WS_LP12?ws_lp_cut(s->p.cutoff):s->p.cutoff*137*256/127;

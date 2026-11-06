@@ -12,7 +12,7 @@ static void fresh(void)
 {
     wm=(wm_state_t)WM_DEFAULTS;recording=running=anchor_view=confirm=settings_open=notice=scope_open=0;
     capture_serial=audio_frames=step_index=step_clock=step_primed=0;
-    step_samples=FS*15u/wm.bpm;cues_enabled=0;reset_performance();project_initialise();recording_toggle();
+    step_samples=FS*15u/wm.bpm;cues_enabled=0;reset_performance();project_initialise(1);recording_toggle();
 }
 static uint8_t has(uint32_t note)
 {for(uint32_t v=0;v<WM_POLY;v++)if(wm_get(&wm.memory,0,v).velocity&&wm_get(&wm.memory,0,v).note==note)return 1;return 0;}

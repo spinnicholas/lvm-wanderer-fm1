@@ -301,6 +301,28 @@ def main():
                     f'static const char *const WS_NAMES_3[WS_PRESET_COUNT]={{{names}}};\n'
                     f'static const ws_patch_t WS_PRESETS_3[WS_PRESET_COUNT]={{\n{patches}\n}};\n')
     (R / 'assets/wanderer_presets_3_0.json').write_text(json.dumps(rows, indent=2) + '\n')
+    # 3.1: the firmware includes only this lean header: the patch type, the
+    # envelope/LFO/time tables it uses, and the current bank. Older banks stay
+    # in wanderer_sound_data.h for the design tools, not in the firmware.
+    head = original.split('\n')
+    keep, skip = [], False
+    for line in head:
+        if line.startswith('static const char * const WS_NAMES[') or line.startswith('static const ws_patch_t WS_PRESETS['):
+            skip = line.startswith('static const ws_patch_t')
+            continue
+        if skip:
+            if line.startswith('};'):
+                skip = False
+            continue
+        if line.startswith('/* Wanderer 2.0 factory bank */'):
+            break
+        if line.startswith('static const uint32_t WS_ATTACK') or line.startswith('static const uint16_t WS_HZ'):
+            continue
+        keep.append(line)
+    bank_h = '\n'.join(keep).rstrip() + f'\n{MARKER}\n'
+    bank_h += f'static const char *const WS_NAMES_3[WS_PRESET_COUNT]={{{names}}};\n'
+    bank_h += f'static const ws_patch_t WS_PRESETS_3[WS_PRESET_COUNT]={{\n{patches}\n}};\n'
+    (R / 'firmware/src/wanderer_bank.h').write_text(bank_h)
     engines = {}
     for r in rows:
         engines[r['patch']['engine']] = engines.get(r['patch']['engine'], 0) + 1

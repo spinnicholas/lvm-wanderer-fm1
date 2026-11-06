@@ -132,7 +132,6 @@ static void editor_adjust(uint32_t k,int32_t d)
   cue_boundary(old,*value,0,max);page_dirty=1;return;
  }
  ws_patch_t *p=editor_ensure();
- if(layer_focus)wm.layer_legacy=0;else wm.legacy=0;
  uint8_t *value=(uint8_t*)editor_param(k,p);if(!value)return;
  int32_t max=editor_patch_max(k,p,value),step=max<=31?1:2;
 
@@ -142,7 +141,7 @@ static void editor_adjust(uint32_t k,int32_t d)
   if(p->detune<2)p->detune=2;if(p->pulse<2)p->pulse=2;if(p->mix>99)p->mix=99;if(p->sub>99)p->sub=99;}
  cue_boundary(old,*value,0,(uint32_t)max);
  uint8_t source=layer_focus?PATCH_LAYER:PATCH_MEMORY,sound=ws_edit_sound();
- for(uint32_t v=0;v<NV;v++)if(voice[v].gate&&voice[v].patch_source==source&&ws_voice[v].modern&&voice[v].patch==sound){
+ for(uint32_t v=0;v<NV;v++)if(voice[v].gate&&voice[v].patch_source==source&&voice[v].patch==sound){
   if(ws_voice[v].p.engine!=p->engine){voice[v].splice=voice[v].last;voice[v].splice_left=32;ws_start(v,voice[v].note,(uint32_t)voice[v].gate/16384u);}
   else{
    ws_voice_t *s=&ws_voice[v];

@@ -21,7 +21,6 @@ int main(void){
  fresh();wm.arp_on=1;wm.arp_latch=1;midi_message(1,0x90,60,100);midi_message(1,0xb0,123,0);assert(!arp_count);
  fresh();wm.arp_on=1;recording_toggle();performance_on(60,100,1);performance_on(64,100,1);frames(step_samples*8);performance_off(60,1,0);performance_off(64,1,0);capture_finish_all();uint32_t events=0;for(uint32_t i=0;i<WM_STEPS;i++)for(uint32_t v=0;v<WM_POLY;v++){wm_event_t e=wm_get(&wm.memory,i,v);if(e.velocity){events++;assert(e.note==60||e.note==64);assert(e.gate>=32&&e.gate<512);}}assert(events>=6);transport();assert(!arp_count&&arp_note==128);
  fresh();wm.arp_on=1;wm.arp_clock=1;performance_on(60,100,1);frames(256);assert(arp_note==128);midi_message(2,0xf8,0,0);assert(!arp_clock_seen);midi_message(1,0xfa,0,0);midi_message(1,0xf8,0,0);for(uint32_t k=0;k<30;k++){frames(FS/48);fm1_ms+=21;midi_message(1,0xf8,0,0);}assert(arp_clock_seen&&arp_clock_quarter>FS/3&&arp_clock_quarter<FS);midi_message(1,0xfc,0,0);assert(!running&&!arp_count);
- fresh();wm_disk_v7_t old={WM_MAGIC,7,sizeof(wm_state_v7_t),{0}};memcpy(&old.state,&wm,sizeof old.state);old.state.grain_size=6;old.state.decay=120;old.state.memory.e[0]=(wm_event_t){60,127,4096};const wm_state_t *m=wm_migrate_v7_ptr(&old);assert(m&&m->grain_size==6&&m->decay==120&&m->memory.e[0].gate==4096&&!m->arp_on&&m->arp_octaves==1&&m->scatter_edge==72);old.state.repeat_style=7;assert(!wm_valid_v7(&old));
  for(uint32_t page=0;page<SETTINGS_PAGES;page++)for(uint32_t k=0;k<4;k++){fresh();settings_page=page;settings_adjust(k,100000);settings_adjust(k,-100000);wm_disk_t disk={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(wm_valid(&disk));}
  fresh();for(uint32_t mode=0;mode<WM_SCATTER_MODES;mode++)for(uint32_t size=0;size<WM_GRAIN_COUNT;size++){
   wm.repeat_style=mode;wm.grain_size=size;wm.decay=127;wm.scatter_edge=mode&1?0:127;wm.memory.e[0]=(wm_event_t){60,127,8192};running=1;frames(step_samples*32);running=0;reset_performance();}
@@ -33,5 +32,5 @@ int main(void){
  }
  assert(wp_arm());frames(step_samples*32);assert(wp_undo_valid&&wp_undo()&&wp_undo());
  uint32_t after_print=0;for(uint32_t i=0;i<sizeof wp_arena[0];i++)after_print=after_print*33u+wp_arena[0][i];assert(after_print==protected_audio);panic();
- puts("1.4 patterns, all mode/rate combinations, extreme chords/gates/swing, MIDI ownership/pedal/latch, generated recording, external clock, v7 import, control bounds and Scatter matrix pass");return 0;
+ puts("1.4 patterns, all mode/rate combinations, extreme chords/gates/swing, MIDI ownership/pedal/latch, generated recording, external clock, control bounds and Scatter matrix pass");return 0;
 }

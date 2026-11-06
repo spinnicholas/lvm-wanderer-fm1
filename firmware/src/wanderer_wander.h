@@ -34,7 +34,7 @@ typedef struct {
 static ww_state_t ww={.rng=0x9e3779b9u};
 static uint32_t ww_random(void)
 {uint32_t x=ww.rng;if(!x)x=0x9e3779b9u;x^=x<<13;x^=x>>17;x^=x<<5;return ww.rng=x;}
-static uint8_t ww_active(void){return (uint8_t)!wm.legacy;}
+static uint8_t ww_active(void){return 1u;}
 static void ww_reset(void)
 {
  uint32_t seed=ww.rng;memset(&ww,0,sizeof ww);ww.rng=seed?seed:0x9e3779b9u;

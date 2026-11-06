@@ -160,12 +160,11 @@ int main(void)
  /* The 3.0 bank is valid, current and individual. */
  uint32_t distinct=0;
  for(uint32_t p=0;p<WS_PRESET_COUNT;p++){
-  assert(ws_patch_valid(&WS_PRESETS_3[p])&&ws_patch_valid(&WS_PRESETS_2[p]));
+  assert(ws_patch_valid(&WS_PRESETS_3[p]));
   uint8_t unique=1;for(uint32_t q=0;q<p;q++)if(!memcmp(WS_PRESETS_3[p].morph,WS_PRESETS_3[q].morph,6))unique=0;distinct+=unique;
  }
  assert(distinct>=120u);ws_select(5);assert(wm.preset_bank==WS_BANK_CURRENT&&!memcmp(&wm.patch,&WS_PRESETS_3[5],sizeof wm.patch));
- assert(ws_factory_patch(WS_BANK_2_0,5)==&WS_PRESETS_2[5]);
- puts("stereo voice spread and an individual, valid 3.0 bank; 2.0 bank kept for old projects");
+ puts("stereo voice spread and an individual, valid current bank");
  /* Adversarial: random knob, scale, root, length and recording changes over
   * thousands of loops never break the bounds or the source. */
  fresh();uint32_t r=99;
@@ -250,6 +249,30 @@ int main(void)
  wm_preferences_t pr;assert(settings_load(&pr,sizeof pr)); /* settings sector is blank */
  settings_open=0;notice=0;
  puts("SEQ toggles the click and holds to Save; SYSTEM page reads CPU and erases all Wanderer data on request");
+ /* 3.1 fresh start: a new firmware version erases every Wanderer sector
+  * (settings first), one per call, then writes its identity. */
+ {
+  wm_disk_t d={WM_MAGIC,WM_DISK_VERSION,sizeof wm,(wm_state_t)WM_DEFAULTS};
+  /* Blank unit: fresh start, then the same version keeps its saves. */
+  memset(host_set,0,sizeof host_set);memset(host_slot,0,sizeof host_slot);
+  boot_store();assert(fresh_left==FRESH_SECTORS);
+  while(fresh_left)fresh_step();
+  wm_preferences_t pr;assert(!settings_load(&pr,sizeof pr)&&preferences_valid(&pr)&&pr.build==build_identity());
+  assert(!slot_save(2,&d,sizeof d));color_theme=1;assert(!preferences_save());
+  boot_store();assert(!fresh_left&&slot_presence[2]==2u&&color_theme==1);
+  /* A different firmware identity: everything goes, including slots. */
+  pr.build^=0x10u;assert(!settings_save(&pr,sizeof pr));
+  boot_store();assert(fresh_left==FRESH_SECTORS&&slot_presence[2]==1u);
+  /* Power lost part way: settings were erased first, so the next boot erases again. */
+  fresh_step();fresh_step();
+  boot_store();assert(fresh_left==FRESH_SECTORS);
+  while(fresh_left)fresh_step();
+  assert(!project_read_slot(2,0)&&!settings_load(&pr,sizeof pr)&&preferences_valid(&pr));
+  /* A damaged record is a fresh start too. */
+  pr.reserved[1]=0;assert(!settings_save(&pr,sizeof pr));boot_store();assert(fresh_left==FRESH_SECTORS);
+  while(fresh_left)fresh_step();boot_store();assert(!fresh_left);
+ }
+ puts("fresh start: blank, same version keeps saves, new version erases all, interrupted erase repeats, damaged record");
  puts("WANDERER 3.0 TESTS PASSED");
  return 0;
 }
