@@ -19,7 +19,15 @@ typedef struct {
  ws_lp_stage_t lp[2];
  wn_lad_coef_t ladder;wn_lad_state_t ladder_state;wn_pd_t pd[2];uint8_t modern,modal_decay[4];
  int32_t drift; /* slow analog pitch wander, Q4 cents */
+ /* 3.0 SUPER: seven-saw unison (centre + six), true stereo side signal. */
+ uint32_t uph[6],uinc[6];int32_t side,side_last;ws_lp_stage_t side_lp;
+ /* 3.0 VOICE: three formant band-passes (vowel morph), choir partner. */
+ ws_lp_stage_t formant[3];int32_t fk[3],fgain[3];
 } ws_voice_t;
+/* SUPER unison offsets (fraction of full spread, Q8) and their stereo sides. */
+static const int16_t WS_UNISON[6]={-256,-147,-46,46,145,248};
+/* VOICE formants for A E I O U: centre frequency (MIDI note, Q8) and gain (Q8). */
+static const int16_t WS_VOWEL[5][2][3]={{{19908,21684,25256},{256,150,70}},{{18489,24005,25328},{256,110,80}},{{15500,24975,26186},{256,70,60}},{{18811,20530,25201},{256,170,40}},{{15967,20685,24877},{256,90,30}}};
 /* A small fixed stereo spread per voice slot, applied as a side signal that the
  * effect chain adds to left and subtracts from right (Q8). */
 static const int8_t WS_SPREAD[NV]={-36,36,-22,22};
@@ -91,6 +99,7 @@ static void ws_start(uint32_t v,uint32_t note,uint32_t vel)
  s->rng=(ages*747796405u)^((note+1u)*2891336453u);if(!s->rng)s->rng=1;
  s->coef_cut=-1;s->coef_res=-1;s->pitch_step=tone_step(note);s->cut_sm=s->p.filter>=WS_LP12?ws_lp_cut(s->p.cutoff):s->p.cutoff*137*256/127;
  if(s->p.engine==5)wn_fm6_start(v,&s->p,note,vel);
+ if(s->p.engine==6)for(uint32_t k=0;k<6;k++){s->uph[k]=s->rng*(2654435761u+k*40503u)+k*0x2545f491u;s->ph[0]=s->rng>>3;}
  if(!s->p.engine){memcpy(s->ph,phases,sizeof phases);if(!s->ph[0]&&!s->ph[1]){s->ph[0]=s->rng;s->ph[1]=s->rng*2654435761u;s->ph[2]=s->rng>>1;}}
  if(s->p.engine!=5)for(uint32_t o=0;o<4;o++)s->inc[o]=ws_ratio_inc(s->pitch_step,s->p.ratio[o]);
  if(!s->p.engine&&s->p.wave==5)s->inc[3]=s->pitch_step;
@@ -181,8 +190,29 @@ static void ws_control(uint32_t v,uint8_t gate,int32_t melt)
  if(!p->engine&&!p->filter)wn_lad_coef(&s->ladder,s->cut_sm,p->resonance*3850/127);
  }
  }
+ if(p->engine==6){
+  /* Spread grows with the square of Detune (fine near zero, wide at the top). */
+  int32_t spread=s->detune*s->detune*70/16129+s->detune/16;
+  for(uint32_t k=0;k<6;k++){int32_t c=ws_clamp(WS_UNISON[k]*spread/256,-127,127);
+   s->uinc[k]=(uint32_t)(((uint64_t)s->pitch_step*WN_CENTS[127+c])>>16);}
+  s->inc[2]=s->pitch_step>>1;
+  /* The side signal follows the same tone as the centre. */
+  int32_t i=s->cut_sm>>8,g=WN_SVF_G[i<137?i:137];ws_lp_coef(&s->side_lp,g,5793);
+ }
+ if(p->engine==7){
+  /* Vowel: Shape walks A-E-I-O-U; Position shifts all formants (+-8 semitones). */
+  int32_t at=s->shape*4*256/127,seg=at>>8,f=at&255;if(seg>=4){seg=3;f=256;}
+  int32_t shift=((int32_t)p->position-64)*8*256/64,k=ws_clamp(1100-(int32_t)p->feedback*7,240,1100);
+  for(uint32_t b=0;b<3;b++){
+   int32_t note=WS_VOWEL[seg][0][b]+((WS_VOWEL[seg+1][0][b]-WS_VOWEL[seg][0][b])*f>>8)+shift;
+   s->fgain[b]=WS_VOWEL[seg][1][b]+((WS_VOWEL[seg+1][1][b]-WS_VOWEL[seg][1][b])*f>>8);
+   note=ws_clamp(note,30*256,136*256);int32_t i=note>>8,g=WN_SVF_G[i];g+=((WN_SVF_G[i+1]-g)*(note&255))>>8;
+   ws_lp_coef(&s->formant[b],g,k);s->fk[b]=k;
+  }
+  s->inc[1]=(uint32_t)(((uint64_t)s->pitch_step*WN_CENTS[127+(s->detune>>2)])>>16);
+ }
  if(p->engine==5)return;
- if(p->engine!=2&&p->engine!=3)for(uint32_t k=0;k<4;k++){
+ if(p->engine!=2&&p->engine!=3&&p->engine<6)for(uint32_t k=0;k<4;k++){
   if(!p->engine&&k!=1u)continue;
   uint32_t ratio=p->engine==4&&p->wave==3?16u*(2u*k+1u):p->ratio[k]+(p->engine==4&&k?p->inharm*k/32u:0u);
   if(p->engine==1&&k>=2)ratio<<=(p->sub>3?3:p->sub);
@@ -262,6 +292,36 @@ static int32_t ws_osc(uint32_t v)
    int32_t ap=s->ks_ap_in+((s->ks_coef*(low-s->ks_ap_out))>>15);s->ks_ap_in=low;s->ks_ap_out=ws_clamp(ap,-32767,32767);ws_string[v][pos]=(int16_t)((s->ks_ap_out*s->ks_loss)>>15);}
   s->pos=pos+1u==s->length?0u:pos+1u;
   s->feedback+=(a-s->feedback)/4;x=(a*(128-p->mix)+s->feedback*p->mix)>>7;
+ }else if(p->engine==6){
+  /* Centre voice, six detuned voices (Mix sets their level), octave sub. */
+  int32_t centre,sum=0,side=0,pw=(int32_t)s->pulse<<25;
+  #define WS_SUPER_WAVE(ph,inc) (p->wave==1?wn_osc_pulse(ph,inc,(uint32_t)pw)*2:p->wave==2?(wn_osc_saw(ph,inc)+wn_osc_pulse(ph,inc,(uint32_t)pw))/2:wn_osc_saw(ph,inc))
+  centre=p->wave==3?wn_sine_i(s->ph[0]):WS_SUPER_WAVE(s->ph[0],inc);s->ph[0]+=inc;
+  for(uint32_t k=0;k<6;k++){int32_t y=WS_SUPER_WAVE(s->uph[k],s->uinc[k]);s->uph[k]+=s->uinc[k];sum+=y;side+=(k&1u)?y:-y;}
+  #undef WS_SUPER_WAVE
+  x=(centre*(160-p->mix)+(sum/3)*p->mix)/224;
+  if(p->sub){x+=wn_sine_i(s->ph[2])*p->sub/200;s->ph[2]+=s->inc[2];}
+  if(p->inharm)x+=((int32_t)(wn_random(s)>>17)-16384)*p->inharm/400;
+  s->side=(side/3)*p->mix/224*s->shape/127;
+ }else if(p->engine==7){
+  /* Glottal-ish source through three formants; Mix blends in the raw source. */
+  uint32_t pw=(uint32_t)s->pulse<<25;
+  int32_t a=p->wave==1?wn_osc_pulse(s->ph[0],inc,pw)*2:p->wave==2?(wn_osc_saw(s->ph[0],inc)+wn_osc_pulse(s->ph[0],inc,pw))/2:wn_osc_saw(s->ph[0],inc);
+  int32_t b=p->detune?wn_osc_saw(s->ph[1],s->inc[1]):0;
+  int32_t noise=(int32_t)(wn_random(s)>>17)-16384,breath=p->inharm+(p->wave==3?60:0);
+  int32_t src=(a+b*p->detune/160)*3/4+noise*breath/127;
+  s->ph[0]+=inc;s->ph[1]+=s->inc[1];
+  int32_t voc=0;
+  for(uint32_t k=0;k<3;k++){
+   ws_lp_stage_t *f=&s->formant[k];int32_t in=ws_clamp(src,-65535,65535)/2,v3=in-f->ic2;
+   int32_t band=f->a1*f->ic1+f->a2*v3+f->frac1;int32_t low=f->a2*f->ic1+f->a3*v3+f->frac2;
+   int32_t v1=band>>13,v2=f->ic2+(low>>13);f->frac1=band&8191;f->frac2=low&8191;
+   f->ic1=ws_clamp(2*v1-f->ic1,-65535,65535);f->ic2=ws_clamp(2*v2-f->ic2,-65535,65535);
+   voc+=((v1*s->fk[k])>>11)*s->fgain[k]>>8;
+  }
+  x=(voc*2*p->mix+src*(127-p->mix)/3)/127; /* formants remove energy: restore level */
+  if(p->sub){x+=wn_sine_i(s->ph[2])*p->sub/200;}
+  s->ph[2]+=inc>>1;
  }else if(p->engine==5)x=wn_fm6_sample(v,p,voice[v].note,(uint32_t)s->velocity,voice[v].gate!=0,s->shape);
  else{if(p->wave==3||p->wave==4||p->amp[2]>60){for(uint32_t k=0;k<4;k++){int32_t y=(wn_sine_i(s->ph[k])*s->op_now[k])>>15;s->ph[k]+=s->inc[k];x+=(((y*p->op_level[k])>>9)*s->alias[k])>>15;}}
   else for(uint32_t k=0;k<4;k++){int32_t a=s->mode_x[k],b=s->mode_y[k];int32_t nx=(int32_t)(((int64_t)a*s->mode_c[k]-(int64_t)b*s->mode_s[k])>>24),ny=(int32_t)(((int64_t)a*s->mode_s[k]+(int64_t)b*s->mode_c[k])>>24);
@@ -299,6 +359,14 @@ static void ws_render(uint32_t v,int32_t *out,uint32_t n,int32_t melt)
   x=x*s->p.level/256;
   if(voice[v].splice_left){uint32_t t=voice[v].splice_left--;x=(x*(int32_t)(32u-t)+voice[v].splice*(int32_t)t)/32;}
   s->last=x;voice[v].last=x;voice[v].amp=s->p.engine==5?(!wn_fm6[v].done?32768:0):(s->amp.value>>10)*s->velocity;
-  if(s->amp.value&&!voice[v].amp&&s->p.engine!=5)voice[v].amp=1;out[i*2u]+=x;out[i*2u+1u]+=(x*WS_SPREAD[v])>>8;
+  if(s->amp.value&&!voice[v].amp&&s->p.engine!=5)voice[v].amp=1;out[i*2u]+=x;
+  int32_t side=(x*WS_SPREAD[v])>>8;
+  if(s->p.engine==6){
+   /* SUPER's own stereo field: filtered, enveloped like the centre. */
+   int32_t y=ws_lp_step(&s->side_lp,ws_clamp(s->side,-65535,65535)/2)*2;
+   y=(int32_t)(((int64_t)y*s->amp_now)>>15)*s->velocity/127*s->p.level/256;
+   side+=y;
+  }
+  out[i*2u+1u]+=side;
  }voice[v].remain=remain;
 }

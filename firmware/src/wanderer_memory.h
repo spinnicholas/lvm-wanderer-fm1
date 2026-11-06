@@ -6,6 +6,9 @@
 #include <stdint.h>
 #include "wanderer_sound_data.h"
 #include "wanderer_factory_legacy.h"
+/* The generated tables describe six engines; 3.0 adds SUPER (6) and VOICE (7). */
+#undef WS_ENGINES
+#define WS_ENGINES 8u
 #define WM_STEPS 32u
 #define WM_DISK_VERSION 15u
 enum {WS_LOW,WS_BAND,WS_HIGH,WS_LP12,WS_LP24,WS_FILTER_COUNT};
@@ -144,7 +147,7 @@ typedef struct {uint32_t magic;uint16_t version,size;wm_state_v8_t state;} wm_di
 static const ws_patch_t *ws_factory_patch(uint8_t bank,uint8_t sound)
 {return bank==WS_BANK_1_4?&WS_PRESETS_1_4[sound]:bank==WS_BANK_1_3?&WS_PRESETS_1_3[sound]:bank==WS_BANK_1_9?&WS_PRESETS[sound]:bank==WS_BANK_2_0?&WS_PRESETS_2[sound]:&WS_PRESETS_3[sound];}
 static const char *ws_factory_name(uint8_t bank,uint8_t sound)
-{return bank==WS_BANK_1_4?WS_NAMES_1_4[sound]:bank==WS_BANK_1_3?WS_NAMES_1_3[sound]:bank==WS_BANK_1_9?WS_NAMES[sound]:WS_NAMES_2[sound];}
+{return bank==WS_BANK_1_4?WS_NAMES_1_4[sound]:bank==WS_BANK_1_3?WS_NAMES_1_3[sound]:bank==WS_BANK_1_9?WS_NAMES[sound]:bank==WS_BANK_2_0?WS_NAMES_2[sound]:WS_NAMES_3[sound];}
 #define WM_DEFAULT_FIELDS .magic=WM_MAGIC,.loop_steps=16,.root=0,.scale=2,.bpm=112,.fx_on=4,.grain_size=8, \
     .chorus_mix=26,.delay_mix=32,.reverb_mix=42, \
     .delay_div=2,.delay_feedback=48,.reverb_size=72,.reverb_damp=56, \
@@ -323,7 +326,7 @@ static uint8_t ws_patch_valid(const ws_patch_t *p)
  const uint8_t *bytes=(const uint8_t*)p;
  for(uint32_t i=0;i<sizeof(ws_patch_t)-6u;i++)if(bytes[i]>127u)return 0;
  for(uint32_t i=0;i<6;i++)if(p->morph[i]==-128)return 0;
- return p->engine<6u&&p->wave<(p->engine==0?10u:p->engine==2?8u:6u)&&p->filter<WS_FILTER_COUNT&&p->lfo_dest<3u&&p->algorithm<(p->engine==5?32u:8u);
+ return p->engine<WS_ENGINES&&p->wave<(p->engine==0?10u:p->engine==2?8u:p->engine>=6u?4u:6u)&&p->filter<WS_FILTER_COUNT&&p->lfo_dest<3u&&p->algorithm<(p->engine==5?32u:8u);
 }
 static __attribute__((noinline)) uint8_t wm_valid(const wm_disk_t *d)
 {

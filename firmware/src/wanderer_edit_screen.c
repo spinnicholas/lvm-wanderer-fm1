@@ -131,6 +131,7 @@ static const char *editor_value(uint32_t k,char *buf,const char **unit)
  else if(editor_page==1&&k==2)return filter_names[v];
  else if(editor_page==3&&k==0)return WS_ENGINE_NAMES[v];
  else if(editor_page==3&&k==1&&p->engine==0){const char *waves[10]={"SAW","SAW PULSE","PULSE","SINE","TRI","STACK","REED","NOISE","SYNC","RING"};return waves[v];}
+ else if(editor_page==3&&k==1&&p->engine>=6){const char *waves[2][4]={{"SAW","PULSE","SAW PULSE","GLASS"},{"SAW","PULSE","SAW PULSE","BREATH"}};return waves[p->engine-6u][v&3u];}
  else if(editor_page==EDIT_COLOR&&p->engine==5&&k<2){*unit="/4";}
  else if(editor_page==EDIT_COLOR&&p->engine!=5&&((p->engine==2&&k<2)||(k==0&&p->engine))){
   const char *pd[8]={"SAW","SQUARE","PULSE","DOUBLE SIN","SAW PULSE","RES SAW","RES TRI","RES TRAP"};

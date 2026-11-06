@@ -29,7 +29,7 @@ int main(void)
  uint32_t cases=0;
  /* G3 is key index 2. Compare the actual local performance entry with MIDI
   * on every key and voice slot, at matching velocity and onset state. */
- for(uint32_t engine=0;engine<WS_ENGINES;engine++){
+ for(uint32_t engine=0;engine<6u;engine++){ /* engines with 1.9 factory patches */
   uint32_t p=0;while(WS_PRESETS[p].engine!=engine)p++;
   for(int32_t oct=-2;oct<=2;oct++)for(uint32_t key=0;key<27;key++){
    uint32_t note=(uint32_t)((int32_t)KEY0+oct*12+(int32_t)key);render(p,0,note,0,ref);
@@ -45,7 +45,7 @@ int main(void)
   for(uint32_t slot=1;slot<NV;slot++){render(p,slot,note,0,out);assert(same_mid(ref,out));cases++;}
  }
  /* New waveform models at both pitch limits and maximum legal modulation. */
- const uint8_t waves[6]={10,5,8,4,5,6};uint32_t corners=0;
+ const uint8_t waves[WS_ENGINES]={10,5,8,4,5,6,4,4}; /* 3.0: SUPER and VOICE */uint32_t corners=0;
  for(uint32_t e=0;e<WS_ENGINES;e++)for(uint32_t w=0;w<waves[e];w++)for(uint32_t high=0;high<2;high++){
   prepare(0,0);wm.patch.engine=e;wm.patch.wave=w;wm.patch.algorithm=7;
   wm.patch.shape=wm.patch.drive=wm.patch.feedback=wm.patch.resonance=127;
