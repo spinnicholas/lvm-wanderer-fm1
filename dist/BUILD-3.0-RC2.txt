@@ -1,10 +1,10 @@
 LVM Wanderer 3.0-RC2 native FM-1 build
-Source commit: 36011bdcd0ebcf06c214c9c5dd7ca6dc9bb089aa
-Workflow run: https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42136932829
+Source commit: 701031f285c16cbdbb02b21e0c4a3399832880ed
+Workflow run: https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42137785068
 
 loader: image 10456 B at 0x1c0a800, bss end 0x1c0ff30
   ok    .ram_text: 916 insns, no calls
-  ok    image 569880 B of 581564; RAM .data+.bss 94656 B of 98304; pool 342536 B of 344064
+  ok    image 570584 B of 581564; RAM .data+.bss 94672 B of 98304; pool 342536 B of 344064
   ok    register access: hal/ only (src/, loader/ clean)
 
-dde9bf5ba935a69b1a564561941f9d9dfaf38697aa043134f6e310311fcacb8f  dist/LVM-Wanderer-3.0-RC2-FM1.fwsc
+78d807b81714ce5463ccc28d79e26f182e274af23aee243a650dc4ddc033de1f  dist/LVM-Wanderer-3.0-RC2-FM1.fwsc
