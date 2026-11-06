@@ -1,4 +1,4 @@
-# LVM Wanderer 3.0 RC1
+# LVM Wanderer 3.0 RC2
 
 3.0 is a major overhaul built on 2.0 RC11. The layout, the button names and
 the Anchor/Memory idea are unchanged, as are your saved projects and the
@@ -196,8 +196,8 @@ Done on the host computer:
 environment. `.github/workflows/fm1-native-build.yml` builds the version
 named in `RELEASE` with the pinned, checksum-verified JieLi toolchain and
 the AC79 SDK. It runs the host tests, checks the package and commits
-`dist/LVM-Wanderer-3.0-RC1-FM1.fwsc` with a size report. You can also run it
-locally: `RELEASE=3.0-RC1 sh tools/compile_native.sh`.
+`dist/LVM-Wanderer-3.0-RC2-FM1.fwsc` with a size report. You can also run it
+locally: `RELEASE=3.0-RC2 sh tools/compile_native.sh`.
 
 Before release, test on hardware: boot, every button and hold, audio under
 four voices with all effects at full, Keep/Return while playing, save and
