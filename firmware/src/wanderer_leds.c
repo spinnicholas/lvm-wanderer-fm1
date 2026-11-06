@@ -45,7 +45,7 @@ static void app_leds(void)
         bright|=(uint64_t)1u<<(BTN_SEL);glow|=(uint64_t)1u<<(BTN_HOME);
     }else if(confirm){
         uint32_t button=confirm==1u||confirm==4u?BTN_FX:
-            confirm==2u?BTN_SEQ:confirm==3u?BTN_ARP:BTN_LFO;
+            confirm==2u?BTN_SEQ:confirm==3u?BTN_ARP:confirm==6u?BTN_SEL:BTN_LFO;
         bright|=(uint64_t)1u<<(button);bright|=(uint64_t)1u<<(BTN_SEL);
         glow|=(uint64_t)1u<<(BTN_HOME);
     }else if(notice_sticky()){
@@ -72,6 +72,7 @@ static void app_leds(void)
         if(!wm.arp_on)for(uint32_t key=0;key<27u;key++)
             if(key_notes[key]%12u==wm.root)glow|=(uint64_t)1u<<KEY_LED(key);
         if(wm_can_undo)glow|=(uint64_t)1u<<(BTN_ENV);
+        if(metronome_on)glow|=(uint64_t)1u<<BTN_SEQ; /* the click is on: tap SEQ to stop it */
     }
     if(!scope_open&&!settings_open&&!confirm&&!notice_sticky()){
         if((int8_t)octave<0)bright|=(uint64_t)1u<<(BTN_OCT_DOWN);

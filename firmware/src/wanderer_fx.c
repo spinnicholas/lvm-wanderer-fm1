@@ -212,7 +212,7 @@ static void verb_process(int32_t input,int32_t feedback,int32_t damp,int32_t *le
    tap[k]=lines[k][pos];
    /* Lines 2 and 4 wander a few samples against each other, so the
     * modes keep moving instead of ringing as a fixed comb. */
-   if(VERB_MOD[verb_type]&&(k&1u))
+   if(VERB_MOD[verb_type]&&(k&1u)&&!cpu_lean)
     tap[k]=verb_modulated_tap(lines[k],pos,p->lines[k],motion_phase+(k>>1)*0x40000000u,VERB_MOD[verb_type]);
    if(ambient){
     uint32_t frac_at=AMB_OFFSET[k]+pos,shift=(frac_at&1u)*4u;

@@ -62,7 +62,7 @@ lets a copy, called <strong>Memory</strong>, wander a little further every time 
 <p>This guide is written to be used with your hands on the instrument. Each section tells you
 <strong>where to reach</strong>, <strong>what you will hear</strong>, and <strong>what lights up</strong>. You do not
 need to read the screen to use Wanderer, but the screen helps: large words, thick bars and six colour themes.</p>
-<div class="card"><b>Status</b>3.0 RC2 is a test release. It passes the host-computer tests but has not yet been
+<div class="card"><b>Status</b>3.0 RC3 is a test release. It passes the host-computer tests but has not yet been
 played on an FM-1. Keep your 2.0 RC11 file and your recovery files.</div>
 
 <nav aria-label="Sections"><ul class="toc">
@@ -116,6 +116,8 @@ are still pressing, so you can let go as soon as you hear the sound cue.</div>
 <p>Hold <span class="key">SEL</span> for Settings and turn <strong>PRESET</strong> to <strong>Output</strong>. Knob 3,
 <strong>CLICK</strong>, sets OFF, REC (click while recording) or ALWAYS (click whenever the loop plays). Knob 4 sets the
 click volume. The first beat of every bar is higher and louder.</p>
+<p><strong>Quickest:</strong> on Home, <strong>tap <span class="key">SEQ</span></strong> to turn the click on or off. The
+screen says CLICK ON or CLICK OFF, and SEQ glows while it is on.</p>
 <p>With the click on, tapping <span class="key">REC</span> from stop counts in one bar: four clicks, a huge 4-3-2-1 on screen,
 and the REC light flashing on each beat. Recording starts on the next downbeat. Tap REC again to cancel.</p>
 <p>Want two bars? Settings → Music, knob 3 (Length) sets 16 or 32 steps (stop first).</p>
@@ -249,7 +251,7 @@ you switch between versions.</div>
 <tr><td>ENV</td><td>Undo the last change (on the Print page: undo / redo the print)</td><td>—</td></tr>
 <tr><td>EDIT</td><td>Edit the sound</td><td>About 1 s: switch Layer 1 / 2</td></tr>
 <tr><td>FX</td><td>Clear Layer 2 (asks first)</td><td>1.6 s: New session (asks first)</td></tr>
-<tr><td>SEQ</td><td>Save</td><td>—</td></tr>
+<tr><td>SEQ</td><td>Click (metronome) on or off</td><td>About 1 s: Save</td></tr>
 <tr><td>ARP</td><td>Load</td><td>About 1 s: Arpeggiator settings</td></tr>
 <tr><td>SEL</td><td>Settings, Music page</td><td>About 1 s: Accessibility</td></tr>
 <tr><td>HOME</td><td>Back / cancel</td><td>1 s: stop all sound</td></tr>
@@ -260,6 +262,21 @@ you switch between versions.</div>
 </div></details>
 
 <details id="help"><summary><h2>10. If something goes wrong</h2></summary><div>
+<h3>Going back to the official firmware</h3>
+<p>Do this <strong>before</strong> installing the official v15 firmware. It stops v15 from reading Wanderer's projects as
+its own memory.</p>
+<ol>
+ <li>Stop the loop.</li>
+ <li>Hold <span class="key">SEL</span> for Settings, then turn <strong>PRESET</strong> to <strong>SYSTEM</strong>.</li>
+ <li>Turn knob 4, <strong>OFFICIAL FW</strong>. The screen asks: ERASE 8 SLOTS AND SETTINGS FOR OFFICIAL FW.</li>
+ <li>Tap <span class="key">SELECT</span> to erase, or <span class="key">HOME</span> to cancel.</li>
+</ol>
+<p><strong>This deletes every saved Wanderer project.</strong> When the screen says READY FOR V15, install v15.
+If v15 already shows strange data, install Wanderer again, do these steps, then reinstall v15.</p>
+<h3>If the sound breaks up</h3>
+<p>Settings → SYSTEM shows CPU NOW and CPU PEAK. When the load gets high, Wanderer lightens its heaviest sounds by itself
+(LOAD GUARD shows LIGHTER or LIGHTEST) and returns to normal when things calm down. Lowering the number of effects
+in use also helps.</p>
 <ul>
  <li><strong>Too much is happening:</strong> hold HOME for one second. Every sound stops; your notes are safe.</li>
  <li><strong>Memory has gone too far:</strong> hold GLO to Return, or turn Melt and Drift to zero and let it drift home.</li>

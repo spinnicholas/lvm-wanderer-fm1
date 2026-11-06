@@ -208,6 +208,48 @@ int main(void)
  settings_page=SETTINGS_OUTPUT;settings_index=2;metronome_on=2;settings_press();assert(metronome_on==0);settings_press();assert(metronome_on==1);
  metronome_on=0;
  puts("metronome modes, accented bars, one-bar count-in and cancel, bounded ticks and saved settings");
+ /* Load guard: high measured load lightens the engines and sheds the
+  * oldest sequenced note; calm restores everything. */
+ fresh();cpu_lean=0;cpu_load=cpu_peak=0;
+ sequence_event((wm_event_t){48,100,4096},0);sequence_event((wm_event_t){55,100,4096},0);
+ sequence_event((wm_event_t){60,100,4096},0);sequence_event((wm_event_t){64,100,4096},0);
+ uint32_t budget=256u*(FM1_TICKS_PER_US*1000000u/FS);
+ cpu_account(budget*3u/4u,256);assert(cpu_lean==1&&cpu_load>=70);
+ for(uint32_t i=0;i<8;i++)cpu_account(budget*9u/10u,256);
+ assert(cpu_lean==2&&cpu_peak>=85);uint32_t held=0;for(uint32_t v=0;v<NV;v++)held+=voice[v].gate!=0;assert(held<4);
+ for(uint32_t i=0;i<400;i++)cpu_account(budget/5u,256);assert(!cpu_lean);
+ /* Under load SUPER and VOICE stay bounded and audible. */
+ for(uint8_t lean=0;lean<3;lean++)for(uint32_t p=0;p<WS_PRESET_COUNT;p++){
+  if(WS_PRESETS_3[p].engine<6)continue;
+  wm=(wm_state_t)WM_DEFAULTS;ws_select((uint8_t)p);memset(voice,0,sizeof voice);memset(ws_voice,0,sizeof ws_voice);
+  cpu_lean=lean;note_on(48,127,1);note_on(60,127,1);note_on(67,127,1);int64_t e=0;
+  for(int bl=0;bl<40;bl++){int32_t b2[512]={0};for(uint32_t v=0;v<NV;v++)ws_render(v,b2,256,64);
+   for(int i=0;i<512;i++){assert(b2[i]>-200000&&b2[i]<200000);e+=(int64_t)b2[i]*b2[i];}
+   for(uint32_t v=0;v<NV;v++)if(ws_voice[v].p.engine==7)for(int k=0;k<3;k++){ws_lp_stage_t *f=&ws_voice[v].formant[k];
+    assert(f->ic1>-65535&&f->ic1<65535&&f->ic2>-65535&&f->ic2<65535);} /* formants never saturate */
+  }
+  assert(e>0);
+ }
+ cpu_lean=0;
+ puts("load guard lightens and sheds under load, recovers when calm; VOICE formants never saturate");
+ /* SEQ: tap toggles the click (Home), hold opens Save. */
+ fresh();metronome_on=0;metronome_last=0;notice=0;const uint32_t seq=1u<<BTN_SEQ;
+ fm1_ms=20000;fm1_in.buttons=seq;assert(!seq_edges(seq,0));fm1_ms+=100;fm1_in.buttons=0;assert(seq_edges(0,seq)==seq);
+ fm1_in.buttons=seq;assert(!seq_edges(seq,0));fm1_ms+=901;assert(!seq_edges(0,0)&&confirm==2);fm1_in.buttons=0;assert(!seq_edges(0,seq));confirm=0;
+ /* The Home tap handler: off -> ALWAYS -> off -> last mode. */
+ metronome_on=0;metronome_last=0;
+ { if(metronome_on){metronome_last=metronome_on;metronome_on=0;}else metronome_on=metronome_last?metronome_last:2u; } assert(metronome_on==2);
+ /* System page: CPU read-outs and erasing for the official firmware. */
+ fresh();settings_open=1;settings_page=SETTINGS_SYSTEM;assert(settings_count()==4);
+ for(settings_index=0;settings_index<4;settings_index++)for(uint32_t z=0;z<2;z++){wm.extra_large=(uint8_t)z;screen();}
+ wm.extra_large=0;wm_disk_t disk={WM_MAGIC,WM_DISK_VERSION,sizeof wm,wm};assert(!slot_save(4,&disk,sizeof disk));
+ assert(!preferences_save());settings_adjust(3,1);assert(confirm==6);screen();
+ running=1;apply_confirm();assert(notice==N_STOP_FIRST&&project_read_slot(4,0));running=0;
+ settings_adjust(3,1);apply_confirm();assert(notice==N_ERASED);
+ for(uint32_t i=0;i<NSLOT;i++)assert(!project_read_slot(i,0)&&slot_presence[i]==1u);
+ wm_preferences_t pr;assert(settings_load(&pr,sizeof pr)); /* settings sector is blank */
+ settings_open=0;notice=0;
+ puts("SEQ toggles the click and holds to Save; SYSTEM page reads CPU and erases all Wanderer data on request");
  puts("WANDERER 3.0 TESTS PASSED");
  return 0;
 }

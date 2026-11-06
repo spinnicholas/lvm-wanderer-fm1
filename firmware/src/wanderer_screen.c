@@ -220,6 +220,7 @@ static uint32_t notice_icon(void)
     case N_STILL:case N_STOP_FIRST:return ICO_STOP;case N_LIVE:return ICO_PLAY;
     case N_LAYER_CLEARED:return ICO_LAYER;case N_NEW_SESSION:return ICO_NEW;
     case N_RETURNED:return ICO_ANCHOR;case N_NOTHING_TO_KEEP:return ICO_EMPTY;case N_THEME:return ICO_SUN;
+    case N_CLICK_ON:case N_CLICK_OFF:return ICO_TEMPO;case N_ERASED:return ICO_ERASE;
     case N_SAVED:return ICO_SAVE;case N_LOADED:return ICO_LOAD;
     default:return ICO_MEMORY;}
 }
@@ -233,7 +234,8 @@ static const char *notice_word(void)
     case N_STILL:return "STILL";case N_LIVE:return "LIVE";case N_LAYER_CLEARED:return "LAYER 2 CLEAR";
     case N_NEW_SESSION:return "NEW SESSION";case N_STOP_FIRST:return "STOP FIRST";
     case N_RETURNED:return "BACK HOME";case N_NOTHING_TO_KEEP:return "NOT WANDERED";
-    case N_THEME:return theme_palette()->name;case N_SAVE_FAILED:return "SAVE FAILED";
+    case N_THEME:return theme_palette()->name;case N_CLICK_ON:return "CLICK ON";case N_CLICK_OFF:return "CLICK OFF";
+    case N_ERASED:return "READY FOR V15";case N_SAVE_FAILED:return "SAVE FAILED";
     case N_NO_VALID_SAVE:return "EMPTY SLOT";default:return 0;}
 }
 static uint8_t notice_error(void)
@@ -329,8 +331,8 @@ static void screen_focus(uint16_t fg,uint16_t guide)
 }
 static void screen_message(uint16_t fg,uint16_t guide)
 {
-    static const char *const actions[]={"","CLEAR 2","SAVE","LOAD","NEW SESSION","RESTORE"};
-    status_header(confirm==2?ICO_SAVE:confirm==3?ICO_LOAD:confirm==1||confirm==4?ICO_ERASE:confirm==5?ICO_ANCHOR:notice_icon(),
+    static const char *const actions[]={"","CLEAR 2","SAVE","LOAD","NEW SESSION","RESTORE","ERASE ALL"};
+    status_header(confirm==2?ICO_SAVE:confirm==3?ICO_LOAD:confirm==1||confirm==4||confirm==6?ICO_ERASE:confirm==5?ICO_ANCHOR:notice_icon(),
         confirm?actions[confirm]:0,fg,guide);
     if(confirm){
         if(confirm==2||confirm==3){
@@ -347,6 +349,12 @@ static void screen_message(uint16_t fg,uint16_t guide)
             if(project_dirty)tiny(202,37,ICO_EDITED,fg);
             mini(40,54,ICO_ANCHOR,fg);mini(104,54,ICO_MEMORY,fg);mini(168,54,ICO_LAYER,fg);
             icon_blit(88,100,ICO_ERASE,fg);
+        }else if(confirm==6){
+            /* Erasing every project needs words, not just symbols. */
+            mid(96,40,ICO_ERASE,fg);
+            zoom_text(8,90,224,28,23,"ERASE 8 SLOTS",0,fg);
+            zoom_text(8,120,224,24,18,"AND SETTINGS",0,fg);
+            zoom_text(8,146,224,24,18,"FOR OFFICIAL FW",0,fg);
         }else if(confirm==5){
             icon_blit(20,73,ICO_ANCHOR,fg);icon_blit(158,73,ICO_MEMORY,fg);
             diagram_arrow(98,104,42,fg);

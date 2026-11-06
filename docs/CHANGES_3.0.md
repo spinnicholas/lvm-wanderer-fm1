@@ -1,4 +1,4 @@
-# LVM Wanderer 3.0 RC2
+# LVM Wanderer 3.0 RC3
 
 3.0 is a major overhaul built on 2.0 RC11. The layout, the button names and
 the Anchor/Memory idea are unchanged, as are your saved projects and the
@@ -7,6 +7,57 @@ now travels a little further from the Anchor every loop.
 
 **Status:** compiled with the pinned JieLi toolchain and passes the host test suite.
 It has **not yet been tested on an FM-1.** See [Build and test status](#build-and-test-status).
+
+## RC3: fixes from hardware testing of RC2
+
+**Glitching, lag and growling when changing presets.** RC2 asked too much of the
+audio interrupt, and one engine could clip inside its own filters. In RC3:
+
+* **The heaviest sound costs less than RC11's heaviest.** For the most expensive
+  sound, with four voices and every effect on, RC11 used 54.3 million instructions
+  per measured run. RC2 used 63.1 million, and RC3 uses 53.3 million. With the 2.0
+  sounds that older projects use, RC3's heaviest is 52.8 million. These figures
+  are Valgrind instruction counts measured on a computer, not timings on the FM-1.
+  Changes:
+  * SUPER's six detuned voices are plain saws or pulses, as in classic
+    supersaws, and its gains are worked out at control rate.
+  * VOICE's formants do less work per sample.
+  * The DC blocker is 32-bit again.
+  * Analog's saw waveform no longer computes an unused triangle when Round is
+    zero. This waste was also in RC11.
+  * Triangle waves use a cheap plain triangle below about 690 Hz, where its soft
+    harmonics alias inaudibly.
+* **VOICE no longer growls.** Its formant filters could saturate internally on
+  some presets, such as Monk Chant and Robot Vowel. The signal is now scaled
+  before the filters, so they can't saturate, and a test checks every VOICE
+  preset at full velocity.
+* **A load guard.** Each audio callback is timed with the FM-1's 24 MHz timer.
+  Above 70% of the time available, SUPER plays three of its seven voices, VOICE
+  drops its third formant and choir partner, and reverb lines stop modulating.
+  Above 85%, the oldest sequenced note is also released. After about a second of
+  calm, everything returns. Settings → SYSTEM shows the live and peak load.
+
+**Downgrading to the official v15 firmware.** Wanderer, like the related open
+firmwares, keeps its projects in a flash area the official firmware also uses for
+its own memory. After a downgrade, v15 read Wanderer's data as its own, which caused
+the corruption. Before installing v15:
+
+1. Stop the loop.
+2. Hold **SEL** for Settings, then turn **PRESET** to **SYSTEM**.
+3. Choose row 4, **OFFICIAL FW**: turn knob 4 or tap **SELECT**.
+4. Confirm with **SELECT**.
+
+This erases all eight Wanderer slots and the settings sector, and nothing else, so
+v15 finds blank memory there. The message READY FOR V15 confirms it. **It deletes
+every saved Wanderer project.**
+
+If v15 is already showing corrupted data: install RC3, do the steps above, then
+install v15 again.
+
+**Metronome shortcut.** On Home, **tap SEQ** to turn the click on or off. It turns on
+in the mode you last used, or ALWAYS the first time. The screen says CLICK ON or
+CLICK OFF, and SEQ glows while the click is on. **Hold SEQ** (about one second) to
+open Save; holding SAVE still works too.
 
 ## Melt and Drift now wander
 
@@ -203,7 +254,7 @@ Actions run 42137785068, source `701031f`):
 | Audio pool | 342,536 B | 344,064 B |
 
 RAM code makes no calls, and hardware registers are only touched in `hal/`.
-Package `LVM-Wanderer-3.0-RC2-FM1.fwsc`: 612,196 bytes, identity `FM-1_929`, SHA-256
+Package `LVM-Wanderer-3.0-RC3-FM1.fwsc`: 612,196 bytes, identity `FM-1_929`, SHA-256
 `78d807b81714ce5463ccc28d79e26f182e274af23aee243a650dc4ddc033de1f`.
 
 **Host tests:** `tests/run_core_tests.sh` passes. It covers the 2.0 regressions, the

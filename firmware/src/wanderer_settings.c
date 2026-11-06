@@ -18,6 +18,7 @@ static uint32_t settings_get(uint32_t k)
 {
  if(settings_page==SETTINGS_MIDI)return k==0u?wm.midi_input:k==1u?wm.midi_channel:k==2u?wm.arp_clock:!wm.midi_ignore_program;
  if(settings_page==SETTINGS_LAYER)return k==0u?layer_focus:k==1u?wm.layer_enabled:ws_layer_own();
+ if(settings_page==SETTINGS_SYSTEM)return k==0u?cpu_load:k==1u?cpu_peak:k==2u?cpu_lean:0u;
  if(settings_page>=9){uint8_t *p=settings_fx_param(k);return p?*p:(wm.fx_new_on&settings_fx_bit())!=0;}
  if(settings_page==0u)return k==0?color_theme:k==1?wm.extra_large:wm.reduced_motion;
  if(settings_page>=1u&&settings_page<=3u){
@@ -44,6 +45,11 @@ static const char *settings_value(uint32_t k,char *buf)
  if(settings_page==0u){
   if(k==0u)return WM_THEMES[v].name;
   if(k==2u)return v?"REDUCED":"FULL";
+ }
+ if(settings_page==SETTINGS_SYSTEM){
+  if(k<2u){number(v>100u?100u:v,buf);uint32_t n=0;while(buf[n])n++;buf[n++]='%';buf[n]=0;return buf;}
+  if(k==2u){static const char *const names[3]={"READY","LIGHTER","LIGHTEST"};return names[v<3u?v:2u];}
+  return "PREPARE";
  }
  if(settings_page==SETTINGS_OUTPUT&&k==2u){static const char *const names[3]={"OFF","REC","ALWAYS"};return names[v<3u?v:0u];}
  if(settings_page==SETTINGS_OUTPUT&&k==3u){static const char *const names[4]={"25%","50%","75%","100%"};return names[v&3u];}
@@ -80,7 +86,7 @@ static void settings_adjust(uint32_t k,int32_t d)
 {
  if(k>=settings_count()||!d)return;
  settings_index=(uint8_t)k;
- if(settings_page!=SETTINGS_LAYER&&settings_page!=0u&&settings_page!=SETTINGS_OUTPUT&&settings_page!=SETTINGS_ACCESS_FEEL&&!(settings_page==SETTINGS_MUSIC&&k==2u))wm_mark();
+ if(settings_page!=SETTINGS_LAYER&&settings_page!=0u&&settings_page!=SETTINGS_OUTPUT&&settings_page!=SETTINGS_SYSTEM&&settings_page!=SETTINGS_ACCESS_FEEL&&!(settings_page==SETTINGS_MUSIC&&k==2u))wm_mark();
  if(settings_page==10u&&k==2u&&wm.tape_sync){uint32_t ms=fx_tape_ms();wm.tape_time=(uint8_t)((ms-40u)*127u/960u);wm.tape_sync=0;}
  uint32_t old=settings_get(k);int32_t value=(int32_t)old+d;
  if(settings_bool(k))value=d>0?1:0;
@@ -100,6 +106,11 @@ static void settings_adjust(uint32_t k,int32_t d)
    if(value)ws_layer_unlink();
    else wm.layer_link=1;
   }
+ }else if(settings_page==SETTINGS_SYSTEM){
+  /* Read-outs: turning CPU PEAK clears it; OFFICIAL FW asks before erasing. */
+  if(k==1u)cpu_peak=cpu_load;
+  if(k==3u&&d>0){confirm=6;focus=notice=0;cue(47u);}
+  return;
  }else if(settings_page>=9u){
   p=settings_fx_param(k);
   if(!p){uint8_t bit=settings_fx_bit();if(value)wm.fx_new_on|=bit;else wm.fx_new_on&=(uint8_t)~bit;hi=1;}
@@ -163,6 +174,8 @@ static void settings_press(void)
  if(settings_page==SETTINGS_REVERB&&!settings_index){
   int32_t selected=(int32_t)wm.reverb_type+1;
   settings_adjust(0,(wm.fx_on&4u)?-selected:selected);
+ }else if(settings_page==SETTINGS_SYSTEM){
+  if(settings_index==3u)settings_adjust(3,1);else if(settings_index==1u)settings_adjust(1,1);
  }else if(settings_page==SETTINGS_OUTPUT&&settings_index>=2u){
   /* SELECT steps through OFF, REC, ALWAYS (and the four click levels), then wraps. */
   uint32_t top=settings_index==2u?2u:3u,v=settings_get(settings_index);

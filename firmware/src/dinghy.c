@@ -36,9 +36,22 @@ enum {
     N_BRANCHED, N_CATCH_FIRST, N_UNDO, N_NO_UNDO, N_STILL, N_LIVE,
     N_LAYER_CLEARED, N_NEW_SESSION, N_SAVE_FAILED, N_SAVED,
     N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN,
-    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME
+    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME, N_CLICK_ON, N_CLICK_OFF, N_ERASED
 };
 enum {PATCH_MEMORY,PATCH_LAYER,PATCH_ANCHOR};
+/* Audio load guard. Each callback is timed with the 24 MHz hardware timer.
+ * cpu_lean 1: SUPER plays three of its seven voices, VOICE two formants
+ * and no choir partner, reverb lines stop modulating. 2: also release the
+ * oldest sequenced note. It returns to normal after about a second of calm. */
+#ifndef FM1_TICKS_PER_US
+#define FM1_TICKS_PER_US 24u
+#endif
+static volatile uint8_t cpu_lean,cpu_load,cpu_peak;static uint16_t cpu_calm,cpu_shed;
+#ifdef DINGHY_HOST
+static uint32_t host_cpu_ticks;static uint32_t cpu_ticks(void){return host_cpu_ticks;}
+#else
+static uint32_t cpu_ticks(void){return fm1_ticks();}
+#endif
 static struct {
     volatile uint32_t inc;volatile int32_t gate;
     uint32_t ph,ph2,ph3,lfo,inc2,age,remain;
@@ -175,7 +188,7 @@ static uint8_t project_slot,cues_enabled=1;
 /* Metronome: 0 off, 1 while recording (with count-in), 2 whenever playing.
  * click_level 0..3 = 25..100%. The click joins the output after every effect,
  * so it is never printed, scattered or sent to the reverb. */
-static uint8_t metronome_on,click_level=2;
+static uint8_t metronome_on,metronome_last,click_level=2;
 static uint32_t click_left,click_phase,click_step;static int32_t click_env,click_amp;
 static volatile uint32_t count_in_pos,count_in_total;
 static uint8_t count_in_shown;
@@ -638,7 +651,30 @@ static uint32_t letter(const font_t *f,uint8_t c)
 }
 /* Split at musical boundaries: repeat timing never depends on callback size. */
 static void count_in_finish(void);
+static void cpu_account(uint32_t ticks,uint32_t n)
+{
+    uint32_t budget=n*(FM1_TICKS_PER_US*1000000u/FS);if(!budget)return;
+    uint32_t pct=ticks*100u/budget;if(pct>255u)pct=255u;
+    cpu_load=(uint8_t)(pct>=cpu_load?pct:cpu_load-1u);if(cpu_load>cpu_peak)cpu_peak=cpu_load;
+    if(pct>=85u){cpu_lean=2;cpu_calm=0;}
+    else if(pct>=70u){if(!cpu_lean)cpu_lean=1;cpu_calm=0;}
+    else if(pct<45u){if(cpu_lean&&++cpu_calm>=170u){cpu_lean--;cpu_calm=0;}}
+    else cpu_calm=0;
+    if(cpu_lean==2u&&++cpu_shed>=8u){
+        /* Heavy load: let the oldest sequenced note go rather than let the audio break up. */
+        uint32_t pick=NV,oldest=0xffffffffu;cpu_shed=0;
+        for(uint32_t v=0;v<NV;v++)if(voice[v].gate&&!voice[v].live&&voice[v].age<oldest){oldest=voice[v].age;pick=v;}
+        if(pick<NV)voice[pick].gate=0;
+    }
+}
+static void app_audio_run(int32_t *out,uint32_t n);
 static void app_audio(int32_t *out,uint32_t n)
+{
+    uint32_t t0=cpu_ticks();
+    app_audio_run(out,n);
+    cpu_account(cpu_ticks()-t0,n);
+}
+static void app_audio_run(int32_t *out,uint32_t n)
 {
  /* Count-in: one bar of clicks before recording starts on the next downbeat. */
  if(count_in_total&&!running){
@@ -785,6 +821,19 @@ static int preferences_save(void)
     if(settings_save(&p,sizeof p)||settings_load(&verify,sizeof verify))return -1;
     return memcmp(&p,&verify,sizeof p)?-1:0;
 }
+/* Prepare for the official firmware: erase every sector Wanderer writes
+ * (the eight project slots and the settings sector) so v15 finds blank
+ * memory there instead of Wanderer data. Called with the audio stopped. */
+static void store_erase_all(void)
+{
+#ifdef DINGHY_HOST
+    memset(host_set,0,sizeof host_set);memset(host_slot,0,sizeof host_slot);host_store_writes++;
+#else
+    uint32_t took;
+    fm1_wdt_feed();fl_erase4k(SETTINGS_AT,&took);
+    for(uint32_t i=0;i<NSLOT*SLOT_SECT;i++){fm1_wdt_feed();fl_erase4k(SLOTS_AT+i*0x1000u,&took);}
+#endif
+}
 static void transport_locked(void)
 {
     capture_finish_all();record_undo_pending=0;running=!running;recording=0;step_index=step_clock=cycle_index=0;step_primed=0;
@@ -887,10 +936,16 @@ static void apply_confirm(void)
     static wm_disk_t disk;
     static wm_disk_t verify;
     static wm_state_t loaded;
-    if((confirm==2||confirm==3||confirm==5)&&(running||recording)){
+    if((confirm==2||confirm==3||confirm==5||confirm==6)&&(running||recording)){
         cue(45u);show_notice(N_STOP_FIRST);confirm=0;return;
     }
-    if(confirm==1){
+    if(confirm==6){
+        fm1_irq_off();reset_performance();fm1_irq_on();
+        store_erase_all();
+        for(uint32_t i=0;i<NSLOT;i++)slot_presence[i]=1u;
+        project_origin_slot=255u;preferences_pending=1;project_poll();
+        cue_pair(76u,52u,2);show_notice(N_ERASED);
+    }else if(confirm==1){
         fm1_irq_off();wm_mark();wm_clear_phrase(&wm.layer);for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==1u)voice[v].gate=0;fm1_irq_on();
         show_notice(N_LAYER_CLEARED);
     }else if(confirm==4){
@@ -1022,6 +1077,20 @@ static uint32_t save_edges(uint32_t b,uint32_t released)
 }
 /* Tap GLO keeps the wander; hold GLO for 0.9 s to Return Memory to its
  * recorded source. The Anchor and the recorded notes are never changed. */
+static uint32_t seq_down;static uint8_t seq_pending;
+static uint32_t seq_edges(uint32_t b,uint32_t released)
+{
+    const uint32_t bit=1u<<BTN_SEQ;
+    uint8_t home=(uint8_t)(!scope_open&&!settings_open&&!editor_open&&!confirm);
+    if((b&bit)&&home){b&=~bit;seq_down=fm1_ms+1u;seq_pending=1;}
+    if(seq_pending&&!home)seq_pending=0;
+    if(seq_pending&&(fm1_in.buttons&bit)&&fm1_ms+1u-seq_down>=900u){
+        seq_pending=0;fm1_irq_off();recording_end();fm1_irq_on();
+        confirm=2;focus=notice=0;cue(57u);page_dirty=1;
+    }
+    if((released&bit)&&seq_pending){seq_pending=0;b|=bit;}
+    return b;
+}
 static uint32_t glo_down;static uint8_t glo_pending;
 static uint32_t glo_edges(uint32_t b,uint32_t released)
 {
@@ -1193,6 +1262,7 @@ static void wander_service(void)
 static uint32_t screen_refresh_interval(void)
 {
     if(scope_open)return scope_hold?0u:wm.reduced_motion?250u:80u;
+    if(settings_open&&settings_page==SETTINGS_SYSTEM&&!confirm)return 500u;
     if(wm.reduced_motion)return 0;
     if(running&&!settings_open&&!editor_open&&!confirm&&!notice&&!focus&&!splash_active)
         return 250u;
@@ -1213,7 +1283,7 @@ static void app_main(void)
         app_midi();
         b=fm1_input_edges(&rel);
         if(b)splash_dismiss();
-        b=ui_edges(b,rel);b=save_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
+        b=ui_edges(b,rel);b=save_edges(b,rel);b=seq_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
         if(!scope_open&&notice&&notice_sticky()&&(b&((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX)))){
             notice=0;b&=~((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX));page_dirty=1;
         }
@@ -1289,7 +1359,13 @@ static void app_main(void)
                 cue(ok?71u:48u);if(notice!=N_AUDIO_LOCK)show_notice(ok?N_UNDO:N_NO_UNDO);
             }
             if(b&(1u<<BTN_FX)){confirm=1;fx_down=fm1_ms;page_dirty=1;cue(55u);}
-            if(b&(1u<<BTN_SEQ)){confirm=2;page_dirty=1;cue(57u);}
+            if(b&(1u<<BTN_SEQ)){
+                /* Tap SEQ: click on (last mode, ALWAYS at first) or off. Hold SEQ: Save. */
+                if(metronome_on){metronome_last=metronome_on;metronome_on=0;}
+                else metronome_on=metronome_last?metronome_last:2u;
+                if(!metronome_on)click_left=0;
+                cue_toggle(metronome_on!=0);show_notice(metronome_on?N_CLICK_ON:N_CLICK_OFF);
+            }
             if(b&(1u<<BTN_ARP)){confirm=3;page_dirty=1;cue(59u);}
             if(b&(1u<<BTN_SEL)){settings_open=1;recording=0;settings_index=0;
                 settings_page=SETTINGS_MUSIC;focus=notice=0;cue(78u);page_dirty=1;}
