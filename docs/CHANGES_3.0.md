@@ -193,33 +193,36 @@ guitars, mallets, bells, and percussion and effects.
 
 ## Build and test status
 
-Done on the host computer:
+**Native FM-1 build** (pinned, checksum-verified JieLi toolchain and AC79 SDK, GitHub
+Actions run 42137785068, source `701031f`):
 
-* `tests/run_core_tests.sh`: the 2.0 regression suite, the 1.2 product
-  tests, the engine voice comparisons, the LED tests and the new
-  `tests/wanderer_3_0_test.c`. It covers wander growth, bounds, gravity and
-  landmarks, Keep/Return/Undo, the automatic Anchor, playback pausing, the
-  GLO and OCT− holds, notice words in every theme and size, beat LEDs,
-  Scatter motifs, reverb silence, stereo spread, the bank, and 6,000
-  adversarial loops under AddressSanitizer and UndefinedBehaviorSanitizer.
-* All 42 host test programs in `tests/` that pass on RC11 also pass here. Not run:
-  `wanderer_1_4_timing`, `wanderer_scatter_audition`, `wanderer_theme_test`,
-  the `render_bank_*` programs and the screenshot capture programs. They
-  fail the same way on unmodified RC11 because of old expected values or
-  missing output folders. The `1.1-navigation`, `led-navigation` and
-  `rc2-navigation` scripts also fail on unmodified RC11 because their
-  expected results are old.
-* Estimated size: about 15 KB more flash, against about 32 KB free in
-  RC11, and under 1 KB more RAM. The audio pool is unchanged. The native
-  build checks these limits exactly.
+| Region | Used | Limit |
+| --- | ---: | ---: |
+| App image | 570,584 B | 581,564 B |
+| RAM (.data + .bss) | 94,672 B | 98,304 B |
+| Audio pool | 342,536 B | 344,064 B |
 
-**Native FM-1 build:** the JieLi compiler is not available in this
-environment. `.github/workflows/fm1-native-build.yml` builds the version
-named in `RELEASE` with the pinned, checksum-verified JieLi toolchain and
-the AC79 SDK. It runs the host tests, checks the package and commits
-`dist/LVM-Wanderer-3.0-RC2-FM1.fwsc` with a size report. You can also run it
-locally: `RELEASE=3.0-RC2 sh tools/compile_native.sh`.
+RAM code makes no calls, and hardware registers are only touched in `hal/`.
+Package `LVM-Wanderer-3.0-RC2-FM1.fwsc`: 612,196 bytes, identity `FM-1_929`, SHA-256
+`78d807b81714ce5463ccc28d79e26f182e274af23aee243a650dc4ddc033de1f`.
 
-Before release, test on hardware: boot, every button and hold, audio under
-four voices with all effects at full, Keep/Return while playing, save and
-load, and switching back to 2.0 RC11 and to the stock firmware.
+**Host tests:** `tests/run_core_tests.sh` passes. It covers the 2.0 regressions, the
+1.2 product tests, the engine comparisons, the LED tests, `wanderer_3_0_test.c` and
+`wanderer_engines_3_0_test.c`. Every other host test program that passes on RC11 also
+passes. The wander engine, metronome, new engines and adversarial runs also pass under
+AddressSanitizer and UndefinedBehaviorSanitizer.
+
+Not run, because they also fail on unmodified RC11: `wanderer_1_4_timing`,
+`wanderer_scatter_audition`, `wanderer_theme_test`, the old `render_bank_*` and
+screenshot programs, and the `1.1-navigation`, `led-navigation` and `rc2-navigation`
+scripts. They fail on old expected results or missing output folders.
+
+**Not yet done:** testing on an FM-1. CPU load on the device is not measured; on the
+host, SUPER and VOICE cost within about 15% of Analog. Before release, check:
+
+* boot, and every tap and hold
+* four voices with every effect at full, listening for crackles
+* wandering, with Keep and Return
+* the count-in
+* save and load
+* switching back to 2.0 RC11 and to the stock firmware
