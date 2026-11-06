@@ -599,6 +599,9 @@ static void aa_text(int32_t x,int32_t y,const font_t *f,const char *s,uint16_t f
         x+=f->adv[k];
     }
 }
+#define FRESH_SECTORS (1u+NSLOT*SLOT_SECT)
+static uint8_t fresh_left; /* sectors still to erase for a fresh start */
+static void fresh_step(void);
 #include "wanderer_screen.c"
 static void focus_show(uint8_t id,uint8_t v){if(notice_success())notice=0;focus=id;focus_value=v;focus_until=display_deadline();page_dirty=1;}
 static void show_notice(uint8_t id){focus=0;notice=id;notice_until=notice_sticky()?0u:display_deadline();page_dirty=1;}
@@ -688,8 +691,6 @@ static void store_erase_all(void)
 /* Fresh start: a new firmware version erases every sector Wanderer uses,
  * one per splash frame (settings first, so an interrupted erase repeats on
  * the next boot), then writes the new identity. Same-version reboots skip this. */
-#define FRESH_SECTORS (1u+NSLOT*SLOT_SECT)
-static uint8_t fresh_left;
 static void fresh_step(void)
 {
     if(!fresh_left)return;
@@ -1134,6 +1135,8 @@ static void wander_service(void)
 }
 static uint32_t screen_refresh_interval(void)
 {
+    /* Splash: ~30 fps while letters move; keep drawing during a fresh-start erase. */
+    if(splash_active)return splash_moving()?30u:fresh_left?60u:0u;
     if(scope_open)return scope_hold?0u:wm.reduced_motion?250u:80u;
     if(settings_open&&settings_page==SETTINGS_SYSTEM&&!confirm)return 500u;
     if(wm.reduced_motion)return 0;
@@ -1157,7 +1160,7 @@ static void app_main(void)
      * Wanderer version, another firmware, blank or damaged): fresh start. */
     lcd_fill(0,0,240,240,DARK);
     boot_store();
-    splash_active=1;splash_started=fm1_ms;page_dirty=1;
+    splash_active=1;splash_drawn=splash_skip=0;splash_started=fm1_ms;page_dirty=1;
     for(;;){
         uint32_t b,rel,keys,down,up,k,base,transition;
         int32_t d;
@@ -1166,6 +1169,8 @@ static void app_main(void)
         app_midi();
         b=fm1_input_edges(&rel);
         if(b)splash_dismiss();
+        /* While a fresh start erases flash, controls only skip the animation. */
+        if(fresh_left){b=0;for(uint32_t e=0;e<7u;e++)(void)fm1_enc_take(e);}
         b=ui_edges(b,rel);b=save_edges(b,rel);b=seq_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
         if(!scope_open&&notice&&notice_sticky()&&(b&((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX)))){
             notice=0;b&=~((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX));page_dirty=1;
