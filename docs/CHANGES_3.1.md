@@ -173,13 +173,13 @@ measured with the same harness in the same session.
 
 ## Build and test status
 
-Native build of source commit `33c7ef268f0d` by the
-[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42278806836),
+Native build of source commit `077cb77af557` by the
+[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42285597780),
 with the pinned JieLi toolchain and AC79 SDK.
 
 * **Package:** `dist/LVM-Wanderer-3.1-RC1-FM1.fwsc`, 612,196 B, identity `FM-1_929`.
   The build reported "FLASHABLE BUILD VALIDATED".
-* **SHA-256:** `d5afccc43a8f497669cba29ca6f228fb932b5b5749754bcb3e78a62ca26f2ada`
+* **SHA-256:** `7626285595cf5bae2dec80181d13c897f7ab37637a80b85ecdf8af61ba6e8c83`
 
 | | Limit | 3.0 RC3 | 3.1 RC1 | Change |
 | --- | --- | --- | --- | --- |
