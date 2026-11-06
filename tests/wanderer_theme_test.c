@@ -20,6 +20,11 @@ int main(void){
   confirm=2;screen();confirm=0;notice=N_STOP_FIRST;screen();notice=0;scope_open=1;screen();scope_open=0;
   const wm_theme_t *p=theme_palette();printf("PALETTE %u %s %u %u %u %u %u %u %u %u\n",t,p->name,p->bg,p->panel,p->memory,p->text,p->label,p->anchor,p->evolve,p->layer);
  }
+ /* Home layout: MEMORY clears the card's thick edge (x 123-125, 232-234) and sits below the
+  * distance meter (x 224-230, y 66 to 112 in Normal, 66 to 142 in Zoom; labels at y 116 / 146). */
+ {int32_t w=width(&FONT_T,"MEMORY"),a=width(&FONT_T,"ANCHOR");
+  assert(179-w/2>=126&&179-w/2+w<=232&&61-a/2>=8&&61-a/2+a<=114);
+  assert(66+46<116&&66+76<146);}
  /* 3.1: no migration. Older records, and records from another build, are ignored. */
  wm_preferences_t old={WM_MAGIC,1,sizeof old,THEME_LIGHT,0,0,100,1,0,{0,128}};
  assert(!settings_save(&old,sizeof old));color_theme=5;preferences_load();assert(color_theme==5);

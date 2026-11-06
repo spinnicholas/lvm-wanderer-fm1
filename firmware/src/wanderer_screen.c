@@ -37,7 +37,7 @@ static void disk(int32_t cx,int32_t cy,int32_t r,uint16_t col)
 }
 static void panel(int32_t x,int32_t y,int32_t w,int32_t h,uint16_t fill)
 {
-    int32_t r=h/2<7?h/2:7;
+    int32_t r=h/2<7?h/2:7;if(r>w/2)r=w/2;
     cv_rect(x+r,y,w-2*r,h,fill);cv_rect(x,y+r,w,h-2*r,fill);
     disk(x+r,y+r,r,fill);disk(x+w-r-1,y+r,r,fill);
     disk(x+r,y+h-r-1,r,fill);disk(x+w-r-1,y+h-r-1,r,fill);
@@ -95,8 +95,9 @@ static void tag(int32_t x,int32_t y,const char *word,uint16_t color)
 static void toggle_switch(int32_t x,int32_t y,uint8_t on,uint16_t color,uint16_t fg,uint16_t guide)
 {
     const wm_theme_t *theme=theme_palette();
-    if(on){panel(x,y,62,26,color);disk(x+49,y+13,9,theme->bg);aa_text(x+7,y+4,&FONT_T,"ON",theme->bg);}
-    else{panel(x,y,62,26,guide);panel(x+2,y+2,58,22,theme->panel);disk(x+13,y+13,8,guide);aa_text(x+56-width(&FONT_T,"OFF"),y+4,&FONT_T,"OFF",fg);}
+    /* 74 x 26: the word and the knob never touch. ON: filled, knob right. OFF: outline, knob left. */
+    if(on){panel(x,y,74,26,color);disk(x+61,y+13,9,theme->bg);aa_text(x+8,y+4,&FONT_T,"ON",theme->bg);}
+    else{panel(x,y,74,26,guide);panel(x+2,y+2,70,22,theme->panel);disk(x+12,y+13,8,guide);aa_text(x+26,y+4,&FONT_T,"OFF",fg);}
 }
 /* One colour language everywhere: Anchor teal, Memory/Drift violet, Layer and
  * Tempo gold, Melt and warnings coral, Scatter and storage sky. */
@@ -298,26 +299,27 @@ static void screen_home(uint16_t fg,uint16_t guide)
         char b[12];number(ww.loops>99u?99u:ww.loops,b);
         aa_text(229-width(&FONT_T,b),44,&FONT_T,b,fg);
     }
-    int32_t meter_top=zoom?70:68,meter_h=zoom?92:92;
+    /* Beside the symbol only, so the word MEMORY has the card's full width. */
+    int32_t meter_top=66,meter_h=zoom?76:46;
     if(wander){
         int32_t fill=ww.distance*meter_h/100;
-        panel(224,meter_top,7,meter_h,mix565(theme->memory,theme->evolve,60u));
+        panel(224,meter_top,7,meter_h,mix565(theme->memory,theme->evolve,104u));
         if(fill>4)panel(224,meter_top+meter_h-fill,7,fill,theme->evolve);
     }
     if(zoom){
         zoom_blit(13,48,ICO_ANCHOR,theme->anchor);
         zoom_blit(121,48,ICO_MEMORY,theme->evolve);
         aa_text(61-width(&FONT_T,"ANCHOR")/2,146,&FONT_T,"ANCHOR",fg);
-        aa_text(173-width(&FONT_T,"MEMORY")/2,146,&FONT_T,"MEMORY",fg);
+        aa_text(179-width(&FONT_T,"MEMORY")/2,146,&FONT_T,"MEMORY",fg);
     }else{
         mid(37,66,ICO_ANCHOR,theme->anchor);
         mid(147,66,ICO_MEMORY,theme->evolve);
         aa_text(61-width(&FONT_T,"ANCHOR")/2,116,&FONT_T,"ANCHOR",fg);
-        aa_text(173-width(&FONT_T,"MEMORY")/2,116,&FONT_T,"MEMORY",fg);
+        aa_text(179-width(&FONT_T,"MEMORY")/2,116,&FONT_T,"MEMORY",fg);
         /* Melody pictures: the Anchor as recorded; Memory as you hear it now,
          * over a faint line of the Anchor so its journey can be seen. */
         piano_roll(14,138,94,22,&wm.anchor,0,0,theme->anchor,guide,guide,(uint8_t)(running&&anchor_view&&!wp_active));
-        piano_roll(132,138,86,22,&wm.memory,anchored?&wm.anchor:0,wander,theme->evolve,guide,guide,
+        piano_roll(132,138,94,22,&wm.memory,anchored?&wm.anchor:0,wander,theme->evolve,guide,guide,
             (uint8_t)(running&&!anchor_view&&!wp_active));
     }
     /* The Layer row: gold symbol, its own melody, and the playback switch. */
@@ -327,8 +329,8 @@ static void screen_home(uint16_t fg,uint16_t guide)
     /* Editing the Layer: its name becomes a solid gold tag, as EDIT is on Memory. */
     if(layer_focus)tag(44,ly+(zoom?6:2),"LAYER",theme->layer);
     else aa_text(50,ly+(zoom?7:3),&FONT_T,"LAYER",fg);
-    if(!zoom)piano_roll(46,ly+22,118,14,&wm.layer,0,0,theme->layer,guide,guide,(uint8_t)(running&&wm.layer_enabled&&!anchor_view&&!wp_active));
-    toggle_switch(172,ly+(lh-26)/2,wm.layer_enabled,theme->layer,fg,guide);
+    if(!zoom)piano_roll(46,ly+22,106,14,&wm.layer,0,0,theme->layer,guide,guide,(uint8_t)(running&&wm.layer_enabled&&!anchor_view&&!wp_active));
+    toggle_switch(158,ly+(lh-26)/2,wm.layer_enabled,theme->layer,fg,guide);
     project_footer(fg,guide);
 }
 static void diagram_arrow(int32_t x,int32_t y,int32_t w,uint16_t fg)
