@@ -245,17 +245,17 @@ guitars, mallets, bells, and percussion and effects.
 ## Build and test status
 
 **Native FM-1 build** (pinned, checksum-verified JieLi toolchain and AC79 SDK, GitHub
-Actions run 42137785068, source `701031f`):
+Actions run 42243814235, source `bda56f2`):
 
 | Region | Used | Limit |
 | --- | ---: | ---: |
-| App image | 570,584 B | 581,564 B |
-| RAM (.data + .bss) | 94,672 B | 98,304 B |
+| App image | 571,888 B | 581,564 B |
+| RAM (.data + .bss) | 94,752 B | 98,304 B |
 | Audio pool | 342,536 B | 344,064 B |
 
 RAM code makes no calls, and hardware registers are only touched in `hal/`.
 Package `LVM-Wanderer-3.0-RC3-FM1.fwsc`: 612,196 bytes, identity `FM-1_929`, SHA-256
-`78d807b81714ce5463ccc28d79e26f182e274af23aee243a650dc4ddc033de1f`.
+`78c067f73b2cf1f1163e7e837c0f620f342feeee3a4c5d7f9e374535fcdbfdd5`.
 
 **Host tests:** `tests/run_core_tests.sh` passes. It covers the 2.0 regressions, the
 1.2 product tests, the engine comparisons, the LED tests, `wanderer_3_0_test.c` and
