@@ -20,7 +20,7 @@ It has **not yet been tested on an FM-1.** See [Build and test status](#build-an
   screens, meters, messages, confirmations, Save/Load and the oscilloscope.
 * **Home, redesigned.** Tinted Anchor and Memory cards with large colour symbols.
   An EDIT tag marks what your knobs and keys change. The wander count sits at the
-  top right, and a tall violet bar on Memory's edge shows how far it has gone.
+  top right, and a violet bar beside the Memory symbol shows how far it has gone.
   Each card has a melody picture.
 * **The Layer row returns,** with the stacked-squares symbol from the older versions.
   It is gold, shows the Layer's own melody line, and has an ON/OFF switch showing
@@ -101,7 +101,7 @@ refused.
 * **Source removed:** `wanderer_waves.h`, `wanderer_presets.h` and
   `wanderer_factory_legacy.h`. In `firmware/src` that is 1,334 lines removed and
   489 added.
-* **Flash freed:** 68,032 B of app image, and 23,280 B of RAM. See
+* **Flash freed:** 68,080 B of app image, and 23,280 B of RAM. See
   [Build and test status](#build-and-test-status).
 
 ### Tests removed, and why
@@ -176,23 +176,23 @@ measured with the same harness.
 
 ## Build and test status
 
-Native build of source commit `077cb77af557` by the
-[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42285597780),
+Native build of source commit `7740b7344ec9` by the
+[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42295786238),
 with the pinned JieLi toolchain and AC79 SDK.
 
 * **Package:** `dist/LVM-Wanderer-3.1-RC1-FM1.fwsc`, 612,196 B, identity `FM-1_929`.
   The build reported "FLASHABLE BUILD VALIDATED".
-* **SHA-256:** `7626285595cf5bae2dec80181d13c897f7ab37637a80b85ecdf8af61ba6e8c83`
+* **SHA-256:** `1bd6a5863c06d13647a73d8783895cb58921eef31e0bdc90db1d45347d70a408`
 
 | | Limit | 3.0 RC3 | 3.1 RC1 | Change |
 | --- | --- | --- | --- | --- |
-| App image | 581,564 B | 571,888 B | **503,856 B** | −68,032 B (−11.9%) |
+| App image | 581,564 B | 571,888 B | **503,808 B** | −68,080 B (−11.9%) |
 | RAM (.data + .bss) | 98,304 B | 94,752 B | **71,472 B** | −23,280 B |
 | Audio pool | 344,064 B | 342,536 B | 342,536 B | 0 |
 | Loader | — | 10,456 B | 10,456 B | 0 |
 
 The `.fwsc` container is a fixed 612,196 B for both versions. The savings are inside
-it: 77,708 B of headroom in the app image, up from 9,676 B.
+it: 77,756 B of headroom in the app image, up from 9,676 B.
 
 **Host tests** run in CI before the compile and passed:
 
