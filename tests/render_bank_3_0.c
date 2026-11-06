@@ -1,16 +1,15 @@
-/* Render every factory sound (bank argument: 2 = 2.0, 3 = 3.0) and print
+/* Render every factory sound and print
  * index, RMS, peak and zero-crossing rate. Used by tools/level_bank_3_0.py. */
 #define DINGHY_HOST 1
 #define main wanderer_host_main
 #include "../firmware/src/dinghy.c"
 #undef main
 static int32_t buf[2*4096];
-int main(int argc,char **argv)
+int main(void)
 {
- int bank=argc>1?atoi(argv[1]):3;
  for(uint32_t i=0;i<WS_PRESET_COUNT;i++){
-  const ws_patch_t *p=bank==2?&WS_PRESETS_2[i]:&WS_PRESETS_3[i];
-  wm.patch=*p;wm.patch_valid=1;wm.legacy=0;layer_focus=anchor_view=0;
+  const ws_patch_t *p=&WS_PRESETS_3[i];
+  wm.patch=*p;wm.patch_valid=1;layer_focus=anchor_view=0;
   memset(voice,0,sizeof voice);memset(ws_voice,0,sizeof ws_voice);
   uint32_t fam=i/10u,low=fam==1u||fam==2u;
   static const uint8_t chord[3]={48,52,55};

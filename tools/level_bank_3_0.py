@@ -8,22 +8,20 @@ from pathlib import Path
 R = Path(__file__).resolve().parents[1]
 EXE = R / 'build/render_bank_3_0'
 
-def render(bank):
+def render():
     subprocess.run(['cc', '-O2', '-w', '-Ifirmware/hal', '-Ifirmware/src', '-Ifirmware/gen',
                     'tests/render_bank_3_0.c', '-o', str(EXE), '-lm'], check=True, cwd=R)
-    out = subprocess.run([str(EXE), str(bank)], check=True, cwd=R, capture_output=True, text=True).stdout
+    out = subprocess.run([str(EXE)], check=True, cwd=R, capture_output=True, text=True).stdout
     return [tuple(map(float, l.split())) for l in out.splitlines()]
 
 def main():
-    ref = render(2)
-    targets = {}
-    for group, idx in (('low', range(10, 30)), ('rest', [i for i in range(150) if not 10 <= i < 30])):
-        targets[group] = statistics.median(ref[i][1] for i in idx)
-    targets['peak'] = statistics.median(ref[i][2] for i in range(100, 150))
+    # Loudness targets: medians of the 2.0 factory bank, measured with this
+    # renderer on 3.0 RC3 (the 2.0 bank itself was removed in 3.1).
+    targets = {'low': 1931.4, 'rest': 3170.5, 'peak': 13187.0}
     print('targets', {k: round(v) for k, v in targets.items()})
     for _ in range(3):
         rows = json.loads((R / 'assets/wanderer_presets_3_0.json').read_text())
-        now = render(3)
+        now = render()
         levels = {}
         for i, row in enumerate(rows):
             if row.get('from_2_0'):
@@ -35,7 +33,7 @@ def main():
             levels[row['name']] = int(max(24, min(127, round(lvl))))
         (R / 'assets/wanderer_levels_3_0.json').write_text(json.dumps(levels, indent=1) + '\n')
         subprocess.run([sys.executable, 'tools/design_bank_3_0.py'], check=True, cwd=R)
-    now = render(3)
+    now = render()
     rows = json.loads((R / 'assets/wanderer_presets_3_0.json').read_text())
     for i, (r, n) in enumerate(zip(rows, now)):
         if r.get('from_2_0'):

@@ -101,7 +101,8 @@ refused.
 * **Source removed:** `wanderer_waves.h`, `wanderer_presets.h` and
   `wanderer_factory_legacy.h`. In `firmware/src` that is 1,334 lines removed and
   489 added.
-* **Flash freed:** see [Build and test status](#build-and-test-status).
+* **Flash freed:** 68,032 B of app image, and 23,280 B of RAM. See
+  [Build and test status](#build-and-test-status).
 
 ### Tests removed, and why
 
@@ -110,6 +111,7 @@ refused.
 | `wanderer_1_1_test`, `wanderer_1_1_stress` | Exercised the 1.1 CLASSIC engine and v3–v5 project migration, both removed. |
 | `wanderer_1_3_test`, `wanderer_operations_1_3`, `wanderer_timing_1_3` | Exercised 1.3-format projects and the legacy wavetable voice. |
 | `wanderer_bank_1_5_test`, `compare_factory_compat_1_5` | Compared the 1.5 factory bank and its compatibility mapping, now removed. |
+| `capture_1_5`, `capture_1_6`, `capture_1_7`, `render_bank_1_3`, `render_bank_1_5`, `render_bank_1_6`, `render_bank_1_7` | Screenshot and audio renderers for the 1.x banks, which no longer exist. |
 
 The tests that remain were moved to the current format. New tests cover:
 
@@ -121,6 +123,28 @@ The tests that remain were moved to the current format. New tests cover:
 * rejection of legacy flags, old banks and the old magic number;
 * the animated splash: full first frame then strip only, timing, Reduced Motion,
   a key skip, and a skip during an erase.
+
+### Old failures fixed
+
+The 3.0 notes listed several programs as not run because they also failed on
+RC11. All of them now run and pass:
+
+* **`wanderer_theme_test`.** The test stored the 32-bit settings signature in a
+  16-bit variable, which cut off the theme and click-level bits. It now uses 32 bits
+  and checks the 3.1 rules: WANDERER is the default, and old records or records from
+  another build are ignored. It is now in the core suite.
+* **`wanderer_1_4_timing`** checks that audio and recorded notes are identical
+  whatever the audio callback size. It failed because the effects' start-up memory
+  clear was still running during the test, and that clear advances once per call.
+  With the clear finished first, all 1,092 comparisons match. On the FM-1 the clear
+  finishes during start-up and callbacks are always 256 frames, so the device's
+  sound was never affected. It is now in the core suite.
+* **Tools that needed setup.** The screenshot programs needed their output folders;
+  `ota_test`, `ldr_test` and `wanderer_scatter_audition` needed file arguments; and
+  `smk_flash_test` needs the SMK-37 build flag. With those, all pass. `ota_test`
+  accepts the 3.1 package, and `ldr_test` passes for the RC3 → 3.1 update.
+* **`render_bank_3_0`** renders only the current bank. `tools/level_bank_3_0.py`
+  keeps the 2.0 loudness targets as fixed numbers, measured on RC3.
 
 ## Sound and performance
 
@@ -149,4 +173,39 @@ measured with the same harness in the same session.
 
 ## Build and test status
 
-*Filled in from the native build.*
+Native build of source commit `33c7ef268f0d` by the
+[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42278806836),
+with the pinned JieLi toolchain and AC79 SDK.
+
+* **Package:** `dist/LVM-Wanderer-3.1-RC1-FM1.fwsc`, 612,196 B, identity `FM-1_929`.
+  The build reported "FLASHABLE BUILD VALIDATED".
+* **SHA-256:** `d5afccc43a8f497669cba29ca6f228fb932b5b5749754bcb3e78a62ca26f2ada`
+
+| | Limit | 3.0 RC3 | 3.1 RC1 | Change |
+| --- | --- | --- | --- | --- |
+| App image | 581,564 B | 571,888 B | **503,856 B** | −68,032 B (−11.9%) |
+| RAM (.data + .bss) | 98,304 B | 94,752 B | **71,472 B** | −23,280 B |
+| Audio pool | 344,064 B | 342,536 B | 342,536 B | 0 |
+| Loader | — | 10,456 B | 10,456 B | 0 |
+
+The `.fwsc` container is a fixed 612,196 B for both versions. The savings are inside
+it: 77,708 B of headroom in the app image, up from 9,676 B.
+
+**Host tests** run in CI before the compile and passed:
+
+* the core suite;
+* the palette contrast check.
+
+**Also passed locally:**
+
+* the full sweep: all 58 test programs in `tests/`;
+* AddressSanitizer and UndefinedBehaviorSanitizer runs of the 3.0, adversarial,
+  engines, release, editor, splash, memory and layer workflow tests.
+
+**Not yet tested on an FM-1.** Things to watch on hardware:
+
+* the first-start erase, and that a same-version restart keeps your saves;
+* the splash timing and key skip;
+* theme readability in real room light;
+* the CPU readout on heavy SUPER and VOICE sounds with all effects on;
+* a clean start of v15 after OFFICIAL FW.
