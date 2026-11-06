@@ -75,30 +75,51 @@ static void section_rule(uint16_t accent,uint16_t guide)
     cv_rect(12,33,216,1,guide);
     cv_rect(12,31,34,4,accent);
 }
-/* One switch for the edit and record target, visible in both Home layouts. */
-static void home_layer_header(uint16_t fg,uint16_t guide)
+/* Home header: the name, recording and transport; the rule takes the colour
+ * of the element you are editing (or teal while listening to the Anchor). */
+static void home_header(uint16_t fg,uint16_t guide)
 {
     const wm_theme_t *theme=theme_palette();
-    aa_text(12,7,&FONT_T,"LAYER",fg);
-    card(101,3,79,27,theme->bg,fg,0);
-    for(uint32_t lane=0;lane<2;lane++){
-        int32_t x=103+(int32_t)lane*38;
-        const char *label=lane?"2":"1";
-        uint8_t selected=lane==layer_focus;
-        if(selected)panel(x,5,37,23,fg);
-        aa_text(x+(37-width(&FONT_T,label))/2,7,&FONT_T,label,selected?theme->bg:fg);
-    }
-    if(recording)disk(193,16,6,fg);
+    aa_text(12,7,&FONT_T,"WANDERER",fg);
+    if(recording)disk(193,16,6,theme->coral);
     transport_symbol(209,6,fg);
     section_rule(anchor_view?theme->anchor:layer_focus?theme->layer:theme->evolve,guide);
 }
+/* A small filled tag in an element's colour: "EDIT" marks the edit/record target. */
+static void tag(int32_t x,int32_t y,const char *word,uint16_t color)
+{
+    int32_t w=width(&FONT_T,word)+12;
+    panel(x,y,w,22,color);aa_text(x+6,y+2,&FONT_T,word,theme_palette()->bg);
+}
+/* An on/off switch: a filled track with the knob at the right when on. */
+static void toggle_switch(int32_t x,int32_t y,uint8_t on,uint16_t color,uint16_t fg,uint16_t guide)
+{
+    const wm_theme_t *theme=theme_palette();
+    if(on){panel(x,y,62,26,color);disk(x+49,y+13,9,theme->bg);aa_text(x+7,y+4,&FONT_T,"ON",theme->bg);}
+    else{panel(x,y,62,26,guide);panel(x+2,y+2,58,22,theme->panel);disk(x+13,y+13,8,guide);aa_text(x+56-width(&FONT_T,"OFF"),y+4,&FONT_T,"OFF",fg);}
+}
+/* One colour language everywhere: Anchor teal, Memory/Drift violet, Layer and
+ * Tempo gold, Melt and warnings coral, Scatter and storage sky. */
+static uint16_t accent_for_icon(uint32_t icon)
+{
+    const wm_theme_t *t=theme_palette();
+    switch(icon){
+    case ICO_ANCHOR:case ICO_LOCK:case ICO_LISTEN:case ICO_SAFE:return t->anchor;
+    case ICO_MEMORY:case ICO_DRIFT:case ICO_BRANCH:case ICO_SCOPE:return t->evolve;
+    case ICO_LAYER:case ICO_TEMPO:case ICO_LENGTH:return t->layer;
+    case ICO_MELT:case ICO_ERASE:case ICO_BROKEN:case ICO_CLOSE:case ICO_STOP:case ICO_EMPTY:case ICO_RECORD:return t->coral;
+    case ICO_REPEAT:case ICO_SAVE:case ICO_LOAD:case ICO_STORED:case ICO_UNDO:case ICO_SUN:return t->sky;
+    case ICO_SOUND:return layer_focus?t->layer:t->evolve;
+    default:return t->text;}
+}
 static void status_header(uint32_t context,const char *title,uint16_t fg,uint16_t guide)
 {
-    mini(8,0,context,fg);
+    uint16_t accent=accent_for_icon(context);
+    mini(8,0,context,accent);
     if(title)aa_text(48,7,&FONT_T,title,fg);
     transport_symbol(209,6,fg);
-    if(recording)disk(193,16,6,fg);
-    cv_rect(12,33,216,2,guide);
+    if(recording)disk(193,16,6,theme_palette()->coral);
+    section_rule(accent,guide);
 }
 static void gauge(int32_t x,int32_t y,int32_t w,uint32_t percent,uint16_t fg,uint16_t guide)
 {
@@ -260,47 +281,54 @@ static void project_footer(uint16_t fg,uint16_t guide)
 static void screen_home(uint16_t fg,uint16_t guide)
 {
     const wm_theme_t *theme=theme_palette();
-    uint8_t anchored=(uint8_t)(wm.has_anchor||wp_has_anchor);
-    const wm_phrase_t *memory=layer_focus?&wm.layer:&wm.memory;
-    home_layer_header(fg,guide);
-    card(5,42,112,166,theme->panel,anchor_view?theme->anchor:guide,anchor_view);
-    card(123,42,112,166,theme->memory,anchor_view?guide:theme->evolve,!anchor_view);
-
-    tiny(16,49,anchored?ICO_LOCK:ICO_NEW,fg);
-    if(anchor_view)tiny(84,49,ICO_LISTEN,fg);
-    if(wp_active||wp_armed||wp_writing){
-        const char *state=wp_writing?"WRITE":wp_armed?"ARM":"RAM";
-        aa_text(133,51,&FONT_T,state,fg);
-    }else if(layer_focus&&!wm.layer_enabled){
-        tiny(132,49,ICO_MUTE,fg);
-    }
-    /* Wander: how far Memory has travelled from its source, and for how many loops. */
-    uint8_t wander=(uint8_t)(!layer_focus&&ww_active()&&!wp_active&&wm_memory_playable());
-    if(recording)disk(216,60,5,fg);
-    else if(wander&&ww.loops&&!wp_armed&&!wp_writing){
+    uint8_t anchored=(uint8_t)(wm.has_anchor||wp_has_anchor),zoom=wm.extra_large;
+    uint8_t print=(uint8_t)(wp_active||wp_armed||wp_writing);
+    home_header(fg,guide);
+    /* Anchor and Memory cards: colour-tinted, the focused one with a thick edge. */
+    int32_t card_h=zoom?132:126;
+    card(5,38,112,card_h,theme->panel,anchor_view?theme->anchor:mix565(theme->panel,theme->anchor,110u),anchor_view);
+    card(123,38,112,card_h,theme->memory,!anchor_view&&!layer_focus?theme->evolve:mix565(theme->memory,theme->evolve,110u),!anchor_view&&!layer_focus);
+    tiny(12,42,anchored?ICO_LOCK:ICO_NEW,anchored?theme->anchor:guide);
+    if(anchor_view)tiny(84,42,ICO_LISTEN,theme->anchor);
+    if(print)tag(129,42,wp_writing?"WRITE":wp_armed?"ARM":"RAM",theme->coral);
+    else if(!layer_focus&&!anchor_view)tag(129,42,"EDIT",theme->evolve);
+    /* Wander: loops wandered (top right) and distance (the tall meter). */
+    uint8_t wander=(uint8_t)(ww_active()&&!wp_active&&wm_memory_playable());
+    if(wander&&ww.loops&&!print){
         char b[12];number(ww.loops>99u?99u:ww.loops,b);
-        aa_text(226-width(&FONT_T,b),51,&FONT_T,b,fg);
+        aa_text(229-width(&FONT_T,b),44,&FONT_T,b,fg);
     }
-    if(wm.extra_large){
-        zoom_blit(13,50,ICO_ANCHOR,theme->anchor);
-        zoom_blit(131,50,ICO_MEMORY,theme->evolve);
-    }else{
-        mid(37,70,ICO_ANCHOR,theme->anchor);
-        mid(155,70,ICO_MEMORY,theme->evolve);
-    }
-    int32_t label_y=wm.extra_large?148:121,bar_y=label_y+21,roll_y=bar_y+11,roll_h=204-roll_y;
-    aa_text(61-width(&FONT_T,"ANCHOR")/2,label_y,&FONT_T,"ANCHOR",fg);
-    aa_text(179-width(&FONT_T,"MEMORY")/2,label_y,&FONT_T,"MEMORY",fg);
+    int32_t meter_top=zoom?70:68,meter_h=zoom?92:92;
     if(wander){
-        int32_t fill=ww.distance*92/100;
-        panel(133,bar_y,92,7,guide);panel(134,bar_y+1,90,5,theme->memory);
-        if(fill>3)panel(133,bar_y,fill,7,theme->evolve);
+        int32_t fill=ww.distance*meter_h/100;
+        panel(224,meter_top,7,meter_h,mix565(theme->memory,theme->evolve,60u));
+        if(fill>4)panel(224,meter_top+meter_h-fill,7,fill,theme->evolve);
     }
-    /* Melody pictures: the Anchor as recorded; Memory as you hear it now,
-     * over a faint line of the Anchor so its journey can be seen. */
-    piano_roll(14,roll_y,94,roll_h,&wm.anchor,0,0,theme->anchor,guide,guide,(uint8_t)(running&&anchor_view&&!wp_active));
-    piano_roll(132,roll_y,94,roll_h,memory,!layer_focus&&anchored?&wm.anchor:0,wander,theme->evolve,guide,guide,
-        (uint8_t)(running&&!anchor_view&&!wp_active&&(!layer_focus||wm.layer_enabled)));
+    if(zoom){
+        zoom_blit(13,48,ICO_ANCHOR,theme->anchor);
+        zoom_blit(121,48,ICO_MEMORY,theme->evolve);
+        aa_text(61-width(&FONT_T,"ANCHOR")/2,146,&FONT_T,"ANCHOR",fg);
+        aa_text(173-width(&FONT_T,"MEMORY")/2,146,&FONT_T,"MEMORY",fg);
+    }else{
+        mid(37,66,ICO_ANCHOR,theme->anchor);
+        mid(147,66,ICO_MEMORY,theme->evolve);
+        aa_text(61-width(&FONT_T,"ANCHOR")/2,116,&FONT_T,"ANCHOR",fg);
+        aa_text(173-width(&FONT_T,"MEMORY")/2,116,&FONT_T,"MEMORY",fg);
+        /* Melody pictures: the Anchor as recorded; Memory as you hear it now,
+         * over a faint line of the Anchor so its journey can be seen. */
+        piano_roll(14,138,94,22,&wm.anchor,0,0,theme->anchor,guide,guide,(uint8_t)(running&&anchor_view&&!wp_active));
+        piano_roll(132,138,86,22,&wm.memory,anchored?&wm.anchor:0,wander,theme->evolve,guide,guide,
+            (uint8_t)(running&&!anchor_view&&!wp_active));
+    }
+    /* The Layer row: gold symbol, its own melody, and the playback switch. */
+    int32_t ly=zoom?174:168,lh=zoom?36:40;
+    card(5,ly,230,lh,mix565(theme->panel,theme->layer,layer_focus?44u:22u),layer_focus?theme->layer:mix565(theme->panel,theme->layer,120u),layer_focus);
+    mini(12,ly+4,ICO_LAYER,theme->layer);
+    /* Editing the Layer: its name becomes a solid gold tag, as EDIT is on Memory. */
+    if(layer_focus)tag(44,ly+(zoom?6:2),"LAYER",theme->layer);
+    else aa_text(50,ly+(zoom?7:3),&FONT_T,"LAYER",fg);
+    if(!zoom)piano_roll(46,ly+22,118,14,&wm.layer,0,0,theme->layer,guide,guide,(uint8_t)(running&&wm.layer_enabled&&!anchor_view&&!wp_active));
+    toggle_switch(172,ly+(lh-26)/2,wm.layer_enabled,theme->layer,fg,guide);
     project_footer(fg,guide);
 }
 static void diagram_arrow(int32_t x,int32_t y,int32_t w,uint16_t fg)
@@ -318,7 +346,7 @@ static void screen_focus(uint16_t fg,uint16_t guide)
     const char *titles[]={"","MELT","DRIFT","SCATTER","TEMPO","LEVEL",""};
     uint32_t value=focus==4?wm.bpm:percent(focus_value);
     status_header(focus_icon(),titles[focus],fg,guide);
-    icon_blit(88,44,focus_icon(),fg);
+    icon_blit(88,44,focus_icon(),accent_for_icon(focus_icon()));
     large_value(value,122,focus!=4,fg);
     /* A plain word for where the knob sits, in Normal size. */
     if(!wm.extra_large&&focus>=1&&focus<=3){
@@ -327,7 +355,7 @@ static void screen_focus(uint16_t fg,uint16_t guide)
         uint32_t band=focus_value?1u+(focus_value>=48u)+(focus_value>=96u):0u;
         text_center(188,&FONT_T,words[focus-1u][band],fg);
     }
-    meter(16,212,208,18,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide,theme_palette()->evolve);
+    meter(16,212,208,18,focus==4?(wm.bpm-60u)*100u/120u:value,fg,guide,accent_for_icon(focus_icon()));
 }
 static void screen_message(uint16_t fg,uint16_t guide)
 {
@@ -337,7 +365,7 @@ static void screen_message(uint16_t fg,uint16_t guide)
     if(confirm){
         if(confirm==2||confirm==3){
             card(12,47,216,119,theme_palette()->panel,guide,0);
-            icon_blit(25,73,confirm==2?ICO_SAVE:ICO_LOAD,fg);
+            icon_blit(25,73,confirm==2?ICO_SAVE:ICO_LOAD,theme_palette()->sky);
             char b[12];number(project_slot+1u,b);const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
             aa_text(196-width(f,b),77,f,b,fg);
             const char *state=slot_presence[project_slot]==2u?(confirm==2?"OVERWRITE":"SAVED SLOT"):
@@ -348,20 +376,20 @@ static void screen_message(uint16_t fg,uint16_t guide)
         }else if(confirm==4){
             if(project_dirty)tiny(202,37,ICO_EDITED,fg);
             mini(40,54,ICO_ANCHOR,fg);mini(104,54,ICO_MEMORY,fg);mini(168,54,ICO_LAYER,fg);
-            icon_blit(88,100,ICO_ERASE,fg);
+            icon_blit(88,100,ICO_ERASE,theme_palette()->coral);
         }else if(confirm==6){
             /* Erasing every project needs words, not just symbols. */
-            mid(96,40,ICO_ERASE,fg);
+            mid(96,40,ICO_ERASE,theme_palette()->coral);
             zoom_text(8,90,224,28,23,"ERASE 8 SLOTS",0,fg);
             zoom_text(8,120,224,24,18,"AND SETTINGS",0,fg);
             zoom_text(8,146,224,24,18,"FOR OFFICIAL FW",0,fg);
         }else if(confirm==5){
-            icon_blit(20,73,ICO_ANCHOR,fg);icon_blit(158,73,ICO_MEMORY,fg);
+            icon_blit(20,73,ICO_ANCHOR,theme_palette()->anchor);icon_blit(158,73,ICO_MEMORY,theme_palette()->evolve);
             diagram_arrow(98,104,42,fg);
-        }else{zoom_blit(42,51,ICO_LAYER,fg);mid(145,108,ICO_ERASE,fg);}
+        }else{zoom_blit(42,51,ICO_LAYER,theme_palette()->layer);mid(145,108,ICO_ERASE,theme_palette()->coral);}
         card(12,177,100,57,theme_palette()->panel,guide,0);
         card(128,177,100,57,theme_palette()->panel,guide,0);
-        mini(46,178,ICO_CLOSE,fg);mini(162,178,ICO_CHECK,fg);
+        mini(46,178,ICO_CLOSE,theme_palette()->coral);mini(162,178,ICO_CHECK,theme_palette()->anchor);
         aa_text(62-width(&FONT_T,"HOME")/2,210,&FONT_T,"HOME",fg);
         aa_text(178-width(&FONT_T,"SELECT")/2,210,&FONT_T,"SELECT",fg);
     }else if(notice==N_PREF_FAILED){
@@ -372,29 +400,29 @@ static void screen_message(uint16_t fg,uint16_t guide)
     }else if(notice==N_AUDIO_LOCK){
         icon_blit(88,60,ICO_LOCK,fg);text_center(137,&FONT_P,"RAM LOOP",fg);text_center(184,&FONT_T,"LOAD / NEW",fg);
     }else if(notice==N_CATCH_FIRST){
-        icon_blit(88,53,ICO_ANCHOR,fg);
+        icon_blit(88,53,ICO_ANCHOR,theme_palette()->anchor);
         text_center(133,&FONT_P,"NO ANCHOR",fg);
         const char *next=wm_memory_playable()?(recording?"TAP REC TO FINISH":"TAP LFO TO LISTEN"):
             "RECORD LAYER 1";
         text_center(174,&FONT_T,next,fg);
     }else if(notice==N_ANCHOR_LISTEN){
-        zoom_blit(72,54,ICO_LOCK,fg);
+        zoom_blit(72,54,ICO_LOCK,theme_palette()->anchor);
         text_center(157,&FONT_T,"ANCHOR LISTEN",fg);
         text_center(188,&FONT_T,"TAP LFO TO EXIT",fg);
     }else if(notice_success()){
         card(12,47,216,119,theme_palette()->panel,guide,0);
-        icon_blit(25,73,notice==N_SAVED?ICO_SAVE:ICO_LOAD,fg);
+        icon_blit(25,73,notice==N_SAVED?ICO_SAVE:ICO_LOAD,theme_palette()->sky);
         char b[12];number(project_slot+1u,b);const font_t *f=wm.extra_large?&FONT_X:&FONT_B;
-        aa_text(196-width(f,b),77,f,b,fg);mid(96,177,ICO_CHECK,fg);
+        aa_text(196-width(f,b),77,f,b,fg);mid(96,177,ICO_CHECK,theme_palette()->anchor);
     }else{
         const char *word=notice_word();
         if(notice==N_STOP_FIRST){
             icon_blit(22,60,ICO_PLAY,fg);icon_blit(154,60,ICO_STOP,fg);
             diagram_arrow(97,92,44,fg);
-        }else if(word)zoom_blit(72,44,notice_icon(),fg);
-        else zoom_blit(72,62,notice_icon(),fg);
+        }else if(word)zoom_blit(72,44,notice_icon(),accent_for_icon(notice_icon()));
+        else zoom_blit(72,62,notice_icon(),accent_for_icon(notice_icon()));
         if(word)zoom_text(8,140,224,40,34,word,0,fg);
-        mid(96,186,notice_error()?ICO_CLOSE:ICO_CHECK,fg);
+        mid(96,186,notice_error()?ICO_CLOSE:ICO_CHECK,notice_error()?theme_palette()->coral:theme_palette()->anchor);
     }
 }
 static void scope_control(int32_t x,int32_t y,const char *label,const char *value,uint16_t fg,uint16_t guide)
@@ -414,7 +442,7 @@ static void screen_scope(uint16_t bg,uint16_t fg,uint16_t guide)
         uint32_t at=x*(SCOPE_N-1u)/207u;
         int32_t y=90-((int32_t)scope_trace[at]*(1<<scope_gain)*41)/32768;
         y=ws_clamp(y,48,132);
-        if(x)for(int32_t t=0;t<3;t++)cv_line(15+(int32_t)x,old+t-1,16+(int32_t)x,y+t-1,fg);
+        if(x)for(int32_t t=0;t<3;t++)cv_line(15+(int32_t)x,old+t-1,16+(int32_t)x,y+t-1,theme_palette()->evolve);
         old=y;
     }
     char b[12];

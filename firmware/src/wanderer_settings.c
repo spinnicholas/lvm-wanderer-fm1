@@ -184,7 +184,11 @@ static void settings_press(void)
 }
 static void screen_parameters(uint16_t fg,uint16_t pa,uint16_t guide)
 {
- uint16_t accent=theme_palette()->anchor;
+ /* Page groups: access sky, effects coral, music/arp/MIDI gold, Layer gold, system teal. */
+ const wm_theme_t *tp=theme_palette();
+ uint16_t accent=settings_page==0u||settings_page==SETTINGS_ACCESS_FEEL?tp->sky:
+    (settings_page>=1u&&settings_page<=3u)||(settings_page>=9u&&settings_page<=13u)?tp->coral:
+    settings_page==SETTINGS_SYSTEM?tp->anchor:tp->layer;
  aa_text(10,7,&FONT_T,SETTINGS_TITLES[settings_page],fg);transport_symbol(209,6,fg);section_rule(accent,guide);
  uint32_t count=settings_count();
  if(wm.extra_large){

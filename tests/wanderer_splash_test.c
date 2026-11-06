@@ -14,21 +14,33 @@ int main(void)
     wm_state_t before=wm;
     uint64_t leds=host_leds,glow=host_glow;
     for(int theme=0;theme<2;theme++){
-        wm.light=(uint8_t)theme;splash_active=1;
+        wm.light=(uint8_t)theme;splash_active=1;splash_drawn=0;splash_skip=0;splash_started=fm1_ms;
         screen();
         write_ppm_as(theme?"build/screens/45-splash-light.ppm":"build/screens/44-splash-dark.ppm");
-        assert(cv_oy==0&&cv_h==60&&cv_w==240);
+        assert(cv_oy==0&&cv_h==60&&cv_w==240&&splash_drawn);       /* first frame: four full bands */
+        fm1_ms+=400;screen();assert(cv_oy==0&&cv_w==240&&cv_h<=60);  /* then only the wordmark strip */
         assert(host_leds==leds&&host_glow==glow);
     }
+    /* Letters start off to the right and all land in place by ~1.85 s. */
+    splash_skip=0;wm.reduced_motion=0;splash_started=fm1_ms;
+    for(uint32_t i=0;i<SPLASH_LETTERS;i++)assert(splash_letter_x(i)>=240);
+    fm1_ms+=SPLASH_STAGGER_MS*(SPLASH_LETTERS-1u)+SPLASH_MOVE_MS;
+    for(uint32_t i=0;i<SPLASH_LETTERS;i++)assert(splash_letter_x(i)==SPLASH_LX[i]);
+    wm.reduced_motion=1;splash_started=fm1_ms;for(uint32_t i=0;i<SPLASH_LETTERS;i++)assert(splash_letter_x(i)==SPLASH_LX[i]);
+    wm.reduced_motion=0;
     wm.light=before.light;assert(!memcmp(&before,&wm,sizeof wm));
-    splash_started=100;splash_active=1;page_dirty=0;
-    fm1_ms=1199;splash_tick();assert(splash_active&&!page_dirty);
-    fm1_ms=1200;splash_tick();assert(!splash_active&&page_dirty);
+    splash_started=100;splash_active=1;splash_skip=0;page_dirty=0;
+    fm1_ms=100+SPLASH_TOTAL_MS-1u;splash_tick();assert(splash_active&&!page_dirty);
+    fm1_ms=100+SPLASH_TOTAL_MS;splash_tick();assert(!splash_active&&page_dirty);
     splash_started=0xffffff00u;splash_active=1;
-    fm1_ms=splash_started+1100u;splash_tick();assert(!splash_active);
+    fm1_ms=splash_started+SPLASH_TOTAL_MS;splash_tick();assert(!splash_active);
+    wm.reduced_motion=1;splash_started=0;splash_active=1;fm1_ms=SPLASH_STILL_MS;splash_tick();assert(!splash_active);wm.reduced_motion=0;
+    /* During a fresh-start erase a key skips the animation but the splash waits for the erase. */
+    fresh_left=3;splash_active=1;splash_skip=0;splash_dismiss();assert(splash_active&&splash_skip);
+    splash_tick();assert(splash_active);while(fresh_left)fresh_step();splash_tick();assert(!splash_active);splash_skip=0;
     splash_active=1;page_dirty=0;splash_dismiss();assert(!splash_active&&page_dirty);
     page_dirty=0;splash_dismiss();assert(!page_dirty);
     splash_active=1;midi_message(1,0x90,60,100);
     assert(!splash_active);assert(voice[0].gate);midi_message(1,0x80,60,0);
-    puts("PASS: both themes, bounds, 60-row bands, state/LED preservation, timeout, wrap, dismiss, MIDI note-through");
+    puts("PASS: animated letters, full first frame then strip, timing, Reduced Motion, skip, erase-safe skip, wrap, MIDI note-through");
 }

@@ -110,7 +110,7 @@ static void control_row_at(uint32_t k,int32_t y,const char *label,const char *va
   /* Where the knob sits: a thick track under the label, clear of the value. */
   int32_t w=track*position/256;
   panel(16,y+31,track,6,selected?mix565(accent,ink,64u):mix565(pa,guide,90u));
-  if(w>3)panel(16,y+30,w,8,ink);
+  if(w>3)panel(16,y+30,w,8,selected?ink:accent);
  }
 }
 static void knob_tabs(uint32_t count,uint32_t selected,int32_t y,uint16_t fg,uint16_t pa,uint16_t guide)
@@ -167,8 +167,12 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
  uint8_t engine=ws_edit_patch()->engine;
  const char *title=engine==5&&editor_page==0?"OP 6 ENV":engine==5&&editor_page==2?"OP 5 ENV":engine==4&&editor_page==10?"MODAL RATIOS":engine==4&&editor_page==11?"PARTIAL LVLS":EDIT_TITLES[editor_page];
  const wm_theme_t *theme=theme_palette();
+ /* Page groups have their own colour: envelopes gold, FM sky, Scatter coral,
+  * Print teal, the rest of the sound violet. */
  uint16_t accent=editor_page==EDIT_PRINT?theme->anchor:
-    editor_page==EDIT_SCATTER||editor_page==EDIT_PATTERN?theme->layer:theme->evolve;
+    editor_page==EDIT_SCATTER||editor_page==EDIT_PATTERN?theme->coral:
+    editor_page==0||editor_page==2||(editor_page>=6&&editor_page<=9)?theme->layer:
+    editor_page>=10&&editor_page<=12?theme->sky:theme->evolve;
  aa_text(10,7,&FONT_T,title,fg);
  if(editor_page!=EDIT_PRINT&&editor_page!=EDIT_SCATTER&&editor_page!=EDIT_PATTERN)
   aa_text(188,7,&FONT_T,layer_focus?"2":"1",fg);
@@ -213,7 +217,7 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
 }
 static void screen_preset_name(uint16_t fg,uint16_t guide)
 {
- status_header(ICO_SOUND,layer_focus?"LAYER 2":"LAYER 1",fg,guide);mid(96,44,ICO_SOUND,fg);
+ status_header(ICO_SOUND,layer_focus?"LAYER 2":"LAYER 1",fg,guide);mid(96,44,ICO_SOUND,accent_for_icon(ICO_SOUND));
  const uint8_t sound=ws_edit_sound();
  zoom_text(12,96,216,73,wm.extra_large?34:23,ws_edit_name(),1,fg);
  char value[12];text_center(180,&FONT_N,number(sound+1,value),fg);
