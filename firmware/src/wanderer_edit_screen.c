@@ -225,7 +225,7 @@ static void screen_preset_name(uint16_t fg,uint16_t guide)
   /* Zoom: the name gets the whole width and most of the height (two lines
    * for two-word names), and the number is large too. No symbol. */
   zoom_text(4,38,232,124,60,ws_edit_name(),1,fg);
-  text_center(168,&FONT_H,value,fg);
+  text_center(166,&FONT_Q,value,fg);
  }else{
   mid(96,44,ICO_SOUND,accent_for_icon(ICO_SOUND));
   zoom_text(12,96,216,73,23,ws_edit_name(),1,fg);

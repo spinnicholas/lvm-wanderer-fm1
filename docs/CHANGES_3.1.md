@@ -77,7 +77,7 @@ SAFE, and no control could make a new one.
 ## Zoom: larger sound names, centred knob numbers
 
 * **The sound screen has its own Zoom layout.** The name gets the whole width and
-  most of the height, on two lines for two-word names, and the number is 41 px
+  most of the height, on two lines for two-word names, and the number is 46 px
   instead of 21. Of the 150 names, 99 now show at 46 px (all were 23 or 34 px
   before), 43 at 34 px, and the 8 longest single words at a new 28 px size.
 * **A new 28 px font fills the gap between 23 and 34 px.** It adds 7,516 B. Other
