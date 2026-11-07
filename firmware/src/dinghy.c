@@ -34,7 +34,7 @@ enum {
     N_BRANCHED, N_CATCH_FIRST, N_UNDO, N_NO_UNDO, N_STILL, N_LIVE,
     N_LAYER_CLEARED, N_NEW_SESSION, N_SAVE_FAILED, N_SAVED,
     N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN,
-    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME, N_CLICK_ON, N_CLICK_OFF, N_ERASED
+    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME, N_CLICK_ON, N_CLICK_OFF, N_ERASED, N_ANCHOR_REPLACED
 };
 enum {PATCH_MEMORY,PATCH_LAYER,PATCH_ANCHOR};
 /* Audio load guard. Each callback is timed with the 24 MHz hardware timer.
@@ -805,6 +805,15 @@ static uint8_t undo_events_locked(void)
     reset_performance();
     return 1;
 }
+/* Tap SAVE on Home: set the Anchor; if there already is one, offer to replace it
+ * with Memory as you hear it now (asks first; Undo brings the old one back). */
+static void save_tap(void)
+{
+    fm1_irq_off();capture_finish_all();uint8_t ok=wm_catch();fm1_irq_on();
+    if(!ok&&wm.has_anchor&&!anchor_view&&!wp_active&&!wp_has_anchor&&wm_memory_playable()){
+        confirm=7;focus=notice=0;cue(57u);page_dirty=1;
+    }else{cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_CATCH_FIRST);}
+}
 static void apply_confirm(void)
 {
     static wm_disk_t disk;
@@ -819,6 +828,14 @@ static void apply_confirm(void)
         for(uint32_t i=0;i<NSLOT;i++)slot_presence[i]=1u;
         project_origin_slot=255u;preferences_pending=1;project_poll();
         cue_pair(76u,52u,2);show_notice(N_ERASED);
+    }else if(confirm==7){
+        /* Replace the Anchor with Memory as you hear it now, wander included.
+         * One Undo step restores the previous Anchor and Memory together. */
+        fm1_irq_off();capture_finish_all();wm_mark();
+        if(ww.loops||ww.distance)ww_keep();          /* bakes in the wander; same Undo point */
+        wm.has_anchor=0;uint8_t ok=wm_protect_source();
+        if(ok){wm.has_branch=0;wm.branch_melt=0;ww_reset();}
+        fm1_irq_on();cue(ok?84u:48u);show_notice(ok?N_ANCHOR_REPLACED:N_CATCH_FIRST);
     }else if(confirm==1){
         fm1_irq_off();wm_mark();wm_clear_phrase(&wm.layer);for(uint32_t v=0;v<NV;v++)if(!voice[v].live&&voice[v].seq_lane==1u)voice[v].gate=0;fm1_irq_on();
         show_notice(N_LAYER_CLEARED);
@@ -1226,7 +1243,7 @@ static void app_main(void)
         else{
             if(b&(1u<<BTN_PLAY))transport();
             if(b&(1u<<BTN_REC))recording_toggle();
-            if(b&(1u<<BTN_SAVE)){fm1_irq_off();capture_finish_all();uint8_t ok=wm_catch();fm1_irq_on();cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_CATCH_FIRST);}
+            if(b&(1u<<BTN_SAVE))save_tap();
             if(b&(1u<<BTN_EDIT)){editor_open=1;editor_page=editor_selected=0;focus=notice=0;page_dirty=1;}
             if(b&(1u<<BTN_LFO))anchor_preview();
             if(b&(1u<<BTN_GLO)){

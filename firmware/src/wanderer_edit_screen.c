@@ -31,7 +31,7 @@ static const zoom_fit_t *zoom_fit(const char *s,uint16_t w,uint16_t h,uint16_t c
  zoom_fit_t *p=&zoom_fit_cache[zoom_fit_next++%4u];
  p->w=w;p->h=h;p->cap=cap;p->wrap=wrap;p->valid=1;p->font=&FONT_T;p->split=0;
  for(uint32_t i=0;i<n;i++)p->text[i]=s[i];p->text[n]=0;
- const font_t *fonts[]={&FONT_Z,&FONT_X,&FONT_B,&FONT_R,&FONT_Q,&FONT_V,&FONT_P,&FONT_T};
+ const font_t *fonts[]={&FONT_Z,&FONT_X,&FONT_B,&FONT_R,&FONT_Q,&FONT_V,&FONT_Y,&FONT_P,&FONT_T};
  for(uint32_t i=0;i<sizeof fonts/sizeof *fonts;i++){
   const font_t *f=fonts[i];
   if(f->h>cap||f->h>h)continue;
@@ -115,10 +115,12 @@ static void control_row_at(uint32_t k,int32_t y,const char *label,const char *va
 }
 static void knob_tabs(uint32_t count,uint32_t selected,int32_t y,uint16_t fg,uint16_t pa,uint16_t guide)
 {
+ /* Centred as a group, whatever the number of knobs; each digit centred in its tab. */
+ int32_t left=(240-((int32_t)count*40+((int32_t)count-1)*15))/2;
  for(uint32_t k=0;k<count;k++){
-  int32_t x=18+(int32_t)k*55;char n[12];
+  int32_t x=left+(int32_t)k*55;char n[12];number(k+1u,n);
   card(x,y,40,30,pa,k==selected?fg:guide,k==selected);
-  aa_text(x+12,y+6,&FONT_T,number(k+1u,n),fg);
+  aa_text(x+(40-width(&FONT_T,n))/2,y+6,&FONT_T,n,fg);
  }
 }
 static const char *editor_value(uint32_t k,char *buf,const char **unit)
@@ -217,9 +219,17 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
 }
 static void screen_preset_name(uint16_t fg,uint16_t guide)
 {
- status_header(ICO_SOUND,layer_focus?"LAYER 2":"LAYER 1",fg,guide);mid(96,44,ICO_SOUND,accent_for_icon(ICO_SOUND));
- const uint8_t sound=ws_edit_sound();
- zoom_text(12,96,216,73,wm.extra_large?34:23,ws_edit_name(),1,fg);
- char value[12];text_center(180,&FONT_N,number(sound+1,value),fg);
+ status_header(ICO_SOUND,layer_focus?"LAYER":"MEMORY",fg,guide);
+ const uint8_t sound=ws_edit_sound();char value[12];number(sound+1,value);
+ if(wm.extra_large){
+  /* Zoom: the name gets the whole width and most of the height (two lines
+   * for two-word names), and the number is large too. No symbol. */
+  zoom_text(4,38,232,124,60,ws_edit_name(),1,fg);
+  text_center(168,&FONT_H,value,fg);
+ }else{
+  mid(96,44,ICO_SOUND,accent_for_icon(ICO_SOUND));
+  zoom_text(12,96,216,73,23,ws_edit_name(),1,fg);
+  text_center(180,&FONT_N,value,fg);
+ }
  for(uint32_t i=0;i<WM_PRESET_BANKS;i++)cv_rect(9+(int32_t)i*15,224,12,6,i==sound/10?fg:guide);
 }

@@ -234,7 +234,7 @@ static uint32_t notice_icon(void)
 {
     switch(notice){
     case N_AUDIO_LOCK:case N_ORIGINAL_SAFE:case N_ANCHOR_SAFE:return ICO_LOCK;
-    case N_ANCHORED:case N_CATCH_FIRST:return ICO_ANCHOR;
+    case N_ANCHORED:case N_ANCHOR_REPLACED:case N_CATCH_FIRST:return ICO_ANCHOR;
     case N_BRANCHED:return ICO_BRANCH;
     case N_UNDO:case N_NO_UNDO:return ICO_UNDO;
     case N_NO_PHRASE:case N_NO_VALID_SAVE:return ICO_EMPTY;
@@ -250,10 +250,10 @@ static uint32_t notice_icon(void)
 static const char *notice_word(void)
 {
     switch(notice){
-    case N_ORIGINAL_SAFE:return "RESTORED";case N_ANCHORED:return "ANCHOR SET";
+    case N_ORIGINAL_SAFE:return "RESTORED";case N_ANCHORED:return "ANCHOR SET";case N_ANCHOR_REPLACED:return "NEW ANCHOR";
     case N_ANCHOR_SAFE:return "ANCHOR IS SAFE";case N_NO_PHRASE:return "NO NOTES";
     case N_BRANCHED:return "KEPT";case N_UNDO:return "UNDONE";case N_NO_UNDO:return "NOTHING TO UNDO";
-    case N_STILL:return "STILL";case N_LIVE:return "LIVE";case N_LAYER_CLEARED:return "LAYER 2 CLEAR";
+    case N_STILL:return "STILL";case N_LIVE:return "LIVE";case N_LAYER_CLEARED:return "LAYER CLEARED";
     case N_NEW_SESSION:return "NEW SESSION";case N_STOP_FIRST:return "STOP FIRST";
     case N_RETURNED:return "BACK HOME";case N_NOTHING_TO_KEEP:return "NOT WANDERED";
     case N_THEME:return theme_palette()->name;case N_CLICK_ON:return "CLICK ON";case N_CLICK_OFF:return "CLICK OFF";
@@ -361,8 +361,8 @@ static void screen_focus(uint16_t fg,uint16_t guide)
 }
 static void screen_message(uint16_t fg,uint16_t guide)
 {
-    static const char *const actions[]={"","CLEAR 2","SAVE","LOAD","NEW SESSION","RESTORE","ERASE ALL"};
-    status_header(confirm==2?ICO_SAVE:confirm==3?ICO_LOAD:confirm==1||confirm==4||confirm==6?ICO_ERASE:confirm==5?ICO_ANCHOR:notice_icon(),
+    static const char *const actions[]={"","CLEAR LAYER","SAVE","LOAD","NEW SESSION","RESTORE","ERASE ALL","NEW ANCHOR"};
+    status_header(confirm==2?ICO_SAVE:confirm==3?ICO_LOAD:confirm==1||confirm==4||confirm==6?ICO_ERASE:confirm==5||confirm==7?ICO_ANCHOR:notice_icon(),
         confirm?actions[confirm]:0,fg,guide);
     if(confirm){
         if(confirm==2||confirm==3){
@@ -388,6 +388,11 @@ static void screen_message(uint16_t fg,uint16_t guide)
         }else if(confirm==5){
             icon_blit(20,73,ICO_ANCHOR,theme_palette()->anchor);icon_blit(158,73,ICO_MEMORY,theme_palette()->evolve);
             diagram_arrow(98,104,42,fg);
+        }else if(confirm==7){
+            /* Memory becomes the new Anchor: the reverse of Restore. */
+            icon_blit(20,58,ICO_MEMORY,theme_palette()->evolve);icon_blit(158,58,ICO_ANCHOR,theme_palette()->anchor);
+            diagram_arrow(98,89,42,fg);
+            zoom_text(8,142,224,30,23,"REPLACE ANCHOR",0,fg);
         }else{zoom_blit(42,51,ICO_LAYER,theme_palette()->layer);mid(145,108,ICO_ERASE,theme_palette()->coral);}
         card(12,177,100,57,theme_palette()->panel,guide,0);
         card(128,177,100,57,theme_palette()->panel,guide,0);
@@ -405,7 +410,7 @@ static void screen_message(uint16_t fg,uint16_t guide)
         icon_blit(88,53,ICO_ANCHOR,theme_palette()->anchor);
         text_center(133,&FONT_P,"NO ANCHOR",fg);
         const char *next=wm_memory_playable()?(recording?"TAP REC TO FINISH":"TAP LFO TO LISTEN"):
-            "RECORD LAYER 1";
+            "RECORD MEMORY";
         text_center(174,&FONT_T,next,fg);
     }else if(notice==N_ANCHOR_LISTEN){
         zoom_blit(72,54,ICO_LOCK,theme_palette()->anchor);

@@ -45,7 +45,7 @@ static void app_leds(void)
         bright|=(uint64_t)1u<<(BTN_SEL);glow|=(uint64_t)1u<<(BTN_HOME);
     }else if(confirm){
         uint32_t button=confirm==1u||confirm==4u?BTN_FX:
-            confirm==2u?BTN_SEQ:confirm==3u?BTN_ARP:confirm==6u?BTN_SEL:BTN_LFO;
+            confirm==2u?BTN_SEQ:confirm==3u?BTN_ARP:confirm==6u?BTN_SEL:confirm==7u?BTN_SAVE:BTN_LFO;
         bright|=(uint64_t)1u<<(button);bright|=(uint64_t)1u<<(BTN_SEL);
         glow|=(uint64_t)1u<<(BTN_HOME);
     }else if(notice_sticky()){

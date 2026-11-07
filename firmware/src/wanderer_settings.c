@@ -58,7 +58,7 @@ static const char *settings_value(uint32_t k,char *buf)
   return names[v];
  }
  if(settings_page==SETTINGS_LAYER){
-  if(!k)return v?"2 LAYER":"1 MEMORY";
+  if(!k)return v?"LAYER":"MEMORY";
   if(k==1u)return v?"PLAY":"MUTE";
   return v?"INDEPENDENT":"FOLLOW MEMORY";
  }

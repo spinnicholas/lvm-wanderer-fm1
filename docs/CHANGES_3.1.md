@@ -56,6 +56,38 @@ It has **not yet been tested on an FM-1.** See [Build and test status](#build-an
   (`tests/capture_gallery_3_1.c`) renders 56 screens in three themes at both sizes
   for review.
 
+## Replace the Anchor
+
+Before, tap SAVE only set an Anchor when there was none. Wanderer also makes the
+Anchor for you the first time Memory wanders, so SAVE usually just said ANCHOR IS
+SAFE, and no control could make a new one.
+
+* **Now, with an Anchor already set, tap SAVE asks NEW ANCHOR / REPLACE ANCHOR.**
+* **SELECT makes Memory, as you hear it now, the new Anchor.** Any wander you haven't
+  kept is included. The wander count and distance start again from zero.
+* **HOME cancels, and Undo (ENV) brings back the old Anchor and Memory together.**
+* **It works while the loop plays.** It isn't offered while you're listening to the
+  Anchor (LFO), or with printed audio in RAM. Those cases still say ANCHOR IS SAFE.
+* **Hold SAVE** still opens project Save, as before.
+* **Wording:** the NO ANCHOR screen says RECORD MEMORY, not RECORD LAYER 1. Elsewhere,
+  LAYER 1/2 is now MEMORY and LAYER.
+* `tests/wanderer_anchor_replace_test.c` covers all of this, under the sanitizers
+  too.
+
+## Zoom: larger sound names, centred knob numbers
+
+* **The sound screen has its own Zoom layout.** The name gets the whole width and
+  most of the height, on two lines for two-word names, and the number is 41 px
+  instead of 21. Of the 150 names, 99 now show at 46 px (all were 23 or 34 px
+  before), 43 at 34 px, and the 8 longest single words at a new 28 px size.
+* **A new 28 px font fills the gap between 23 and 34 px.** It adds 7,516 B. Other
+  Zoom pages also use it where a value was too long for 34 px.
+* **The knob-number tabs are centred as a group.** Pages with three knobs
+  (Accessibility, Arp Feel, Layer) used to sit to the left. Each digit is also
+  centred in its tab.
+* **Home:** MEMORY clears the card edge and the distance meter, the meter draws as a
+  clean bar, and the Layer switch is wider, so ON and OFF never touch the knob.
+
 ## Animated start
 
 The LVM mark appears, then the eight letters of "Wanderer" glide in from the
@@ -201,7 +233,7 @@ it: 77,756 B of headroom in the app image, up from 9,676 B.
 
 **Also passed locally:**
 
-* the full sweep: all 58 test programs in `tests/`;
+* the full sweep: all 59 test programs in `tests/`;
 * AddressSanitizer and UndefinedBehaviorSanitizer runs of the 3.0, adversarial,
   engines, release, editor, splash, memory and layer workflow tests.
 
