@@ -133,7 +133,9 @@ refused.
 * **Source removed:** `wanderer_waves.h`, `wanderer_presets.h` and
   `wanderer_factory_legacy.h`. In `firmware/src` that is 1,334 lines removed and
   489 added.
-* **Flash freed:** 68,080 B of app image, and 23,280 B of RAM. See
+* **Flash freed:** removing old-project support freed about 68 KB of app image and
+  23,280 B of RAM. The 3.1 additions (the 28 px font and the Anchor and Zoom
+  changes) use about 8 KB of that, so the net saving is 59,948 B. See
   [Build and test status](#build-and-test-status).
 
 ### Tests removed, and why
@@ -208,23 +210,23 @@ measured with the same harness.
 
 ## Build and test status
 
-Native build of source commit `7740b7344ec9` by the
-[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42295786238),
+Native build of source commit `bea7d690cd23` by the
+[FM-1 native build workflow](https://github.com/spinnicholas/lvm-wanderer-fm1/actions/runs/42402234724),
 with the pinned JieLi toolchain and AC79 SDK.
 
 * **Package:** `dist/LVM-Wanderer-3.1-RC1-FM1.fwsc`, 612,196 B, identity `FM-1_929`.
   The build reported "FLASHABLE BUILD VALIDATED".
-* **SHA-256:** `1bd6a5863c06d13647a73d8783895cb58921eef31e0bdc90db1d45347d70a408`
+* **SHA-256:** `bd4fc60e0288c4bb53eddf82853c4ec67bd15387fcbb8c92514e93995481198d`
 
 | | Limit | 3.0 RC3 | 3.1 RC1 | Change |
 | --- | --- | --- | --- | --- |
-| App image | 581,564 B | 571,888 B | **503,808 B** | −68,080 B (−11.9%) |
+| App image | 581,564 B | 571,888 B | **511,940 B** | −59,948 B (−10.5%) |
 | RAM (.data + .bss) | 98,304 B | 94,752 B | **71,472 B** | −23,280 B |
 | Audio pool | 344,064 B | 342,536 B | 342,536 B | 0 |
 | Loader | — | 10,456 B | 10,456 B | 0 |
 
 The `.fwsc` container is a fixed 612,196 B for both versions. The savings are inside
-it: 77,756 B of headroom in the app image, up from 9,676 B.
+it: 69,624 B of headroom in the app image, up from 9,676 B.
 
 **Host tests** run in CI before the compile and passed:
 
