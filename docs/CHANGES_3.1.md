@@ -88,6 +88,34 @@ SAFE, and no control could make a new one.
 * **Home:** MEMORY clears the card edge and the distance meter, the meter draws as a
   clean bar, and the Layer switch is wider, so ON and OFF never touch the knob.
 
+## Clearer controls
+
+A review of Home, Edit and Settings for controls that said one thing and did another:
+
+* **The Layer switch can be flipped from Home: tap FX.** Before, the only way was
+  Settings → LAYER, knob 2, so the switch seemed stuck on ON.
+  * The switch acts when you let go, so holding FX for 1.6 seconds still asks New
+    session without also flipping the Layer.
+  * You see LAYER ON or LAYER OFF, and hear a rising or falling cue.
+  * FX glows while the Layer is on.
+  * An OFF Layer's melody line turns grey.
+  * Undo reverses the switch.
+* **Clear Layer has moved to Settings → LAYER, knob 4 (CLEAR).** Before, a tap of FX
+  opened it. It still asks first, Undo brings the notes back, and it says EMPTY when
+  there is nothing to clear.
+* **Same words everywhere:** knob 2 on the Layer page says ON/OFF, like the switch,
+  not PLAY/MUTE.
+* **NO ANCHOR now says TAP SAVE TO SET.** Before, it said TAP LFO TO LISTEN, but with
+  no Anchor, LFO only shows NO ANCHOR again.
+* **LFO glows only when there is an Anchor to hear.**
+* **Edit pages show a violet Memory or gold Layer symbol at the top right.** Before,
+  a bare "1" or "2" there looked like a page number.
+* **Guide fixes:**
+  * Saving is "hold SEQ", not "tap SEQ". Tap SEQ is the click.
+  * Settings opens with a tap of SEL. Holding SEL opens Accessibility.
+* `tests/wanderer_layer_switch_test.c` covers the switch, the hold, the Layer page,
+  CLEAR and the lamps, under the sanitizers too.
+
 ## Animated start
 
 The LVM mark appears, then the eight letters of "Wanderer" glide in from the
@@ -235,7 +263,7 @@ it: 69,624 B of headroom in the app image, up from 9,676 B.
 
 **Also passed locally:**
 
-* the full sweep: all 59 test programs in `tests/`;
+* the full sweep: all 60 test programs in `tests/`;
 * AddressSanitizer and UndefinedBehaviorSanitizer runs of the 3.0, adversarial,
   engines, release, editor, splash, memory and layer workflow tests.
 

@@ -10,14 +10,14 @@ static uint8_t *settings_fx_param(uint32_t k)
 }
 static uint8_t settings_bool(uint32_t k)
 {
- return (settings_page==SETTINGS_MIDI&&k==3u)||(settings_page==SETTINGS_LAYER)||(settings_page>=9u&&k==0u&&settings_fx_bit())||(settings_page==0u&&k!=0u)||(settings_page>=1u&&settings_page<SETTINGS_REVERB&&k==0u)||
+ return (settings_page==SETTINGS_MIDI&&k==3u)||(settings_page==SETTINGS_LAYER&&k<3u)||(settings_page>=9u&&k==0u&&settings_fx_bit())||(settings_page==0u&&k!=0u)||(settings_page>=1u&&settings_page<SETTINGS_REVERB&&k==0u)||
  (settings_page==4u&&k==3u)||
  (settings_page==6u&&k==0u)||(settings_page==7u&&k==2u)||(settings_page==SETTINGS_ACCESS_FEEL&&k==3u);
 }
 static uint32_t settings_get(uint32_t k)
 {
  if(settings_page==SETTINGS_MIDI)return k==0u?wm.midi_input:k==1u?wm.midi_channel:k==2u?wm.arp_clock:!wm.midi_ignore_program;
- if(settings_page==SETTINGS_LAYER)return k==0u?layer_focus:k==1u?wm.layer_enabled:ws_layer_own();
+ if(settings_page==SETTINGS_LAYER)return k==0u?layer_focus:k==1u?wm.layer_enabled:k==2u?ws_layer_own():wm_has_notes(&wm.layer);
  if(settings_page==SETTINGS_SYSTEM)return k==0u?cpu_load:k==1u?cpu_peak:k==2u?cpu_lean:0u;
  if(settings_page>=9){uint8_t *p=settings_fx_param(k);return p?*p:(wm.fx_new_on&settings_fx_bit())!=0;}
  if(settings_page==0u)return k==0?color_theme:k==1?wm.extra_large:wm.reduced_motion;
@@ -59,7 +59,8 @@ static const char *settings_value(uint32_t k,char *buf)
  }
  if(settings_page==SETTINGS_LAYER){
   if(!k)return v?"LAYER":"MEMORY";
-  if(k==1u)return v?"PLAY":"MUTE";
+  if(k==1u)return v?"ON":"OFF";                 /* the same words as the Home switch */
+  if(k==3u)return v?"LAYER":"EMPTY";            /* reads CLEAR LAYER; asks first */
   return v?"INDEPENDENT":"FOLLOW MEMORY";
  }
  if(settings_page==SETTINGS_MIDI){
@@ -99,6 +100,7 @@ static void settings_adjust(uint32_t k,int32_t d)
   }
  }else if(settings_page==SETTINGS_LAYER){
   hi=1;
+  if(k==3u){if(d>0&&wm_has_notes(&wm.layer)){confirm=1;focus=notice=0;cue(55u);}page_dirty=1;return;}
   if(!k)layer_target_locked((uint8_t)value);
   else if(k==1u)layer_playback_locked((uint8_t)value);
   else if(old!=(uint32_t)value){
@@ -176,6 +178,8 @@ static void settings_press(void)
   settings_adjust(0,(wm.fx_on&4u)?-selected:selected);
  }else if(settings_page==SETTINGS_SYSTEM){
   if(settings_index==3u)settings_adjust(3,1);else if(settings_index==1u)settings_adjust(1,1);
+ }else if(settings_page==SETTINGS_LAYER&&settings_index==3u){
+  settings_adjust(3,1);
  }else if(settings_page==SETTINGS_OUTPUT&&settings_index>=2u){
   /* SELECT steps through OFF, REC, ALWAYS (and the four click levels), then wraps. */
   uint32_t top=settings_index==2u?2u:3u,v=settings_get(settings_index);

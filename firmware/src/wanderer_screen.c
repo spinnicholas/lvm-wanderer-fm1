@@ -235,6 +235,7 @@ static uint32_t notice_icon(void)
     switch(notice){
     case N_AUDIO_LOCK:case N_ORIGINAL_SAFE:case N_ANCHOR_SAFE:return ICO_LOCK;
     case N_ANCHORED:case N_ANCHOR_REPLACED:case N_CATCH_FIRST:return ICO_ANCHOR;
+    case N_LAYER_ON:case N_LAYER_OFF:return ICO_LAYER;
     case N_BRANCHED:return ICO_BRANCH;
     case N_UNDO:case N_NO_UNDO:return ICO_UNDO;
     case N_NO_PHRASE:case N_NO_VALID_SAVE:return ICO_EMPTY;
@@ -250,7 +251,7 @@ static uint32_t notice_icon(void)
 static const char *notice_word(void)
 {
     switch(notice){
-    case N_ORIGINAL_SAFE:return "RESTORED";case N_ANCHORED:return "ANCHOR SET";case N_ANCHOR_REPLACED:return "NEW ANCHOR";
+    case N_ORIGINAL_SAFE:return "RESTORED";case N_ANCHORED:return "ANCHOR SET";case N_ANCHOR_REPLACED:return "NEW ANCHOR";case N_LAYER_ON:return "LAYER ON";case N_LAYER_OFF:return "LAYER OFF";
     case N_ANCHOR_SAFE:return "ANCHOR IS SAFE";case N_NO_PHRASE:return "NO NOTES";
     case N_BRANCHED:return "KEPT";case N_UNDO:return "UNDONE";case N_NO_UNDO:return "NOTHING TO UNDO";
     case N_STILL:return "STILL";case N_LIVE:return "LIVE";case N_LAYER_CLEARED:return "LAYER CLEARED";
@@ -329,7 +330,8 @@ static void screen_home(uint16_t fg,uint16_t guide)
     /* Editing the Layer: its name becomes a solid gold tag, as EDIT is on Memory. */
     if(layer_focus)tag(44,ly+(zoom?6:2),"LAYER",theme->layer);
     else aa_text(50,ly+(zoom?7:3),&FONT_T,"LAYER",fg);
-    if(!zoom)piano_roll(46,ly+22,106,14,&wm.layer,0,0,theme->layer,guide,guide,(uint8_t)(running&&wm.layer_enabled&&!anchor_view&&!wp_active));
+    /* A Layer that is OFF draws its melody in the quiet guide colour. */
+    if(!zoom)piano_roll(46,ly+22,106,14,&wm.layer,0,0,wm.layer_enabled?theme->layer:guide,guide,guide,(uint8_t)(running&&wm.layer_enabled&&!anchor_view&&!wp_active));
     toggle_switch(158,ly+(lh-26)/2,wm.layer_enabled,theme->layer,fg,guide);
     project_footer(fg,guide);
 }
@@ -409,7 +411,7 @@ static void screen_message(uint16_t fg,uint16_t guide)
     }else if(notice==N_CATCH_FIRST){
         icon_blit(88,53,ICO_ANCHOR,theme_palette()->anchor);
         text_center(133,&FONT_P,"NO ANCHOR",fg);
-        const char *next=wm_memory_playable()?(recording?"TAP REC TO FINISH":"TAP LFO TO LISTEN"):
+        const char *next=wm_memory_playable()?(recording?"TAP REC TO FINISH":"TAP SAVE TO SET"):
             "RECORD MEMORY";
         text_center(174,&FONT_T,next,fg);
     }else if(notice==N_ANCHOR_LISTEN){

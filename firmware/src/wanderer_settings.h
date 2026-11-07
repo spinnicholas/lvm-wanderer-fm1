@@ -13,8 +13,8 @@ static const char * const SETTINGS_LABELS[SETTINGS_PAGES][4]={
  {"TYPE","MIX","SIZE","DAMPING"},{"ROOT","SCALE","LENGTH","KEYBOARD"},
  {"LEVEL","SLOT","CLICK","CLICK LEVEL"},{"ON","PATTERN","RATE","OCTAVES"},{"GATE","SWING","LATCH",""},
  {"DISPLAY","CUES","CUE LEVEL","STEADY"},{"ON","MIX","BITS","RATE HZ"},
- {"ON","MIX","TIME MS","FEEDBACK"},{"TONE","WOW","HEADS","SYNC"},{"ON","MIX","RATE","DEPTH"},{"ON","MIX","DRIVE","TONE"},{"INPUT","CHANNEL","ARP CLOCK","PROGRAM"},{"EDIT","PLAYBACK","PATCH",""},{"CPU NOW","CPU PEAK","LOAD GUARD","OFFICIAL FW"}};
-static uint32_t settings_count(void){return settings_page==SETTINGS_LAYER||settings_page==0u||settings_page==7u?3u:4u;}
+ {"ON","MIX","TIME MS","FEEDBACK"},{"TONE","WOW","HEADS","SYNC"},{"ON","MIX","RATE","DEPTH"},{"ON","MIX","DRIVE","TONE"},{"INPUT","CHANNEL","ARP CLOCK","PROGRAM"},{"EDIT","PLAYBACK","PATCH","CLEAR"},{"CPU NOW","CPU PEAK","LOAD GUARD","OFFICIAL FW"}};
+static uint32_t settings_count(void){return settings_page==0u||settings_page==7u?3u:4u;}
 static void settings_press(void);
 static void settings_adjust(uint32_t k,int32_t d);
 static const char *settings_value(uint32_t k,char *buf);

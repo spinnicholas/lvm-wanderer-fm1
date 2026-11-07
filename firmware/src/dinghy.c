@@ -34,7 +34,7 @@ enum {
     N_BRANCHED, N_CATCH_FIRST, N_UNDO, N_NO_UNDO, N_STILL, N_LIVE,
     N_LAYER_CLEARED, N_NEW_SESSION, N_SAVE_FAILED, N_SAVED,
     N_NO_VALID_SAVE, N_LOADED, N_STOP_FIRST, N_PREF_FAILED, N_AUDIO_LOCK, N_ANCHOR_LISTEN,
-    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME, N_CLICK_ON, N_CLICK_OFF, N_ERASED, N_ANCHOR_REPLACED
+    N_RETURNED, N_NOTHING_TO_KEEP, N_THEME, N_CLICK_ON, N_CLICK_OFF, N_ERASED, N_ANCHOR_REPLACED, N_LAYER_ON, N_LAYER_OFF
 };
 enum {PATCH_MEMORY,PATCH_LAYER,PATCH_ANCHOR};
 /* Audio load guard. Each callback is timed with the 24 MHz hardware timer.
@@ -178,7 +178,7 @@ static uint8_t zoom_chord_latched;
 static uint32_t focus_until;
 static uint8_t notice;
 static uint32_t notice_until;
-static uint32_t fx_down,arp_down;static uint8_t arp_pending;
+static uint32_t fx_down,arp_down;static uint8_t arp_pending,fx_pending;
 static uint32_t home_down,anchor_down,save_down;
 static uint32_t octave_up_down,octave_down_down,play_down,performance_pending;
 static uint8_t play_tap,play_recall,anchor_pending,sel_can_open,edit_layer_done;
@@ -814,6 +814,13 @@ static void save_tap(void)
         confirm=7;focus=notice=0;cue(57u);page_dirty=1;
     }else{cue(ok?84u:48u);show_notice(ok?N_ANCHORED:wm.has_anchor?N_ANCHOR_SAFE:N_CATCH_FIRST);}
 }
+static void layer_playback_locked(uint8_t enabled);
+/* Tap FX on Home: flip the Layer ON/OFF switch shown on Home. */
+static void layer_switch_tap(void)
+{
+    fm1_irq_off();layer_playback_locked((uint8_t)!wm.layer_enabled);fm1_irq_on();
+    show_notice(wm.layer_enabled?N_LAYER_ON:N_LAYER_OFF);
+}
 static void apply_confirm(void)
 {
     static wm_disk_t disk;
@@ -937,7 +944,7 @@ static uint32_t ui_edges(uint32_t b,uint32_t released)
     if(b&sel){sel_down=fm1_ms;sel_can_open=(uint8_t)(!confirm&&!scope_open);}
     ui_pending|=b&pair;b&=~pair;
     if((held&pair)==pair&&!ui_chord_latched){
-        ui_chord_latched=1;ui_pending&=~pair;home_down=fx_down=0;anchor_pending=0;
+        ui_chord_latched=1;ui_pending&=~pair;home_down=fx_down=0;fx_pending=0;anchor_pending=0;
         scope_set_open((uint8_t)!scope_open);focus=0;cue(78u);page_dirty=1;
     }
     if(ui_chord_latched){
@@ -980,6 +987,20 @@ static uint32_t seq_edges(uint32_t b,uint32_t released)
         confirm=2;focus=notice=0;cue(57u);page_dirty=1;
     }
     if((released&bit)&&seq_pending){seq_pending=0;b|=bit;}
+    return b;
+}
+/* Tap FX: the Layer ON/OFF switch on Home. Hold FX 1.6 s: New session (asks).
+ * Acting on release keeps a hold from also flipping the Layer. */
+static uint32_t fx_edges(uint32_t b,uint32_t released)
+{
+    const uint32_t bit=1u<<BTN_FX;
+    uint8_t home=(uint8_t)(!scope_open&&!settings_open&&!editor_open&&!confirm);
+    if((b&bit)&&home){b&=~bit;fx_down=fm1_ms+1u;fx_pending=1;}
+    if(fx_pending&&!home)fx_pending=0;
+    if(fx_pending&&(fm1_in.buttons&bit)&&fm1_ms+1u-fx_down>=1600u){
+        fx_pending=0;fx_down=0;confirm=4;focus=notice=0;cue(47u);page_dirty=1;
+    }
+    if((released&bit)&&fx_pending){fx_pending=0;fx_down=0;b|=bit;}
     return b;
 }
 static uint32_t glo_down;static uint8_t glo_pending;
@@ -1188,7 +1209,7 @@ static void app_main(void)
         if(b)splash_dismiss();
         /* While a fresh start erases flash, controls only skip the animation. */
         if(fresh_left){b=0;for(uint32_t e=0;e<7u;e++)(void)fm1_enc_take(e);}
-        b=ui_edges(b,rel);b=save_edges(b,rel);b=seq_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
+        b=ui_edges(b,rel);b=save_edges(b,rel);b=seq_edges(b,rel);b=fx_edges(b,rel);b=glo_edges(b,rel);b=detail_edges(b,rel);b=performance_edges(b,rel);
         if(!scope_open&&notice&&notice_sticky()&&(b&((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX)))){
             notice=0;b&=~((1u<<BTN_HOME)|(1u<<BTN_SEL)|(1u<<BTN_FX));page_dirty=1;
         }
@@ -1263,7 +1284,7 @@ static void app_main(void)
                 fm1_irq_on();
                 cue(ok?71u:48u);if(notice!=N_AUDIO_LOCK)show_notice(ok?N_UNDO:N_NO_UNDO);
             }
-            if(b&(1u<<BTN_FX)){confirm=1;fx_down=fm1_ms;page_dirty=1;cue(55u);}
+            if(b&(1u<<BTN_FX))layer_switch_tap();
             if(b&(1u<<BTN_SEQ)){
                 /* Tap SEQ: click on (last mode, ALWAYS at first) or off. Hold SEQ: Save. */
                 if(metronome_on){metronome_last=metronome_on;metronome_on=0;}
@@ -1280,10 +1301,6 @@ static void app_main(void)
         }
         if(home_down&&(fm1_in.buttons&(1u<<BTN_HOME))&&fm1_ms+1u-home_down>=1000u){panic();home_down=0;}
         if(!(fm1_in.buttons&(1u<<BTN_HOME)))home_down=0;
-        if(fx_down&&!scope_open&&confirm==1&&(fm1_in.buttons&(1u<<BTN_FX))&&fm1_ms-fx_down>=1600u){
-            confirm=4;fx_down=0;cue(47u);page_dirty=1;
-        }
-        if(!(fm1_in.buttons&(1u<<BTN_FX)))fx_down=0;
         if(b&(1u<<BTN_OCT_DOWN)){if((int8_t)octave> -2)octave=(uint8_t)((int8_t)octave-1);page_dirty=1;}
         if(b&(1u<<BTN_OCT_UP)){if((int8_t)octave<2)octave=(uint8_t)((int8_t)octave+1);page_dirty=1;}
         base=(uint32_t)((int32_t)KEY0+(int8_t)octave*12);

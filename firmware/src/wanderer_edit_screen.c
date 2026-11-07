@@ -177,7 +177,7 @@ static void screen_editor(uint16_t bg,uint16_t fg,uint16_t pa,uint16_t guide)
     editor_page>=10&&editor_page<=12?theme->sky:theme->evolve;
  aa_text(10,7,&FONT_T,title,fg);
  if(editor_page!=EDIT_PRINT&&editor_page!=EDIT_SCATTER&&editor_page!=EDIT_PATTERN)
-  aa_text(188,7,&FONT_T,layer_focus?"2":"1",fg);
+  tiny(182,4,layer_focus?ICO_LAYER:ICO_MEMORY,layer_focus?theme->layer:theme->evolve); /* which part you edit, not a page number */
  transport_symbol(209,6,fg);section_rule(accent,guide);
  if(editor_page==EDIT_PRINT){
   const char *state=wp_writing?"PRINTING":wp_armed?"NEXT LOOP":wp_dry_view?"DRY ANCHOR":anchor_view?"ANCHOR":wp_redo?"UNDO LOOP":wp_active?"AUDIO LOOP":"EVENT LOOP";

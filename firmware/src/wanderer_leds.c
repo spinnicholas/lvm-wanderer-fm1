@@ -64,7 +64,8 @@ static void app_leds(void)
         if(memory_ready)glow|=(uint64_t)1u<<BTN_SAVE;
         if(layer_focus)bright|=(uint64_t)1u<<(BTN_EDIT);
         if(anchor_view)bright|=(uint64_t)1u<<(BTN_LFO);
-        if(!anchor_view&&(anchored||(!recording&&memory_ready)))glow|=(uint64_t)1u<<BTN_LFO;
+        if(!anchor_view&&anchored)glow|=(uint64_t)1u<<BTN_LFO;   /* only when there is an Anchor to hear */
+        if(wm.layer_enabled)glow|=(uint64_t)1u<<BTN_FX;            /* FX is the Layer ON/OFF switch */
         if(!anchor_view&&anchored&&ww.distance>=50u&&on_beat&&played==0u)bright|=(uint64_t)1u<<BTN_LFO;
         if(wm.has_anchor||wp_has_anchor||ww.distance)glow|=(uint64_t)1u<<(BTN_GLO);
         if(led_tide_until&&(int32_t)(fm1_ms-led_tide_until)<0)bright|=(uint64_t)1u<<BTN_GLO;
