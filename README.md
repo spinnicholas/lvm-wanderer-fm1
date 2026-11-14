@@ -46,3 +46,5 @@ Use the compiled `.fwsc` download with your FM-1 update method. The source/relea
 New saves use project format v8. Older Wanderer projects import without overwriting their original slots; save conversions into spare slots if you need to return to an older version. Printed audio remains RAM-only and must be recorded externally. External clock controls the arpeggiator; event-memory playback and printed audio keep their existing clock.
 
 Build the exact embedded RC6 version with `sh build.sh --release 1.4-RC6`, following [the pinned toolchain instructions](README-DINGHY.md). GPL-3.0-only with retained platform, font and icon notices in [LICENSING.md](LICENSING.md). Nicholas James / Low Vision Music. Independent firmware; not affiliated with M-VAVE or the original platform authors.
+
+You can also try LVM Wanderer in the browser, no flashing needed, in the free community [FM-1 Emulator](https://fm1-emulator.atst.tools/).
