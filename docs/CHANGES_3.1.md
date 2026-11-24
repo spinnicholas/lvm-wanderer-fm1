@@ -5,7 +5,8 @@ audio, sample for sample. What changes is how Wanderer looks, how it starts, and
 how it treats data from earlier versions.
 
 **Status:** compiled with the pinned JieLi toolchain and passes the host test suite.
-It has **not yet been tested on an FM-1.** See [Build and test status](#build-and-test-status).
+The author reports it is fully tested on his FM-1 ([hardware record](HARDWARE_TESTING_3.1_RC1.md)).
+See [Build and test status](#build-and-test-status).
 
 > **Installing 3.1 erases your saved Wanderer projects and settings** the first
 > time it starts. This is deliberate: see [Fresh start](#fresh-start-on-every-new-version).
@@ -267,7 +268,8 @@ it: 69,460 B of headroom in the app image, up from 9,676 B.
 * AddressSanitizer and UndefinedBehaviorSanitizer runs of the 3.0, adversarial,
   engines, release, editor, splash, memory and layer workflow tests.
 
-**Not yet tested on an FM-1.** Things to watch on hardware:
+**Hardware:** the author reports full testing on his own FM-1 (see
+[HARDWARE_TESTING_3.1_RC1.md](HARDWARE_TESTING_3.1_RC1.md)). Things worth watching on your own unit:
 
 * the first-start erase, and that a same-version restart keeps your saves;
 * the splash timing and key skip;

@@ -1,9 +1,9 @@
 {
-  "what": "Wanderer 1.4: author-tested synth for low-vision musicians. Protect an Anchor, evolve two layers, play 100 sounds, eight Scatter modes and a 13-pattern arp. Adaptive/steady Zoom, clear knob controls, adjustable display hold and optional audio cues.",
+  "what": "Wanderer 3.1 RC1: author-tested synth for low-vision musicians, designed with low vision in mind. Protect an Anchor, evolve a Layer, 150 sounds, Scatter and Pattern, six colour themes with a high-contrast option, Zoom and clear knob controls. The first start erases saved Wanderer projects and settings; keep a 1.4 file for rollback.",
   "author": "Nicholas James / Low Vision Music",
   "kinds": [
     "synth"
   ],
-  "image": "docs/screenshots-1.4/home.png",
-  "cheat": "https://github.com/spinnicholas/lvm-wanderer-fm1/blob/main/docs/QUICK_START_1.4.md"
+  "image": "docs/screenshots-3.1/home.png",
+  "cheat": "https://spinnicholas.github.io/lvm-wanderer-fm1/guide-3.1.html"
 }

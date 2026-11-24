@@ -1,17 +1,17 @@
 # LVM Wanderer 1.4 for M-VAVE FM-1
 
-> **Wanderer 3.1 RC1 (test build, not yet hardware-tested).** Colour is back: a new default WANDERER theme with a teal Anchor, violet Memory and gold Layer (Contrast is now an option), a redesigned Home with the Layer row and its switch, and an animated start where the letters of "Wanderer" glide in. **The first start of a new version erases saved Wanderer projects and settings** for a clean slate. The sound is unchanged from 3.0 RC3. [What changed](docs/CHANGES_3.1.md) · [Touch-first low-vision guide](https://spinnicholas.github.io/lvm-wanderer-fm1/guide-3.1.html) · Firmware: `dist/LVM-Wanderer-3.1-RC1-FM1.fwsc` (built by the native build workflow).
+> **Wanderer 3.1 RC1 is the current release (author hardware-tested).** Colour is back: a new default WANDERER theme with a teal Anchor, violet Memory and gold Layer (Contrast is now an option), a redesigned Home with the Layer row and its switch, and an animated start where the letters of "Wanderer" glide in. **The first start of a new version erases saved Wanderer projects and settings** for a clean slate. The sound is unchanged from 3.0 RC3. [What changed](docs/CHANGES_3.1.md) · [Touch-first low-vision guide](https://spinnicholas.github.io/lvm-wanderer-fm1/guide-3.1.html) · [Download the firmware](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v3.1.0/LVM-Wanderer-3.1-RC1-FM1.fwsc) · [Release](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v3.1.0). SHA-256 `da603e50e629c7388a545425cc905dbda33c5812aa2dfe2bdafb63ebd98b32bb`. Keep your 1.4 file for rollback; project saves from 3.1 will not load on older versions.
 
-> **Wanderer 1.7 RC4 has been thoroughly hardware-tested by its author.** The exact firmware and matching source archive have been verified, and [release details, compatibility notes and checksums](docs/RELEASE_1.7_RC4.md) are available. **The RC4 download is not hosted on GitHub yet.** The 1.4 link below remains the latest installable GitHub release until RC4 assets are uploaded. See the [RC4 hardware-test record](docs/HARDWARE_TESTING_1.7_RC4.md).
+> Wanderer 1.7 RC4 was tested by its author but was never uploaded to GitHub; 3.1 supersedes it. [RC4 record](docs/RELEASE_1.7_RC4.md).
 
 
 ![Wanderer Home screen with the protected Anchor, evolving memory and layer controls](docs/screenshots-1.4/home-large.png)
 
-**Current release: 1.4 · Author hardware-tested · Designed with low vision in mind**
+**Current release: 3.1 RC1 · Author hardware-tested · Designed with low vision in mind** (the 1.4 notes below describe the earlier stable release)
 
 Wanderer is a four-voice event-memory synthesizer from [Low Vision Music](https://www.lowvisionmusic.info). Protect an idea as an Anchor, evolve a working copy with Melt and Drift, add a second layer, then reshape the result with musical Scatter, Print and effects. I designed it as a visually impaired musician, with large high-contrast symbols, consistent physical controls and optional sound feedback.
 
-[Download the tested firmware](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v1.4.0/LVM-Wanderer-1.4-RC6-FM1.fwsc) · [Release and what’s new](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v1.4.0) · [Full guide](https://spinnicholas.github.io/lvm-wanderer-fm1/) · [Quick start](docs/QUICK_START_1.4.md)
+[Download 3.1 RC1](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/download/v3.1.0/LVM-Wanderer-3.1-RC1-FM1.fwsc) · [Release and what’s new](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v3.1.0) · [Previous stable 1.4](https://github.com/spinnicholas/lvm-wanderer-fm1/releases/tag/v1.4.0) · [Full guide](https://spinnicholas.github.io/lvm-wanderer-fm1/) · [Quick start](docs/QUICK_START_1.4.md)
 
 ## What is new in 1.4
 
